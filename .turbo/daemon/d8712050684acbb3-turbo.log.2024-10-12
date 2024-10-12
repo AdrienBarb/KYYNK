@@ -1,0 +1,19 @@
+2024-10-12T05:30:37.348831Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf(".turbo/cookies/.turbo-cookie")}
+2024-10-12T05:30:37.348838Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2024-10-12T05:30:41.959428Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf(".turbo/cookies/1.cookie"), AnchoredSystemPathBuf(".turbo/cookies/2.cookie")}
+2024-10-12T05:30:41.959445Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2024-10-12T05:31:46.149775Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/kyynk/.env")}
+2024-10-12T05:31:46.149791Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@kyynk/app"), path: AnchoredSystemPathBuf("apps/kyynk") }}))
+2024-10-12T05:31:54.049469Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/kyynk/.env.development"), AnchoredSystemPathBuf("apps/kyynk/.env")}
+2024-10-12T05:31:54.049480Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@kyynk/app"), path: AnchoredSystemPathBuf("apps/kyynk") }}))
+2024-10-12T05:32:06.949351Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/kyynk/.env")}
+2024-10-12T05:32:06.949373Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@kyynk/app"), path: AnchoredSystemPathBuf("apps/kyynk") }}))
+2024-10-12T05:32:06.949653Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2024-10-12T05:33:18.748659Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/kyynk/prisma/schema.prisma")}
+2024-10-12T05:33:18.748668Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@kyynk/app"), path: AnchoredSystemPathBuf("apps/kyynk") }}))
+2024-10-12T05:33:18.768352Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2024-10-12T05:33:56.049693Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/kyynk/prisma/schema.prisma")}
+2024-10-12T05:33:56.049706Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@kyynk/app"), path: AnchoredSystemPathBuf("apps/kyynk") }}))
+2024-10-12T05:35:50.249213Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("apps/kyynk/.env")}
+2024-10-12T05:35:50.249232Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@kyynk/app"), path: AnchoredSystemPathBuf("apps/kyynk") }}))
+2024-10-12T05:35:50.292429Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun

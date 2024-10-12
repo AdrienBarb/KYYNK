@@ -1,0 +1,59 @@
+@import "library.scss";
+
+.chip {
+  border-radius: 6px;
+  padding: 0.2rem 0.4rem;
+  width: min-content;
+  font-family: var(--font-karla);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.paid {
+  border: 1px solid #bbe6b3;
+  background-color: #91d685;
+  color: #3c8a2e;
+}
+
+.waiting {
+  border: 1px solid #f5b68e;
+  background-color: #f29d69;
+  color: #bc5210;
+}
+
+.commandButton {
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.saleCard {
+  border-radius: 6px;
+  padding: 0.6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .nameAndDate {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  a {
+    color: white;
+    font-size: 14px;
+  }
+
+  .value {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+}
