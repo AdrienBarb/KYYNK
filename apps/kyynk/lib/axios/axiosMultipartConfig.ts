@@ -1,22 +1,21 @@
-import axios from "axios";
-import { store } from "../../store/store";
+import axios from 'axios';
+import { store } from '../../store/store';
 import {
   setToastError,
   setStatusCode,
-} from "../../features/error-handling/errorHandlingSlice";
-import { getSession } from "next-auth/react";
-import { redirect } from "@/navigation";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../utils/authOptions";
+} from '../../features/error-handling/errorHandlingSlice';
+import { getSession } from 'next-auth/react';
+import { redirect } from '@/navigation';
+import { getServerSession } from 'next-auth';
 
-const isServer = typeof window === "undefined";
+const isServer = typeof window === 'undefined';
 
 const axiosInstanceMultipartForm = axios.create({
   baseURL: isServer
     ? process.env.NEXT_PUBLIC_INTERNAL_API_URL
     : process.env.NEXT_PUBLIC_API_URL,
   headers: {
-    "Content-Type": "multipart/form-data",
+    'Content-Type': 'multipart/form-data',
   },
 });
 
@@ -29,18 +28,18 @@ axiosInstanceMultipartForm.interceptors.response.use(
 
     if (errorStatus === 404) {
       if (isServer) {
-        redirect("/404");
+        redirect('/404');
       } else {
         store.dispatch(setStatusCode(errorStatus));
       }
 
-      return Promise.reject(error.response?.data || "not_found");
+      return Promise.reject(error.response?.data || 'not_found');
     }
 
     if (errorStatus >= 500) {
-      let message = error.response?.data || "server_error";
+      let message = error.response?.data || 'server_error';
       if (isServer) {
-        redirect("/500");
+        redirect('/500');
       } else {
         store.dispatch(setToastError(message));
         store.dispatch(setStatusCode(errorStatus));
@@ -49,10 +48,10 @@ axiosInstanceMultipartForm.interceptors.response.use(
     }
 
     if (errorStatus === 400) {
-      let message = error.response?.data || "bad_request";
+      let message = error.response?.data || 'bad_request';
 
       if (isServer) {
-        redirect("/500");
+        redirect('/500');
       } else {
         store.dispatch(setToastError(message));
         store.dispatch(setStatusCode(errorStatus));
@@ -62,9 +61,9 @@ axiosInstanceMultipartForm.interceptors.response.use(
     }
 
     if (errorStatus === 401) {
-      let message = error.response?.data || "need_login";
+      let message = error.response?.data || 'need_login';
       if (isServer) {
-        redirect("/401");
+        redirect('/401');
       } else {
         store.dispatch(setStatusCode(errorStatus));
         store.dispatch(setToastError(message));
@@ -72,21 +71,21 @@ axiosInstanceMultipartForm.interceptors.response.use(
       return Promise.reject(message);
     }
 
-    return Promise.reject(error.response?.data || "Something went wrong");
-  }
+    return Promise.reject(error.response?.data || 'Something went wrong');
+  },
 );
 
 axiosInstanceMultipartForm.interceptors.request.use(async (config) => {
   let session;
 
   if (isServer) {
-    session = await getServerSession(authOptions);
+    session = await getServerSession();
   } else {
     session = await getSession();
   }
 
   if (session?.user?.accessToken) {
-    config.headers["Authorization"] = `Bearer ${session?.user?.accessToken}`;
+    config.headers['Authorization'] = `Bearer ${session?.user?.accessToken}`;
   }
 
   return config;

@@ -1,49 +1,60 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import styles from "@/styles/Form.module.scss";
-import LoadingButton from "@/components/Buttons/LoadingButton";
-import CustomTextField from "@/components/Inputs/TextField";
-import { resetPasswordRequest } from "@/features/forgot-password/forgotPasswordSlice";
-import { useSelector } from "react-redux";
-import { RootStateType, useAppDispatch } from "@/store/store";
-import { useTranslations } from "next-intl";
-import { useParams } from "next/navigation";
+import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import styles from '@/styles/Form.module.scss';
+import LoadingButton from '@/components/Buttons/LoadingButton';
+import CustomTextField from '@/components/Inputs/TextField';
+
+import { useSelector } from 'react-redux';
+import { RootStateType, useAppDispatch } from '@/store/store';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
+import useApi from '@/lib/hooks/useApi';
 
 const UserForgotPasswordForm = () => {
   const { locale } = useParams<{ locale: string }>();
   const t = useTranslations();
   const dispatch = useAppDispatch();
   const state = useSelector((state: RootStateType) => state.forgotPassword);
+  const { usePost } = useApi();
+  const [isEmailSend, setIsEmailSend] = useState(false);
 
   const validationSchema = yup.object({
     email: yup
       .string()
-      .email(t("error.field_not_valid"))
-      .required(t("error.field_required")),
+      .email(t('error.field_not_valid'))
+      .required(t('error.field_required')),
   });
+
+  const { mutate: resetPasswordRequest, isLoading } = usePost(
+    `/api/me/password/request`,
+    {
+      onSuccess: () => {
+        setIsEmailSend(true);
+      },
+    },
+  );
 
   const formik = useFormik({
     initialValues: {
-      email: "",
+      email: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      dispatch(
-        resetPasswordRequest({
-          ...values,
-          locale,
-        })
-      );
+      console.log('🚀 ~ UserForgotPasswordForm ~ values:', values);
+      resetPasswordRequest({
+        ...values,
+        locale,
+      });
     },
   });
 
-  if (state.isPasswordRequestSuccess) {
+  if (isEmailSend) {
     return (
       <div className={styles.emailConfirmationWrapper}>
-        <div className={styles.title}>{t("common.email_has_been_send")}</div>
+        <div className={styles.title}>{t('common.email_has_been_send')}</div>
         <div className={styles.email}>{formik.values.email}</div>
       </div>
     );
@@ -57,18 +68,14 @@ const UserForgotPasswordForm = () => {
           fullWidth
           id="email"
           name="email"
-          label={t("common.email")}
+          label={t('common.email')}
           value={formik.values.email}
           onChange={formik.handleChange}
           error={formik.touched.email && Boolean(formik.errors.email)}
           helperText={formik.touched.email && formik.errors.email}
         />
-        <LoadingButton
-          fullWidth
-          type="submit"
-          loading={state.isPasswordRequestLoading}
-        >
-          {t("common.send")}
+        <LoadingButton fullWidth type="submit" loading={isLoading}>
+          {t('common.send')}
         </LoadingButton>
       </form>
     </div>

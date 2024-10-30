@@ -1,5 +1,6 @@
 import { genPageMetadata } from '@/app/seo';
 import { appRouter } from '@/appRouter';
+import { auth } from '@/auth';
 import { client } from '@/client';
 import AppFAQ from '@/components/AppFAQ';
 import Footer from '@/components/Footer';
@@ -11,7 +12,7 @@ import ModelOffer from '@/components/ModelOffer';
 import userService from '@/features/user/userService';
 import { redirect } from '@/navigation';
 import { Metadata } from 'next';
-import { getServerSession } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import { getTranslations } from 'next-intl/server';
 
 export async function generateMetadata({
@@ -28,12 +29,6 @@ export async function generateMetadata({
 }
 
 const Home = async ({ params: { locale } }: { params: { locale: string } }) => {
-  const session = await getServerSession();
-
-  if (session) {
-    redirect(appRouter.feed);
-  }
-
   // const { users } = await userService.getAllUsers({});
 
   return (

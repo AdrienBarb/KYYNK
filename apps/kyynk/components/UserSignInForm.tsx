@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import styles from "@/styles/Form.module.scss";
-import LoadingButton from "@/components/Buttons/LoadingButton";
-import CustomTextField from "@/components/Inputs/TextField";
-import { IconButton, InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { signIn } from "next-auth/react";
-import { useTranslations } from "next-intl";
-import toast from "react-hot-toast";
-import { appRouter } from "@/appRouter";
-import { useRouter } from "@/navigation";
-import { useSearchParams } from "next/navigation";
+import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import styles from '@/styles/Form.module.scss';
+import LoadingButton from '@/components/Buttons/LoadingButton';
+import CustomTextField from '@/components/Inputs/TextField';
+import { IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useTranslations } from 'next-intl';
+import toast from 'react-hot-toast';
+import { appRouter } from '@/appRouter';
+import { useRouter } from '@/navigation';
+import { useSearchParams } from 'next/navigation';
+import { authenticate } from '@/lib/server-actions/users/authenticate';
 
 const UserSignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +21,7 @@ const UserSignInForm = () => {
   const t = useTranslations();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const previousPath = searchParams.get("previousPath");
+  const previousPath = searchParams.get('previousPath');
 
   const handleClickShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -30,34 +30,33 @@ const UserSignInForm = () => {
   const validationSchema = yup.object({
     email: yup
       .string()
-      .email(t("error.field_not_valid"))
-      .required(t("error.field_required")),
+      .email(t('error.field_not_valid'))
+      .required(t('error.field_required')),
     password: yup
       .string()
-      .required(t("error.field_required"))
-      .min(8, t("error.password_to_short")),
+      .required(t('error.field_required'))
+      .min(8, t('error.password_to_short')),
   });
 
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setIsLoading(true);
-      const login = await signIn("credentials", {
-        email: values.email,
-        password: values.password,
-        redirect: false,
-      });
+      try {
+        await authenticate({ email: values.email, password: values.password });
 
-      if (login?.ok) {
-        toast.success(t("success.login"));
+        toast.success(t('success.login'));
         router.push(previousPath ? previousPath : appRouter.feed);
-      } else {
-        toast.error(t("error.credentials"));
+      } catch (error) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+        }
       }
+
       setIsLoading(false);
     },
   });
@@ -79,10 +78,10 @@ const UserSignInForm = () => {
         <CustomTextField
           variant="standard"
           fullWidth
-          type={showPassword ? "text" : "password"}
+          type={showPassword ? 'text' : 'password'}
           id="password"
           name="password"
-          label={t("common.password")}
+          label={t('common.password')}
           value={formik.values.password}
           onChange={formik.handleChange}
           error={formik.touched.password && Boolean(formik.errors.password)}
@@ -102,7 +101,7 @@ const UserSignInForm = () => {
         />
 
         <LoadingButton fullWidth type="submit" loading={isLoading}>
-          {t("common.signIn")}
+          {t('common.signIn')}
         </LoadingButton>
       </form>
     </div>

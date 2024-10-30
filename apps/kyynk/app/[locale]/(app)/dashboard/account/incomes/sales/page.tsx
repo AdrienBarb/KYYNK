@@ -1,7 +1,7 @@
-import ContainerWithBackArrow from "@/components/ContainerWithBackArrow";
-import PaddingContainer from "@/components/PaddingContainer";
-import SalesTable from "@/components/SalesTable";
-import React, { FC } from "react";
+import ContainerWithBackArrow from '@/components/ContainerWithBackArrow';
+import PaddingContainer from '@/components/PaddingContainer';
+import SalesTable from '@/components/SalesTable';
+import React, { FC } from 'react';
 
 interface SalesPageProps {}
 

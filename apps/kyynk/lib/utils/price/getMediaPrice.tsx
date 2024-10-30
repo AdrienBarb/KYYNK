@@ -5,13 +5,3 @@ export const getMediaPrice = (price: any) => {
 
   return formattedPrice;
 };
-
-export const getCurrencySign = (currency: any) => {
-  let sign = "";
-
-  if (currency === "EUR") {
-    sign = "€";
-  }
-
-  return sign;
-};

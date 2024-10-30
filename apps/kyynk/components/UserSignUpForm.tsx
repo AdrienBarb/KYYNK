@@ -1,29 +1,30 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import styles from "@/styles/Form.module.scss";
-import { useSearchParams } from "next/navigation";
-import LoadingButton from "@/components/Buttons/LoadingButton";
-import CustomTextField from "@/components/Inputs/TextField";
+import React, { useEffect, useState } from 'react';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import styles from '@/styles/Form.module.scss';
+import { useSearchParams } from 'next/navigation';
+import LoadingButton from '@/components/Buttons/LoadingButton';
+import CustomTextField from '@/components/Inputs/TextField';
 
-import { Checkbox } from "@mui/material";
-import { IconButton, InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import userAuthService from "@/features/user-auth/userAuthService";
-import { signIn } from "next-auth/react";
-import { useTranslations } from "next-intl";
-import toast from "react-hot-toast";
-import { Link, useRouter } from "@/navigation";
-import { appRouter } from "@/appRouter";
-import { sendEvent } from "@/lib/analytics/fathom/trackHelper";
+import { Checkbox } from '@mui/material';
+import { IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import userAuthService from '@/features/user-auth/userAuthService';
+import { signIn } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+import toast from 'react-hot-toast';
+import { Link, useRouter } from '@/navigation';
+import { appRouter } from '@/appRouter';
+import { sendEvent } from '@/lib/analytics/fathom/trackHelper';
+import { register } from '@/lib/server-actions/users/register';
 
 const UserSignUpForm = () => {
   //router
   const router = useRouter();
   const searchParams = useSearchParams();
-  const referral = searchParams.get("referral");
+  const referral = searchParams.get('referral');
 
   //translation
   const t = useTranslations();
@@ -45,60 +46,51 @@ const UserSignUpForm = () => {
   const validationSchema = yup.object({
     pseudo: yup
       .string()
-      .matches(/^[a-zA-Z0-9._-]{3,30}$/, t("error.pseudo_invalid"))
-      .required(t("error.field_required")),
+      .transform((value) => value.replace(/\s+/g, ''))
+      .matches(/^[a-zA-Z0-9._-]{3,30}$/, t('error.pseudo_invalid'))
+      .required(t('error.field_required')),
     email: yup
       .string()
-      .email(t("error.field_not_valid"))
-      .required(t("error.field_required")),
+      .email(t('error.field_not_valid'))
+      .required(t('error.field_required')),
     password: yup
       .string()
-      .required(t("error.field_required"))
-      .min(8, t("error.password_to_short")),
+      .required(t('error.field_required'))
+      .min(8, t('error.password_to_short')),
     passwordConfirmation: yup
       .string()
-      .required(t("error.field_required"))
-      .min(8, t("error.password_to_short")),
-    isOver18: yup.bool().oneOf([true], t("error.field_required")),
-    isLegalAccepted: yup.bool().oneOf([true], t("error.field_required")),
+      .required(t('error.field_required'))
+      .min(8, t('error.password_to_short')),
+    isOver18: yup.bool().oneOf([true], t('error.field_required')),
+    isLegalAccepted: yup.bool().oneOf([true], t('error.field_required')),
   });
 
   const formik = useFormik({
     initialValues: {
-      pseudo: "",
-      email: "",
-      password: "",
-      passwordConfirmation: "",
+      pseudo: '',
+      email: '',
+      password: '',
+      passwordConfirmation: '',
       isOver18: false,
       isLegalAccepted: false,
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       if (values.password !== values.passwordConfirmation) {
-        toast.error(t("error.password_confirmation_invalid"));
+        toast.error(t('error.password_confirmation_invalid'));
         return;
       }
 
       setIsLoading(true);
 
       try {
-        const response = await userAuthService.register({
-          ...values,
-          referral: referral,
+        await register({
+          pseudo: values.pseudo,
+          email: values.email,
+          password: values.password,
         });
 
-        if (response) {
-          const login = await signIn("credentials", {
-            email: values.email,
-            password: values.password,
-            redirect: false,
-          });
-
-          if (login?.ok) {
-            sendEvent("new user");
-            router.push(appRouter.userType);
-          }
-        }
+        router.push(appRouter.userType);
 
         setIsLoading(false);
       } catch (error) {
@@ -116,7 +108,7 @@ const UserSignUpForm = () => {
             fullWidth
             id="pseudo"
             name="pseudo"
-            label={t("common.pseudo")}
+            label={t('common.pseudo')}
             value={formik.values.pseudo}
             onChange={formik.handleChange}
             error={formik.touched.pseudo && Boolean(formik.errors.pseudo)}
@@ -127,7 +119,7 @@ const UserSignUpForm = () => {
             fullWidth
             id="email"
             name="email"
-            label={t("common.email")}
+            label={t('common.email')}
             value={formik.values.email}
             onChange={formik.handleChange}
             error={formik.touched.email && Boolean(formik.errors.email)}
@@ -136,10 +128,10 @@ const UserSignUpForm = () => {
           <CustomTextField
             variant="standard"
             fullWidth
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             id="password"
             name="password"
-            label={t("common.password")}
+            label={t('common.password')}
             value={formik.values.password}
             onChange={formik.handleChange}
             error={formik.touched.password && Boolean(formik.errors.password)}
@@ -161,10 +153,10 @@ const UserSignUpForm = () => {
           <CustomTextField
             variant="standard"
             fullWidth
-            type={showPasswordConfirmation ? "text" : "password"}
+            type={showPasswordConfirmation ? 'text' : 'password'}
             id="passwordConfirmation"
             name="passwordConfirmation"
-            label={t("common.passwordConfirmation")}
+            label={t('common.passwordConfirmation')}
             value={formik.values.passwordConfirmation}
             onChange={formik.handleChange}
             error={
@@ -200,18 +192,18 @@ const UserSignUpForm = () => {
                 checked={formik.values.isOver18}
                 onChange={formik.handleChange}
                 sx={{
-                  color: "black",
-                  padding: "0",
-                  "&.Mui-checked": {
-                    color: "black",
+                  color: 'black',
+                  padding: '0',
+                  '&.Mui-checked': {
+                    color: 'black',
                   },
                 }}
               />
-              <div className={styles.text}>{t("common.over_18")}</div>
+              <div className={styles.text}>{t('common.over_18')}</div>
             </div>
             {formik.errors.isOver18 && (
               <div className={styles.error}>
-                {t("common.over_18_helper_text")}
+                {t('common.over_18_helper_text')}
               </div>
             )}
           </div>
@@ -222,32 +214,32 @@ const UserSignUpForm = () => {
                 checked={formik.values.isLegalAccepted}
                 onChange={formik.handleChange}
                 sx={{
-                  color: "black",
-                  padding: "0",
-                  "&.Mui-checked": {
-                    color: "black",
+                  color: 'black',
+                  padding: '0',
+                  '&.Mui-checked': {
+                    color: 'black',
                   },
                 }}
               />
               <div className={styles.text}>
-                {t("common.i_read")}{" "}
-                <Link className={styles.bold} href={"/legal/privacy"}>
-                  {t("common.privacy")}
-                </Link>{" "}
-                {t("common.and")}{" "}
+                {t('common.i_read')}{' '}
+                <Link className={styles.bold} href={'/legal/privacy'}>
+                  {t('common.privacy')}
+                </Link>{' '}
+                {t('common.and')}{' '}
                 <Link className={styles.bold} href="/legal/terms-of-use">
-                  {t("common.terms")}
+                  {t('common.terms')}
                 </Link>
               </div>
             </div>
             {formik.errors.isLegalAccepted && (
               <div className={styles.error}>
-                {t("common.legal_helper_text")}
+                {t('common.legal_helper_text')}
               </div>
             )}
           </div>
           <LoadingButton fullWidth type="submit" loading={isLoading}>
-            {t("common.signUp")}
+            {t('common.signUp')}
           </LoadingButton>
         </form>
       </div>
