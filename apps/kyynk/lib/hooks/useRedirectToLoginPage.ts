@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Nude } from "@/types/models/Nude";
-import { usePathname, useRouter } from "@/navigation";
+import { Nude } from '@/types/models/Nude';
+import { usePathname, useRouter } from 'next/navigation';
 
 const useRedirectToLoginPage = () => {
   const router = useRouter();

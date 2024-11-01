@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useTranslations } from "next-intl";
-import FullButton from "./Buttons/FullButton";
-import { useSession } from "next-auth/react";
-import { useRouter } from "@/navigation";
+import React from 'react';
+import { useTranslations } from 'next-intl';
+import FullButton from './Buttons/FullButton';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const LandingButton = () => {
   const t = useTranslations();
@@ -13,22 +13,22 @@ const LandingButton = () => {
   const router = useRouter();
 
   const handleClick = () => {
-    if (status === "unauthenticated") {
-      router.push("/login");
+    if (status === 'unauthenticated') {
+      router.push('/login');
       return;
     }
 
-    router.push("/dashboard/feed");
+    router.push('/dashboard/feed');
   };
 
   return (
     <FullButton
       onClick={handleClick}
-      customStyles={{ backgroundColor: "#fff0eb" }}
+      customStyles={{ backgroundColor: '#fff0eb' }}
     >
-      {status === "unauthenticated"
-        ? t("home.getStarted")
-        : t("home.exploreNudes")}
+      {status === 'unauthenticated'
+        ? t('home.getStarted')
+        : t('home.exploreNudes')}
     </FullButton>
   );
 };

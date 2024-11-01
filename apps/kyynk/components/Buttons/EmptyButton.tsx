@@ -1,7 +1,7 @@
-import React, { CSSProperties, MouseEventHandler, FC, ReactNode } from "react";
-import styles from "../../styles/Buttons.module.scss";
-import clsx from "clsx";
-import { Link } from "@/navigation";
+import React, { CSSProperties, MouseEventHandler, FC, ReactNode } from 'react';
+import styles from '../../styles/Buttons.module.scss';
+import clsx from 'clsx';
+import Link from 'next/link';
 
 interface EmptyButtonProps {
   children: ReactNode;
@@ -19,9 +19,9 @@ const EmptyButton: FC<EmptyButtonProps> = ({
   customStyles,
 }) => {
   const style: CSSProperties = {
-    cursor: disabled ? "inherit" : "pointer",
-    color: disabled ? "rgba(0, 0, 0, 0.3)" : "black",
-    borderColor: disabled ? "rgba(0, 0, 0, 0.3)" : "black",
+    cursor: disabled ? 'inherit' : 'pointer',
+    color: disabled ? 'rgba(0, 0, 0, 0.3)' : 'black',
+    borderColor: disabled ? 'rgba(0, 0, 0, 0.3)' : 'black',
     ...customStyles,
   };
 
@@ -42,7 +42,7 @@ const EmptyButton: FC<EmptyButtonProps> = ({
         className={clsx(
           styles.button,
           styles.emptyButton,
-          disabled && styles.disabled
+          disabled && styles.disabled,
         )}
         style={style}
         prefetch
@@ -57,7 +57,7 @@ const EmptyButton: FC<EmptyButtonProps> = ({
       className={clsx(
         styles.button,
         styles.emptyButton,
-        disabled && styles.disabled
+        disabled && styles.disabled,
       )}
       onClick={handleClick}
       style={style}

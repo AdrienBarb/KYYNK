@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import styles from "@/styles/Form.module.scss";
-import { useTranslations } from "next-intl";
-import CustomTextField from "./Inputs/TextField";
-import { useRouter } from "@/navigation";
-import CustomLoadingButton from "./Buttons/LoadingButton";
-import { useSession } from "next-auth/react";
-import useApi from "@/lib/hooks/useApi";
+import React from 'react';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import styles from '@/styles/Form.module.scss';
+import { useTranslations } from 'next-intl';
+import CustomTextField from './Inputs/TextField';
+import CustomLoadingButton from './Buttons/LoadingButton';
+import { useSession } from 'next-auth/react';
+import useApi from '@/lib/hooks/useApi';
+import { useRouter } from 'next/navigation';
 
 const validationSchema = yup.object({
   email: yup
     .string()
-    .email("Enter a valid email")
-    .required("Email is required"),
-  password: yup.string().required("Password is required"),
+    .email('Enter a valid email')
+    .required('Email is required'),
+  password: yup.string().required('Password is required'),
 });
 
 const EditEmailForm = () => {
@@ -44,12 +44,12 @@ const EditEmailForm = () => {
         };
 
         update(updatedSession);
-        if (session?.user?.userType === "creator") {
+        if (session?.user?.userType === 'creator') {
           router.push(
-            "/dashboard/account/parameters/my-account/edit/email/verification"
+            '/dashboard/account/parameters/my-account/edit/email/verification',
           );
         } else {
-          router.push("/dashboard/account/parameters/my-account");
+          router.push('/dashboard/account/parameters/my-account');
         }
       }
     },
@@ -57,8 +57,8 @@ const EditEmailForm = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -75,7 +75,7 @@ const EditEmailForm = () => {
           id="password"
           name="password"
           type="password"
-          label={t("common.password")}
+          label={t('common.password')}
           value={formik.values.password}
           onChange={formik.handleChange}
           error={formik.touched.password && Boolean(formik.errors.password)}
@@ -86,14 +86,14 @@ const EditEmailForm = () => {
           fullWidth
           id="email"
           name="email"
-          label={t("common.new_email")}
+          label={t('common.new_email')}
           value={formik.values.email}
           onChange={formik.handleChange}
           error={formik.touched.email && Boolean(formik.errors.email)}
           helperText={formik.touched.email && formik.errors.email}
         />
         <CustomLoadingButton fullWidth type="submit" loading={isLoading}>
-          {t("common.send")}
+          {t('common.send')}
         </CustomLoadingButton>
       </form>
     </div>

@@ -1,14 +1,13 @@
-"use client";
+'use client';
 
-import React, { FC } from "react";
-import { useParams } from "next/navigation";
-import { faMessage } from "@fortawesome/free-solid-svg-icons";
-import ProfileButton from "@/components/ProfileButton";
-import { useTranslations } from "next-intl";
-import { useSession } from "next-auth/react";
-import useApi from "@/lib/hooks/useApi";
-import useRedirectToLoginPage from "@/lib/hooks/useRedirectToLoginPage";
-import { useRouter } from "@/navigation";
+import React, { FC } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { faMessage } from '@fortawesome/free-solid-svg-icons';
+import ProfileButton from '@/components/ProfileButton';
+import { useTranslations } from 'next-intl';
+import { useSession } from 'next-auth/react';
+import useApi from '@/lib/hooks/useApi';
+import useRedirectToLoginPage from '@/lib/hooks/useRedirectToLoginPage';
 
 interface Props {}
 
@@ -28,16 +27,16 @@ const UserProfileMessageButton: FC<Props> = ({}) => {
 
   const { usePost } = useApi();
   const { mutate: createConversation, isLoading } = usePost(
-    "/api/conversations",
+    '/api/conversations',
     {
       onSuccess: (data) => {
         router.push(`/dashboard/account/messages/${data._id}`);
       },
-    }
+    },
   );
 
   const handleWriteMessageClick = () => {
-    if (status !== "authenticated") {
+    if (status !== 'authenticated') {
       redirectToLoginPage();
       return;
     }
@@ -52,7 +51,7 @@ const UserProfileMessageButton: FC<Props> = ({}) => {
         onClick={handleWriteMessageClick}
         isLoading={isLoading}
       >
-        {t("profile.popover_write_message")}
+        {t('profile.popover_write_message')}
       </ProfileButton>
     </div>
   );

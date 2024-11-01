@@ -7,4 +7,6 @@ export const errorMessages = {
   PSEUDO_ALREADY_EXIST: 'pseudoAlreadyExist',
   SERVER_ERROR: 'somethingWentWrong',
   NOT_AUTHENTICATE: 'notAuthenticate',
+  INVALID_LINK: 'invalidLink',
+  EMAIL_ERROR: 'emailError',
 };

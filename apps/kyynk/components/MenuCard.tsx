@@ -1,11 +1,11 @@
-import React, { FC } from "react";
-import styles from "@/styles/MenuCard.module.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { FC } from 'react';
+import styles from '@/styles/MenuCard.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowRight,
   faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { Link } from "@/navigation";
+} from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
 
 interface MenuCardProps {
   label: string;

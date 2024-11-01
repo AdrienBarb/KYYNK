@@ -1,8 +1,8 @@
-import React, { FC, CSSProperties } from "react";
-import styles from "../../styles/Buttons.module.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { Link } from "@/navigation";
+import React, { FC, CSSProperties } from 'react';
+import styles from '../../styles/Buttons.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import Link from 'next/link';
 
 interface IconButtonProps {
   onClick?: (e?: any) => void;
@@ -21,7 +21,7 @@ const IconButton: FC<IconButtonProps> = ({
   disabled,
   href,
   dataId,
-  iconColor = "white",
+  iconColor = 'white',
 }) => {
   if (href) {
     return (
@@ -42,7 +42,7 @@ const IconButton: FC<IconButtonProps> = ({
       data-id={dataId}
       className={styles.iconButton}
       style={{
-        backgroundColor: disabled ? "rgba(0, 0, 0, 0.2)" : "#Cecaff",
+        backgroundColor: disabled ? 'rgba(0, 0, 0, 0.2)' : '#Cecaff',
         ...style,
       }}
       onClick={onClick}

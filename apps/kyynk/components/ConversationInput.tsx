@@ -1,46 +1,45 @@
-"use client";
+'use client';
 
-import React, { useState, FC } from "react";
-import styles from "@/styles/ConversationInput.module.scss";
-import CustomTextField from "@/components/Inputs/TextField";
-import FullButton from "@/components/Buttons/FullButton";
-import { useSelector } from "react-redux";
-import { RootStateType, useAppDispatch } from "@/store/store";
-import { useTranslations } from "next-intl";
-import useConversationUsers from "@/lib/hooks/useConversationUsers";
-import { useParams } from "next/navigation";
-import IconButton from "./Buttons/IconButton";
-import { faImage } from "@fortawesome/free-solid-svg-icons";
-import useHaveBeenBlocked from "@/lib/hooks/useHaveBeenBlocked";
-import useApi from "@/lib/hooks/useApi";
-import socket from "@/lib/socket/socket";
-import { Message } from "@/types/models/Message";
-import { Conversation } from "@/types/models/Conversation";
-import useUserVerified from "@/lib/hooks/useUserVerified";
-import { useRouter } from "@/navigation";
-import PrivateNudeModal from "./PrivateNudeModal";
-import { useSession } from "next-auth/react";
-import ConfirmationModal from "./ConfirmationModal";
-import useNavigateToPayment from "@/lib/hooks/useNavigateToPayment";
-import { getCreditAmount } from "@/features/user/userSlice";
+import React, { useState, FC } from 'react';
+import styles from '@/styles/ConversationInput.module.scss';
+import CustomTextField from '@/components/Inputs/TextField';
+import FullButton from '@/components/Buttons/FullButton';
+import { useSelector } from 'react-redux';
+import { RootStateType, useAppDispatch } from '@/store/store';
+import { useTranslations } from 'next-intl';
+import useConversationUsers from '@/lib/hooks/useConversationUsers';
+import { useParams, useRouter } from 'next/navigation';
+import IconButton from './Buttons/IconButton';
+import { faImage } from '@fortawesome/free-solid-svg-icons';
+import useHaveBeenBlocked from '@/lib/hooks/useHaveBeenBlocked';
+import useApi from '@/lib/hooks/useApi';
+import socket from '@/lib/socket/socket';
+import { Message } from '@/types/models/Message';
+import { Conversation } from '@/types/models/Conversation';
+import useUserVerified from '@/lib/hooks/useUserVerified';
+import PrivateNudeModal from './PrivateNudeModal';
+import { useSession } from 'next-auth/react';
+import ConfirmationModal from './ConfirmationModal';
+import useNavigateToPayment from '@/lib/hooks/useNavigateToPayment';
+import { getCreditAmount } from '@/features/user/userSlice';
 
 interface Props {
   conversation: Conversation;
   setMessagesList: (
-    updateFunction: (previousMessages: Message[]) => Message[]
+    updateFunction: (previousMessages: Message[]) => Message[],
   ) => void;
 }
 
 const ConversationInput: FC<Props> = ({ conversation, setMessagesList }) => {
   //localstate
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [openNudeModal, setOpenNudeModal] = useState(false);
   const [openCreditModal, setOpenCreditModal] = useState(false);
 
   //hooks
   const haveBeenBlocked: boolean = useHaveBeenBlocked(conversation);
   const { otherUser, currentUser } = useConversationUsers(
-    conversation.participants
+    conversation.participants,
   );
   const { usePost } = useApi();
   const isUserVerified = useUserVerified();
@@ -72,23 +71,23 @@ const ConversationInput: FC<Props> = ({ conversation, setMessagesList }) => {
         if (
           socketState.onlineUsers.some((user) => user.userId === otherUser?._id)
         ) {
-          socket?.emit("sendMessage", {
+          socket?.emit('sendMessage', {
             senderId: currentUser?._id,
             receiverId: otherUser?._id,
             message: data,
           });
 
-          socket?.emit("sendNotification", {
+          socket?.emit('sendNotification', {
             receiverId: otherUser?._id,
             conversationId: conversationId,
           });
         }
 
-        if (otherUser?.userType === "creator") {
+        if (otherUser?.userType === 'creator') {
           dispatch(getCreditAmount());
         }
       },
-    }
+    },
   );
 
   const handleSendMessage = () => {
@@ -96,12 +95,12 @@ const ConversationInput: FC<Props> = ({ conversation, setMessagesList }) => {
       return;
     }
 
-    if (otherUser?.userType === "creator" && userState.creditAmount < 25) {
+    if (otherUser?.userType === 'creator' && userState.creditAmount < 25) {
       setOpenCreditModal(true);
       return;
     }
 
-    setMessage("");
+    setMessage('');
 
     sendMessage({
       text: message,
@@ -110,7 +109,7 @@ const ConversationInput: FC<Props> = ({ conversation, setMessagesList }) => {
 
   const handleMediaProposition = () => {
     if (!isUserVerified) {
-      router.push("/dashboard/account/verification");
+      router.push('/dashboard/account/verification');
       return;
     }
 
@@ -123,8 +122,8 @@ const ConversationInput: FC<Props> = ({ conversation, setMessagesList }) => {
         <CustomTextField
           fullWidth
           id="message"
-          label={t("conversation.message")}
-          placeholder={t("conversation.writeMessage")}
+          label={t('conversation.message')}
+          placeholder={t('conversation.writeMessage')}
           multiline
           disabled={haveBeenBlocked}
           variant="filled"
@@ -140,8 +139,8 @@ const ConversationInput: FC<Props> = ({ conversation, setMessagesList }) => {
             onClick={handleMediaProposition}
             disabled={haveBeenBlocked}
             style={{
-              height: "46px",
-              width: "46px",
+              height: '46px',
+              width: '46px',
             }}
           />
         )}
@@ -149,14 +148,14 @@ const ConversationInput: FC<Props> = ({ conversation, setMessagesList }) => {
           isLoading={isLoading}
           onClick={handleSendMessage}
           customStyles={{
-            width: "100%",
-            height: "46px",
+            width: '100%',
+            height: '46px',
           }}
           disabled={!message || haveBeenBlocked}
         >
-          {otherUser?.userType === "creator"
-            ? t("conversation.sendFor", { creditAmount: 0.2 })
-            : t("conversation.send")}
+          {otherUser?.userType === 'creator'
+            ? t('conversation.sendFor', { creditAmount: 0.2 })
+            : t('conversation.send')}
         </FullButton>
       </div>
       <PrivateNudeModal
@@ -169,9 +168,9 @@ const ConversationInput: FC<Props> = ({ conversation, setMessagesList }) => {
         open={openCreditModal}
         setOpen={setOpenCreditModal}
         confirmAction={navigateToPayment}
-        title={t("common.shouldByCredits")}
-        text={t("common.notEnoughCredit")}
-        buttonText={t("common.buyCredits")}
+        title={t('common.shouldByCredits')}
+        text={t('common.notEnoughCredit')}
+        buttonText={t('common.buyCredits')}
       />
     </div>
   );

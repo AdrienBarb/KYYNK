@@ -1,8 +1,8 @@
-import React, { FC, CSSProperties, ReactNode, MouseEventHandler } from "react";
-import styles from "../../styles/Buttons.module.scss";
-import CircularProgress from "@mui/material/CircularProgress";
-import clsx from "clsx";
-import { Link } from "@/navigation";
+import React, { FC, CSSProperties, ReactNode, MouseEventHandler } from 'react';
+import styles from '../../styles/Buttons.module.scss';
+import CircularProgress from '@mui/material/CircularProgress';
+import clsx from 'clsx';
+import Link from 'next/link';
 
 interface Props {
   onClick?: () => void;
@@ -24,10 +24,10 @@ const FullButton: FC<Props> = ({
   dataId,
 }) => {
   const style = {
-    width: "fit-content",
-    color: disabled ? "rgba(0, 0, 0, 0.5)" : "black",
-    borderColor: disabled ? "rgba(0, 0, 0, 0.3)" : "black",
-    backgroundColor: disabled ? "rgba(0, 0, 0, 0.2)" : "#Cecaff",
+    width: 'fit-content',
+    color: disabled ? 'rgba(0, 0, 0, 0.5)' : 'black',
+    borderColor: disabled ? 'rgba(0, 0, 0, 0.3)' : 'black',
+    backgroundColor: disabled ? 'rgba(0, 0, 0, 0.2)' : '#Cecaff',
     ...customStyles,
   };
 
@@ -38,7 +38,7 @@ const FullButton: FC<Props> = ({
         className={clsx(
           styles.button,
           styles.fullButton,
-          disabled && styles.disabled
+          disabled && styles.disabled,
         )}
         style={style}
         prefetch
@@ -54,7 +54,7 @@ const FullButton: FC<Props> = ({
       className={clsx(
         styles.button,
         styles.fullButton,
-        disabled && styles.disabled
+        disabled && styles.disabled,
       )}
       onClick={onClick}
       disabled={disabled}
@@ -62,7 +62,7 @@ const FullButton: FC<Props> = ({
       data-id={dataId}
     >
       {isLoading ? (
-        <CircularProgress sx={{ color: "#1C131E" }} size={20} />
+        <CircularProgress sx={{ color: '#1C131E' }} size={20} />
       ) : (
         <div>{children}</div>
       )}

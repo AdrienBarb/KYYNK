@@ -1,8 +1,8 @@
-import React, { FC } from "react";
-import styles from "@/styles/ContainerWithBackArrow.module.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "@/navigation";
+import React, { FC } from 'react';
+import styles from '@/styles/ContainerWithBackArrow.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
 
 interface Props {
   prevPath: string;

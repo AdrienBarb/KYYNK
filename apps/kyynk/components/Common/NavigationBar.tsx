@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import styles from "@/styles/NavigationBar.module.scss";
-import Image from "next/image";
-import logo from "../../public/images/logo.svg";
-import MenuIcon from "@mui/icons-material/Menu";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { screenSizes } from "@/constants/screenSizes";
-import SimpleButton from "@/components/Buttons/SimpleButton";
-import { Link } from "@/navigation";
-import { useSession } from "next-auth/react";
-import { useTranslations } from "next-intl";
-import LanguageSwitcher from "../LanguageSwitcher";
-import MobileMenu from "../MobileMenu";
-import CreditAmount from "../CreditAmount";
-import UserAddMenu from "../UserAddMenu";
+import React, { useState } from 'react';
+import styles from '@/styles/NavigationBar.module.scss';
+import Image from 'next/image';
+import logo from '../../public/images/logo.svg';
+import MenuIcon from '@mui/icons-material/Menu';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { screenSizes } from '@/constants/screenSizes';
+import SimpleButton from '@/components/Buttons/SimpleButton';
+import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+import LanguageSwitcher from '../LanguageSwitcher';
+import MobileMenu from '../MobileMenu';
+import CreditAmount from '../CreditAmount';
+import UserAddMenu from '../UserAddMenu';
+import Link from 'next/link';
 
 const NavigationBar = () => {
   //Local state
@@ -29,19 +29,19 @@ const NavigationBar = () => {
     <>
       <div className={styles.navContainer}>
         <div className={styles.navbar}>
-          {matches && status === "authenticated" && (
+          {matches && status === 'authenticated' && (
             <div
               onClick={() => setOpenMenuDrawer(true)}
               data-id="mobile-burger-menu"
             >
               <MenuIcon
-                sx={{ fontSize: "48", cursor: "pointer", color: "#1C131E" }}
+                sx={{ fontSize: '48', cursor: 'pointer', color: '#1C131E' }}
               />
             </div>
           )}
           {!matches ? (
             <Link
-              href={status === "authenticated" ? "/dashboard/feed" : "/"}
+              href={status === 'authenticated' ? '/dashboard/feed' : '/'}
               passHref
               prefetch
             >
@@ -59,13 +59,13 @@ const NavigationBar = () => {
           )}
 
           <div className={styles.flexWrapper}>
-            {status === "unauthenticated" && (
+            {status === 'unauthenticated' && (
               <SimpleButton href="/login" dataId="sign-in-button">
-                {t("common.signIn")}
+                {t('common.signIn')}
               </SimpleButton>
             )}
-            {status === "authenticated" &&
-              session?.user?.userType === "creator" && <UserAddMenu />}
+            {status === 'authenticated' &&
+              session?.user?.userType === 'creator' && <UserAddMenu />}
 
             <CreditAmount />
             <LanguageSwitcher />

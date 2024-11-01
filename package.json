@@ -4,10 +4,15 @@
   "packageManager": "pnpm@8.0.0",
   "devDependencies": {
     "@babel/core": "^7.25.8",
+    "@babel/preset-env": "^7.25.8",
     "@babel/preset-react": "^7.25.7",
     "@babel/preset-typescript": "^7.25.7",
-    "babel-preset-env": "^1.7.0",
+    "autoprefixer": "^10.4.20",
+    "eslint-config-next": "^14.0.4",
+    "next": "^14.2.16",
     "pnpm": "latest",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
     "turbo": "latest"
   },
   "scripts": {

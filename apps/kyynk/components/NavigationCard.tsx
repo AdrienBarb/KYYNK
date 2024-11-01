@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import React, { FC } from "react";
-import styles from "@/styles/NavigationCard.module.scss";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { useTranslations } from "next-intl";
-import { Link, usePathname } from "@/navigation";
-
-import clsx from "clsx";
+import React, { FC } from 'react';
+import styles from '@/styles/NavigationCard.module.scss';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useTranslations } from 'next-intl';
+import clsx from 'clsx';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 interface NavigationCardProps {
   label: string;
@@ -34,12 +34,12 @@ const NavigationCard: FC<NavigationCardProps> = ({
         <div
           className={clsx(
             styles.container,
-            isLinkSelected(href) && styles.isSelected
+            isLinkSelected(href) && styles.isSelected,
           )}
         >
           <div>{t(`navigation.${label}`)}</div>
           {isNotification && <span className={styles.notificationBadge}></span>}
-          {withArrow && <ArrowForwardIosIcon sx={{ fontSize: "18px" }} />}
+          {withArrow && <ArrowForwardIosIcon sx={{ fontSize: '18px' }} />}
         </div>
       </Link>
     );
@@ -49,7 +49,7 @@ const NavigationCard: FC<NavigationCardProps> = ({
     <div className={clsx(styles.container)} onClick={onClick}>
       <div>{t(`navigation.${label}`)}</div>
       {isNotification && <span className={styles.notificationBadge}></span>}
-      {withArrow && <ArrowForwardIosIcon sx={{ fontSize: "18px" }} />}
+      {withArrow && <ArrowForwardIosIcon sx={{ fontSize: '18px' }} />}
     </div>
   );
 };

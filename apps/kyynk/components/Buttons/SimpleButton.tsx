@@ -1,7 +1,7 @@
-import { CircularProgress } from "@mui/material";
-import React, { CSSProperties, FC, ReactNode } from "react";
-import styles from "../../styles/Buttons.module.scss";
-import { Link } from "@/navigation";
+import { CircularProgress } from '@mui/material';
+import React, { CSSProperties, FC, ReactNode } from 'react';
+import styles from '../../styles/Buttons.module.scss';
+import Link from 'next/link';
 
 interface SimpleButtonProps {
   onClick?: () => void;
@@ -23,7 +23,7 @@ const SimpleButton: FC<SimpleButtonProps> = ({
   dataId,
 }) => {
   const style = {
-    backgroundColor: disabled ? "rgba(0, 0, 0, 0.1)" : "#Cecaff",
+    backgroundColor: disabled ? 'rgba(0, 0, 0, 0.1)' : '#Cecaff',
     ...customStyles,
   };
 
@@ -37,7 +37,7 @@ const SimpleButton: FC<SimpleButtonProps> = ({
         data-id={dataId}
       >
         {isLoading ? (
-          <CircularProgress sx={{ color: "#1C131E" }} size={20} />
+          <CircularProgress sx={{ color: '#1C131E' }} size={20} />
         ) : (
           children
         )}
@@ -53,7 +53,7 @@ const SimpleButton: FC<SimpleButtonProps> = ({
       disabled={disabled}
     >
       {isLoading ? (
-        <CircularProgress sx={{ color: "white" }} size={20} />
+        <CircularProgress sx={{ color: 'white' }} size={20} />
       ) : (
         children
       )}

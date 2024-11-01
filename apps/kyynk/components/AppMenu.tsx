@@ -1,48 +1,48 @@
-"use client";
+'use client';
 
-import React, { FC, useEffect, useRef, useState } from "react";
-import styles from "@/styles/AppMenu.module.scss";
-import { appRouter } from "@/appRouter";
-import { useTranslations } from "next-intl";
-import { signOut, useSession } from "next-auth/react";
-import toast from "react-hot-toast";
-import { usePathname, useRouter } from "@/navigation";
-import clsx from "clsx";
-import { useMediaQuery } from "@mui/material";
-import { screenSizes } from "@/constants/screenSizes";
-import Grow from "@mui/material/Grow";
-import Paper from "@mui/material/Paper";
-import Popper from "@mui/material/Popper";
-import MenuList from "@mui/material/MenuList";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
+import React, { FC, useEffect, useRef, useState } from 'react';
+import styles from '@/styles/AppMenu.module.scss';
+import { appRouter } from '@/appRouter';
+import { useTranslations } from 'next-intl';
+import { signOut, useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
+import clsx from 'clsx';
+import { useMediaQuery } from '@mui/material';
+import { screenSizes } from '@/constants/screenSizes';
+import Grow from '@mui/material/Grow';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import MenuList from '@mui/material/MenuList';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 //@ts-ignore
-import { UilUserCircle } from "@iconscout/react-unicons";
+import { UilUserCircle } from '@iconscout/react-unicons';
 //@ts-ignore
-import { UilChat } from "@iconscout/react-unicons";
+import { UilChat } from '@iconscout/react-unicons';
 //@ts-ignore
-import { UilUsersAlt } from "@iconscout/react-unicons";
+import { UilUsersAlt } from '@iconscout/react-unicons';
 //@ts-ignore
-import { UilMoneybag } from "@iconscout/react-unicons";
+import { UilMoneybag } from '@iconscout/react-unicons';
 //@ts-ignore
-import { UilSignOutAlt } from "@iconscout/react-unicons";
+import { UilSignOutAlt } from '@iconscout/react-unicons';
 //@ts-ignore
-import { UilBell } from "@iconscout/react-unicons";
+import { UilBell } from '@iconscout/react-unicons';
 //@ts-ignore
-import { UilSetting } from "@iconscout/react-unicons";
+import { UilSetting } from '@iconscout/react-unicons';
 //@ts-ignore
-import { UilMoneyWithdrawal } from "@iconscout/react-unicons";
+import { UilMoneyWithdrawal } from '@iconscout/react-unicons';
 //@ts-ignore
-import { UilShield } from "@iconscout/react-unicons";
+import { UilShield } from '@iconscout/react-unicons';
 //@ts-ignore
-import { UilLink } from "@iconscout/react-unicons";
+import { UilLink } from '@iconscout/react-unicons';
 //@ts-ignore
-import { UilListUl } from "@iconscout/react-unicons";
+import { UilListUl } from '@iconscout/react-unicons';
 //@ts-ignore
-import { UilCompass } from "@iconscout/react-unicons";
-import { RootStateType, useAppDispatch } from "@/store/store";
-import { getUnreadNotificationsCount } from "@/features/notification/notificationSlice";
-import { useSelector } from "react-redux";
-import { checkIfUnreadMessages } from "@/features/conversation/conversationSlice";
+import { UilCompass } from '@iconscout/react-unicons';
+import { RootStateType, useAppDispatch } from '@/store/store';
+import { getUnreadNotificationsCount } from '@/features/notification/notificationSlice';
+import { useSelector } from 'react-redux';
+import { checkIfUnreadMessages } from '@/features/conversation/conversationSlice';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface Props {
   setOpenDrawer?: (e: boolean) => void;
@@ -55,10 +55,10 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
   const path = usePathname();
   const dispatch = useAppDispatch();
   const notificationState = useSelector(
-    (state: RootStateType) => state.notification
+    (state: RootStateType) => state.notification,
   );
   const conversationState = useSelector(
-    (state: RootStateType) => state.conversation
+    (state: RootStateType) => state.conversation,
   );
 
   const [open, setOpen] = useState<boolean>(false);
@@ -73,7 +73,7 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
   }, []);
 
   const logout = () => {
-    toast.success(t("success.logout"));
+    toast.success(t('success.logout'));
     signOut({
       redirect: true,
       callbackUrl: `${process?.env?.NEXT_PUBLIC_BASE_URL}/`,
@@ -92,7 +92,7 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
         <button
           className={clsx(
             styles.card,
-            path === appRouter.feed && styles.isSelected
+            path === appRouter.feed && styles.isSelected,
           )}
           onClick={() => {
             handleNavigation(appRouter.feed);
@@ -103,13 +103,13 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
         >
           <div className={styles.leftWrapper}>
             <UilListUl />
-            {t("navigation.feed")}
+            {t('navigation.feed')}
           </div>
         </button>
         <button
           className={clsx(
             styles.card,
-            path === appRouter.explore && styles.isSelected
+            path === appRouter.explore && styles.isSelected,
           )}
           onClick={() => {
             handleNavigation(appRouter.community);
@@ -120,13 +120,13 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
         >
           <div className={styles.leftWrapper}>
             <UilCompass />
-            {t("navigation.explore")}
+            {t('navigation.explore')}
           </div>
         </button>
         <button
           className={clsx(
             styles.card,
-            path.includes(appRouter.messages) && styles.isSelected
+            path.includes(appRouter.messages) && styles.isSelected,
           )}
           onClick={() => {
             handleNavigation(appRouter.messages);
@@ -137,15 +137,15 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
         >
           <div className={styles.leftWrapper}>
             <UilChat />
-            {t("navigation.message")}
+            {t('navigation.message')}
           </div>
           {conversationState.isUnreadMessages && (
             <div
               className={styles.notificationDot}
               style={{
                 backgroundColor: isLinkSelected(appRouter.notifications)
-                  ? "white"
-                  : "#cecaff",
+                  ? 'white'
+                  : '#cecaff',
               }}
             ></div>
           )}
@@ -153,7 +153,7 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
         <button
           className={clsx(
             styles.card,
-            path === appRouter.notifications && styles.isSelected
+            path === appRouter.notifications && styles.isSelected,
           )}
           onClick={() => {
             handleNavigation(appRouter.notifications);
@@ -164,25 +164,25 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
         >
           <div className={styles.leftWrapper}>
             <UilBell />
-            {t("navigation.notification")}
+            {t('navigation.notification')}
           </div>
           {notificationState.unreadNotifications && (
             <div
               className={styles.notificationDot}
               style={{
                 backgroundColor: isLinkSelected(appRouter.notifications)
-                  ? "white"
-                  : "#cecaff",
+                  ? 'white'
+                  : '#cecaff',
               }}
             ></div>
           )}
         </button>
 
-        {session?.user?.userType === "creator" && (
+        {session?.user?.userType === 'creator' && (
           <button
             className={clsx(
               styles.card,
-              path.includes(appRouter.incomes) && styles.isSelected
+              path.includes(appRouter.incomes) && styles.isSelected,
             )}
             onClick={() => {
               handleNavigation(appRouter.incomes);
@@ -193,7 +193,7 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
           >
             <div className={styles.leftWrapper}>
               <UilMoneyWithdrawal />
-              {t("navigation.incomes")}
+              {t('navigation.incomes')}
             </div>
           </button>
         )}
@@ -217,28 +217,28 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
             open={open}
             anchorEl={anchorRef.current}
             role={undefined}
-            placement={matches ? "auto-start" : "right-start"}
+            placement={matches ? 'auto-start' : 'right-start'}
             transition
             disablePortal
             sx={{
-              zIndex: "100",
-              width: "220px",
+              zIndex: '100',
+              width: '220px',
               margin: matches
-                ? "0 0 0.4rem 0 !important"
-                : "0 0 0 0.4rem !important",
-              padding: "0.6rem",
-              backgroundColor: "#fff0eb",
-              borderRadius: "6px",
-              border: "1px solid rgba(0, 0, 0, 0.1)",
+                ? '0 0 0.4rem 0 !important'
+                : '0 0 0 0.4rem !important',
+              padding: '0.6rem',
+              backgroundColor: '#fff0eb',
+              borderRadius: '6px',
+              border: '1px solid rgba(0, 0, 0, 0.1)',
             }}
           >
             {({ TransitionProps, placement }) => (
               <Grow {...TransitionProps}>
                 <Paper
                   sx={{
-                    boxShadow: "none",
-                    minWidth: "inherit !important",
-                    width: "auto !important",
+                    boxShadow: 'none',
+                    minWidth: 'inherit !important',
+                    width: 'auto !important',
                   }}
                 >
                   <ClickAwayListener onClickAway={() => setOpen(false)}>
@@ -247,13 +247,13 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
                       id="composition-menu"
                       aria-labelledby="composition-button"
                       sx={{
-                        padding: "0",
-                        backgroundColor: "#fff0eb",
-                        border: "none",
-                        boxShadow: "none",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "0.4rem",
+                        padding: '0',
+                        backgroundColor: '#fff0eb',
+                        border: 'none',
+                        boxShadow: 'none',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '0.4rem',
                       }}
                     >
                       <button
@@ -261,11 +261,11 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
                           styles.card,
                           path ===
                             `${appRouter.community}/${session?.user?.id}` &&
-                            styles.isSelected
+                            styles.isSelected,
                         )}
                         onClick={() => {
                           handleNavigation(
-                            `/dashboard/community/${session?.user?.id}`
+                            `/dashboard/community/${session?.user?.id}`,
                           );
                           setOpen(false);
                           if (setOpenDrawer) {
@@ -275,14 +275,14 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
                       >
                         <div className={styles.leftWrapper}>
                           <UilUserCircle />
-                          {t("navigation.profile")}
+                          {t('navigation.profile')}
                         </div>
                       </button>
                       <button
                         className={clsx(
                           styles.card,
                           path.includes(appRouter.becomeCreator) &&
-                            styles.isSelected
+                            styles.isSelected,
                         )}
                         onClick={() => {
                           handleNavigation(appRouter.becomeCreator);
@@ -294,7 +294,7 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
                       >
                         <div className={styles.leftWrapper}>
                           <UilMoneybag />
-                          {t("navigation.becomeCreator")}
+                          {t('navigation.becomeCreator')}
                         </div>
                       </button>
                       {/* <button
@@ -319,7 +319,7 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
                         className={clsx(
                           styles.card,
                           path.includes(appRouter.parameters) &&
-                            styles.isSelected
+                            styles.isSelected,
                         )}
                         onClick={() => {
                           handleNavigation(appRouter.parameters);
@@ -331,7 +331,7 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
                       >
                         <div className={styles.leftWrapper}>
                           <UilSetting />
-                          {t("navigation.parameter")}
+                          {t('navigation.parameter')}
                         </div>
                       </button>
                       <button
@@ -346,7 +346,7 @@ const AppMenu: FC<Props> = ({ setOpenDrawer }) => {
                       >
                         <div className={styles.leftWrapper}>
                           <UilSignOutAlt />
-                          {t("navigation.logout")}
+                          {t('navigation.logout')}
                         </div>
                       </button>
                     </MenuList>

@@ -1,30 +1,27 @@
-"use client";
+'use client';
 
-import React from "react";
-import Button from "@mui/material/Button";
-import styles from "@/styles/LanguageSwitcher.module.scss";
-import { Popover } from "@mui/material";
-import { usePathname, useRouter } from "@/navigation";
-import { useParams } from "next/navigation";
-import clsx from "clsx";
+import React from 'react';
+import Button from '@mui/material/Button';
+import styles from '@/styles/LanguageSwitcher.module.scss';
+import { Popover } from '@mui/material';
+import { useRouter } from 'next/navigation';
+import clsx from 'clsx';
+import { useLocale } from 'next-intl';
+import { serialize } from 'cookie';
 
-const languages: { label: "FR" | "EN"; value: "fr" | "en" }[] = [
-  { label: "EN", value: "en" },
-  { label: "FR", value: "fr" },
+const languages: { label: 'FR' | 'EN'; value: 'fr' | 'en' }[] = [
+  { label: 'EN', value: 'en' },
+  { label: 'FR', value: 'fr' },
 ];
 
 const LanguageSwitcher = () => {
-  //other
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
 
-  //router
   const router = useRouter();
-  const { locale } = useParams<{ locale: string }>();
-  const pathname = usePathname();
+  const locale = useLocale();
 
-  const handleClick = (event: any) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -32,72 +29,71 @@ const LanguageSwitcher = () => {
     setAnchorEl(null);
   };
 
-  const handleChange = (value: "fr" | "en") => {
-    router.push(pathname, { locale: value });
+  const handleChange = (value: 'fr' | 'en') => {
+    document.cookie = serialize('NEXT_LOCALE', value, { path: '/' });
+    router.refresh();
   };
 
   if (!locale) {
-    return <></>;
+    return null;
   }
 
   return (
     <div>
       <Button
         id="basic-button"
-        aria-controls={open ? "basic-menu" : undefined}
+        aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
+        aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         sx={{
-          padding: "0",
-          color: "black",
-          fontWeight: "200",
-          minWidth: "inherit",
-          "& .MuiTouchRipple-root": {
-            display: "none",
+          padding: '0',
+          color: 'black',
+          fontWeight: '200',
+          minWidth: 'inherit',
+          '& .MuiTouchRipple-root': {
+            display: 'none',
           },
         }}
       >
         <div>{locale.toUpperCase()}</div>
       </Button>
       <Popover
-        id={id}
+        id="simple-popover"
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
+          vertical: 'bottom',
+          horizontal: 'center',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
+          vertical: 'top',
+          horizontal: 'center',
         }}
         sx={{
-          "& .MuiPaper-root": {
-            backgroundColor: "transparent",
-            boxShadow: "none",
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.6rem",
-            marginTop: "0.4rem",
+          '& .MuiPaper-root': {
+            backgroundColor: 'transparent',
+            boxShadow: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.6rem',
+            marginTop: '0.4rem',
           },
         }}
       >
-        {languages.map((currentLanguage, index) => {
-          return (
-            <div
-              key={index}
-              className={clsx(
-                styles.menuItems,
-                locale === currentLanguage.value && styles.selected
-              )}
-              onClick={() => handleChange(currentLanguage.value)}
-            >
-              {currentLanguage.label}
-            </div>
-          );
-        })}
+        {languages.map((currentLanguage, index) => (
+          <div
+            key={index}
+            className={clsx(
+              styles.menuItems,
+              locale === currentLanguage.value && styles.selected,
+            )}
+            onClick={() => handleChange(currentLanguage.value)}
+          >
+            {currentLanguage.label}
+          </div>
+        ))}
       </Popover>
     </div>
   );

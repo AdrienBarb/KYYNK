@@ -1,23 +1,18 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import styles from "@/styles/Form.module.scss";
-import { useRouter } from "next/navigation";
-import LoadingButton from "@/components/Buttons/LoadingButton";
-import CustomTextField from "@/components/Inputs/TextField";
-import { useSelector } from "react-redux";
-import {
-  resetForgotPassword,
-  resetPassword,
-} from "@/features/forgot-password/forgotPasswordSlice";
-import { RootStateType, useAppDispatch } from "@/store/store";
-import { IconButton, InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useParams } from "next/navigation";
-import { useTranslations } from "next-intl";
-import toast from "react-hot-toast";
+import React, { useState } from 'react';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import styles from '@/styles/Form.module.scss';
+import { useRouter } from 'next/navigation';
+import LoadingButton from '@/components/Buttons/LoadingButton';
+import CustomTextField from '@/components/Inputs/TextField';
+import { IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import toast from 'react-hot-toast';
+import useApi from '@/lib/hooks/useApi';
 
 const UserResetPasswordForm = () => {
   //router
@@ -28,9 +23,6 @@ const UserResetPasswordForm = () => {
   }>();
 
   //redux
-  const state = useSelector((state: RootStateType) => state.forgotPassword);
-  const dispatch = useAppDispatch();
-
   const t = useTranslations();
 
   //localstate
@@ -38,14 +30,17 @@ const UserResetPasswordForm = () => {
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
 
-  useEffect(() => {
-    if (state.isPasswordResetSuccess) {
-      toast.success(t("success.passwordChangeSucceed"));
-      router.push("/");
-    }
+  const { usePost } = useApi();
 
-    dispatch(resetForgotPassword());
-  }, [state.isPasswordResetSuccess]);
+  const { mutate: resetPassword, isLoading } = usePost(
+    `/api/me/password/reset`,
+    {
+      onSuccess: () => {
+        toast.success(t('success.passwordChangeSucceed'));
+        router.push('/');
+      },
+    },
+  );
 
   const handleClickShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -58,33 +53,31 @@ const UserResetPasswordForm = () => {
   const validationSchema = yup.object({
     password: yup
       .string()
-      .required(t("error.field_required"))
-      .min(8, t("error.password_to_short")),
+      .required(t('error.field_required'))
+      .min(8, t('error.password_to_short')),
     passwordConfirmation: yup
       .string()
-      .required(t("error.field_required"))
-      .min(8, t("error.password_to_short")),
+      .required(t('error.field_required'))
+      .min(8, t('error.password_to_short')),
   });
 
   const formik = useFormik({
     initialValues: {
-      password: "",
-      passwordConfirmation: "",
+      password: '',
+      passwordConfirmation: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       if (values.password !== values.passwordConfirmation) {
-        toast.error(t("error.password_confirmation_invalid"));
+        toast.error(t('error.password_confirmation_invalid'));
         return;
       }
 
-      dispatch(
-        resetPassword({
-          password: values.password,
-          userId: userId,
-          token: token,
-        })
-      );
+      resetPassword({
+        password: values.password,
+        userId: userId,
+        token: token,
+      });
     },
   });
 
@@ -94,10 +87,10 @@ const UserResetPasswordForm = () => {
         <CustomTextField
           variant="standard"
           fullWidth
-          type={showPassword ? "text" : "password"}
+          type={showPassword ? 'text' : 'password'}
           id="password"
           name="password"
-          label={t("common.password")}
+          label={t('common.password')}
           value={formik.values.password}
           onChange={formik.handleChange}
           error={formik.touched.password && Boolean(formik.errors.password)}
@@ -119,10 +112,10 @@ const UserResetPasswordForm = () => {
         <CustomTextField
           variant="standard"
           fullWidth
-          type={showPasswordConfirmation ? "text" : "password"}
+          type={showPasswordConfirmation ? 'text' : 'password'}
           id="passwordConfirmation"
           name="passwordConfirmation"
-          label={t("common.passwordConfirmation")}
+          label={t('common.passwordConfirmation')}
           value={formik.values.passwordConfirmation}
           onChange={formik.handleChange}
           error={
@@ -151,12 +144,8 @@ const UserResetPasswordForm = () => {
           }}
         />
 
-        <LoadingButton
-          fullWidth
-          type="submit"
-          loading={state.isPasswordResetLoading}
-        >
-          {t("common.validate")}
+        <LoadingButton fullWidth type="submit" loading={isLoading}>
+          {t('common.validate')}
         </LoadingButton>
       </form>
     </div>

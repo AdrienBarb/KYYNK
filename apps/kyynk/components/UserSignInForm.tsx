@@ -11,8 +11,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { appRouter } from '@/appRouter';
-import { useRouter } from '@/navigation';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { authenticate } from '@/lib/server-actions/users/authenticate';
 
 const UserSignInForm = () => {

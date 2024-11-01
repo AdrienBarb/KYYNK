@@ -1,8 +1,8 @@
-import { Link } from "@/navigation";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { FC, ReactNode } from "react";
-import styles from "@/styles/BackButton.module.scss";
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { FC, ReactNode } from 'react';
+import styles from '@/styles/BackButton.module.scss';
+import Link from 'next/link';
 
 interface Props {
   prevPath: string;

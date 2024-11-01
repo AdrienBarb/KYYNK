@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React, { useState, FC } from "react";
-import { styled } from "@mui/material/styles";
-import Tabs, { TabsProps } from "@mui/material/Tabs";
-import Tab, { TabProps } from "@mui/material/Tab";
-import { usePathname, useRouter } from "@/navigation";
+import React, { useState, FC } from 'react';
+import { styled } from '@mui/material/styles';
+import Tabs, { TabsProps } from '@mui/material/Tabs';
+import Tab, { TabProps } from '@mui/material/Tab';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface Props {
   tabs: { label: string; path: string }[];
@@ -42,36 +42,36 @@ const StyledTabs = styled((props: TabsProps) => (
     TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
   />
 ))({
-  marginTop: "2rem",
-  width: "100%",
-  "& .MuiTabs-indicator": {
-    display: "flex",
-    justifyContent: "center",
-    backgroundColor: "transparent",
+  marginTop: '2rem',
+  width: '100%',
+  '& .MuiTabs-indicator': {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
   },
-  "& .MuiTabs-indicatorSpan": {
-    width: "100%",
-    backgroundColor: "black",
+  '& .MuiTabs-indicatorSpan': {
+    width: '100%',
+    backgroundColor: 'black',
   },
-  "& .MuiTabs-flexContainer": {
-    display: "flex",
-    borderBottom: "1px solid black",
+  '& .MuiTabs-flexContainer': {
+    display: 'flex',
+    borderBottom: '1px solid black',
   },
 });
 
 const StyledTab = styled((props: TabProps) => <Tab disableRipple {...props} />)(
   ({ theme }) => ({
-    textTransform: "none",
-    marginRight: "0.4rem",
-    minWidth: "42px",
-    fontSize: "18px",
-    color: "#1C131E",
+    textTransform: 'none',
+    marginRight: '0.4rem',
+    minWidth: '42px',
+    fontSize: '18px',
+    color: '#1C131E',
     fontWeight: 500,
-    "&.Mui-selected": {
-      color: "black",
+    '&.Mui-selected': {
+      color: 'black',
     },
-    "&.Mui-focusVisible": {
-      backgroundColor: "black",
+    '&.Mui-focusVisible': {
+      backgroundColor: 'black',
     },
-  })
+  }),
 );

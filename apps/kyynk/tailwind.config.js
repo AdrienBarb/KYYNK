@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ['class'],
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -15,6 +14,7 @@ module.exports = {
         primary: '#cecaff',
         'primary-light': '#d9d7f6',
         background: '#fff0eb',
+        destructive: 'red',
       },
       borderRadius: {
         lg: 'var(--radius)',

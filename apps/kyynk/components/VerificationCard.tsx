@@ -1,8 +1,8 @@
-import React, { FC } from "react";
-import styles from "@/styles/VerificationCard.module.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "@/navigation";
+import React, { FC } from 'react';
+import styles from '@/styles/VerificationCard.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
 
 interface VerificationCardProps {
   isValid: boolean;
@@ -21,8 +21,8 @@ const VerificationCard: FC<VerificationCardProps> = ({
       prefetch
       className={styles.container}
       style={{
-        backgroundColor: isValid ? "#cecaff" : "transparent",
-        color: isValid ? "white" : "black",
+        backgroundColor: isValid ? '#cecaff' : 'transparent',
+        color: isValid ? 'white' : 'black',
       }}
     >
       <div>

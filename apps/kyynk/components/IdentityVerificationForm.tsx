@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import React, { useState, useMemo, FC, useEffect } from "react";
-import Dropzone from "react-dropzone";
-import styles from "@/styles/CreatorIdentityVerificationForm.module.scss";
-import Image from "next/image";
-import CloseIcon from "@mui/icons-material/Close";
-import LoadingButton from "./Buttons/LoadingButton";
-import { useTranslations } from "next-intl";
-import toast from "react-hot-toast";
-import { useSession } from "next-auth/react";
-import { useRouter } from "@/navigation";
-import CenterHeader from "./CenterHeader";
-import useApi from "@/lib/hooks/useApi";
-import { User } from "@/types/models/User";
-import axios from "axios";
-import Pica from "pica";
+import React, { useState, useMemo, FC, useEffect } from 'react';
+import Dropzone from 'react-dropzone';
+import styles from '@/styles/CreatorIdentityVerificationForm.module.scss';
+import Image from 'next/image';
+import CloseIcon from '@mui/icons-material/Close';
+import LoadingButton from './Buttons/LoadingButton';
+import { useTranslations } from 'next-intl';
+import toast from 'react-hot-toast';
+import { useSession } from 'next-auth/react';
+import CenterHeader from './CenterHeader';
+import useApi from '@/lib/hooks/useApi';
+import { User } from '@/types/models/User';
+import axios from 'axios';
+import Pica from 'pica';
+import { useRouter } from 'next/navigation';
 
 interface Props {}
 
@@ -24,7 +24,7 @@ const IdentityVerificationForm: FC<Props> = () => {
   const [frontIdentity, setFrontIdentity] = useState<null | File>(null);
   const [backIdentity, setBackIdentity] = useState<null | File>(null);
   const [frontAndFaceIdentity, setFrontAndFaceIdentity] = useState<null | File>(
-    null
+    null,
   );
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const { data: session, update } = useSession();
@@ -37,7 +37,7 @@ const IdentityVerificationForm: FC<Props> = () => {
       onSuccess: async ({ signedUrls, keys }) => {
         await uploadIdentities(signedUrls, keys);
       },
-    }
+    },
   );
 
   const { mutate: identityVerification } = usePost(
@@ -53,10 +53,10 @@ const IdentityVerificationForm: FC<Props> = () => {
             },
           };
           update(updatedSession);
-          router.push("/dashboard/account/become-creator");
+          router.push('/dashboard/account/become-creator');
         }
       },
-    }
+    },
   );
 
   const getCurrentOwner = async () => {
@@ -84,7 +84,7 @@ const IdentityVerificationForm: FC<Props> = () => {
 
   const handleSubmitForm = () => {
     if (!frontIdentity || !backIdentity || !frontAndFaceIdentity) {
-      toast.error(t("error.missingPictures"));
+      toast.error(t('error.missingPictures'));
       return;
     }
 
@@ -107,13 +107,13 @@ const IdentityVerificationForm: FC<Props> = () => {
       frontIdentity: string;
       backIdentity: string;
       frontAndFaceIdentity: string;
-    }
+    },
   ) => {
     try {
       const pica = Pica();
 
       const uploadImage = async (imageFile: File | null, signedUrl: string) => {
-        const img = document.createElement("img");
+        const img = document.createElement('img');
         const reader = new FileReader();
 
         if (!imageFile) {
@@ -124,17 +124,17 @@ const IdentityVerificationForm: FC<Props> = () => {
         reader.onload = async (e) => {
           img.src = e.target?.result as string;
           img.onload = async () => {
-            const canvas = document.createElement("canvas");
+            const canvas = document.createElement('canvas');
             const scaleFactor = 600 / Math.max(img.width, img.height);
             canvas.width = img.width * scaleFactor;
             canvas.height = img.height * scaleFactor;
 
             await pica.resize(img, canvas);
-            const jpegBlob = await pica.toBlob(canvas, "image/jpeg", 1);
+            const jpegBlob = await pica.toBlob(canvas, 'image/jpeg', 1);
 
             await axios.put(signedUrl, jpegBlob, {
               headers: {
-                "Content-Type": "image/jpeg",
+                'Content-Type': 'image/jpeg',
               },
             });
           };
@@ -145,76 +145,76 @@ const IdentityVerificationForm: FC<Props> = () => {
       await uploadImage(backIdentity, signedUrls.backIdentityUrl);
       await uploadImage(
         frontAndFaceIdentity,
-        signedUrls.frontAndFaceIdentityUrl
+        signedUrls.frontAndFaceIdentityUrl,
       );
 
       identityVerification(keys);
     } catch (error) {
-      toast.error(t("error.uploadFailed"));
-      console.error("Error uploading identity images: ", error);
+      toast.error(t('error.uploadFailed'));
+      console.error('Error uploading identity images: ', error);
     }
   };
 
   const baseStyle = {
     flex: 1,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "2rem",
-    width: "100%",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '2rem',
+    width: '100%',
     borderWidth: 2,
     borderRadius: 2,
-    borderColor: "black",
-    borderStyle: "dashed",
-    backgroundColor: "transparent",
-    outline: "none",
-    transition: "border .24s ease-in-out",
+    borderColor: 'black',
+    borderStyle: 'dashed',
+    backgroundColor: 'transparent',
+    outline: 'none',
+    transition: 'border .24s ease-in-out',
   };
 
   const style = useMemo(
     () => ({
       ...baseStyle,
     }),
-    []
+    [],
   );
 
   return (
     <div className={styles.container}>
-      {currentUser?.verified === "unverified" && (
+      {currentUser?.verified === 'unverified' && (
         <div className={styles.status}>
           <CenterHeader
             tag="h2"
-            title={t("common.identityUnverified")}
-            description={t("common.identity_verification_explanation")}
+            title={t('common.identityUnverified')}
+            description={t('common.identity_verification_explanation')}
           />
         </div>
       )}
-      {currentUser?.verified === "rejected" && (
+      {currentUser?.verified === 'rejected' && (
         <div className={styles.status}>
           <CenterHeader
             tag="h2"
-            title={t("common.status_rejected")}
-            description={t("common.reimport_document")}
+            title={t('common.status_rejected')}
+            description={t('common.reimport_document')}
           />
         </div>
       )}
-      {currentUser?.verified === "pending" && (
+      {currentUser?.verified === 'pending' && (
         <div className={styles.status}>
           <CenterHeader
             tag="h2"
-            title={t("common.being_verified")}
-            description={t("common.pending_explanation")}
+            title={t('common.being_verified')}
+            description={t('common.pending_explanation')}
           />
         </div>
       )}
-      {currentUser?.verified === "verified" && (
+      {currentUser?.verified === 'verified' && (
         <div className={styles.status}>
-          <CenterHeader tag="h2" title={t("common.identityVerified")} />
+          <CenterHeader tag="h2" title={t('common.identityVerified')} />
         </div>
       )}
 
-      {(currentUser?.verified === "unverified" ||
-        currentUser?.verified === "rejected") && (
+      {(currentUser?.verified === 'unverified' ||
+        currentUser?.verified === 'rejected') && (
         <>
           <div className={styles.dropzoneContainer}>
             <div className={styles.dropzoneWrapper}>
@@ -223,7 +223,7 @@ const IdentityVerificationForm: FC<Props> = () => {
                   className={styles.previewWrapper}
                   style={{
                     backgroundImage: `url(${URL.createObjectURL(
-                      frontIdentity
+                      frontIdentity,
                     )})`,
                   }}
                 >
@@ -231,17 +231,17 @@ const IdentityVerificationForm: FC<Props> = () => {
                     className={styles.deleteIcon}
                     onClick={() => setFrontIdentity(null)}
                   >
-                    <CloseIcon sx={{ color: "black" }} />
+                    <CloseIcon sx={{ color: 'black' }} />
                   </div>
                 </div>
               ) : (
-                ""
+                ''
               )}
               <Dropzone
                 onDrop={onDropIdentityFront}
                 multiple={false}
                 accept={{
-                  "image/png": [".png", ".jpg", ".jpeg"],
+                  'image/png': ['.png', '.jpg', '.jpeg'],
                 }}
               >
                 {({ getRootProps, getInputProps }) => (
@@ -249,16 +249,16 @@ const IdentityVerificationForm: FC<Props> = () => {
                     <input {...getInputProps()} />
 
                     <div className={styles.dropzoneDetails}>
-                      <h4>{t("common.front_face")}</h4>
+                      <h4>{t('common.front_face')}</h4>
                       <p>
                         <span className={styles.fileLink}>
-                          {t("common.search")}
-                        </span>{" "}
-                        {t("common.or")}{" "}
+                          {t('common.search')}
+                        </span>{' '}
+                        {t('common.or')}{' '}
                         <span className={styles.fileLink}>
-                          {t("common.put")}
-                        </span>{" "}
-                        {t("common.file")}
+                          {t('common.put')}
+                        </span>{' '}
+                        {t('common.file')}
                       </p>
                       <Image
                         alt="Image description devant de la carte d'identité"
@@ -277,7 +277,7 @@ const IdentityVerificationForm: FC<Props> = () => {
                   className={styles.previewWrapper}
                   style={{
                     backgroundImage: `url(${URL.createObjectURL(
-                      backIdentity
+                      backIdentity,
                     )})`,
                   }}
                 >
@@ -285,17 +285,17 @@ const IdentityVerificationForm: FC<Props> = () => {
                     className={styles.deleteIcon}
                     onClick={() => setBackIdentity(null)}
                   >
-                    <CloseIcon sx={{ color: "black" }} />
+                    <CloseIcon sx={{ color: 'black' }} />
                   </div>
                 </div>
               ) : (
-                ""
+                ''
               )}
               <Dropzone
                 onDrop={onDropIdentityBack}
                 multiple={false}
                 accept={{
-                  "image/png": [".png", ".jpg", ".jpeg"],
+                  'image/png': ['.png', '.jpg', '.jpeg'],
                 }}
               >
                 {({ getRootProps, getInputProps }) => (
@@ -303,16 +303,16 @@ const IdentityVerificationForm: FC<Props> = () => {
                     <input {...getInputProps()} />
 
                     <div className={styles.dropzoneDetails}>
-                      <h4>{t("common.back_face")}</h4>
+                      <h4>{t('common.back_face')}</h4>
                       <p>
                         <span className={styles.fileLink}>
-                          {t("common.search")}
-                        </span>{" "}
-                        {t("common.or")}{" "}
+                          {t('common.search')}
+                        </span>{' '}
+                        {t('common.or')}{' '}
                         <span className={styles.fileLink}>
-                          {t("common.put")}
-                        </span>{" "}
-                        {t("common.file")}
+                          {t('common.put')}
+                        </span>{' '}
+                        {t('common.file')}
                       </p>
                       <Image
                         alt="Image description dos de la carte d'identité"
@@ -331,7 +331,7 @@ const IdentityVerificationForm: FC<Props> = () => {
                   className={styles.previewWrapper}
                   style={{
                     backgroundImage: `url(${URL.createObjectURL(
-                      frontAndFaceIdentity
+                      frontAndFaceIdentity,
                     )})`,
                   }}
                 >
@@ -339,17 +339,17 @@ const IdentityVerificationForm: FC<Props> = () => {
                     className={styles.deleteIcon}
                     onClick={() => setFrontAndFaceIdentity(null)}
                   >
-                    <CloseIcon sx={{ color: "black" }} />
+                    <CloseIcon sx={{ color: 'black' }} />
                   </div>
                 </div>
               ) : (
-                ""
+                ''
               )}
               <Dropzone
                 onDrop={onDropIdentityFrontAndFace}
                 multiple={false}
                 accept={{
-                  "image/png": [".png", ".jpg", ".jpeg"],
+                  'image/png': ['.png', '.jpg', '.jpeg'],
                 }}
               >
                 {({ getRootProps, getInputProps }) => (
@@ -357,16 +357,16 @@ const IdentityVerificationForm: FC<Props> = () => {
                     <input {...getInputProps()} />
 
                     <div className={styles.dropzoneDetails}>
-                      <h4>{t("common.face_and_id")}</h4>
+                      <h4>{t('common.face_and_id')}</h4>
                       <p>
                         <span className={styles.fileLink}>
-                          {t("common.search")}
-                        </span>{" "}
-                        {t("common.or")}{" "}
+                          {t('common.search')}
+                        </span>{' '}
+                        {t('common.or')}{' '}
                         <span className={styles.fileLink}>
-                          {t("common.put")}
-                        </span>{" "}
-                        {t("common.file")}
+                          {t('common.put')}
+                        </span>{' '}
+                        {t('common.file')}
                       </p>
                       <Image
                         alt="Image description face et photo d'identité"
@@ -382,15 +382,15 @@ const IdentityVerificationForm: FC<Props> = () => {
           </div>
 
           <ul>
-            <li>{t("common.rule_1")}</li>
-            <li>{t("common.rule_2")}</li>
-            <li>{t("common.rule_3")}</li>
-            <li>{t("common.rule_4")}</li>
+            <li>{t('common.rule_1')}</li>
+            <li>{t('common.rule_2')}</li>
+            <li>{t('common.rule_3')}</li>
+            <li>{t('common.rule_4')}</li>
           </ul>
 
           <div className={styles.message}>
             <div className={styles.divider}></div>
-            <p>{t("common.info")}</p>
+            <p>{t('common.info')}</p>
             <div className={styles.divider}></div>
           </div>
 
@@ -400,7 +400,7 @@ const IdentityVerificationForm: FC<Props> = () => {
             loading={isLoading}
             onClick={() => handleSubmitForm()}
           >
-            {t("common.validate")}
+            {t('common.validate')}
           </LoadingButton>
         </>
       )}

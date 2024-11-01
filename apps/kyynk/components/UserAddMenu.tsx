@@ -1,10 +1,10 @@
-import React from "react";
-import Button from "@mui/material/Button";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import styles from "@/styles/CreatorAddMenu.module.scss";
-import { Popover } from "@mui/material";
-import { useRouter } from "@/navigation";
-import { useSession } from "next-auth/react";
+import React from 'react';
+import Button from '@mui/material/Button';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import styles from '@/styles/CreatorAddMenu.module.scss';
+import { Popover } from '@mui/material';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const UserAddMenu = () => {
   //session
@@ -13,7 +13,7 @@ const UserAddMenu = () => {
   //other
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const id = open ? 'simple-popover' : undefined;
 
   //router
   const router = useRouter();
@@ -35,24 +35,24 @@ const UserAddMenu = () => {
     <div data-id="user-add-menu">
       <Button
         id="basic-button"
-        aria-controls={open ? "basic-menu" : undefined}
+        aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
+        aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         sx={{
-          padding: "0",
-          color: "black",
-          minWidth: "inherit",
-          "& .MuiTouchRipple-root": {
-            display: "none",
+          padding: '0',
+          color: 'black',
+          minWidth: 'inherit',
+          '& .MuiTouchRipple-root': {
+            display: 'none',
           },
         }}
       >
         <AddCircleIcon
           sx={{
-            fontSize: "48",
-            cursor: "pointer",
-            color: anchorEl ? "#cecaff" : "#1C131E",
+            fontSize: '48',
+            cursor: 'pointer',
+            color: anchorEl ? '#cecaff' : '#1C131E',
           }}
         />
       </Button>
@@ -62,34 +62,34 @@ const UserAddMenu = () => {
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
+          vertical: 'bottom',
+          horizontal: 'center',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
+          vertical: 'top',
+          horizontal: 'center',
         }}
         sx={{
-          "& .MuiPaper-root": {
-            backgroundColor: "transparent",
-            boxShadow: "none",
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.6rem",
-            marginTop: "0.4rem",
+          '& .MuiPaper-root': {
+            backgroundColor: 'transparent',
+            boxShadow: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.6rem',
+            marginTop: '0.4rem',
           },
         }}
       >
         <div
           className={styles.menuItems}
-          onClick={() => handleNav("/dashboard/account/add/nudes")}
+          onClick={() => handleNav('/dashboard/account/add/nudes')}
         >
           Nudes
         </div>
         {session?.user?.isAccountVerified && (
           <div
             className={styles.menuItems}
-            onClick={() => handleNav("/dashboard/account/add/push")}
+            onClick={() => handleNav('/dashboard/account/add/push')}
           >
             Push
           </div>

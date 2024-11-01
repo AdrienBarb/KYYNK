@@ -44,7 +44,10 @@ export const POST = async (req: NextRequest) => {
     });
 
     if (error) {
-      return NextResponse.json({ message: 'email_error' }, { status: 400 });
+      return NextResponse.json(
+        { message: errorMessages.EMAIL_ERROR },
+        { status: 400 },
+      );
     }
 
     return NextResponse.json({ message: 'OK' }, { status: 200 });

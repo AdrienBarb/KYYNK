@@ -1,38 +1,38 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState, useRef, FC } from "react";
-import { useFormik } from "formik";
-import styles from "@/styles/Form.module.scss";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import FormHelperText from "@mui/material/FormHelperText";
-import * as yup from "yup";
+import React, { useEffect, useState, useRef, FC } from 'react';
+import { useFormik } from 'formik';
+import styles from '@/styles/Form.module.scss';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import * as yup from 'yup';
 import {
   BODY_TYPE,
   HAIR_COLOR,
   ageValues,
   countries,
-} from "@/constants/formValue";
-import LoadingButton from "@/components/Buttons/LoadingButton";
-import CustomTextField from "@/components/Inputs/TextField";
-import EditIcon from "@mui/icons-material/Edit";
-import clsx from "clsx";
-import { useTranslations } from "next-intl";
-import { useRouter } from "@/navigation";
-import userService from "@/features/user/userService";
-import { Gender } from "@/types/models/genderModel";
-import { User } from "@/types/models/User";
-import useApi from "@/lib/hooks/useApi";
-import axios from "axios";
-import Pica from "pica";
-import InputWrapper from "./InputWrapper";
-import { Media } from "@/types/models/Media";
-import GalleryModal from "./GalleryModal";
-import GalleryCard from "./GalleryCard";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import Select from "react-select";
-import { TAGS, TagsType, tagList } from "@/constants/constants";
-import { useSession } from "next-auth/react";
+} from '@/constants/formValue';
+import LoadingButton from '@/components/Buttons/LoadingButton';
+import CustomTextField from '@/components/Inputs/TextField';
+import EditIcon from '@mui/icons-material/Edit';
+import clsx from 'clsx';
+import { useTranslations } from 'next-intl';
+import userService from '@/features/user/userService';
+import { Gender } from '@/types/models/genderModel';
+import { User } from '@/types/models/User';
+import useApi from '@/lib/hooks/useApi';
+import axios from 'axios';
+import Pica from 'pica';
+import InputWrapper from './InputWrapper';
+import { Media } from '@/types/models/Media';
+import GalleryModal from './GalleryModal';
+import GalleryCard from './GalleryCard';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import Select from 'react-select';
+import { TAGS, TagsType, tagList } from '@/constants/constants';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   initialUserDatas: User;
@@ -65,7 +65,7 @@ const UserForm: FC<Props> = ({
 
   const { usePut, useGet, fetchData } = useApi();
 
-  const { mutate: doPost, isLoading } = usePut("/api/users/owner", {
+  const { mutate: doPost, isLoading } = usePut('/api/users/owner', {
     onSuccess: () => {
       router.push(nextPage);
     },
@@ -78,7 +78,7 @@ const UserForm: FC<Props> = ({
       setCurrentUser(r);
       setSelectedMedias(r.secondaryProfileImages);
 
-      formik.setFieldValue("tags", [
+      formik.setFieldValue('tags', [
         ...TAGS.filter((el) => r.tags.includes(el.value)).map((c) => {
           return {
             value: c.value,
@@ -100,20 +100,20 @@ const UserForm: FC<Props> = ({
   const validationSchema = yup.object({
     pseudo: yup
       .string()
-      .matches(/^[a-zA-Z0-9._-]{3,30}$/, t("error.pseudo_invalid"))
-      .required("Pseudo is required"),
+      .matches(/^[a-zA-Z0-9._-]{3,30}$/, t('error.pseudo_invalid'))
+      .required('Pseudo is required'),
   });
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       pseudo: currentUser.pseudo,
-      description: currentUser.description ?? "",
-      age: currentUser.age ?? "",
-      gender: currentUser.gender?._id ?? "",
-      bodyType: currentUser.bodyType ?? "",
-      hairColor: currentUser.hairColor ?? "",
-      country: currentUser.country ?? "",
+      description: currentUser.description ?? '',
+      age: currentUser.age ?? '',
+      gender: currentUser.gender?._id ?? '',
+      bodyType: currentUser.bodyType ?? '',
+      hairColor: currentUser.hairColor ?? '',
+      country: currentUser.country ?? '',
       tags: [],
     },
     validationSchema: validationSchema,
@@ -121,7 +121,7 @@ const UserForm: FC<Props> = ({
       const formValues = {
         description: values.description,
         pseudo: values.pseudo,
-        age: typeof values.age === "string" ? parseInt(values.age) : values.age,
+        age: typeof values.age === 'string' ? parseInt(values.age) : values.age,
         gender: values.gender,
         bodyType: values.bodyType,
         hairColor: values.hairColor,
@@ -135,20 +135,20 @@ const UserForm: FC<Props> = ({
   });
 
   const handleFileUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (!event.target.files) return;
 
     const file = event.target.files[0];
-    const img = document.createElement("img");
+    const img = document.createElement('img');
 
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = async (e) => {
       img.src = e.target?.result as string;
       img.onload = async () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
         const pica = Pica();
 
         const scaleFactor = 600 / Math.max(img.width, img.height);
@@ -157,16 +157,16 @@ const UserForm: FC<Props> = ({
 
         await pica.resize(img, canvas);
 
-        const jpegBlob = await pica.toBlob(canvas, "image/jpeg", 1);
+        const jpegBlob = await pica.toBlob(canvas, 'image/jpeg', 1);
 
         const { signedUrl, profileImageUrl } =
           await userService.addProfilPicture({
-            filetype: "image/jpeg",
+            filetype: 'image/jpeg',
           });
 
         await axios.put(signedUrl, jpegBlob, {
           headers: {
-            "Content-Type": "image/jpeg",
+            'Content-Type': 'image/jpeg',
           },
         });
 
@@ -187,12 +187,12 @@ const UserForm: FC<Props> = ({
     <>
       <div
         className={styles.formWrapper}
-        style={{ backgroundColor: "transparent" }}
+        style={{ backgroundColor: 'transparent' }}
       >
         <form
           onSubmit={formik.handleSubmit}
           className={styles.form}
-          style={{ marginTop: "2rem" }}
+          style={{ marginTop: '2rem' }}
         >
           <div
             className={styles.imageWrapper}
@@ -206,7 +206,7 @@ const UserForm: FC<Props> = ({
               ref={profilInput}
               onChange={(e) => handleFileUpload(e)}
               type="file"
-              style={{ display: "none" }}
+              style={{ display: 'none' }}
               multiple={false}
               accept="image/png, image/jpeg"
             />
@@ -217,16 +217,16 @@ const UserForm: FC<Props> = ({
                 profilInput.current?.click();
               }}
             >
-              <EditIcon sx={{ color: "#FFF0EB" }} fontSize="small" />
+              <EditIcon sx={{ color: '#FFF0EB' }} fontSize="small" />
             </div>
           </div>
 
-          {session?.user?.userType === "creator" && (
-            <InputWrapper label={t("common.secondaryPictureProfile")}>
+          {session?.user?.userType === 'creator' && (
+            <InputWrapper label={t('common.secondaryPictureProfile')}>
               <div className={styles.mediaContainer}>
                 <div className={styles.add} onClick={handleOpenGallery}>
                   <AddCircleIcon
-                    sx={{ fontSize: "48", cursor: "pointer", color: "white" }}
+                    sx={{ fontSize: '48', cursor: 'pointer', color: 'white' }}
                   />
                 </div>
                 {selectedMedias.map(
@@ -241,13 +241,13 @@ const UserForm: FC<Props> = ({
                         />
                       </div>
                     );
-                  }
+                  },
                 )}
               </div>
             </InputWrapper>
           )}
 
-          <InputWrapper label={t("db.pseudo")}>
+          <InputWrapper label={t('db.pseudo')}>
             <CustomTextField
               variant="outlined"
               fullWidth
@@ -257,12 +257,12 @@ const UserForm: FC<Props> = ({
               onChange={formik.handleChange}
               error={formik.touched.pseudo && Boolean(formik.errors.pseudo)}
               helperText={
-                typeof formik.errors.pseudo === "string" && formik.errors.pseudo
+                typeof formik.errors.pseudo === 'string' && formik.errors.pseudo
               }
             />
           </InputWrapper>
 
-          <InputWrapper label={t("db.description")}>
+          <InputWrapper label={t('db.description')}>
             <CustomTextField
               variant="outlined"
               fullWidth
@@ -276,19 +276,19 @@ const UserForm: FC<Props> = ({
                 formik.touched.description && Boolean(formik.errors.description)
               }
               helperText={
-                typeof formik.errors.description === "string" &&
+                typeof formik.errors.description === 'string' &&
                 formik.errors.description
               }
             />
           </InputWrapper>
 
-          {session?.user?.userType === "creator" && (
-            <InputWrapper label={t("common.tags")}>
+          {session?.user?.userType === 'creator' && (
+            <InputWrapper label={t('common.tags')}>
               <Select
                 name="tags"
                 className={styles.multiSelect}
                 onChange={(selectedOptions) =>
-                  formik.setFieldValue("tags", selectedOptions)
+                  formik.setFieldValue('tags', selectedOptions)
                 }
                 options={tagList.map((currentTag) => {
                   return {
@@ -301,56 +301,56 @@ const UserForm: FC<Props> = ({
                 getOptionLabel={(el: TagsType) => el.label}
                 getOptionValue={(el: TagsType) => el.value}
                 closeMenuOnSelect={false}
-                placeholder={t("common.selectTagPlaceholder")}
-                noOptionsMessage={() => <span>{t("common.noOtpions")}</span>}
+                placeholder={t('common.selectTagPlaceholder')}
+                noOptionsMessage={() => <span>{t('common.noOtpions')}</span>}
                 styles={{
                   control: (styles) => ({
                     ...styles,
-                    backgroundColor: "transparent",
-                    boxShadow: "none",
-                    outline: "none",
-                    border: "1px solid rgba(0, 0, 0, 0.3)",
-                    ":hover": {
-                      border: "1px solid black",
+                    backgroundColor: 'transparent',
+                    boxShadow: 'none',
+                    outline: 'none',
+                    border: '1px solid rgba(0, 0, 0, 0.3)',
+                    ':hover': {
+                      border: '1px solid black',
                     },
                   }),
                   option: (
                     styles,
-                    { data, isDisabled, isFocused, isSelected }
+                    { data, isDisabled, isFocused, isSelected },
                   ) => ({
                     ...styles,
                     backgroundColor: isDisabled
                       ? undefined
                       : isSelected
-                      ? "#d9d7f6"
+                      ? '#d9d7f6'
                       : isFocused
-                      ? "#d9d7f6"
+                      ? '#d9d7f6'
                       : undefined,
                   }),
                   menuList: (styles) => ({
                     ...styles,
-                    backgroundColor: "#fff0eb",
-                    borderRadius: "6px",
+                    backgroundColor: '#fff0eb',
+                    borderRadius: '6px',
                   }),
                   multiValue: (styles) => ({
                     ...styles,
-                    backgroundColor: "#cecaff",
+                    backgroundColor: '#cecaff',
                   }),
                   multiValueLabel: (styles) => ({
                     ...styles,
-                    color: "white",
+                    color: 'white',
                   }),
                   multiValueRemove: (styles) => ({
                     ...styles,
-                    color: "white",
+                    color: 'white',
                   }),
                   noOptionsMessage: (styles) => ({
                     ...styles,
-                    color: "black",
+                    color: 'black',
                   }),
                   placeholder: (styles) => ({
                     ...styles,
-                    color: "rgba(0, 0, 0, 0.3)",
+                    color: 'rgba(0, 0, 0, 0.3)',
                   }),
                 }}
                 isMulti
@@ -358,10 +358,10 @@ const UserForm: FC<Props> = ({
             </InputWrapper>
           )}
 
-          <InputWrapper label={t("db.country")}>
+          <InputWrapper label={t('db.country')}>
             <FormControl
               variant="outlined"
-              sx={{ minWidth: 200, width: "100%" }}
+              sx={{ minWidth: 200, width: '100%' }}
             >
               <CustomTextField
                 select
@@ -371,7 +371,7 @@ const UserForm: FC<Props> = ({
                 onChange={formik.handleChange}
               >
                 <MenuItem value="">
-                  <em>{t("db.nothing")}</em>
+                  <em>{t('db.nothing')}</em>
                 </MenuItem>
                 {countries.map((el) => {
                   return (
@@ -381,9 +381,9 @@ const UserForm: FC<Props> = ({
                   );
                 })}
               </CustomTextField>
-              {typeof formik.errors.country === "string" &&
+              {typeof formik.errors.country === 'string' &&
                 formik.errors.country && (
-                  <FormHelperText sx={{ color: "red" }}>
+                  <FormHelperText sx={{ color: 'red' }}>
                     {formik.errors.country}
                   </FormHelperText>
                 )}
@@ -391,10 +391,10 @@ const UserForm: FC<Props> = ({
           </InputWrapper>
 
           <div className={styles.selectWrapper}>
-            <InputWrapper label={t("db.gender")}>
+            <InputWrapper label={t('db.gender')}>
               <FormControl
                 variant="outlined"
-                sx={{ minWidth: 200, width: "100%" }}
+                sx={{ minWidth: 200, width: '100%' }}
               >
                 <CustomTextField
                   select
@@ -404,7 +404,7 @@ const UserForm: FC<Props> = ({
                   onChange={formik.handleChange}
                 >
                   <MenuItem value="">
-                    <em>{t("db.nothing")}</em>
+                    <em>{t('db.nothing')}</em>
                   </MenuItem>
                   {genderCategories.map(
                     (currentCategory: Gender, index: number) => {
@@ -413,21 +413,21 @@ const UserForm: FC<Props> = ({
                           {t(`db.${currentCategory.name}`)}
                         </MenuItem>
                       );
-                    }
+                    },
                   )}
                 </CustomTextField>
-                {typeof formik.errors.gender === "string" &&
+                {typeof formik.errors.gender === 'string' &&
                   formik.errors.gender && (
-                    <FormHelperText sx={{ color: "red" }}>
+                    <FormHelperText sx={{ color: 'red' }}>
                       {formik.errors.gender}
                     </FormHelperText>
                   )}
               </FormControl>
             </InputWrapper>
-            <InputWrapper label={t("db.age")}>
+            <InputWrapper label={t('db.age')}>
               <FormControl
                 variant="outlined"
-                sx={{ minWidth: 200, width: "100%" }}
+                sx={{ minWidth: 200, width: '100%' }}
               >
                 <CustomTextField
                   select
@@ -437,7 +437,7 @@ const UserForm: FC<Props> = ({
                   onChange={formik.handleChange}
                 >
                   <MenuItem value="">
-                    <em>{t("db.nothing")}</em>
+                    <em>{t('db.nothing')}</em>
                   </MenuItem>
                   {ageValues.map((el) => {
                     return (
@@ -445,8 +445,8 @@ const UserForm: FC<Props> = ({
                     );
                   })}
                 </CustomTextField>
-                {typeof formik.errors.age === "string" && formik.errors.age && (
-                  <FormHelperText sx={{ color: "red" }}>
+                {typeof formik.errors.age === 'string' && formik.errors.age && (
+                  <FormHelperText sx={{ color: 'red' }}>
                     {formik.errors.age}
                   </FormHelperText>
                 )}
@@ -454,10 +454,10 @@ const UserForm: FC<Props> = ({
             </InputWrapper>
           </div>
           <div className={styles.selectWrapper}>
-            <InputWrapper label={t("db.body_type")}>
+            <InputWrapper label={t('db.body_type')}>
               <FormControl
                 variant="outlined"
-                sx={{ minWidth: 200, width: "100%" }}
+                sx={{ minWidth: 200, width: '100%' }}
               >
                 <CustomTextField
                   select
@@ -467,7 +467,7 @@ const UserForm: FC<Props> = ({
                   onChange={formik.handleChange}
                 >
                   <MenuItem value="">
-                    <em>{t("db.nothing")}</em>
+                    <em>{t('db.nothing')}</em>
                   </MenuItem>
                   {BODY_TYPE.map((el) => {
                     return (
@@ -477,18 +477,18 @@ const UserForm: FC<Props> = ({
                     );
                   })}
                 </CustomTextField>
-                {typeof formik.errors.bodyType === "string" &&
+                {typeof formik.errors.bodyType === 'string' &&
                   formik.errors.bodyType && (
-                    <FormHelperText sx={{ color: "red" }}>
+                    <FormHelperText sx={{ color: 'red' }}>
                       {formik.errors.bodyType}
                     </FormHelperText>
                   )}
               </FormControl>
             </InputWrapper>
-            <InputWrapper label={t("db.hair_color")}>
+            <InputWrapper label={t('db.hair_color')}>
               <FormControl
                 variant="outlined"
-                sx={{ minWidth: 200, width: "100%" }}
+                sx={{ minWidth: 200, width: '100%' }}
               >
                 <CustomTextField
                   select
@@ -498,7 +498,7 @@ const UserForm: FC<Props> = ({
                   onChange={formik.handleChange}
                 >
                   <MenuItem value="">
-                    <em>{t("db.nothing")}</em>
+                    <em>{t('db.nothing')}</em>
                   </MenuItem>
                   {HAIR_COLOR.map((el) => {
                     return (
@@ -508,9 +508,9 @@ const UserForm: FC<Props> = ({
                     );
                   })}
                 </CustomTextField>
-                {typeof formik.errors.hairColor === "string" &&
+                {typeof formik.errors.hairColor === 'string' &&
                   formik.errors.hairColor && (
-                    <FormHelperText sx={{ color: "red" }}>
+                    <FormHelperText sx={{ color: 'red' }}>
                       {formik.errors.hairColor}
                     </FormHelperText>
                   )}
@@ -523,7 +523,7 @@ const UserForm: FC<Props> = ({
             loading={isLoading}
             onClick={() => formik.handleSubmit()}
           >
-            {t("common.validate")}
+            {t('common.validate')}
           </LoadingButton>
         </form>
       </div>
@@ -533,7 +533,7 @@ const UserForm: FC<Props> = ({
         setSelectedMedias={setSelectedMedias}
         selectedMedias={selectedMedias}
         multiple={true}
-        mediaType={["image"]}
+        mediaType={['image']}
       />
     </>
   );

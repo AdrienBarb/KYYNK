@@ -1,12 +1,12 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState } from 'react';
 
-import { useRouter } from "@/navigation";
-import { Nude } from "@/types/models/Nude";
-import ConfirmationModal from "./ConfirmationModal";
-import { useTranslations } from "next-intl";
-import useApi from "@/lib/hooks/useApi";
-import DotMenuContainer from "./Common/Menu/DotMenuContainer";
-import MenuElement from "./Common/Menu/MenuElement";
+import { Nude } from '@/types/models/Nude';
+import ConfirmationModal from './ConfirmationModal';
+import { useTranslations } from 'next-intl';
+import useApi from '@/lib/hooks/useApi';
+import DotMenuContainer from './Common/Menu/DotMenuContainer';
+import MenuElement from './Common/Menu/MenuElement';
+import { useRouter } from 'next/navigation';
 
 interface MenuButtonProps {
   nude: Nude;
@@ -28,8 +28,8 @@ const NudeCardUserMenu: FC<MenuButtonProps> = ({ nude, setNudeList }) => {
       if (setNudeList) {
         setNudeList((previousNudesList) =>
           previousNudesList.filter(
-            (currentNude) => currentNude._id !== data._id
-          )
+            (currentNude) => currentNude._id !== data._id,
+          ),
         );
       }
     },
@@ -47,22 +47,22 @@ const NudeCardUserMenu: FC<MenuButtonProps> = ({ nude, setNudeList }) => {
 
   return (
     <DotMenuContainer>
-      <MenuElement onClick={handleEditClick}>{t("common.edit")}</MenuElement>
+      <MenuElement onClick={handleEditClick}>{t('common.edit')}</MenuElement>
 
       <MenuElement
         customStyles={{
-          color: "red",
+          color: 'red',
         }}
         onClick={handleDeleteClick}
       >
-        {t("common.delete")}
+        {t('common.delete')}
       </MenuElement>
 
       <ConfirmationModal
         setOpen={setOpenConfirmationModal}
         open={openConfirmationModal}
         confirmAction={() => deleteNude({})}
-        text={t("error.sureDeleteThisNude")}
+        text={t('error.sureDeleteThisNude')}
       />
     </DotMenuContainer>
   );

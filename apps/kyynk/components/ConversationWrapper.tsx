@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import React, { FC, ReactNode } from "react";
-import styles from "@/styles/ConversationWrapper.module.scss";
-import UserAvatar from "./UserAvatar";
-import { Link } from "@/navigation";
-import ConversationUserMenu from "./ConversationUserMenu";
-import { Conversation } from "@/types/models/Conversation";
-import { User } from "@/types/models/User";
+import React, { FC, ReactNode } from 'react';
+import styles from '@/styles/ConversationWrapper.module.scss';
+import UserAvatar from './UserAvatar';
+import ConversationUserMenu from './ConversationUserMenu';
+import { Conversation } from '@/types/models/Conversation';
+import { User } from '@/types/models/User';
+import Link from 'next/link';
 
 interface Props {
   conversation: Conversation;

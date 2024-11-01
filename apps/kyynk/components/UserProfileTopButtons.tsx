@@ -1,14 +1,13 @@
-"use client";
+'use client';
 
-import React, { useState, FC } from "react";
-import styles from "@/styles/UserProfileTopButtons.module.scss";
-import { useParams } from "next/navigation";
-import { faPen, faShare } from "@fortawesome/free-solid-svg-icons";
-import ShareModal from "@/components/ShareModal";
-import { useSession } from "next-auth/react";
-import { useRouter } from "@/navigation";
-import { appRouter } from "@/appRouter";
-import IconButton from "./Buttons/IconButton";
+import React, { useState, FC } from 'react';
+import styles from '@/styles/UserProfileTopButtons.module.scss';
+import { useParams, useRouter } from 'next/navigation';
+import { faPen, faShare } from '@fortawesome/free-solid-svg-icons';
+import ShareModal from '@/components/ShareModal';
+import { useSession } from 'next-auth/react';
+import { appRouter } from '@/appRouter';
+import IconButton from './Buttons/IconButton';
 
 interface Props {}
 

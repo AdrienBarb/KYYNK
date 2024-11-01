@@ -4,9 +4,9 @@ import {
   setToastError,
   setStatusCode,
 } from '../../features/error-handling/errorHandlingSlice';
-import { redirect } from '@/navigation';
 import { getSession } from 'next-auth/react';
-import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
+import { auth } from '@/auth';
 
 const isServer = typeof window === 'undefined';
 
@@ -75,7 +75,7 @@ axiosInstance.interceptors.request.use(async (config) => {
   let session;
 
   if (isServer) {
-    session = await getServerSession();
+    session = await auth();
   } else {
     session = await getSession();
   }

@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { Modal } from "@mui/material";
-import React, { FC, useState } from "react";
-import styles from "@/styles/UserTypeModal.module.scss";
-import Image from "next/image";
-import Title from "./Title";
-import Text from "./Text";
-import clsx from "clsx";
-import SimpleButton from "./Buttons/SimpleButton";
-import useApi from "@/lib/hooks/useApi";
-import { useSession } from "next-auth/react";
-import { useRouter } from "@/navigation";
-import { useTranslations } from "next-intl";
+import { Modal } from '@mui/material';
+import React, { FC, useState } from 'react';
+import styles from '@/styles/UserTypeModal.module.scss';
+import Image from 'next/image';
+import Title from './Title';
+import Text from './Text';
+import clsx from 'clsx';
+import SimpleButton from './Buttons/SimpleButton';
+import useApi from '@/lib/hooks/useApi';
+import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   setOpen: (e: boolean) => void;
@@ -19,7 +19,7 @@ interface Props {
 }
 
 const UserTypeModal: FC<Props> = ({ setOpen, open }) => {
-  const [userType, setUserType] = useState("");
+  const [userType, setUserType] = useState('');
   const { data: session, update } = useSession();
   const t = useTranslations();
 
@@ -48,25 +48,25 @@ const UserTypeModal: FC<Props> = ({ setOpen, open }) => {
     <Modal open={open} onClose={setOpen}>
       <div className={styles.container}>
         <div className={styles.wrapper}>
-          <div className={styles.title}>{t("common.whatKindOfUser")}</div>
+          <div className={styles.title}>{t('common.whatKindOfUser')}</div>
 
           <div className={styles.cardsWrapper}>
             <div
               className={clsx(
                 styles.card,
-                userType === "creator" && styles.selected
+                userType === 'creator' && styles.selected,
               )}
-              onClick={() => setUserType("creator")}
+              onClick={() => setUserType('creator')}
             >
               <Title Tag="h3" customStyles={{}}>
-                {t("common.creator")}
+                {t('common.creator')}
               </Title>
-              <Text customStyles={{ color: "white" }} textAlign="center">
-                {t("common.creatorTypeText")}
+              <Text customStyles={{ color: 'white' }} textAlign="center">
+                {t('common.creatorTypeText')}
               </Text>
               <div className={styles.image}>
                 <Image
-                  src={"/images/svg/pink.svg"}
+                  src={'/images/svg/pink.svg'}
                   alt="logo"
                   fill={true}
                   objectFit="contain"
@@ -76,19 +76,19 @@ const UserTypeModal: FC<Props> = ({ setOpen, open }) => {
             <div
               className={clsx(
                 styles.card,
-                userType === "member" && styles.selected
+                userType === 'member' && styles.selected,
               )}
-              onClick={() => setUserType("member")}
+              onClick={() => setUserType('member')}
             >
               <Title Tag="h3" customStyles={{}}>
-                {t("common.buyer")}
+                {t('common.buyer')}
               </Title>
-              <Text customStyles={{ color: "white" }} textAlign="center">
-                {t("common.buyerTypeText")}
+              <Text customStyles={{ color: 'white' }} textAlign="center">
+                {t('common.buyerTypeText')}
               </Text>
               <div className={styles.image}>
                 <Image
-                  src={"/images/svg/green.svg"}
+                  src={'/images/svg/green.svg'}
                   alt="logo"
                   fill={true}
                   objectFit="contain"
@@ -103,7 +103,7 @@ const UserTypeModal: FC<Props> = ({ setOpen, open }) => {
               editUserType({ userType });
             }}
           >
-            {t("common.continue")}
+            {t('common.continue')}
           </SimpleButton>
         </div>
       </div>

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React, { useState, FC } from "react";
-import { styled } from "@mui/material/styles";
-import Tabs, { TabsProps } from "@mui/material/Tabs";
-import Tab, { TabProps } from "@mui/material/Tab";
-import { usePathname, useRouter } from "@/navigation";
+import React, { useState, FC } from 'react';
+import { styled } from '@mui/material/styles';
+import Tabs, { TabsProps } from '@mui/material/Tabs';
+import Tab, { TabProps } from '@mui/material/Tab';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface Props {
   tabs: { label: string; path: string }[];
@@ -42,37 +42,37 @@ const StyledTabs = styled((props: TabsProps) => (
     TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
   />
 ))({
-  marginTop: "2rem",
-  width: "100%",
-  "& .MuiTabs-indicator": {
-    display: "flex",
-    justifyContent: "center",
-    backgroundColor: "transparent",
+  marginTop: '2rem',
+  width: '100%',
+  '& .MuiTabs-indicator': {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
   },
-  "& .MuiTabs-indicatorSpan": {
+  '& .MuiTabs-indicatorSpan': {
     maxWidth: 40,
-    width: "100%",
-    backgroundColor: "#Cecaff",
+    width: '100%',
+    backgroundColor: '#Cecaff',
   },
-  "& .MuiTabs-flexContainer": {
-    display: "flex",
-    justifyContent: "center",
+  '& .MuiTabs-flexContainer': {
+    display: 'flex',
+    justifyContent: 'center',
   },
 });
 
 const StyledTab = styled((props: TabProps) => <Tab disableRipple {...props} />)(
   ({ theme }) => ({
-    textTransform: "none",
-    marginRight: "0.4rem",
-    minWidth: "42px",
-    fontSize: "18px",
-    color: "#1C131E",
+    textTransform: 'none',
+    marginRight: '0.4rem',
+    minWidth: '42px',
+    fontSize: '18px',
+    color: '#1C131E',
     fontWeight: 300,
-    "&.Mui-selected": {
-      color: "#Cecaff",
+    '&.Mui-selected': {
+      color: '#Cecaff',
     },
-    "&.Mui-focusVisible": {
-      backgroundColor: "#Cecaff",
+    '&.Mui-focusVisible': {
+      backgroundColor: '#Cecaff',
     },
-  })
+  }),
 );

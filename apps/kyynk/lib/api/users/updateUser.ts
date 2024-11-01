@@ -12,6 +12,7 @@ export async function updateUser({
     pseudo: string;
     email: string;
     userType: 'member' | 'creator';
+    preferences: string[];
   };
 }) {
   const data: Prisma.UserUpdateInput = {};
@@ -35,6 +36,10 @@ export async function updateUser({
 
   if (body.userType) {
     data.userType = body.userType;
+  }
+
+  if (body.preferences) {
+    data.preferences = body.preferences;
   }
 
   return prisma.user.update({

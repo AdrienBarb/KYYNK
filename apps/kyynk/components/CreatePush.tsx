@@ -1,27 +1,26 @@
-"use client";
+'use client';
 
-import React, { FC, useEffect, useState } from "react";
-import styles from "@/styles/CreateNude.module.scss";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { getMediaPrice } from "@/lib/utils/price";
-import { Media } from "@/types/models/Media";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
-import GalleryModal from "@/components/GalleryModal";
-import CustomTextField from "./Inputs/TextField";
-import CustomLoadingButton from "./Buttons/LoadingButton";
-import InputWrapper from "./InputWrapper";
-import { useTranslations } from "next-intl";
-import { useParams, useSearchParams } from "next/navigation";
-import { useRouter } from "@/navigation";
-import useApi from "@/lib/hooks/useApi";
-import { useSession } from "next-auth/react";
-import toast from "react-hot-toast";
-import GalleryCard from "./GalleryCard";
-import CustomSlider from "./CustomSlider";
-import { Switch } from "@mui/material";
-import Text from "./Text";
-import { User } from "@/types/models/User";
+import React, { FC, useEffect, useState } from 'react';
+import styles from '@/styles/CreateNude.module.scss';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { getMediaPrice } from '@/lib/utils/price';
+import { Media } from '@/types/models/Media';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import GalleryModal from '@/components/GalleryModal';
+import CustomTextField from './Inputs/TextField';
+import CustomLoadingButton from './Buttons/LoadingButton';
+import InputWrapper from './InputWrapper';
+import { useTranslations } from 'next-intl';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import useApi from '@/lib/hooks/useApi';
+import { useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
+import GalleryCard from './GalleryCard';
+import CustomSlider from './CustomSlider';
+import { Switch } from '@mui/material';
+import Text from './Text';
+import { User } from '@/types/models/User';
 
 interface CreatePushProps {}
 
@@ -48,15 +47,15 @@ const CreatePush: FC<CreatePushProps> = () => {
 
   //other
   type UserList =
-    | "notificationSubscribers"
-    | "profileViewers"
-    | "messageSenders"
-    | "nudeBuyers";
+    | 'notificationSubscribers'
+    | 'profileViewers'
+    | 'messageSenders'
+    | 'nudeBuyers';
   const USERS_LIST: UserList[] = [
-    "notificationSubscribers",
-    "profileViewers",
-    "messageSenders",
-    "nudeBuyers",
+    'notificationSubscribers',
+    'profileViewers',
+    'messageSenders',
+    'nudeBuyers',
   ];
 
   const { mutate: createPush, isLoading } = usePost(`/api/nudes/push`, {
@@ -82,20 +81,20 @@ const CreatePush: FC<CreatePushProps> = () => {
   const validationSchema = yup.object({
     message: yup
       .string()
-      .required(t("error.field_required"))
-      .label(t("error.enterMessage")),
+      .required(t('error.field_required'))
+      .label(t('error.enterMessage')),
   });
 
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
       price: 0,
-      message: "",
+      message: '',
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       if (selectedMedias.length === 0) {
-        toast.error(t("error.missingMedias"));
+        toast.error(t('error.missingMedias'));
         return;
       }
 
@@ -138,8 +137,8 @@ const CreatePush: FC<CreatePushProps> = () => {
 
   return (
     <form className={styles.container}>
-      <Text>{t("common.pushExplanation")}</Text>
-      <InputWrapper label={t("common.whichGroupOfUsers")}>
+      <Text>{t('common.pushExplanation')}</Text>
+      <InputWrapper label={t('common.whichGroupOfUsers')}>
         {USERS_LIST.map((currentUsersList: UserList, index: number) => {
           return (
             <div className={styles.switchWrapper} key={index}>
@@ -153,12 +152,12 @@ const CreatePush: FC<CreatePushProps> = () => {
                   handleSelectedUsersListChange(currentUsersList)
                 }
                 sx={{
-                  color: "#Cecaff !important",
-                  ".Mui-checked": {
-                    color: "#Cecaff !important",
+                  color: '#Cecaff !important',
+                  '.Mui-checked': {
+                    color: '#Cecaff !important',
                   },
-                  ".MuiSwitch-track": {
-                    backgroundColor: "#Cecaff !important",
+                  '.MuiSwitch-track': {
+                    backgroundColor: '#Cecaff !important',
                   },
                 }}
               />
@@ -167,11 +166,11 @@ const CreatePush: FC<CreatePushProps> = () => {
         })}
       </InputWrapper>
 
-      <InputWrapper label={t("common.imageorVideo")}>
+      <InputWrapper label={t('common.imageorVideo')}>
         <div className={styles.mediaContainer}>
           <div className={styles.add} onClick={handleOpenGallery}>
             <AddCircleIcon
-              sx={{ fontSize: "48", cursor: "pointer", color: "white" }}
+              sx={{ fontSize: '48', cursor: 'pointer', color: 'white' }}
             />
           </div>
           {selectedMedias.map(
@@ -186,18 +185,18 @@ const CreatePush: FC<CreatePushProps> = () => {
                   />
                 </div>
               );
-            }
+            },
           )}
         </div>
       </InputWrapper>
 
-      <InputWrapper label={t("common.messageForm")}>
+      <InputWrapper label={t('common.messageForm')}>
         <CustomTextField
           variant="outlined"
           fullWidth
           id="message"
           name="message"
-          placeholder={t("common.message")}
+          placeholder={t('common.message')}
           multiline
           rows={4}
           value={formik.values.message}
@@ -208,10 +207,10 @@ const CreatePush: FC<CreatePushProps> = () => {
       </InputWrapper>
 
       <InputWrapper
-        label={t("common.price")}
+        label={t('common.price')}
         subLabel={
           <div className={styles.creditHelperText}>
-            {t("common.creditHelperText", { creditAmount: totalPrice })}
+            {t('common.creditHelperText', { creditAmount: totalPrice })}
             <a
               href={
                 process.env.NEXT_PUBLIC_BASE_URL +
@@ -219,7 +218,7 @@ const CreatePush: FC<CreatePushProps> = () => {
               }
               target="_blank"
             >
-              {t("common.here")}
+              {t('common.here')}
             </a>
             .
           </div>
@@ -227,7 +226,7 @@ const CreatePush: FC<CreatePushProps> = () => {
       >
         <div className={styles.sliderWrapper}>
           <CustomSlider
-            setValue={(value: number) => formik.setFieldValue("price", value)}
+            setValue={(value: number) => formik.setFieldValue('price', value)}
             fetchedPrice={fetchedPrice}
           />
         </div>
@@ -238,7 +237,7 @@ const CreatePush: FC<CreatePushProps> = () => {
         onClick={handleSubmitForm}
         loading={isLoading}
       >
-        {t("common.validate")}
+        {t('common.validate')}
       </CustomLoadingButton>
 
       <GalleryModal
@@ -247,7 +246,7 @@ const CreatePush: FC<CreatePushProps> = () => {
         setSelectedMedias={setSelectedMedias}
         selectedMedias={selectedMedias}
         multiple={true}
-        mediaType={["image", "video"]}
+        mediaType={['image', 'video']}
       />
     </form>
   );

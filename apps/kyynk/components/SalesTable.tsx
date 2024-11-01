@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import React, { useState, useMemo, useRef, useEffect } from "react";
-import styles from "@/styles/SalesTable.module.scss";
-import { format, isBefore } from "date-fns";
-import { fr } from "date-fns/locale";
-import { useTranslations } from "next-intl";
-import useApi from "@/lib/hooks/useApi";
-import Text from "./Text";
-import { Sale } from "@/types/models/Sale";
-import dynamic from "next/dynamic";
-import { Link } from "@/navigation";
-import { useIntersectionObserver } from "@/lib/hooks/useIntersectionObserver";
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import styles from '@/styles/SalesTable.module.scss';
+import { format, isBefore } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { useTranslations } from 'next-intl';
+import useApi from '@/lib/hooks/useApi';
+import Text from './Text';
+import { Sale } from '@/types/models/Sale';
+import dynamic from 'next/dynamic';
+import { useIntersectionObserver } from '@/lib/hooks/useIntersectionObserver';
+import Link from 'next/link';
 
-const Loader = dynamic(() => import("@/components/Loader"), { ssr: false });
+const Loader = dynamic(() => import('@/components/Loader'), { ssr: false });
 
 const SalesTable = () => {
   //localstate
   const [sales, setSales] = useState([]);
-  const queryKey = useMemo(() => ["salesList", {}], []);
+  const queryKey = useMemo(() => ['salesList', {}], []);
 
   //traduction
   const t = useTranslations();
@@ -34,7 +34,7 @@ const SalesTable = () => {
     isFetchingNextPage,
   } = useInfinite(
     queryKey,
-    "/api/incomes/sales",
+    '/api/incomes/sales',
     {},
     {
       getNextPageParam: (lastPage: any) => lastPage.nextCursor || undefined,
@@ -43,24 +43,24 @@ const SalesTable = () => {
         setSales(data?.pages.flatMap((page: any) => page.sales));
       },
       refetchOnWindowFocus: false,
-    }
+    },
   );
 
   const getSaleType = (saleType: string) => {
-    let value = "-";
+    let value = '-';
 
     switch (saleType) {
-      case "nude":
-        value = t("incomes.nudeSaleLabel");
+      case 'nude':
+        value = t('incomes.nudeSaleLabel');
         break;
-      case "commission":
-        value = t("incomes.commissionLabel");
+      case 'commission':
+        value = t('incomes.commissionLabel');
         break;
-      case "tip":
-        value = t("incomes.tipsLabel");
+      case 'tip':
+        value = t('incomes.tipsLabel');
         break;
-      case "message":
-        value = t("incomes.messageLabel");
+      case 'message':
+        value = t('incomes.messageLabel');
         break;
 
       default:
@@ -93,16 +93,16 @@ const SalesTable = () => {
             key={index}
             style={{
               backgroundColor: currentSale.isPaid
-                ? "rgba(0, 0, 0, 0.4)"
+                ? 'rgba(0, 0, 0, 0.4)'
                 : available
-                ? "#cecaff"
-                : "#f29d69",
+                ? '#cecaff'
+                : '#f29d69',
             }}
           >
             <div>
               <Text
                 weight="bolder"
-                customStyles={{ color: "white", marginBottom: "0.2rem" }}
+                customStyles={{ color: 'white', marginBottom: '0.2rem' }}
                 fontSize={18}
               >
                 {getSaleType(currentSale.saleType)}
@@ -115,13 +115,13 @@ const SalesTable = () => {
                     {`${currentSale.fromUser.pseudo}`}
                   </Link>
                 )}
-                <Text customStyles={{ color: "white" }} fontSize={14}>
+                <Text customStyles={{ color: 'white' }} fontSize={14}>
                   {`le ${format(
                     new Date(currentSale?.createdAt),
-                    "dd MMMM yyyy",
+                    'dd MMMM yyyy',
                     {
                       locale: fr,
-                    }
+                    },
                   )}`}
                 </Text>
               </div>
@@ -129,15 +129,15 @@ const SalesTable = () => {
             <div className={styles.value}>
               <Text
                 weight="bolder"
-                customStyles={{ color: "white" }}
+                customStyles={{ color: 'white' }}
                 fontSize={20}
               >{`${currentSale.amount.fiatValue / 100} €`}</Text>
-              <Text fontSize={12} customStyles={{ color: "white" }}>
+              <Text fontSize={12} customStyles={{ color: 'white' }}>
                 {currentSale.isPaid
-                  ? t("incomes.paid")
+                  ? t('incomes.paid')
                   : available
-                  ? t("incomes.available")
-                  : t("incomes.pending")}
+                  ? t('incomes.available')
+                  : t('incomes.pending')}
               </Text>
             </div>
           </div>
@@ -145,10 +145,10 @@ const SalesTable = () => {
       })}
 
       <div
-        style={{ height: "10rem", display: hasNextPage ? "flex" : "none" }}
+        style={{ height: '10rem', display: hasNextPage ? 'flex' : 'none' }}
         ref={loadMoreRef}
       >
-        {isFetchingNextPage && <Loader style={{ color: "#cecaff" }} />}
+        {isFetchingNextPage && <Loader style={{ color: '#cecaff' }} />}
       </div>
     </div>
   );

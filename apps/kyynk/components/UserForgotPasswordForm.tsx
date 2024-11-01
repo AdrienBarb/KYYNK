@@ -6,9 +6,6 @@ import * as yup from 'yup';
 import styles from '@/styles/Form.module.scss';
 import LoadingButton from '@/components/Buttons/LoadingButton';
 import CustomTextField from '@/components/Inputs/TextField';
-
-import { useSelector } from 'react-redux';
-import { RootStateType, useAppDispatch } from '@/store/store';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import useApi from '@/lib/hooks/useApi';
@@ -16,8 +13,6 @@ import useApi from '@/lib/hooks/useApi';
 const UserForgotPasswordForm = () => {
   const { locale } = useParams<{ locale: string }>();
   const t = useTranslations();
-  const dispatch = useAppDispatch();
-  const state = useSelector((state: RootStateType) => state.forgotPassword);
   const { usePost } = useApi();
   const [isEmailSend, setIsEmailSend] = useState(false);
 
@@ -43,7 +38,6 @@ const UserForgotPasswordForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log('🚀 ~ UserForgotPasswordForm ~ values:', values);
       resetPasswordRequest({
         ...values,
         locale,

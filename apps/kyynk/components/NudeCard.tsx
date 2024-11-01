@@ -1,18 +1,17 @@
-"use client";
+'use client';
 
-import React, { FC } from "react";
-import { Nude } from "@/types/models/Nude";
-import styles from "@/styles/NudeCard.module.scss";
-import NudeCardUserMenu from "./NudeCardUserMenu";
-import useIsOwner from "@/lib/hooks/useIsOwner";
-import DisplayedMedia from "./DisplayedMedia";
-import MediaDetails from "./MediaDetails";
-import useCanView from "@/lib/hooks/useCanView";
-
-import { Link } from "@/navigation";
-import { useParams } from "next/navigation";
-import NudeCardCreditAmount from "./NudeCardCreditAmount";
-import BlurMedia from "./BlurMedia";
+import React, { FC } from 'react';
+import { Nude } from '@/types/models/Nude';
+import styles from '@/styles/NudeCard.module.scss';
+import NudeCardUserMenu from './NudeCardUserMenu';
+import useIsOwner from '@/lib/hooks/useIsOwner';
+import DisplayedMedia from './DisplayedMedia';
+import MediaDetails from './MediaDetails';
+import useCanView from '@/lib/hooks/useCanView';
+import { useParams } from 'next/navigation';
+import NudeCardCreditAmount from './NudeCardCreditAmount';
+import BlurMedia from './BlurMedia';
+import Link from 'next/link';
 
 interface Props {
   nude: Nude;

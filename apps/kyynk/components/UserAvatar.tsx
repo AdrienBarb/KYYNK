@@ -1,7 +1,7 @@
-import React, { FC } from "react";
-import styles from "@/styles/UserAvatar.module.scss";
-import { User } from "@/types/models/User";
-import { Link } from "@/navigation";
+import React, { FC } from 'react';
+import styles from '@/styles/UserAvatar.module.scss';
+import { User } from '@/types/models/User';
+import Link from 'next/link';
 
 interface UserAvatarProps {
   user: User;

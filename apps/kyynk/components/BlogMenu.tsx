@@ -1,8 +1,8 @@
-import React, { FC } from "react";
-import styles from "@/styles/BlogMenu.module.scss";
-import { useTranslations } from "next-intl";
-import clsx from "clsx";
-import { Link } from "@/navigation";
+import React, { FC } from 'react';
+import styles from '@/styles/BlogMenu.module.scss';
+import { useTranslations } from 'next-intl';
+import clsx from 'clsx';
+import Link from 'next/link';
 
 interface BlogMenuProps {
   categories: any[];
@@ -10,13 +10,13 @@ interface BlogMenuProps {
 }
 
 const BlogMenu: FC<BlogMenuProps> = ({ categories, locale }) => {
-  const t = useTranslations("blog");
+  const t = useTranslations('blog');
 
   return (
     <div className={styles.container}>
       <div className={styles.linksWrapper}>
         <div className={clsx(styles.link)}>
-          <Link href="/blog">{t("allArticles")}</Link>
+          <Link href="/blog">{t('allArticles')}</Link>
         </div>
         {categories &&
           categories.length > 0 &&

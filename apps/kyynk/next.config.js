@@ -1,11 +1,10 @@
-const withNextIntl = require('next-intl/plugin')('./i18n.ts');
+const createNextIntlPlugin = require('next-intl/plugin');
+
+const withNextIntl = createNextIntlPlugin();
 
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  images: {
-    domains: ['d10arthua11ogq.cloudfront.net'],
-  },
   reactStrictMode: false,
   optimizeFonts: false,
   swcMinify: true,

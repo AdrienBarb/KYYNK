@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import React from "react";
-import styles from "@/styles/NavigationBar.module.scss";
-import Image from "next/image";
-import LanguageSwitcher from "./LanguageSwitcher";
-import { Link } from "@/navigation";
+import React from 'react';
+import styles from '@/styles/NavigationBar.module.scss';
+import Image from 'next/image';
+import LanguageSwitcher from './LanguageSwitcher';
+import Link from 'next/link';
 
 const LoginNavigationBar = () => {
   return (
     <>
       <header className={styles.navContainer}>
         <div className={styles.navbar}>
-          <Link href={"/"} passHref prefetch>
+          <Link href={'/'} passHref prefetch>
             <div className={styles.logo}>
               <Image
-                src={"/images/logo.svg"}
+                src={'/images/logo.svg'}
                 alt="logo"
                 fill={true}
                 objectFit="contain"

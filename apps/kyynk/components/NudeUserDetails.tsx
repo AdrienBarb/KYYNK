@@ -1,9 +1,9 @@
-import React, { FC } from "react";
-import styles from "@/styles/NudeUserDetails.module.scss";
-import { Nude } from "@/types/models/Nude";
-import UserAvatar from "@/components/UserAvatar";
-import { Link } from "@/navigation";
-import Text from "./Text";
+import React, { FC } from 'react';
+import styles from '@/styles/NudeUserDetails.module.scss';
+import { Nude } from '@/types/models/Nude';
+import UserAvatar from '@/components/UserAvatar';
+import Text from './Text';
+import Link from 'next/link';
 
 interface Props {
   nude: Nude;
@@ -21,7 +21,7 @@ const NudeUserDetails: FC<Props> = ({ nude, showAvatar }) => {
             <Text weight="bolder">{nude.user.pseudo}</Text>
           </Link>
         )}
-        <Text customStyles={{ marginTop: "0.2rem" }}>{nude.description}</Text>
+        <Text customStyles={{ marginTop: '0.2rem' }}>{nude.description}</Text>
       </span>
     </div>
   );

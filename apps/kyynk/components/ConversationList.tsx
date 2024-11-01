@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import React, { FC, useEffect, useMemo, useRef, useState } from "react";
-import styles from "@/styles/ConversationList.module.scss";
-import ConversationCard from "./ConversationCard";
-import { useTranslations } from "next-intl";
-import { Conversation } from "@/types/models/Conversation";
-import { Link, useRouter } from "@/navigation";
-import useApi from "@/lib/hooks/useApi";
-import socket from "@/lib/socket/socket";
-import AppMessage from "./AppMessage";
-import ClassicButton from "./Buttons/ClassicButton";
-import { useAppDispatch } from "@/store/store";
-import { checkIfUnreadMessages } from "@/features/conversation/conversationSlice";
-import { useIntersectionObserver } from "@/lib/hooks/useIntersectionObserver";
-import Loader from "./Loader";
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
+import styles from '@/styles/ConversationList.module.scss';
+import ConversationCard from './ConversationCard';
+import { useTranslations } from 'next-intl';
+import { Conversation } from '@/types/models/Conversation';
+import useApi from '@/lib/hooks/useApi';
+import socket from '@/lib/socket/socket';
+import AppMessage from './AppMessage';
+import ClassicButton from './Buttons/ClassicButton';
+import { useAppDispatch } from '@/store/store';
+import { checkIfUnreadMessages } from '@/features/conversation/conversationSlice';
+import { useIntersectionObserver } from '@/lib/hooks/useIntersectionObserver';
+import Loader from './Loader';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   initialConversationsDatas: {
@@ -26,12 +26,12 @@ const ConversationList: FC<Props> = ({ initialConversationsDatas }) => {
   //traduction
   const t = useTranslations();
   const [conversationsList, setConversationsList] = useState<Conversation[]>(
-    initialConversationsDatas.conversations
+    initialConversationsDatas.conversations,
   );
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const queryKey = useMemo(() => ["conversationsList", {}], []);
+  const queryKey = useMemo(() => ['conversationsList', {}], []);
 
   const { useInfinite } = useApi();
 
@@ -56,11 +56,11 @@ const ConversationList: FC<Props> = ({ initialConversationsDatas }) => {
       },
       onSuccess: (data: any) => {
         setConversationsList(
-          data?.pages.flatMap((page: any) => page.conversations)
+          data?.pages.flatMap((page: any) => page.conversations),
         );
       },
       refetchOnWindowFocus: false,
-    }
+    },
   );
 
   const loadMoreRef = useRef(null);
@@ -74,7 +74,7 @@ const ConversationList: FC<Props> = ({ initialConversationsDatas }) => {
   useEffect(() => {
     if (!socket) return;
 
-    socket?.on("getNotification", ({ conversationId }) => {
+    socket?.on('getNotification', ({ conversationId }) => {
       setConversationsList([
         ...conversationsList.map((currentConversation) => {
           if (currentConversation._id === conversationId) {
@@ -90,7 +90,7 @@ const ConversationList: FC<Props> = ({ initialConversationsDatas }) => {
     });
 
     return () => {
-      socket?.off("getNotification");
+      socket?.off('getNotification');
     };
   }, []);
 
@@ -109,25 +109,25 @@ const ConversationList: FC<Props> = ({ initialConversationsDatas }) => {
                   <ConversationCard conversation={currentConversation} />
                 </Link>
               );
-            }
+            },
           )}
           <div
-            style={{ height: "4rem", display: hasNextPage ? "flex" : "none" }}
+            style={{ height: '4rem', display: hasNextPage ? 'flex' : 'none' }}
             ref={loadMoreRef}
           >
-            {isFetchingNextPage && <Loader style={{ color: "#cecaff" }} />}
+            {isFetchingNextPage && <Loader style={{ color: '#cecaff' }} />}
           </div>
         </>
       ) : (
         <AppMessage
-          title={t("error.no_conversations")}
-          text={t("common.noConversationsHasBeenFound")}
+          title={t('error.no_conversations')}
+          text={t('common.noConversationsHasBeenFound')}
         >
           <ClassicButton
-            customStyles={{ width: "100%" }}
-            onClick={() => router.push("/dashboard/community")}
+            customStyles={{ width: '100%' }}
+            onClick={() => router.push('/dashboard/community')}
           >
-            {t("common.startToChat")}
+            {t('common.startToChat')}
           </ClassicButton>
         </AppMessage>
       )}

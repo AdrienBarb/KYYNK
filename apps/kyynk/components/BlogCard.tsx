@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import styles from "@/styles/BlogCard.module.scss";
-import { Link } from "@/navigation";
+import React, { FC } from 'react';
+import styles from '@/styles/BlogCard.module.scss';
+import Link from 'next/link';
 
 interface BlogCardProps {
   slug: string;
@@ -18,7 +18,7 @@ const BlogCard: FC<BlogCardProps> = ({ slug, title, imageSrc }) => {
           src={imageSrc}
         />
       </div>
-      <div className={styles.titleWrapper}>
+      <div className="">
         <Link href={`/blog/articles/${slug}`}>
           <h2>{title}</h2>
         </Link>
