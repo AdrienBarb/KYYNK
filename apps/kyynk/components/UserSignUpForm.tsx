@@ -1,29 +1,26 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import styles from '@/styles/Form.module.scss';
 import { useRouter, useSearchParams } from 'next/navigation';
-import LoadingButton from '@/components/Buttons/LoadingButton';
 import CustomTextField from '@/components/Inputs/TextField';
-
 import { Checkbox } from '@mui/material';
 import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import userAuthService from '@/features/user-auth/userAuthService';
-import { signIn } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { appRouter } from '@/appRouter';
-import { sendEvent } from '@/lib/analytics/fathom/trackHelper';
 import { register } from '@/lib/server-actions/users/register';
+import Link from 'next/link';
+import { Button } from './Ui/Button';
+import { useSession } from 'next-auth/react';
 
 const UserSignUpForm = () => {
   //router
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const referral = searchParams.get('referral');
+  const { data: session, update } = useSession();
 
   //translation
   const t = useTranslations();
@@ -89,7 +86,7 @@ const UserSignUpForm = () => {
           password: values.password,
         });
 
-        router.push(appRouter.userType);
+        router.push(appRouter.userType, {});
 
         setIsLoading(false);
       } catch (error) {
@@ -237,9 +234,10 @@ const UserSignUpForm = () => {
               </div>
             )}
           </div>
-          <LoadingButton fullWidth type="submit" loading={isLoading}>
+
+          <Button type="submit" isLoading={isLoading}>
             {t('common.signUp')}
-          </LoadingButton>
+          </Button>
         </form>
       </div>
     </>

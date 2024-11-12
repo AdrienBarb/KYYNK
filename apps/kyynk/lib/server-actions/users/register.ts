@@ -41,22 +41,28 @@ export async function register({
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    await prisma.user.create({
+    const createdUser = await prisma.user.create({
       data: {
         pseudo: pseudo,
         email: lowerCaseEmail,
         password: hashedPassword,
         slug: await checkOrCreateSlug(pseudo),
       },
+      select: {
+        id: true,
+        pseudo: true,
+        email: true,
+        slug: true,
+      },
     });
 
-    const result = await signIn('credentials', {
+    await signIn('credentials', {
       email: lowerCaseEmail,
       password: password,
       redirect: false,
     });
 
-    return result;
+    return createdUser;
   } catch (error: any) {
     throw new Error(error.message || errorMessages.FAILED_TO_AUTHENTICATE);
   }

@@ -7,14 +7,19 @@ import Link from 'next/link';
 interface Props {
   prevPath: string;
   children?: ReactNode;
+  isVisible?: boolean;
 }
 
-const BackButton: FC<Props> = ({ prevPath, children }) => {
+const BackButton: FC<Props> = ({ prevPath, children, isVisible }) => {
   return (
     <div className={styles.container}>
-      <Link href={prevPath} prefetch>
-        <FontAwesomeIcon icon={faArrowLeft} size="xl" />
-      </Link>
+      <div>
+        {isVisible && (
+          <Link href={prevPath} prefetch>
+            <FontAwesomeIcon icon={faArrowLeft} size="xl" />
+          </Link>
+        )}
+      </div>
       {children && children}
     </div>
   );

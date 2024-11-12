@@ -50,6 +50,7 @@ export async function updateUser({
       pseudo: true,
       email: true,
       userType: true,
+      slug: true,
     },
   });
 }

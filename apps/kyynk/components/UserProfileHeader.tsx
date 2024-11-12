@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import React, { FC, useState } from "react";
-import styles from "@/styles/Profile.module.scss";
-import { useParams } from "next/navigation";
-import { useSelector } from "react-redux";
-import TimeAgo from "javascript-time-ago";
-import fr from "javascript-time-ago/locale/fr";
-import moment from "moment";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faCircle, faStar } from "@fortawesome/free-solid-svg-icons";
-import { RootStateType } from "@/store/store";
-import parser from "html-react-parser";
-import ProfileIcon from "@/components/ProfileIcon";
-import { useTranslations } from "next-intl";
-import { useSession } from "next-auth/react";
-import { User } from "@/types/models/User";
-import useApi from "@/lib/hooks/useApi";
-import UserProfileButtons from "./UserProfileButtons";
-import Title from "./Title";
-import Text from "./Text";
+import React, { FC, useState } from 'react';
+import styles from '@/styles/Profile.module.scss';
+import { useParams } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import TimeAgo from 'javascript-time-ago';
+import fr from 'javascript-time-ago/locale/fr';
+import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faCircle, faStar } from '@fortawesome/free-solid-svg-icons';
+import { RootStateType } from '@/store/store';
+import parser from 'html-react-parser';
+import ProfileIcon from '@/components/ProfileIcon';
+import { useTranslations } from 'next-intl';
+import { useSession } from 'next-auth/react';
+import { User } from '@/types/models/User';
+import useApi from '@/lib/hooks/useApi';
+import UserProfileButtons from './UserProfileButtons';
+import Title from './Title';
+import Text from './Text';
 
 //Config timeago in french
 TimeAgo.addDefaultLocale(fr);
@@ -32,7 +32,7 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
   const [currentUser, setCurrentUser] = useState(initialUserDatas);
 
   //router
-  const { userId } = useParams<{ userId: string }>();
+  const { slug } = useParams<{ slug: string }>();
 
   //session
   const { data: session } = useSession();
@@ -41,19 +41,20 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
   const t = useTranslations();
 
   //others
-  const timeAgo = new TimeAgo("fr-FR");
+  const timeAgo = new TimeAgo('fr-FR');
 
   const { useGet } = useApi();
 
   useGet(
-    `/api/users/${userId}`,
+    `/api/users/${slug}`,
     {},
     {
       initialData: initialUserDatas,
       onSuccess: (data) => {
+        console.log('🚀 ~ data:', data);
         setCurrentUser(data);
       },
-    }
+    },
   );
 
   const dateObject = moment(currentUser?.lastLogin).toDate();
@@ -76,45 +77,45 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
       <div className={styles.detailsWrapper}>
         <div className={styles.pseudoContainer}>
           <div className={styles.pseudoWrapper}>
-            {currentUser && currentUser.verified === "verified" && (
+            {currentUser && currentUser.verified === 'verified' && (
               <ProfileIcon
                 icon={faCheck}
-                popoverDescription={t("profile.verifiedProfile")}
+                popoverDescription={t('profile.verifiedProfile')}
               />
             )}
-            <Title Tag="h2" titleStyle={{ margin: "0" }} dataId="user-pseudo">
+            <Title Tag="h2" titleStyle={{ margin: '0' }} dataId="user-pseudo">
               {currentUser.pseudo}
             </Title>
           </div>
         </div>
         <Text
-          customStyles={{ whiteSpace: "pre-line", marginTop: "0.6rem" }}
+          customStyles={{ whiteSpace: 'pre-line', marginTop: '0.6rem' }}
           textAlign="center"
         >
           {currentUser.version === 1
-            ? parser(currentUser.description ?? "")
+            ? parser(currentUser.description ?? '')
             : currentUser.description}
         </Text>
         {!session && (
           <div className={styles.status}>
             {socketState.onlineUsers?.some(
-              (u) => u?.userId === currentUser?._id
+              (u) => u?.userId === currentUser?._id,
             ) ? (
               <div className={styles.statusWraper}>
                 <div className={styles.iconWrapper}>
                   <FontAwesomeIcon icon={faCircle} color="#57cc99" size="xs" />
                 </div>
-                {t("profile.online")}
+                {t('profile.online')}
               </div>
             ) : (
-              <div>{`${t("profile.online")} : ${timeAgoValue}`}</div>
+              <div>{`${t('profile.online')} : ${timeAgoValue}`}</div>
             )}
           </div>
         )}
-        <UserProfileButtons
+        {/* <UserProfileButtons
           currentUser={currentUser}
           setCurrentUser={setCurrentUser}
-        />
+        /> */}
       </div>
     </div>
   );

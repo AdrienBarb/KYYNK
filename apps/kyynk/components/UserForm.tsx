@@ -20,7 +20,6 @@ import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import userService from '@/features/user/userService';
 import { Gender } from '@/types/models/genderModel';
-import { User } from '@/types/models/User';
 import useApi from '@/lib/hooks/useApi';
 import axios from 'axios';
 import Pica from 'pica';
@@ -34,19 +33,13 @@ import { TAGS, TagsType, tagList } from '@/constants/constants';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
+import { User } from '@prisma/client';
+
 interface Props {
-  initialUserDatas: User;
-  genderCategories: Gender[];
   nextPage: string;
 }
 
-const UserForm: FC<Props> = ({
-  initialUserDatas,
-  genderCategories,
-  nextPage,
-}) => {
-  const { _id: userId } = initialUserDatas;
-
+const UserForm: FC<Props> = ({ nextPage }) => {
   //router
   const router = useRouter();
 
@@ -54,8 +47,8 @@ const UserForm: FC<Props> = ({
   const t = useTranslations();
 
   //localstate
-  const [imageProfil, setImageProfil] = useState(initialUserDatas.profileImage);
-  const [currentUser, setCurrentUser] = useState(initialUserDatas);
+  const [imageProfil, setImageProfil] = useState('');
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [openGalleryModal, setOpenGalleryModal] = useState(false);
   const [selectedMedias, setSelectedMedias] = useState<Media[]>([]);
 
@@ -73,7 +66,7 @@ const UserForm: FC<Props> = ({
 
   const getCurrentUser = async () => {
     try {
-      const r = await fetchData(`/api/users/owner`);
+      const r = await fetchData(`/api/me`);
 
       setCurrentUser(r);
       setSelectedMedias(r.secondaryProfileImages);
@@ -92,10 +85,10 @@ const UserForm: FC<Props> = ({
   };
 
   useEffect(() => {
-    if (userId) {
+    if (session?.user?.id) {
       getCurrentUser();
     }
-  }, [userId]);
+  }, [session?.user?.id]);
 
   const validationSchema = yup.object({
     pseudo: yup
@@ -107,13 +100,13 @@ const UserForm: FC<Props> = ({
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      pseudo: currentUser.pseudo,
-      description: currentUser.description ?? '',
-      age: currentUser.age ?? '',
-      gender: currentUser.gender?._id ?? '',
-      bodyType: currentUser.bodyType ?? '',
-      hairColor: currentUser.hairColor ?? '',
-      country: currentUser.country ?? '',
+      pseudo: currentUser?.pseudo ?? '',
+      description: currentUser?.description ?? '',
+      age: currentUser?.age ?? '',
+      gender: currentUser?.gender ?? '',
+      bodyType: currentUser?.bodyType ?? '',
+      hairColor: currentUser?.hairColor ?? '',
+      country: currentUser?.country ?? '',
       tags: [],
     },
     validationSchema: validationSchema,

@@ -1,40 +1,59 @@
-import nudeService from "@/features/nude/nudeService";
-import React from "react";
-import NudesWall from "@/components/NudesWall";
-import { Metadata } from "next";
-import userService from "@/features/user/userService";
-import { genPageMetadata } from "@/app/seo";
+import React from 'react';
+import { Metadata } from 'next';
+import { genPageMetadata } from '@/app/seo';
+import { getUserBySlug } from '@/lib/api/users/getUserBySlug';
+import { redirect } from 'next/navigation';
+import ErrorMessage from '@/components/ErrorMessage';
+import { getTranslations } from 'next-intl/server';
+import ScrollableContainer from '@/components/ScrollableContainer';
+import BackButton from '@/components/Common/BackButton';
+import UserProfileTopButtons from '@/components/UserProfileTopButtons';
+import { auth } from '@/auth';
+import UserUncompletedProfileBand from '@/components/UserUncompletedProfileBand';
+import UserProfileHeader from '@/components/UserProfileHeader';
 
 export async function generateMetadata({
-  params: { userId },
+  params: { slug },
 }: {
-  params: { userId: string };
+  params: { slug: string };
 }): Promise<Metadata | undefined> {
-  const initialUserDatas = await userService.getUser(userId);
+  const user = await getUserBySlug({ slug });
 
   return genPageMetadata({
-    title: initialUserDatas?.pseudo,
-    description: initialUserDatas?.description,
-    image:
-      process.env.NEXT_PUBLIC_CLOUDFRONT_MEDIA + initialUserDatas.profileImage,
+    title: user?.pseudo ?? '',
+    description: user?.description ?? '',
+    image: user?.profileImageId ?? '',
   });
 }
 
-const UserPage = async ({ params }: { params: { userId: string } }) => {
-  const { userId } = params;
+const UserPage = async ({ params }: { params: { slug: string } }) => {
+  const { slug } = params;
+  const t = await getTranslations();
+  const session = await auth();
 
-  if (userId === "index.js.map") {
-    return;
+  const user = await getUserBySlug({ slug });
+
+  if (!user) {
+    redirect('/404');
   }
 
-  const { nudes, availableFilters } = await nudeService.getUserNudes(userId);
+  if (user.isArchived) {
+    return <ErrorMessage message={t('error.userArchived')} />;
+  }
 
   return (
-    <NudesWall
-      nudes={nudes}
-      initialAvailableFilters={availableFilters}
-      userId={userId}
-    />
+    <ScrollableContainer>
+      <BackButton isVisible={!!session} prevPath="/dashboard/community">
+        <UserProfileTopButtons />
+      </BackButton>
+
+      <UserUncompletedProfileBand />
+      <UserProfileHeader initialUserDatas={user} />
+      {/* {(initialUserDatas?.isAccountVerified || session?.user?.id === userId) &&
+        initialUserDatas?.userType === 'creator' && (
+          <div className={styles.contentContainer}>{children}</div>
+        )} */}
+    </ScrollableContainer>
   );
 };
 

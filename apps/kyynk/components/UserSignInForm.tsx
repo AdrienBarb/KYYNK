@@ -46,10 +46,13 @@ const UserSignInForm = () => {
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        await authenticate({ email: values.email, password: values.password });
+        const user = await authenticate({
+          email: values.email,
+          password: values.password,
+        });
 
         toast.success(t('success.login'));
-        router.push(previousPath ? previousPath : appRouter.feed);
+        router.push(previousPath ? previousPath : `/${user?.slug}`);
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);

@@ -3,16 +3,16 @@
 import React, { useState } from 'react';
 import PageContainer from '@/components/PageContainer';
 import { useTranslations } from 'next-intl';
-import FullButton from '@/components/Buttons/FullButton';
-import { useSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import useApi from '@/lib/hooks/useApi';
 import { appRouter } from '@/appRouter';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/Ui/Button';
 
 const SignUpPage = () => {
   const t = useTranslations();
   const [userType, setUserType] = useState('');
-  const { data: session, update } = useSession();
+  const { update } = useSession();
 
   const { usePut } = useApi();
 
@@ -20,6 +20,8 @@ const SignUpPage = () => {
 
   const { mutate: editUserType, isLoading } = usePut(`/api/me`, {
     onSuccess: async ({ userType }) => {
+      const session = await getSession();
+
       if (session) {
         const updatedSession = {
           ...session,
@@ -33,7 +35,7 @@ const SignUpPage = () => {
 
         userType === 'member'
           ? router.push(appRouter.preferences)
-          : router.push(appRouter.feed);
+          : router.push(`/${session?.user?.slug}`);
       }
     },
   });
@@ -71,16 +73,16 @@ const SignUpPage = () => {
           </div>
         </div>
 
-        <FullButton
-          customStyles={{ width: '100%' }}
+        <Button
           disabled={!userType}
           isLoading={isLoading}
           onClick={() => {
             editUserType({ userType });
           }}
+          className="w-full"
         >
           {t('common.continue')}
-        </FullButton>
+        </Button>
       </div>
     </PageContainer>
   );

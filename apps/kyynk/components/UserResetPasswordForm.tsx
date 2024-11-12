@@ -13,6 +13,7 @@ import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import useApi from '@/lib/hooks/useApi';
+import { Button } from './Ui/Button';
 
 const UserResetPasswordForm = () => {
   //router
@@ -144,9 +145,9 @@ const UserResetPasswordForm = () => {
           }}
         />
 
-        <LoadingButton fullWidth type="submit" loading={isLoading}>
+        <Button type="submit" isLoading={isLoading}>
           {t('common.validate')}
-        </LoadingButton>
+        </Button>
       </form>
     </div>
   );

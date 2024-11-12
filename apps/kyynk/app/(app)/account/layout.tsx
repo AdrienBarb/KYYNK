@@ -23,6 +23,10 @@ const DashboardLayout: FC<Props> = ({ children }) => {
   }, [session?.user?.id]);
 
   useEffect(() => {
+    if (!session) {
+      router.push('/login');
+    }
+
     checkIfUserVerified();
   }, [session]);
 

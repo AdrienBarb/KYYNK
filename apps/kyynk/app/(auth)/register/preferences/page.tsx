@@ -5,21 +5,20 @@ import PageContainer from '@/components/PageContainer';
 import { useTranslations } from 'next-intl';
 import FullButton from '@/components/Buttons/FullButton';
 import useApi from '@/lib/hooks/useApi';
-import { appRouter } from '@/appRouter';
 import { TAGS } from '@/constants/constants';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 const SignUpPage = () => {
   const t = useTranslations();
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-
+  const { data: session } = useSession();
   const { usePut } = useApi();
-
   const router = useRouter();
 
   const { mutate: editUserPreferences, isLoading } = usePut(`/api/me`, {
     onSuccess: () => {
-      router.push(appRouter.feed);
+      router.push(`/${session?.user?.slug}`);
     },
   });
 

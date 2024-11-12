@@ -1,7 +1,6 @@
 import React from 'react';
 import PageContainer from '@/components/PageContainer';
 import styles from '@/styles/AuthPage.module.scss';
-import EmptyButton from '@/components/Buttons/EmptyButton';
 import UserSignInForm from '@/components/UserSignInForm';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';

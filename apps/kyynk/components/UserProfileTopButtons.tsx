@@ -14,7 +14,7 @@ interface Props {}
 const UserProfileTopButtons: FC<Props> = () => {
   //router
   const router = useRouter();
-  const { userId } = useParams<{ userId: string }>();
+  const { slug } = useParams<{ slug: string }>();
 
   //session
   const { data: session } = useSession();
@@ -29,7 +29,7 @@ const UserProfileTopButtons: FC<Props> = () => {
   return (
     <>
       <div className={styles.buttonsWrapper}>
-        {session?.user?.id === userId && (
+        {session?.user?.slug === slug && (
           <IconButton
             onClick={handleEditAccountDetailsClick}
             icon={faPen}

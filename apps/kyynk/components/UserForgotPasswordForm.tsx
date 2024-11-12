@@ -4,11 +4,11 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import styles from '@/styles/Form.module.scss';
-import LoadingButton from '@/components/Buttons/LoadingButton';
 import CustomTextField from '@/components/Inputs/TextField';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import useApi from '@/lib/hooks/useApi';
+import { Button } from './Ui/Button';
 
 const UserForgotPasswordForm = () => {
   const { locale } = useParams<{ locale: string }>();
@@ -68,9 +68,9 @@ const UserForgotPasswordForm = () => {
           error={formik.touched.email && Boolean(formik.errors.email)}
           helperText={formik.touched.email && formik.errors.email}
         />
-        <LoadingButton fullWidth type="submit" loading={isLoading}>
+        <Button type="submit" isLoading={isLoading}>
           {t('common.send')}
-        </LoadingButton>
+        </Button>
       </form>
     </div>
   );

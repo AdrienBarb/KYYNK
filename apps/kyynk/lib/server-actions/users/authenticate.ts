@@ -1,6 +1,7 @@
 'use server';
 import { signIn } from '@/auth';
 import { errorMessages } from '@/lib/constants/errorMessage';
+import { prisma } from '@/lib/db/client';
 import { AuthError } from 'next-auth';
 
 export async function authenticate({
@@ -11,12 +12,20 @@ export async function authenticate({
   password: string;
 }) {
   try {
-    const r = await signIn('credentials', {
+    await signIn('credentials', {
       email: email,
       password: password,
       redirect: false,
     });
-    return r;
+
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: {
+        slug: true,
+      },
+    });
+
+    return user;
   } catch (error) {
     if (error instanceof AuthError) {
       throw new Error(error?.cause?.err?.message);

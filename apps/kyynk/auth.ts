@@ -27,19 +27,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signOut: '/',
   },
   callbacks: {
-    async redirect({ url, baseUrl }) {
-      if (url.startsWith(baseUrl)) {
-        return url;
-      }
-
-      const locale = url.split('/')[1] || 'en';
-      return `${baseUrl}/${locale}/login`;
-    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
         token.userType = user.userType;
+        token.slug = user.slug;
       }
       return token;
     },
@@ -47,6 +40,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.id = token.id;
       session.user.email = token.email;
       session.user.userType = token.userType;
+      session.user.slug = token.slug;
       return session;
     },
   },
