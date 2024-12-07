@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import styles from '@/styles/CreditAmount.module.scss';
 import { useSession } from 'next-auth/react';

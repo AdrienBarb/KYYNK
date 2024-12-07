@@ -15,12 +15,10 @@ import { appRouter } from '@/appRouter';
 import { register } from '@/lib/server-actions/users/register';
 import Link from 'next/link';
 import { Button } from './Ui/Button';
-import { useSession } from 'next-auth/react';
 
 const UserSignUpForm = () => {
   //router
   const router = useRouter();
-  const { data: session, update } = useSession();
 
   //translation
   const t = useTranslations();

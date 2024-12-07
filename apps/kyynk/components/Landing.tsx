@@ -1,8 +1,8 @@
-import React from "react";
-import LandingButton from "./LandingButton";
-import { useTranslations } from "next-intl";
-import appScreenImage from "../public/images/app-screen.png";
-import Image from "next/image";
+import React from 'react';
+import LandingButton from './LandingButton';
+import { useTranslations } from 'next-intl';
+import appScreenImage from '../public/images/app-screen.png';
+import Image from 'next/image';
 
 const Landing = () => {
   const t = useTranslations();
@@ -15,11 +15,12 @@ const Landing = () => {
             data-id="homepage-title"
             className="text-4xl lg:text-5xl font-bold font-rubik text-background"
           >
-            {t("home.title")}
+            {t('home.title')}
           </h1>
           <h2 className="text-xl font-light font-karla text-background">
-            {t("home.subTitle")}
+            {t('home.subTitle')}
           </h2>
+
           <div className="mt-4">
             <LandingButton />
           </div>

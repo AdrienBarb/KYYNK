@@ -19,6 +19,7 @@ import useApi from '@/lib/hooks/useApi';
 import UserProfileButtons from './UserProfileButtons';
 import Title from './Title';
 import Text from './Text';
+import Avatar from './Ui/Avatar';
 
 //Config timeago in french
 TimeAgo.addDefaultLocale(fr);
@@ -62,17 +63,11 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
 
   return (
     <div className={styles.container}>
-      <div
-        className={styles.imageWrapper}
-        style={{
-          ...(currentUser.profileImage && {
-            backgroundImage: `url(${
-              process.env.NEXT_PUBLIC_CLOUDFRONT_MEDIA +
-              currentUser.profileImage
-            })`,
-          }),
-        }}
-      ></div>
+      <Avatar
+        className="h-[10rem] w-[10rem]"
+        imageId={currentUser?.profileImageId}
+        pseudo={currentUser?.pseudo}
+      />
 
       <div className={styles.detailsWrapper}>
         <div className={styles.pseudoContainer}>

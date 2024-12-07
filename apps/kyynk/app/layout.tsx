@@ -116,15 +116,7 @@ const RootLayout: FC<Props> = async ({ children }) => {
                 />
                 <body>
                   <Toaster position="bottom-center" />
-                  <MuiThemeProvider
-                    fonts={[
-                      karlaFont.style.fontFamily,
-                      rubikFont.style.fontFamily,
-                      'sans-serif',
-                    ].join(',')}
-                  >
-                    <GlobalConfig>{children}</GlobalConfig>
-                  </MuiThemeProvider>
+                  <GlobalConfig>{children}</GlobalConfig>
                   <Fathom />
                   <SocketIO />
                   <GlobalErrorHandler />

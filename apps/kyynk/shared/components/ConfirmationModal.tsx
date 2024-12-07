@@ -1,8 +1,8 @@
-import * as React from "react";
-import CustomModal from "@/components/Modal";
-import { useTranslations } from "next-intl";
-import SimpleButton from "./Buttons/SimpleButton";
-import Text from "./Text";
+import * as React from 'react';
+import CustomModal from '@/components/Modal';
+import { useTranslations } from 'next-intl';
+import SimpleButton from '@/components/Buttons/SimpleButton';
+import Text from '@/components/Text';
 
 interface ConfirmationModalProps {
   setOpen: (e: boolean) => void;
@@ -35,22 +35,22 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       open={open}
       onClose={setOpen}
       withCloseIcon
-      title={title || t("common.confirmation")}
+      title={title || t('common.confirmation')}
       customStyle={{
-        maxWidth: "400px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "2rem",
+        maxWidth: '400px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '2rem',
       }}
     >
       <Text textAlign="center">{text}</Text>
       <SimpleButton
         isLoading={isLoading}
         onClick={handleValidation}
-        customStyles={{ padding: "0.6rem 1rem" }}
+        customStyles={{ padding: '0.6rem 1rem' }}
       >
-        {buttonText || t("common.confirm")}
+        {buttonText || t('common.confirm')}
       </SimpleButton>
     </CustomModal>
   );

@@ -1,23 +1,22 @@
-import { auth } from '@/auth';
+'use client';
+
 import BackButton from '@/components/Common/BackButton';
-import ScrollableContainer from '@/components/ScrollableContainer';
-import categoryService from '@/features/category/categoryService';
-import userService from '@/features/user/userService';
+import PageContainer from '@/components/PageContainer';
+import { useUser } from '@/lib/hooks/useUser';
 import dynamic from 'next/dynamic';
 import React from 'react';
 
 const UserForm = dynamic(() => import('@/components/UserForm'), { ssr: false });
 
-const EditProfilPage = async () => {
-  const userInitialDatas = await userService.getAccountOwner();
-
-  const session = await auth();
+const EditProfilPage = () => {
+  const { getUser } = useUser();
+  const user = getUser();
 
   return (
-    <ScrollableContainer>
-      <BackButton isVisible={true} prevPath={`/${session?.user?.slug}`} />
-      <UserForm nextPage={`/dashboard/community/${session?.user?.id}`} />
-    </ScrollableContainer>
+    <PageContainer>
+      <BackButton isVisible={true} prevPath={`/${user?.slug}`} />
+      <UserForm />
+    </PageContainer>
   );
 };
 

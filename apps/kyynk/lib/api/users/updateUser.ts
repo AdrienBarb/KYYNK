@@ -13,6 +13,14 @@ export async function updateUser({
     email: string;
     userType: 'member' | 'creator';
     preferences: string[];
+    age: number;
+    description: string;
+    profileImageId: string;
+    gender: string;
+    bodyType: string;
+    hairColor: string;
+    country: string;
+    tags: string[];
   };
 }) {
   const data: Prisma.UserUpdateInput = {};
@@ -42,6 +50,38 @@ export async function updateUser({
     data.preferences = body.preferences;
   }
 
+  if (body.description) {
+    data.description = body.description;
+  }
+
+  if (body.age) {
+    data.age = body.age;
+  }
+
+  if (body.gender) {
+    data.gender = body.gender;
+  }
+
+  if (body.bodyType) {
+    data.bodyType = body.bodyType;
+  }
+
+  if (body.hairColor) {
+    data.hairColor = body.hairColor;
+  }
+
+  if (body.country) {
+    data.country = body.country;
+  }
+
+  if (body.tags) {
+    data.tags = body.tags;
+  }
+
+  if (body.profileImageId) {
+    data.profileImageId = body.profileImageId;
+  }
+
   return prisma.user.update({
     where: { id: userId },
     data,
@@ -51,6 +91,15 @@ export async function updateUser({
       email: true,
       userType: true,
       slug: true,
+      description: true,
+      profileImageId: true,
+      isArchived: true,
+      age: true,
+      gender: true,
+      bodyType: true,
+      hairColor: true,
+      country: true,
+      tags: true,
     },
   });
 }

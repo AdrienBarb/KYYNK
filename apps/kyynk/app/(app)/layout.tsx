@@ -1,5 +1,6 @@
-import NavigationBar from "@/components/Common/NavigationBar";
-import React, { FC, ReactNode } from "react";
+import Footer from '@/shared/components/layout/Footer';
+import NavigationBar from '@/shared/components/layout/NavigationBar';
+import React, { FC, ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
@@ -8,10 +9,9 @@ interface Props {
 const AppLayout: FC<Props> = ({ children }) => {
   return (
     <>
-      <header>
-        <NavigationBar />
-      </header>
-      <main>{children}</main>
+      <NavigationBar />
+      <main className="mt-[48px] mx-auto max-w-7xl pt-8 px-4">{children}</main>
+      <Footer />
     </>
   );
 };

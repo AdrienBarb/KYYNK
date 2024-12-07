@@ -5,12 +5,12 @@ import { getUserBySlug } from '@/lib/api/users/getUserBySlug';
 import { redirect } from 'next/navigation';
 import ErrorMessage from '@/components/ErrorMessage';
 import { getTranslations } from 'next-intl/server';
-import ScrollableContainer from '@/components/ScrollableContainer';
 import BackButton from '@/components/Common/BackButton';
 import UserProfileTopButtons from '@/components/UserProfileTopButtons';
 import { auth } from '@/auth';
 import UserUncompletedProfileBand from '@/components/UserUncompletedProfileBand';
 import UserProfileHeader from '@/components/UserProfileHeader';
+import PageContainer from '@/components/PageContainer';
 
 export async function generateMetadata({
   params: { slug },
@@ -42,7 +42,7 @@ const UserPage = async ({ params }: { params: { slug: string } }) => {
   }
 
   return (
-    <ScrollableContainer>
+    <PageContainer>
       <BackButton isVisible={!!session} prevPath="/dashboard/community">
         <UserProfileTopButtons />
       </BackButton>
@@ -53,7 +53,7 @@ const UserPage = async ({ params }: { params: { slug: string } }) => {
         initialUserDatas?.userType === 'creator' && (
           <div className={styles.contentContainer}>{children}</div>
         )} */}
-    </ScrollableContainer>
+    </PageContainer>
   );
 };
 

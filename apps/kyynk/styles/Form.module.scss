@@ -1,4 +1,4 @@
-@import "library.scss";
+@import 'library.scss';
 .container {
   width: 100%;
 }
@@ -33,7 +33,7 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.42);
   .richTextLabel {
     color: rgba(0, 0, 0, 0.6);
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
     font-weight: 400;
     font-size: 0.8rem;
     white-space: nowrap;
@@ -205,16 +205,6 @@
   position: absolute;
   cursor: pointer;
   border: 1px solid $background;
-}
-
-.profil {
-  right: 10px;
-  bottom: 10px;
-
-  @media (max-width: $sm) {
-    right: 0px;
-    bottom: 0px;
-  }
 }
 
 .banner {

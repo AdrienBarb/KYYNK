@@ -3,16 +3,18 @@
 import React, { useState } from 'react';
 import PageContainer from '@/components/PageContainer';
 import { useTranslations } from 'next-intl';
-import { getSession, useSession } from 'next-auth/react';
 import useApi from '@/lib/hooks/useApi';
 import { appRouter } from '@/appRouter';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/Ui/Button';
+import { useUser } from '@/lib/hooks/useUser';
 
 const SignUpPage = () => {
   const t = useTranslations();
   const [userType, setUserType] = useState('');
-  const { update } = useSession();
+
+  const { setUser, getUser } = useUser();
+  const user = getUser();
 
   const { usePut } = useApi();
 
@@ -20,23 +22,11 @@ const SignUpPage = () => {
 
   const { mutate: editUserType, isLoading } = usePut(`/api/me`, {
     onSuccess: async ({ userType }) => {
-      const session = await getSession();
+      setUser({ userType });
 
-      if (session) {
-        const updatedSession = {
-          ...session,
-          user: {
-            ...session.user,
-            userType: userType,
-          },
-        };
-
-        await update(updatedSession);
-
-        userType === 'member'
-          ? router.push(appRouter.preferences)
-          : router.push(`/${session?.user?.slug}`);
-      }
+      userType === 'member'
+        ? router.push(appRouter.preferences)
+        : router.push(`/${user?.slug}`);
     },
   });
 

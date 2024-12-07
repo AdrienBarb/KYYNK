@@ -16,6 +16,12 @@ model User {
   password       String
   description    String?
   profileImageId String?
+  age            Int?
+  gender         String?
+  bodyType       String?
+  hairColor      String?
+  country        String?
+  tags           String[]   @default([])
   isArchived     Boolean    @default(false)
   preferences    String[]   @default([])
   userType       UserType?  @default(member)

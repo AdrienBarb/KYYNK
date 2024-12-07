@@ -15,6 +15,10 @@ const nextConfig = {
     }
     return config;
   },
+  images: {
+    loader: 'custom',
+    loaderFile: './node_modules/@uploadcare/nextjs-loader/build/loader.js',
+  },
 };
 
 module.exports = withNextIntl(nextConfig);

@@ -14,12 +14,22 @@ module.exports = {
         primary: '#cecaff',
         'primary-light': '#d9d7f6',
         background: '#fff0eb',
+        'custom-black': '#1c131e',
         destructive: 'red',
       },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+      keyframes: {
+        'slide-in-from-left': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        'slide-out-to-left': {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
+      },
+      animation: {
+        'slide-in-from-left': 'slide-in-from-left 0.3s ease-out',
+        'slide-out-to-left': 'slide-out-to-left 0.3s ease-in',
       },
     },
   },

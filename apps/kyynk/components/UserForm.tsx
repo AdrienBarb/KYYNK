@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef, FC } from 'react';
+import React, { useRef } from 'react';
 import { useFormik } from 'formik';
 import styles from '@/styles/Form.module.scss';
 import MenuItem from '@mui/material/MenuItem';
@@ -9,86 +9,57 @@ import FormHelperText from '@mui/material/FormHelperText';
 import * as yup from 'yup';
 import {
   BODY_TYPE,
+  GENDER,
   HAIR_COLOR,
   ageValues,
   countries,
 } from '@/constants/formValue';
-import LoadingButton from '@/components/Buttons/LoadingButton';
 import CustomTextField from '@/components/Inputs/TextField';
 import EditIcon from '@mui/icons-material/Edit';
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
-import userService from '@/features/user/userService';
-import { Gender } from '@/types/models/genderModel';
 import useApi from '@/lib/hooks/useApi';
-import axios from 'axios';
-import Pica from 'pica';
 import InputWrapper from './InputWrapper';
-import { Media } from '@/types/models/Media';
-import GalleryModal from './GalleryModal';
-import GalleryCard from './GalleryCard';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Select from 'react-select';
 import { TAGS, TagsType, tagList } from '@/constants/constants';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@/lib/hooks/useUser';
+import '@uploadcare/react-uploader/core.css';
+import { uploadDirect } from '@uploadcare/upload-client';
+import Avatar from './Ui/Avatar';
+import { Button } from './Ui/Button';
 
-import { User } from '@prisma/client';
-
-interface Props {
-  nextPage: string;
-}
-
-const UserForm: FC<Props> = ({ nextPage }) => {
+const UserForm = () => {
   //router
   const router = useRouter();
 
   //traduction
   const t = useTranslations();
 
-  //localstate
-  const [imageProfil, setImageProfil] = useState('');
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [openGalleryModal, setOpenGalleryModal] = useState(false);
-  const [selectedMedias, setSelectedMedias] = useState<Media[]>([]);
+  const { setUser, getUser } = useUser();
+  const user = getUser();
 
   const { data: session } = useSession();
 
   const profilInput = useRef<HTMLInputElement>(null);
 
-  const { usePut, useGet, fetchData } = useApi();
+  const { usePut } = useApi();
 
-  const { mutate: doPost, isLoading } = usePut('/api/users/owner', {
-    onSuccess: () => {
-      router.push(nextPage);
+  const { mutate: doPost, isLoading } = usePut('/api/me', {
+    onSuccess: async (user) => {
+      setUser(user);
+
+      router.push(`/${user?.slug}`);
     },
   });
 
-  const getCurrentUser = async () => {
-    try {
-      const r = await fetchData(`/api/me`);
-
-      setCurrentUser(r);
-      setSelectedMedias(r.secondaryProfileImages);
-
-      formik.setFieldValue('tags', [
-        ...TAGS.filter((el) => r.tags.includes(el.value)).map((c) => {
-          return {
-            value: c.value,
-            label: t(`nudeCategories.${c.label}`),
-          };
-        }),
-      ]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (session?.user?.id) {
-      getCurrentUser();
-    }
-  }, [session?.user?.id]);
+  const { mutate: setProfileImageId, isLoading: isProfileImageLoading } =
+    usePut('/api/me', {
+      onSuccess: async ({ profileImageId }) => {
+        setUser({ profileImageId });
+      },
+    });
 
   const validationSchema = yup.object({
     pseudo: yup
@@ -100,14 +71,21 @@ const UserForm: FC<Props> = ({ nextPage }) => {
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      pseudo: currentUser?.pseudo ?? '',
-      description: currentUser?.description ?? '',
-      age: currentUser?.age ?? '',
-      gender: currentUser?.gender ?? '',
-      bodyType: currentUser?.bodyType ?? '',
-      hairColor: currentUser?.hairColor ?? '',
-      country: currentUser?.country ?? '',
-      tags: [],
+      pseudo: user?.pseudo ?? '',
+      description: user?.description ?? '',
+      age: user?.age ?? '',
+      gender: user?.gender ?? '',
+      bodyType: user?.bodyType ?? '',
+      hairColor: user?.hairColor ?? '',
+      country: user?.country ?? '',
+      tags: [
+        ...TAGS.filter((el) => user?.tags.includes(el.value)).map((c) => {
+          return {
+            value: c.value,
+            label: t(`nudeCategories.${c.label}`),
+          };
+        }),
+      ],
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -119,7 +97,6 @@ const UserForm: FC<Props> = ({ nextPage }) => {
         bodyType: values.bodyType,
         hairColor: values.hairColor,
         country: values.country,
-        secondaryProfileImages: selectedMedias.map((m) => m._id),
         tags: values.tags.map((t: TagsType) => t.value),
       };
 
@@ -133,47 +110,13 @@ const UserForm: FC<Props> = ({ nextPage }) => {
     if (!event.target.files) return;
 
     const file = event.target.files[0];
-    const img = document.createElement('img');
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = async (e) => {
-      img.src = e.target?.result as string;
-      img.onload = async () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const pica = Pica();
+    const result = await uploadDirect(file, {
+      publicKey: '1f9328108f2de93793ae',
+      store: 'auto',
+    });
 
-        const scaleFactor = 600 / Math.max(img.width, img.height);
-        canvas.width = img.width * scaleFactor;
-        canvas.height = img.height * scaleFactor;
-
-        await pica.resize(img, canvas);
-
-        const jpegBlob = await pica.toBlob(canvas, 'image/jpeg', 1);
-
-        const { signedUrl, profileImageUrl } =
-          await userService.addProfilPicture({
-            filetype: 'image/jpeg',
-          });
-
-        await axios.put(signedUrl, jpegBlob, {
-          headers: {
-            'Content-Type': 'image/jpeg',
-          },
-        });
-
-        setImageProfil(profileImageUrl);
-      };
-    };
-  };
-
-  const handleOpenGallery = () => {
-    setOpenGalleryModal(true);
-  };
-
-  const handleClickOnDelete = (mediaId: string) => {
-    setSelectedMedias((prev) => prev.filter((m: Media) => m._id !== mediaId));
+    setProfileImageId({ profileImageId: result.uuid });
   };
 
   return (
@@ -187,14 +130,13 @@ const UserForm: FC<Props> = ({ nextPage }) => {
           className={styles.form}
           style={{ marginTop: '2rem' }}
         >
-          <div
-            className={styles.imageWrapper}
-            style={{
-              ...(imageProfil && {
-                backgroundImage: `url(${process.env.NEXT_PUBLIC_CLOUDFRONT_MEDIA}${imageProfil})`,
-              }),
-            }}
-          >
+          <div className="relative self-center ">
+            <Avatar
+              className="h-[10rem] w-[10rem]"
+              imageId={user?.profileImageId}
+              pseudo={user?.pseudo}
+            />
+
             <input
               ref={profilInput}
               onChange={(e) => handleFileUpload(e)}
@@ -205,7 +147,7 @@ const UserForm: FC<Props> = ({ nextPage }) => {
             />
 
             <div
-              className={clsx(styles.photoIcon, styles.profil)}
+              className={clsx(styles.photoIcon, 'right-[10px] bottom-[10px]')}
               onClick={() => {
                 profilInput.current?.click();
               }}
@@ -213,32 +155,6 @@ const UserForm: FC<Props> = ({ nextPage }) => {
               <EditIcon sx={{ color: '#FFF0EB' }} fontSize="small" />
             </div>
           </div>
-
-          {session?.user?.userType === 'creator' && (
-            <InputWrapper label={t('common.secondaryPictureProfile')}>
-              <div className={styles.mediaContainer}>
-                <div className={styles.add} onClick={handleOpenGallery}>
-                  <AddCircleIcon
-                    sx={{ fontSize: '48', cursor: 'pointer', color: 'white' }}
-                  />
-                </div>
-                {selectedMedias.map(
-                  (currentLocalSelectedMedia: Media, index: number) => {
-                    return (
-                      <div className={styles.media} key={index}>
-                        <GalleryCard
-                          media={currentLocalSelectedMedia}
-                          deleteAction={() =>
-                            handleClickOnDelete(currentLocalSelectedMedia._id)
-                          }
-                        />
-                      </div>
-                    );
-                  },
-                )}
-              </div>
-            </InputWrapper>
-          )}
 
           <InputWrapper label={t('db.pseudo')}>
             <CustomTextField
@@ -291,8 +207,6 @@ const UserForm: FC<Props> = ({ nextPage }) => {
                 })}
                 value={formik.values.tags}
                 classNamePrefix="react-select"
-                getOptionLabel={(el: TagsType) => el.label}
-                getOptionValue={(el: TagsType) => el.value}
                 closeMenuOnSelect={false}
                 placeholder={t('common.selectTagPlaceholder')}
                 noOptionsMessage={() => <span>{t('common.noOtpions')}</span>}
@@ -399,15 +313,13 @@ const UserForm: FC<Props> = ({ nextPage }) => {
                   <MenuItem value="">
                     <em>{t('db.nothing')}</em>
                   </MenuItem>
-                  {genderCategories.map(
-                    (currentCategory: Gender, index: number) => {
-                      return (
-                        <MenuItem key={index} value={currentCategory._id}>
-                          {t(`db.${currentCategory.name}`)}
-                        </MenuItem>
-                      );
-                    },
-                  )}
+                  {GENDER.map((gender: string, index: number) => {
+                    return (
+                      <MenuItem key={index} value={gender}>
+                        {t(`db.${gender}`)}
+                      </MenuItem>
+                    );
+                  })}
                 </CustomTextField>
                 {typeof formik.errors.gender === 'string' &&
                   formik.errors.gender && (
@@ -511,23 +423,15 @@ const UserForm: FC<Props> = ({ nextPage }) => {
             </InputWrapper>
           </div>
 
-          <LoadingButton
-            fullWidth
-            loading={isLoading}
+          <Button
+            type="submit"
+            isLoading={isLoading}
             onClick={() => formik.handleSubmit()}
           >
             {t('common.validate')}
-          </LoadingButton>
+          </Button>
         </form>
       </div>
-      <GalleryModal
-        open={openGalleryModal}
-        setOpen={setOpenGalleryModal}
-        setSelectedMedias={setSelectedMedias}
-        selectedMedias={selectedMedias}
-        multiple={true}
-        mediaType={['image']}
-      />
     </>
   );
 };

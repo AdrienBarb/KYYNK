@@ -30,7 +30,6 @@ const Home = async () => {
       <LandingFeatures />
       {/* <LastUsersHomeSection users={users} /> */}
       <AppFAQ />
-      <Footer />
     </>
   );
 };

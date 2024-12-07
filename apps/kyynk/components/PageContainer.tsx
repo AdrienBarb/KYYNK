@@ -1,20 +1,13 @@
-import React, { CSSProperties, FC, ReactNode } from 'react';
-import styles from '@/styles/PageContainer.module.scss';
+import React, { FC, ReactNode } from 'react';
+import { cn } from '@/lib/utils/tailwind/cn';
 
 interface PageContainerProps {
   children: ReactNode;
-  containerStyles?: CSSProperties;
-  wrapperStyles?: CSSProperties;
+  className?: string;
 }
 
-const PageContainer: FC<PageContainerProps> = ({ children, containerStyles, wrapperStyles }) => {
-  return (
-    <div className={styles.container} style={containerStyles}>
-      <div className={styles.wrapper} style={wrapperStyles}>
-        {children}
-      </div>
-    </div>
-  );
+const PageContainer: FC<PageContainerProps> = ({ children, className }) => {
+  return <div className={cn('w-full min-h-[80vh]', className)}>{children}</div>;
 };
 
 export default PageContainer;

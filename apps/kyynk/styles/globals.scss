@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Karla:wght@200;300;400;500;600;700;800&family=Rubik:wght@300;400;500;600;700;800;900&display=swap");
-@import "library.scss";
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@200;300;400;500;600;700;800&family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
+@import 'library.scss';
 
 html,
 body {
@@ -43,6 +43,11 @@ body {
   p {
     margin: 0;
   }
+}
+
+.my-config {
+  --uc-primary-oklch-dark: 69% 0.1768 300;
+  --uc-primary-oklch-light: 59% 0.22 300;
 }
 
 .Form_richTextWrapper__op9SB {
