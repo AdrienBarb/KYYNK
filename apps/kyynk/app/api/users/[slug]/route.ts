@@ -1,6 +1,6 @@
-import { getUserBySlug } from '@/lib/api/users/getUserBySlug';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { errorHandler } from '@/lib/utils/errors/errorHandler';
+import { getUserBySlug } from '@/shared/api/services/users/getUserBySlug';
 import { NextResponse } from 'next/server';
 
 export const GET = async (

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import styles from '@/styles/Form.module.scss';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import CustomTextField from '@/components/Inputs/TextField';
 import { Checkbox } from '@mui/material';
 import { IconButton, InputAdornment } from '@mui/material';
@@ -12,9 +12,9 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { appRouter } from '@/appRouter';
-import { register } from '@/lib/server-actions/users/register';
 import Link from 'next/link';
-import { Button } from './Ui/Button';
+import { register } from '@/app-features/auth/server-actions/register';
+import { Button } from '@/shared/shared/components/ui/Button';
 
 const UserSignUpForm = () => {
   //router

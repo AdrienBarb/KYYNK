@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import useApi from '@/lib/hooks/useApi';
 import { appRouter } from '@/appRouter';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/Ui/Button';
+import { Button } from '@/shared/components/ui/Button';
 import { useUser } from '@/lib/hooks/useUser';
 
 const SignUpPage = () => {

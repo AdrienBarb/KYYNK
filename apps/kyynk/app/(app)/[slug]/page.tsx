@@ -1,7 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
 import { genPageMetadata } from '@/app/seo';
-import { getUserBySlug } from '@/lib/api/users/getUserBySlug';
 import { redirect } from 'next/navigation';
 import ErrorMessage from '@/components/ErrorMessage';
 import { getTranslations } from 'next-intl/server';
@@ -11,6 +10,7 @@ import { auth } from '@/auth';
 import UserUncompletedProfileBand from '@/components/UserUncompletedProfileBand';
 import UserProfileHeader from '@/components/UserProfileHeader';
 import PageContainer from '@/components/PageContainer';
+import { getUserBySlug } from '@/shared/api/services/users/getUserBySlug';
 
 export async function generateMetadata({
   params: { slug },

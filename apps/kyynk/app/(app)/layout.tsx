@@ -10,7 +10,9 @@ const AppLayout: FC<Props> = ({ children }) => {
   return (
     <>
       <NavigationBar />
-      <main className="mt-[48px] mx-auto max-w-7xl pt-8 px-4">{children}</main>
+      <main className="mt-[48px] mx-auto max-w-7xl pt-8 px-4 pb-12">
+        {children}
+      </main>
       <Footer />
     </>
   );

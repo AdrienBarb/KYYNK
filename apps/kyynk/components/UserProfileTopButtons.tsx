@@ -6,8 +6,8 @@ import { useParams, useRouter } from 'next/navigation';
 import ShareModal from '@/components/ShareModal';
 import { appRouter } from '@/appRouter';
 import { useUser } from '@/lib/hooks/useUser';
-import { Button } from './Ui/Button';
 import { Forward, Pencil } from 'lucide-react';
+import { Button } from '@/shared/components/ui/Button';
 
 interface Props {}
 

@@ -28,7 +28,7 @@ import { UilMoneyWithdrawal } from '@iconscout/react-unicons';
 import { UilCompass } from '@iconscout/react-unicons';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/lib/hooks/useUser';
-import { Button } from '@/components/Ui/Button';
+import { Button } from '@/shared/components/ui/Button';
 import { cn } from '@/lib/utils/tailwind/cn';
 
 interface Props {

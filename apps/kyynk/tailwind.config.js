@@ -3,6 +3,8 @@ module.exports = {
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './shared/**/*.{js,ts,jsx,tsx,mdx}',
+    './app-features/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -16,20 +18,6 @@ module.exports = {
         background: '#fff0eb',
         'custom-black': '#1c131e',
         destructive: 'red',
-      },
-      keyframes: {
-        'slide-in-from-left': {
-          '0%': { transform: 'translateX(-100%)' },
-          '100%': { transform: 'translateX(0)' },
-        },
-        'slide-out-to-left': {
-          '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(-100%)' },
-        },
-      },
-      animation: {
-        'slide-in-from-left': 'slide-in-from-left 0.3s ease-out',
-        'slide-out-to-left': 'slide-out-to-left 0.3s ease-in',
       },
     },
   },

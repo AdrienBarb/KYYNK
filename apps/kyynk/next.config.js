@@ -16,8 +16,14 @@ const nextConfig = {
     return config;
   },
   images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'kyynk-296765883.imgix.net',
+      },
+    ],
     loader: 'custom',
-    loaderFile: './node_modules/@uploadcare/nextjs-loader/build/loader.js',
+    loaderFile: './lib/imgix/loader.ts',
   },
 };
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import PageContainer from '@/components/PageContainer';
 import styles from '@/styles/AuthPage.module.scss';
-import UserSignInForm from '@/components/UserSignInForm';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { Button } from '@/components/Ui/Button';
+import { Button } from '@/shared/components/ui/Button';
+import UserSignInForm from '@/app-features/auth/components/UserSignInForm';
 
 const LoginPage = () => {
   const t = useTranslations();

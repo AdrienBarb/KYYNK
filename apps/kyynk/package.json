@@ -13,6 +13,7 @@
     "cypress:run:staging": "CYPRESS_ENV=staging npx cypress run"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.705.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@fortawesome/fontawesome-svg-core": "^6.5.1",

@@ -28,7 +28,9 @@ import { useUser } from '@/lib/hooks/useUser';
 import '@uploadcare/react-uploader/core.css';
 import { uploadDirect } from '@uploadcare/upload-client';
 import Avatar from './Ui/Avatar';
-import { Button } from './Ui/Button';
+import { Button } from '@/shared/components/ui/Button';
+import { uploadToS3 } from '@/shared/utils/s3Uploader';
+import toast from 'react-hot-toast';
 
 const UserForm = () => {
   //router
@@ -54,12 +56,11 @@ const UserForm = () => {
     },
   });
 
-  const { mutate: setProfileImageId, isLoading: isProfileImageLoading } =
-    usePut('/api/me', {
-      onSuccess: async ({ profileImageId }) => {
-        setUser({ profileImageId });
-      },
-    });
+  const { mutate: setProfileImageId } = usePut('/api/me', {
+    onSuccess: async ({ profileImageId }) => {
+      setUser({ profileImageId });
+    },
+  });
 
   const validationSchema = yup.object({
     pseudo: yup
@@ -111,12 +112,13 @@ const UserForm = () => {
 
     const file = event.target.files[0];
 
-    const result = await uploadDirect(file, {
-      publicKey: '1f9328108f2de93793ae',
-      store: 'auto',
-    });
+    try {
+      const imageKey = await uploadToS3({ file, folder: 'medias' });
 
-    setProfileImageId({ profileImageId: result.uuid });
+      setProfileImageId({ profileImageId: imageKey });
+    } catch (err) {
+      toast.error('Something went wrong!');
+    }
   };
 
   return (
@@ -132,7 +134,7 @@ const UserForm = () => {
         >
           <div className="relative self-center ">
             <Avatar
-              className="h-[10rem] w-[10rem]"
+              size="l"
               imageId={user?.profileImageId}
               pseudo={user?.pseudo}
             />

@@ -4,15 +4,14 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import styles from '@/styles/Form.module.scss';
-import LoadingButton from '@/components/Buttons/LoadingButton';
+import { Button } from '@/shared/components/ui/Button';
 import CustomTextField from '@/components/Inputs/TextField';
 import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
-import { appRouter } from '@/appRouter';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { authenticate } from '@/lib/server-actions/users/authenticate';
+import { authenticate } from '@/app-features/auth/server-actions/authenticate';
 
 const UserSignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -102,9 +101,9 @@ const UserSignInForm = () => {
           }}
         />
 
-        <LoadingButton fullWidth type="submit" loading={isLoading}>
+        <Button type="submit" isLoading={isLoading}>
           {t('common.signIn')}
-        </LoadingButton>
+        </Button>
       </form>
     </div>
   );
