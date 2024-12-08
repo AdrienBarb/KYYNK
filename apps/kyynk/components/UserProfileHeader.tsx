@@ -64,7 +64,7 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
   return (
     <div className={styles.container}>
       <Avatar
-        className="h-[10rem] w-[10rem]"
+        size="l"
         imageId={currentUser?.profileImageId}
         pseudo={currentUser?.pseudo}
       />

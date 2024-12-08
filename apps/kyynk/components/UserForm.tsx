@@ -1,36 +1,44 @@
 'use client';
 
-import React, { useRef } from 'react';
-import { useFormik } from 'formik';
+import React, { useEffect, useRef } from 'react';
 import styles from '@/styles/Form.module.scss';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import FormHelperText from '@mui/material/FormHelperText';
-import * as yup from 'yup';
 import {
   BODY_TYPE,
   GENDER,
   HAIR_COLOR,
-  ageValues,
   countries,
 } from '@/constants/formValue';
-import CustomTextField from '@/components/Inputs/TextField';
 import EditIcon from '@mui/icons-material/Edit';
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import useApi from '@/lib/hooks/useApi';
-import InputWrapper from './InputWrapper';
-import Select from 'react-select';
-import { TAGS, TagsType, tagList } from '@/constants/constants';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/lib/hooks/useUser';
 import '@uploadcare/react-uploader/core.css';
-import { uploadDirect } from '@uploadcare/upload-client';
 import Avatar from './Ui/Avatar';
 import { Button } from '@/shared/components/ui/Button';
 import { uploadToS3 } from '@/shared/utils/s3Uploader';
 import toast from 'react-hot-toast';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/shared/components/ui/Form';
+import { Input } from '@/shared/components/ui/Input';
+import { Textarea } from '@/shared/components/ui/TextArea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/components/ui/Select';
 
 const UserForm = () => {
   //router
@@ -41,8 +49,6 @@ const UserForm = () => {
 
   const { setUser, getUser } = useUser();
   const user = getUser();
-
-  const { data: session } = useSession();
 
   const profilInput = useRef<HTMLInputElement>(null);
 
@@ -62,48 +68,42 @@ const UserForm = () => {
     },
   });
 
-  const validationSchema = yup.object({
-    pseudo: yup
+  const formSchema = z.object({
+    pseudo: z
       .string()
-      .matches(/^[a-zA-Z0-9._-]{3,30}$/, t('error.pseudo_invalid'))
-      .required('Pseudo is required'),
+      .min(3, { message: 'Pseudo must be at least 3 characters long.' })
+      .max(30, { message: 'Pseudo must be at most 30 characters long.' })
+      .regex(
+        /^[a-zA-Z0-9](?!.*[_.-]{2})[a-zA-Z0-9._-]*[a-zA-Z0-9]$/,
+        'Pseudo can only contain letters, numbers, "_", "-", ".", and must not start or end with special characters.',
+      ),
+    description: z.string().optional(),
+    gender: z.string().optional(),
+    bodyType: z.string().optional(),
+    hairColor: z.string().optional(),
+    country: z.string().optional(),
   });
 
-  const formik = useFormik({
-    enableReinitialize: true,
-    initialValues: {
-      pseudo: user?.pseudo ?? '',
-      description: user?.description ?? '',
-      age: user?.age ?? '',
-      gender: user?.gender ?? '',
-      bodyType: user?.bodyType ?? '',
-      hairColor: user?.hairColor ?? '',
-      country: user?.country ?? '',
-      tags: [
-        ...TAGS.filter((el) => user?.tags.includes(el.value)).map((c) => {
-          return {
-            value: c.value,
-            label: t(`nudeCategories.${c.label}`),
-          };
-        }),
-      ],
-    },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      const formValues = {
-        description: values.description,
-        pseudo: values.pseudo,
-        age: typeof values.age === 'string' ? parseInt(values.age) : values.age,
-        gender: values.gender,
-        bodyType: values.bodyType,
-        hairColor: values.hairColor,
-        country: values.country,
-        tags: values.tags.map((t: TagsType) => t.value),
-      };
-
-      doPost(formValues);
-    },
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
   });
+
+  const { reset } = form;
+
+  useEffect(() => {
+    if (user) {
+      reset({
+        pseudo: user.pseudo ?? '',
+        description: user.description ?? '',
+      });
+    }
+  }, [user, reset]);
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log('🚀 ~ onSubmit ~ values:', values);
+
+    doPost(values);
+  }
 
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -122,319 +122,196 @@ const UserForm = () => {
   };
 
   return (
-    <>
-      <div
-        className={styles.formWrapper}
-        style={{ backgroundColor: 'transparent' }}
+    <Form {...form} key={user?.id}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8 flex flex-col items-center w-full"
       >
-        <form
-          onSubmit={formik.handleSubmit}
-          className={styles.form}
-          style={{ marginTop: '2rem' }}
-        >
-          <div className="relative self-center ">
-            <Avatar
-              size="l"
-              imageId={user?.profileImageId}
-              pseudo={user?.pseudo}
-            />
+        <div className="relative self-center ">
+          <Avatar
+            size="l"
+            imageId={user?.profileImageId}
+            pseudo={user?.pseudo}
+          />
 
-            <input
-              ref={profilInput}
-              onChange={(e) => handleFileUpload(e)}
-              type="file"
-              style={{ display: 'none' }}
-              multiple={false}
-              accept="image/png, image/jpeg"
-            />
+          <input
+            ref={profilInput}
+            onChange={(e) => handleFileUpload(e)}
+            type="file"
+            style={{ display: 'none' }}
+            multiple={false}
+            accept="image/png, image/jpeg"
+          />
 
-            <div
-              className={clsx(styles.photoIcon, 'right-[10px] bottom-[10px]')}
-              onClick={() => {
-                profilInput.current?.click();
-              }}
-            >
-              <EditIcon sx={{ color: '#FFF0EB' }} fontSize="small" />
-            </div>
-          </div>
-
-          <InputWrapper label={t('db.pseudo')}>
-            <CustomTextField
-              variant="outlined"
-              fullWidth
-              id="pseudo"
-              name="pseudo"
-              value={formik.values.pseudo}
-              onChange={formik.handleChange}
-              error={formik.touched.pseudo && Boolean(formik.errors.pseudo)}
-              helperText={
-                typeof formik.errors.pseudo === 'string' && formik.errors.pseudo
-              }
-            />
-          </InputWrapper>
-
-          <InputWrapper label={t('db.description')}>
-            <CustomTextField
-              variant="outlined"
-              fullWidth
-              id="description"
-              name="description"
-              multiline
-              rows={4}
-              value={formik.values.description}
-              onChange={formik.handleChange}
-              error={
-                formik.touched.description && Boolean(formik.errors.description)
-              }
-              helperText={
-                typeof formik.errors.description === 'string' &&
-                formik.errors.description
-              }
-            />
-          </InputWrapper>
-
-          {session?.user?.userType === 'creator' && (
-            <InputWrapper label={t('common.tags')}>
-              <Select
-                name="tags"
-                className={styles.multiSelect}
-                onChange={(selectedOptions) =>
-                  formik.setFieldValue('tags', selectedOptions)
-                }
-                options={tagList.map((currentTag) => {
-                  return {
-                    value: currentTag,
-                    label: t(`nudeCategories.${currentTag}`),
-                  };
-                })}
-                value={formik.values.tags}
-                classNamePrefix="react-select"
-                closeMenuOnSelect={false}
-                placeholder={t('common.selectTagPlaceholder')}
-                noOptionsMessage={() => <span>{t('common.noOtpions')}</span>}
-                styles={{
-                  control: (styles) => ({
-                    ...styles,
-                    backgroundColor: 'transparent',
-                    boxShadow: 'none',
-                    outline: 'none',
-                    border: '1px solid rgba(0, 0, 0, 0.3)',
-                    ':hover': {
-                      border: '1px solid black',
-                    },
-                  }),
-                  option: (
-                    styles,
-                    { data, isDisabled, isFocused, isSelected },
-                  ) => ({
-                    ...styles,
-                    backgroundColor: isDisabled
-                      ? undefined
-                      : isSelected
-                      ? '#d9d7f6'
-                      : isFocused
-                      ? '#d9d7f6'
-                      : undefined,
-                  }),
-                  menuList: (styles) => ({
-                    ...styles,
-                    backgroundColor: '#fff0eb',
-                    borderRadius: '6px',
-                  }),
-                  multiValue: (styles) => ({
-                    ...styles,
-                    backgroundColor: '#cecaff',
-                  }),
-                  multiValueLabel: (styles) => ({
-                    ...styles,
-                    color: 'white',
-                  }),
-                  multiValueRemove: (styles) => ({
-                    ...styles,
-                    color: 'white',
-                  }),
-                  noOptionsMessage: (styles) => ({
-                    ...styles,
-                    color: 'black',
-                  }),
-                  placeholder: (styles) => ({
-                    ...styles,
-                    color: 'rgba(0, 0, 0, 0.3)',
-                  }),
-                }}
-                isMulti
-              />
-            </InputWrapper>
-          )}
-
-          <InputWrapper label={t('db.country')}>
-            <FormControl
-              variant="outlined"
-              sx={{ minWidth: 200, width: '100%' }}
-            >
-              <CustomTextField
-                select
-                id="country"
-                name="country"
-                value={formik.values.country}
-                onChange={formik.handleChange}
-              >
-                <MenuItem value="">
-                  <em>{t('db.nothing')}</em>
-                </MenuItem>
-                {countries.map((el) => {
-                  return (
-                    <MenuItem key={el.value} value={el.value}>
-                      {t(`db.${el.label}`)}
-                    </MenuItem>
-                  );
-                })}
-              </CustomTextField>
-              {typeof formik.errors.country === 'string' &&
-                formik.errors.country && (
-                  <FormHelperText sx={{ color: 'red' }}>
-                    {formik.errors.country}
-                  </FormHelperText>
-                )}
-            </FormControl>
-          </InputWrapper>
-
-          <div className={styles.selectWrapper}>
-            <InputWrapper label={t('db.gender')}>
-              <FormControl
-                variant="outlined"
-                sx={{ minWidth: 200, width: '100%' }}
-              >
-                <CustomTextField
-                  select
-                  id="gender"
-                  name="gender"
-                  value={formik.values.gender}
-                  onChange={formik.handleChange}
-                >
-                  <MenuItem value="">
-                    <em>{t('db.nothing')}</em>
-                  </MenuItem>
-                  {GENDER.map((gender: string, index: number) => {
-                    return (
-                      <MenuItem key={index} value={gender}>
-                        {t(`db.${gender}`)}
-                      </MenuItem>
-                    );
-                  })}
-                </CustomTextField>
-                {typeof formik.errors.gender === 'string' &&
-                  formik.errors.gender && (
-                    <FormHelperText sx={{ color: 'red' }}>
-                      {formik.errors.gender}
-                    </FormHelperText>
-                  )}
-              </FormControl>
-            </InputWrapper>
-            <InputWrapper label={t('db.age')}>
-              <FormControl
-                variant="outlined"
-                sx={{ minWidth: 200, width: '100%' }}
-              >
-                <CustomTextField
-                  select
-                  id="age"
-                  name="age"
-                  value={formik.values.age}
-                  onChange={formik.handleChange}
-                >
-                  <MenuItem value="">
-                    <em>{t('db.nothing')}</em>
-                  </MenuItem>
-                  {ageValues.map((el) => {
-                    return (
-                      <MenuItem key={el} value={el}>{`${el} ans`}</MenuItem>
-                    );
-                  })}
-                </CustomTextField>
-                {typeof formik.errors.age === 'string' && formik.errors.age && (
-                  <FormHelperText sx={{ color: 'red' }}>
-                    {formik.errors.age}
-                  </FormHelperText>
-                )}
-              </FormControl>
-            </InputWrapper>
-          </div>
-          <div className={styles.selectWrapper}>
-            <InputWrapper label={t('db.body_type')}>
-              <FormControl
-                variant="outlined"
-                sx={{ minWidth: 200, width: '100%' }}
-              >
-                <CustomTextField
-                  select
-                  id="bodyType"
-                  name="bodyType"
-                  value={formik.values.bodyType}
-                  onChange={formik.handleChange}
-                >
-                  <MenuItem value="">
-                    <em>{t('db.nothing')}</em>
-                  </MenuItem>
-                  {BODY_TYPE.map((el) => {
-                    return (
-                      <MenuItem key={el} value={el}>
-                        {t(`db.${el}`)}
-                      </MenuItem>
-                    );
-                  })}
-                </CustomTextField>
-                {typeof formik.errors.bodyType === 'string' &&
-                  formik.errors.bodyType && (
-                    <FormHelperText sx={{ color: 'red' }}>
-                      {formik.errors.bodyType}
-                    </FormHelperText>
-                  )}
-              </FormControl>
-            </InputWrapper>
-            <InputWrapper label={t('db.hair_color')}>
-              <FormControl
-                variant="outlined"
-                sx={{ minWidth: 200, width: '100%' }}
-              >
-                <CustomTextField
-                  select
-                  id="hairColor"
-                  name="hairColor"
-                  value={formik.values.hairColor}
-                  onChange={formik.handleChange}
-                >
-                  <MenuItem value="">
-                    <em>{t('db.nothing')}</em>
-                  </MenuItem>
-                  {HAIR_COLOR.map((el) => {
-                    return (
-                      <MenuItem key={el} value={el}>
-                        {t(`db.${el}`)}
-                      </MenuItem>
-                    );
-                  })}
-                </CustomTextField>
-                {typeof formik.errors.hairColor === 'string' &&
-                  formik.errors.hairColor && (
-                    <FormHelperText sx={{ color: 'red' }}>
-                      {formik.errors.hairColor}
-                    </FormHelperText>
-                  )}
-              </FormControl>
-            </InputWrapper>
-          </div>
-
-          <Button
-            type="submit"
-            isLoading={isLoading}
-            onClick={() => formik.handleSubmit()}
+          <div
+            className={clsx(styles.photoIcon, 'right-[10px] bottom-[10px]')}
+            onClick={() => {
+              profilInput.current?.click();
+            }}
           >
-            {t('common.validate')}
-          </Button>
-        </form>
-      </div>
-    </>
+            <EditIcon sx={{ color: '#FFF0EB' }} fontSize="small" />
+          </div>
+        </div>
+
+        <FormField
+          control={form.control}
+          name="pseudo"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>{t('db.pseudo')}</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>{t('db.description')}</FormLabel>
+              <FormControl>
+                <Textarea {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="flex gap-8 w-full">
+          <FormField
+            control={form.control}
+            name="country"
+            render={({ field }) => {
+              console.log('🚀 ~ UserForm ~ field:', field);
+
+              return (
+                <FormItem className="w-full">
+                  <FormLabel>{t('db.country')}</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value! ?? user?.country}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('db.nothing')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {countries.map((el) => {
+                          return (
+                            <SelectItem value={el.value} key={el.value}>
+                              {t(`db.${el.label}`)}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              );
+            }}
+          />
+          <FormField
+            control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>{t('db.gender')}</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value! ?? user?.gender}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('db.nothing')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {GENDER.map((el) => {
+                        return (
+                          <SelectItem value={el} key={el}>
+                            {t(`db.${el}`)}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="flex gap-8 w-full">
+          <FormField
+            control={form.control}
+            name="bodyType"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>{t('db.body_type')}</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value! ?? user?.bodyType}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('db.nothing')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {BODY_TYPE.map((el) => {
+                        return (
+                          <SelectItem value={el} key={el}>
+                            {t(`db.${el}`)}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="hairColor"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>{t('db.hair_color')}</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value! ?? user?.hairColor}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('db.nothing')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {HAIR_COLOR.map((el) => {
+                        return (
+                          <SelectItem value={el} key={el}>
+                            {t(`db.${el}`)}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <Button className="w-full" type="submit" isLoading={isLoading}>
+          {t('common.validate')}
+        </Button>
+      </form>
+    </Form>
   );
 };
 
