@@ -1,12 +1,12 @@
 import {
   useQuery,
   useMutation,
-  UseQueryOptions,
-  UseMutationOptions,
   useInfiniteQuery,
-} from "react-query";
-import axios, { AxiosResponse } from "axios";
-import axiosInstance from "../axios/axiosConfig";
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
+import axios, { AxiosResponse } from 'axios';
+import axiosInstance from '../axios/axiosConfig';
 
 interface FetchParams {
   url: string;
@@ -20,7 +20,7 @@ interface MutationParams {
 
 export const fetchData = async (
   url: string,
-  params?: Record<string, any>
+  params?: Record<string, any>,
 ): Promise<any> => {
   try {
     const response = await axiosInstance.get(url, { params });
@@ -51,42 +51,44 @@ const useApi = () => {
     return response.data;
   };
 
-  const useGet = (
-    url: string,
-    params?: Record<string, any>,
-    options: UseQueryOptions<any, any, any, [string, FetchParams]> = {}
-  ) => useQuery(["get", { url, params }], fetcher, options);
+  const useGet = (url: string, params?: Record<string, any>, options = {}) =>
+    useQuery({
+      queryKey: ['get', { url, params }],
+      queryFn: fetcher,
+      ...options,
+    });
 
   const useInfinite = (
     queryKey: any,
     url: string,
     params: Record<string, any>,
-    options: {}
+    options = {},
   ) => {
-    return useInfiniteQuery(
-      queryKey,
-      async ({ pageParam = "" }) => {
+    return useInfiniteQuery({
+      queryKey: [queryKey],
+      queryFn: async ({ pageParam = '' }) => {
         const response = await axiosInstance.get(url, {
           params: { ...params, cursor: pageParam },
         });
         return response.data;
       },
-      {
-        ...options,
-        getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
-      }
-    );
+      getNextPageParam: (lastPage: any) => lastPage.nextCursor,
+      initialPageParam: undefined,
+      ...options,
+    });
   };
 
-  const usePost = (
-    url: string,
-    options: UseMutationOptions<any, any, any, any> = {}
-  ) => useMutation((data: any) => poster({ url, data }), options);
+  const usePost = (url: string, options = {}) =>
+    useMutation({
+      mutationFn: (data: any) => poster({ url, data }),
+      ...options,
+    });
 
-  const usePut = (
-    url: string,
-    options: UseMutationOptions<any, any, any, any> = {}
-  ) => useMutation((data: any) => editer({ url, data }), options);
+  const usePut = (url: string, options = {}) =>
+    useMutation({
+      mutationFn: (data: any) => editer({ url, data }),
+      ...options,
+    });
 
   return { useGet, usePost, usePut, useInfinite, fetchData };
 };

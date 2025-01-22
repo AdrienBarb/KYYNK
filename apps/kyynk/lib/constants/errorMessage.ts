@@ -9,4 +9,5 @@ export const errorMessages = {
   NOT_AUTHENTICATE: 'notAuthenticate',
   INVALID_LINK: 'invalidLink',
   EMAIL_ERROR: 'emailError',
+  NOT_AUTHORIZED: 'notAuthorized',
 };

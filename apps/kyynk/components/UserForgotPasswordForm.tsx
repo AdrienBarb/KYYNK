@@ -8,7 +8,7 @@ import CustomTextField from '@/components/Inputs/TextField';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import useApi from '@/lib/hooks/useApi';
-import { Button } from './Ui/Button';
+import { Button } from './ui/Button';
 
 const UserForgotPasswordForm = () => {
   const { locale } = useParams<{ locale: string }>();

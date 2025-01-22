@@ -4,10 +4,10 @@ import React, { useState, FC } from 'react';
 import styles from '@/styles/UserProfileTopButtons.module.scss';
 import { useParams, useRouter } from 'next/navigation';
 import ShareModal from '@/components/ShareModal';
-import { appRouter } from '@/appRouter';
 import { useUser } from '@/lib/hooks/useUser';
 import { Forward, Pencil } from 'lucide-react';
-import { Button } from '@/shared/components/ui/Button';
+import { Button } from '@/components/ui/Button';
+import { appRouter } from '@/constants/appRouter';
 
 interface Props {}
 

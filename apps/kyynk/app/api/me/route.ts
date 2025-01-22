@@ -1,8 +1,8 @@
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { errorHandler } from '@/lib/utils/errors/errorHandler';
-import { strictlyAuth } from '@/shared/api/hoc/strictlyAuth';
-import { getCurrentUser } from '@/shared/api/services/users/getCurrentUser';
-import { updateUser } from '@/shared/api/services/users/updateUser';
+import { strictlyAuth } from '@/hoc/strictlyAuth';
+import { getCurrentUser } from '@/services/users/getCurrentUser';
+import { updateUser } from '@/services/users/updateUser';
 import { NextResponse, NextRequest } from 'next/server';
 
 export const PUT = strictlyAuth(async (req: NextRequest) => {

@@ -1,27 +1,36 @@
-import React, { CSSProperties, FC, ReactNode } from "react";
-import styles from "@/styles/Title.module.scss";
+import React, { FC, ReactNode } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/utils/tailwind/cn';
 
-interface Props {
-  Tag: "h1" | "h2" | "h3" | "h4";
+interface Props extends VariantProps<typeof titleStyles> {
+  Tag: 'h1' | 'h2' | 'h3' | 'h4';
   children: ReactNode;
-  customStyles?: CSSProperties;
-  titleStyle?: CSSProperties;
   dataId?: string;
+  className?: string;
 }
 
-const Title: FC<Props> = ({
-  Tag,
-  children,
-  customStyles,
-  titleStyle,
-  dataId,
-}) => {
+const titleStyles = cva('font-rubik font-bold text-black block m-0', {
+  variants: {
+    level: {
+      h1: 'text-4xl',
+      h2: 'text-3xl',
+      h3: 'text-2xl',
+      h4: 'text-xl',
+    },
+  },
+  defaultVariants: {
+    level: 'h1',
+  },
+});
+
+const Title: FC<Props> = ({ Tag, children, dataId, className }) => {
   return (
-    <span className={styles.container} style={customStyles}>
-      <Tag data-id={dataId} style={titleStyle}>
-        {children}
-      </Tag>
-    </span>
+    <Tag
+      data-id={dataId}
+      className={cn(titleStyles({ level: Tag }), className)}
+    >
+      {children}
+    </Tag>
   );
 };
 

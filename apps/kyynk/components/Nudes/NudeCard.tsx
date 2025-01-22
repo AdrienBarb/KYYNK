@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import { AspectRatio } from "../Ui/AspectRatio";
+import React, { FC } from 'react';
+import { AspectRatio } from '../ui/AspectRatio';
 
 interface Props {}
 

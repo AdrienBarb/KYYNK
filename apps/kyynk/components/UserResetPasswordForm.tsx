@@ -13,7 +13,7 @@ import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import useApi from '@/lib/hooks/useApi';
-import { Button } from './Ui/Button';
+import { Button } from './ui/Button';
 
 const UserResetPasswordForm = () => {
   //router

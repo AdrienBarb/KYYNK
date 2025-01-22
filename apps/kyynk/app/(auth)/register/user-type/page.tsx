@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import PageContainer from '@/components/PageContainer';
 import { useTranslations } from 'next-intl';
 import useApi from '@/lib/hooks/useApi';
-import { appRouter } from '@/appRouter';
+
 import { useRouter } from 'next/navigation';
-import { Button } from '@/shared/components/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { useUser } from '@/lib/hooks/useUser';
+import { appRouter } from '@/constants/appRouter';
 
 const SignUpPage = () => {
   const t = useTranslations();

@@ -15,9 +15,9 @@ import useApi from '@/lib/hooks/useApi';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/lib/hooks/useUser';
 import '@uploadcare/react-uploader/core.css';
-import Avatar from './Ui/Avatar';
-import { Button } from '@/shared/components/ui/Button';
-import { uploadToS3 } from '@/shared/utils/s3Uploader';
+import Avatar from './ui/Avatar';
+import { Button } from '@/components/ui/Button';
+import { uploadToS3 } from '@/utils/s3Uploader';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -29,16 +29,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/shared/components/ui/Form';
-import { Input } from '@/shared/components/ui/Input';
-import { Textarea } from '@/shared/components/ui/TextArea';
+} from '@/components/ui/Form';
+import { Input } from '@/components/ui/Input';
+import { Textarea } from '@/components/ui/TextArea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/shared/components/ui/Select';
+} from '@/components/ui/Select';
 
 const UserForm = () => {
   //router
@@ -100,8 +100,6 @@ const UserForm = () => {
   }, [user, reset]);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log('🚀 ~ onSubmit ~ values:', values);
-
     doPost(values);
   }
 
@@ -122,7 +120,7 @@ const UserForm = () => {
   };
 
   return (
-    <Form {...form} key={user?.id}>
+    <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8 flex flex-col items-center w-full"
@@ -186,8 +184,6 @@ const UserForm = () => {
             control={form.control}
             name="country"
             render={({ field }) => {
-              console.log('🚀 ~ UserForm ~ field:', field);
-
               return (
                 <FormItem className="w-full">
                   <FormLabel>{t('db.country')}</FormLabel>

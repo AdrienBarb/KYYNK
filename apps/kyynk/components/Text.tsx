@@ -1,34 +1,16 @@
-import React, { CSSProperties, FC, ReactNode } from "react";
-import styles from "@/styles/Text.module.scss";
+import React, { FC, ReactNode } from 'react';
+import { cn } from '@/utils/tailwind/cn';
 
 interface Props {
   children: ReactNode;
-  customStyles?: CSSProperties;
-  weight?: "bolder" | "thiner";
-  textAlign?: "left" | "center";
-  fontSize?: number;
+  className?: string;
 }
 
-const Text: FC<Props> = ({
-  children,
-  customStyles,
-  fontSize = 16,
-  weight,
-  textAlign = "left",
-}) => {
+const Text: FC<Props> = ({ children, className }) => {
   return (
-    <div className={styles.container} style={customStyles}>
-      <p
-        style={{
-          fontWeight:
-            weight === "bolder" ? 600 : weight === "thiner" ? 100 : 300,
-          textAlign: textAlign,
-          fontSize: `${fontSize}px`,
-        }}
-      >
-        {children}
-      </p>
-    </div>
+    <p className={cn('font-karla text-black m-0 text-base', className)}>
+      {children}
+    </p>
   );
 };
 

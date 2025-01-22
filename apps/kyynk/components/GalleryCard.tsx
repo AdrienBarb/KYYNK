@@ -1,136 +1,82 @@
-import React, { FC, useEffect, useState } from "react";
-import styles from "@/styles/GalleryCard.module.scss";
-import clsx from "clsx";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCheck,
-  faImage,
-  faTrash,
-  faVideo,
-} from "@fortawesome/free-solid-svg-icons";
-import { Media } from "@/types/models/Media";
-import { useTranslations } from "next-intl";
-import ConfirmationModal from "./ConfirmationModal";
-import S3Image from "./S3Image";
-import Loader from "./Loader";
-import Text from "./Text";
+import React, { FC } from 'react';
+import clsx from 'clsx';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Media } from '@/types/models/Media';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
+import useApi from '@/lib/hooks/useApi';
+import Text from './Text';
+import { Loader2 } from 'lucide-react';
 
 interface GalleryCardProps {
   media: Media;
-  handleSelectMedia?: (media: Media) => void;
-  deleteAction: (e?: string) => void;
-  isSelected?: Boolean;
-  shouldConfirmBeforeDelete?: boolean;
+  refetch: () => void;
 }
 
-const GalleryCard: FC<GalleryCardProps> = ({
-  handleSelectMedia,
-  media,
-  deleteAction,
-  isSelected,
-  shouldConfirmBeforeDelete,
-}) => {
-  //localstate
-  const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
-
+const GalleryCard: FC<GalleryCardProps> = ({ media, refetch }) => {
   // traduction
   const t = useTranslations();
 
-  const handleClickOnDelete = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (shouldConfirmBeforeDelete) {
-      event.stopPropagation();
-      setOpenConfirmationModal(true);
-      return;
-    }
+  const { usePut } = useApi();
 
-    deleteAction(media._id);
+  const { mutate: archiveMedia } = usePut(`/api/medias/${media.id}/archive`, {
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const handleClickOnTrash = async () => {
+    await archiveMedia({});
   };
-
-  const handleDeleteConfirmation = () => {
-    deleteAction(media._id);
-  };
-
-  if (media.status === "created") {
-    return (
-      <>
-        <div className={clsx(styles.card, styles.loadingCard)}>
-          <div
-            onClick={(event) => handleClickOnDelete(event)}
-            className={styles.deleteButton}
-          >
-            <FontAwesomeIcon icon={faTrash} size="lg" />
-          </div>
-          <Loader style={{ color: "white", marginBottom: "1rem" }} size={16} />
-          <Text
-            weight="bolder"
-            textAlign="center"
-            customStyles={{ color: "white" }}
-            fontSize={10}
-          >
-            {t("common.weAreFormattingYourMedia")}
-          </Text>
-        </div>
-        <ConfirmationModal
-          setOpen={setOpenConfirmationModal}
-          open={openConfirmationModal}
-          confirmAction={handleDeleteConfirmation}
-          text={t("error.sureDeleteThisMedia")}
-        />
-      </>
-    );
-  }
 
   return (
-    <>
-      <div
-        className={styles.card}
-        style={{ cursor: handleSelectMedia ? "pointer" : "inherit" }}
-        onClick={() => {
-          if (handleSelectMedia) {
-            handleSelectMedia(media);
-          }
-        }}
-      >
-        {handleSelectMedia && (
+    <div
+      className="relative aspect-square rounded-lg overflow-hidden flex-shrink-0 bg-primary"
+      // style={{ cursor: handleSelectMedia ? 'pointer' : 'inherit' }}
+      // onClick={() => {
+      //   if (handleSelectMedia) {
+      //     handleSelectMedia(media);
+      //   }
+      // }}
+    >
+      {/* {handleSelectMedia && (
           <div
-            className={clsx(styles.selecter, isSelected && styles.isSelected)}
+            className={clsx(
+              'absolute top-2 left-2 z-10 w-6 h-6 bg-white border border-primary flex items-center justify-center rounded',
+              isSelected && 'bg-primary text-white',
+            )}
           >
             {isSelected && <FontAwesomeIcon icon={faCheck} />}
           </div>
-        )}
+        )} */}
 
-        <div
-          onClick={(event) => handleClickOnDelete(event)}
-          className={styles.deleteButton}
-        >
-          <FontAwesomeIcon icon={faTrash} size="lg" />
-        </div>
-        <div className={styles.mediaTypeIcon}>
-          {media.mediaType === "image" ? (
-            <FontAwesomeIcon icon={faImage} size="xs" color="white" />
-          ) : (
-            <FontAwesomeIcon icon={faVideo} size="xs" color="white" />
-          )}
-        </div>
-        {media.posterKey && (
-          <S3Image
-            imageKey={media.posterKey}
-            imageAlt={`media`}
-            fill={true}
-            styles={{
-              objectFit: "cover",
-            }}
-          />
-        )}
+      <div
+        onClick={handleClickOnTrash}
+        className="absolute top-0 right-0 z-10 p-2 text-primary cursor-pointer"
+      >
+        <FontAwesomeIcon icon={faTrash} size="lg" />
       </div>
 
-      <ConfirmationModal
-        setOpen={setOpenConfirmationModal}
-        open={openConfirmationModal}
-        confirmAction={handleDeleteConfirmation}
-        text={t("error.sureDeleteThisMedia")}
-      />
-    </>
+      {media.isReady ? (
+        <Image
+          src={media.thumbnailId}
+          alt={`media`}
+          layout="fill"
+          objectFit="cover"
+          quality={80}
+          priority
+          className="object-cover object-center"
+        />
+      ) : (
+        <div className="flex flex-col items-center justify-center h-full w-full">
+          <Loader2 className="mr-2 h-6 w-6 animate-spin" color="#fff0eb" />
+          <Text className="text-background mt-2 text-center text-xs">
+            We are formatting your media, it can take some time.
+          </Text>
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -1,128 +1,116 @@
-import React, { FC, useEffect, useState } from "react";
-import styles from "@/styles/MediasGallery.module.scss";
-import GalleryCard from "./GalleryCard";
-import { Media } from "@/types/models/Media";
-import { useTranslations } from "next-intl";
-import NoResults from "./Common/NoResults";
-import useApi from "@/lib/hooks/useApi";
-import FullButton from "./Buttons/FullButton";
-import UploadModal from "./UploadModal";
-import socket from "@/lib/socket/socket";
+'use client';
+
+import React, { FC, useState } from 'react';
+import GalleryCard from './GalleryCard';
+import useApi from '@/lib/hooks/useApi';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { VideoUploader } from '@api.video/video-uploader';
+import toast from 'react-hot-toast';
+import { v4 as uuidv4 } from 'uuid';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface MediasGalleryProps {
-  setOpen: (e: boolean) => void;
-  setSelectedMedias: (medias: Media[]) => void;
-  selectedMedias: Media[];
-  multiple: boolean;
-  mediaType: string[];
+  setUploading: (e: boolean) => void;
+  setUploadProgress: (e: number | null) => void;
 }
 
 const MediasGallery: FC<MediasGalleryProps> = ({
-  setSelectedMedias,
-  selectedMedias,
-  multiple,
-  mediaType,
+  setUploading,
+  setUploadProgress,
 }) => {
-  const [medias, setMedias] = useState<Media[]>([]);
-  const [openUploadModal, setOpenUploadModal] = useState(false);
+  const queryClient = useQueryClient();
 
-  //traduction
-  const t = useTranslations();
+  const { fetchData, usePost, useGet } = useApi();
 
-  const { usePut, fetchData } = useApi();
-
-  const getMedias = async () => {
-    const r = await fetchData("/api/medias");
-    setMedias(r);
-  };
-
-  useEffect(() => {
-    getMedias();
-
-    if (!socket) return;
-
-    socket?.off("mediaStatusUpdated")?.on("mediaStatusUpdated", (newMedia) => {
-      setMedias((previousMedias: Media[]) =>
-        previousMedias.map((m) => (newMedia._id === m._id ? newMedia : m))
-      );
-    });
-  }, []);
-
-  const { mutate: archiveMedia } = usePut(`/api/medias/archived`, {
-    onSuccess: (archivedMediaId) => {
-      setMedias((previousMedias: Media[]) =>
-        previousMedias.filter((m) => m._id !== archivedMediaId)
+  const { mutate: createMedia } = usePost('/api/medias', {
+    onSuccess: (newMedia) => {
+      queryClient.setQueryData(
+        ['get', { url: '/api/medias', params: {} }],
+        (oldData: any) => {
+          return [newMedia, ...(oldData || [])];
+        },
       );
     },
   });
 
-  const handleSelectMedia = (media: Media) => {
-    if (!mediaType.includes(media.mediaType)) {
-      return;
-    }
+  const { data: userMedias, refetch } = useGet(
+    '/api/medias',
+    {},
+    {
+      refetchOnWindowFocus: true,
+      refetchInterval: 20000,
+    },
+  );
 
-    let clonedSelectedMedia = [...selectedMedias];
+  const handleUpload = async (file: File) => {
+    setUploading(true);
+    setUploadProgress(0);
 
-    if (multiple) {
-      if (clonedSelectedMedia.some((el) => el._id === media._id)) {
-        clonedSelectedMedia = clonedSelectedMedia.filter(
-          (el) => el._id !== media._id
+    try {
+      const { uploadToken } = await fetchData('/api/medias/upload-token');
+
+      if (!uploadToken) throw new Error('Failed to retrieve upload token');
+
+      const uploader = new VideoUploader({
+        uploadToken,
+        file,
+        retries: 3,
+      });
+
+      uploader.onProgress((event) => {
+        const progress = Math.round(
+          (event.uploadedBytes / event.totalBytes) * 100,
         );
-      } else {
-        clonedSelectedMedia = [...clonedSelectedMedia, media];
-      }
-    } else {
-      if (clonedSelectedMedia.some((el) => el._id === media._id)) {
-        clonedSelectedMedia = [];
-      } else {
-        clonedSelectedMedia = [media];
-      }
-    }
+        setUploadProgress(progress);
+      });
 
-    setSelectedMedias(clonedSelectedMedia);
+      const uploadResult = await uploader.upload();
+
+      createMedia({
+        videoId: uploadResult.videoId,
+      });
+
+      setUploading(false);
+    } catch (error) {
+      console.error('Upload error:', error);
+      setUploading(false);
+      toast.error('An error occurred during the upload. Please try again.');
+    }
   };
 
   return (
-    <>
-      <div className={styles.container}>
-        <div className={styles.buttonWrapper}>
-          <FullButton
-            customStyles={{ width: "100%" }}
-            onClick={() => setOpenUploadModal(true)}
-          >
-            {t("common.importImageOrVideo")}
-          </FullButton>
+    <div className="overflow-y-auto h-full w-full">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+        <div
+          className="aspect-square relative rounded-lg overflow-hidden cursor-pointer items-center justify-center bg-primary text-background flex flex-col gap-2"
+          onClick={() => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'video/*';
+            input.onchange = (event) => {
+              const target = event.target as HTMLInputElement;
+              const file = target.files ? target.files[0] : null;
+              if (file) {
+                handleUpload(file);
+              }
+            };
+            input.click();
+          }}
+        >
+          <FontAwesomeIcon icon={faPlus} size="lg" />
+          Add a new video
         </div>
 
-        {medias.length === 0 ? (
-          <NoResults text={t("common.noMedia")} />
-        ) : (
-          <div className={styles.list}>
-            {medias.map((currentMedia: Media) => {
-              return (
-                <div key={currentMedia._id}>
-                  <GalleryCard
-                    media={currentMedia}
-                    handleSelectMedia={handleSelectMedia}
-                    isSelected={selectedMedias.some(
-                      (el) => el._id === currentMedia?._id
-                    )}
-                    shouldConfirmBeforeDelete={true}
-                    deleteAction={(mediaId) => archiveMedia({ mediaId })}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        )}
+        {userMedias?.map((currentMedia) => {
+          return (
+            <div key={currentMedia.id} className="aspect-square">
+              <GalleryCard media={currentMedia} refetch={refetch} />
+            </div>
+          );
+        })}
       </div>
-      <UploadModal
-        setOpen={setOpenUploadModal}
-        open={openUploadModal}
-        setMedias={setMedias}
-        medias={medias}
-      />
-    </>
+    </div>
   );
 };
 

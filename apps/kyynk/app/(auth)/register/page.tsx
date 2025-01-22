@@ -3,7 +3,7 @@ import PageContainer from '@/components/PageContainer';
 import UserSignUpForm from '@/components/UserSignUpForm';
 import styles from '@/styles/AuthPage.module.scss';
 import { useTranslations } from 'next-intl';
-import { Button } from '@/shared/components/ui/Button';
+import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 
 const SignUpPage = () => {

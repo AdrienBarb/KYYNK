@@ -1,8 +1,5 @@
-import React, { FC } from "react";
-import ScrollableContainer from "@/components/ScrollableContainer";
-import CenterHeader from "@/components/CenterHeader";
-import { useTranslations } from "next-intl";
-import CreateNude from "@/components/CreateNude";
+import React, { FC } from 'react';
+import CreateNude from '@/components/CreateNude';
 
 interface CreateNudePageProps {
   params: {
@@ -11,12 +8,10 @@ interface CreateNudePageProps {
 }
 
 const CreateNudePage: FC<CreateNudePageProps> = ({ params: { nudeId } }) => {
-  const t = useTranslations();
-
   return (
-    <ScrollableContainer>
+    <div className="max-w-screen-sm mx-auto">
       <CreateNude />
-    </ScrollableContainer>
+    </div>
   );
 };
 

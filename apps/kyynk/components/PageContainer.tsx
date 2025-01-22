@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from 'react';
-import { cn } from '@/lib/utils/tailwind/cn';
+import { cn } from '@/utils/tailwind/cn';
 
 interface PageContainerProps {
   children: ReactNode;

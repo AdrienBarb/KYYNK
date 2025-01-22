@@ -3,8 +3,8 @@ import PageContainer from '@/components/PageContainer';
 import styles from '@/styles/AuthPage.module.scss';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { Button } from '@/shared/components/ui/Button';
-import UserSignInForm from '@/app-features/auth/components/UserSignInForm';
+import { Button } from '@/components/ui/Button';
+import UserSignInForm from '@/components/auth/UserSignInForm';
 
 const LoginPage = () => {
   const t = useTranslations();
