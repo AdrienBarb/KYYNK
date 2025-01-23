@@ -5,7 +5,7 @@ import React, { FC, useState } from 'react';
 import styles from '@/styles/UserTypeModal.module.scss';
 import Image from 'next/image';
 import Title from './Title';
-import Text from './Text';
+import Text from '@/components/ui/Text';
 import clsx from 'clsx';
 import SimpleButton from './Buttons/SimpleButton';
 import useApi from '@/lib/hooks/useApi';

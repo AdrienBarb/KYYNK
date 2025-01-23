@@ -1,24 +1,16 @@
 'use client';
 
-import React, { FC, useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import React, { FC, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import * as yup from 'yup'; // Vous pouvez supprimer cette ligne si vous n'utilisez plus Yup
 import { z } from 'zod';
-import { useTranslations } from 'next-intl';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Select from 'react-select';
-import { TAGS, TagsType, tagList } from '@/constants/constants';
+import { TagsType, tagList } from '@/constants/constants';
 import { getMediaPrice } from '@/lib/utils/price/getMediaPrice';
 import useApi from '@/lib/hooks/useApi';
-import GalleryModal from '@/components/GalleryModal';
-import GalleryCard from './GalleryCard';
-import CustomSlider from './CustomSlider';
-import CustomTextField from './Inputs/TextField';
-import CustomLoadingButton from './Buttons/LoadingButton';
-import InputWrapper from './InputWrapper';
+import GalleryModal from '@/components/nudes/GalleryModal';
 import {
   Form,
   FormControl,
@@ -30,69 +22,51 @@ import {
 } from '@/components/ui/Form';
 import { Button } from '@/components/ui/Button';
 import { Textarea } from '@/components/ui/TextArea';
-import { Input } from '@/components/ui/Input';
-import Media from '@/types/models/Media';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Text from '@/components/ui/Text';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
+import { Pencil } from 'lucide-react';
+import type { Media } from '@prisma/client';
+import { useUser } from '@/lib/hooks/useUser';
+import { createNudeSchema } from '@/schemas/nudeSchema';
+import CustomSlider from '../CustomSlider';
 
-interface CreateNudeProps {}
+interface NudeFormProps {}
 
-const CreateNude: FC<CreateNudeProps> = () => {
-  // Session
-  const { data: session } = useSession();
-
+const NudeForm: FC<NudeFormProps> = () => {
   // Local state
   const [openGalleryModal, setOpenGalleryModal] = useState(false);
-  const [selectedMedias, setSelectedMedias] = useState<Media[]>([]);
+  const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
   const [fetchedPrice, setFetchedPrice] = useState<number>(0);
 
   // Hooks
-  const { usePost, fetchData, usePut } = useApi();
+  const { usePost } = useApi();
 
-  // Router and Params
-  const { locale } = useParams();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const nudeId = searchParams.get('nudeId');
 
-  // Traduction
-  const t = useTranslations();
+  const { getUser } = useUser();
+  const user = getUser();
 
   // Mutations
-  const { mutate: createNude, isLoading } = usePost(`/api/nudes`, {
-    onSuccess: (nude) => {
-      if (session?.user?.isAccountVerified) {
-        router.push(
-          `/dashboard/account/add/nudes/success?createdNudeId=${nude._id}`,
-        );
-      } else {
-        router.push(`/dashboard/community/${session?.user?.id}`);
-      }
+  const { mutate: createNude, isPending } = usePost(`/api/nudes`, {
+    onSuccess: () => {
+      // TODO: If user verified, redirect to success page
+      router.push(`/${user?.slug}`);
     },
   });
 
-  const { mutate: editNude, isLoading: isEditLoading } = usePut(
-    `/api/nudes/${nudeId}`,
-    {
-      onSuccess: () => {
-        router.push(`/dashboard/community/${session?.user?.id}`);
-      },
-    },
-  );
+  // const { mutate: editNude, isLoading: isEditLoading } = usePut(
+  //   `/api/nudes/${nudeId}`,
+  //   {
+  //     onSuccess: () => {
+  //       router.push(`/dashboard/community/${session?.user?.id}`);
+  //     },
+  //   },
+  // );
 
-  const formSchema = z.object({
-    description: z
-      .string({ required_error: t('error.field_required') })
-      .min(1, {
-        message: t('error.field_required'),
-      })
-      .max(300, {
-        message: 'Description must be at most 300 characters long.',
-      }),
-    price: z.number().int(),
-    tags: z.array(z.object({ value: z.string(), label: z.string() })),
-  });
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof createNudeSchema>>({
+    resolver: zodResolver(createNudeSchema),
     defaultValues: {
       description: '',
       price: 0,
@@ -100,63 +74,25 @@ const CreateNude: FC<CreateNudeProps> = () => {
     },
   });
 
-  const { reset, handleSubmit, setValue, formState } = form;
-  const { errors } = formState;
-
-  // Fonction pour récupérer les données existantes
-  const getCurrentNude = async () => {
-    try {
-      const currentNude = await fetchData(`/api/nudes/${nudeId}`);
-
-      reset({
-        description: currentNude?.description || '',
-        price: currentNude?.priceDetails.fiatPrice / 100 || 0,
-        tags: TAGS.filter((el) => currentNude.tags.includes(el.value)).map(
-          (c) => ({
-            value: c.value,
-            label: t(`nudeCategories.${c.label}`),
-          }),
-        ),
-      });
-
-      setFetchedPrice(currentNude.priceDetails.fiatPrice / 100 || 0);
-      setSelectedMedias(currentNude.selectedMedias || []);
-    } catch (error) {
-      console.log(error);
-      toast.error(t('error.failedToFetchNude'));
-    }
-  };
-
-  useEffect(() => {
-    if (nudeId) {
-      getCurrentNude();
-    }
-  }, [nudeId]);
-
-  const { isSubmitting } = formState;
+  const { handleSubmit, setValue } = form;
 
   const totalPrice = getMediaPrice(form.watch('price') || 0);
 
   const onSubmit = handleSubmit((values) => {
-    console.log('🚀 ~ onSubmit ~ values:', values);
-
-    if (!nudeId && selectedMedias.length === 0) {
-      toast.error(t('error.missingMedias'));
+    if (!selectedMedia) {
+      toast.error('You forgot to upload a video');
       return;
     }
 
     const payload = {
+      mediaId: selectedMedia.id,
       description: values.description,
       price: values.price,
-      tags: values.tags.map((t: TagsType) => t.value),
+      tags: values.tags,
     };
 
-    nudeId ? editNude(payload) : createNude(payload);
+    createNude(payload);
   });
-
-  const handleClickOnDelete = (mediaId: string) => {
-    setSelectedMedias((prev) => prev.filter((m: Media) => m._id !== mediaId));
-  };
 
   return (
     <Form {...form}>
@@ -166,13 +102,35 @@ const CreateNude: FC<CreateNudeProps> = () => {
       >
         <FormItem className="w-full">
           <FormLabel>Video*</FormLabel>
-          <div
-            className="rounded-md border-dashed border border-black mt-2 cursor-pointer"
-            onClick={() => setOpenGalleryModal(true)}
-          >
-            Add a video
-          </div>
-          <FormMessage />
+          {selectedMedia && selectedMedia.thumbnailId ? (
+            <div className="aspect-[4/5] relative rounded-md overflow-hidden">
+              <Button
+                variant="defaultWithoutBorder"
+                size="icon"
+                onClick={() => setOpenGalleryModal(true)}
+                className="absolute top-2 right-2 z-10"
+              >
+                <Pencil color="white" strokeWidth={3} />
+              </Button>
+              <Image
+                src={selectedMedia.thumbnailId}
+                alt={`media`}
+                layout="fill"
+                objectFit="cover"
+                quality={80}
+                priority
+                className="object-cover object-center"
+              />
+            </div>
+          ) : (
+            <div
+              className="rounded-md border-dashed border border-black mt-2 cursor-pointer aspect-[4/5] flex items-center justify-center text-center flex-col gap-2"
+              onClick={() => setOpenGalleryModal(true)}
+            >
+              <FontAwesomeIcon icon={faPlus} size="lg" />
+              <Text className="text-custom-black">Add a video</Text>
+            </div>
+          )}
         </FormItem>
 
         <FormField
@@ -180,7 +138,7 @@ const CreateNude: FC<CreateNudeProps> = () => {
           name="description"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>{t('common.descriptionForm')}</FormLabel>
+              <FormLabel>Description*</FormLabel>
               <FormControl>
                 <Textarea rows={4} {...field} className="mt-2" />
               </FormControl>
@@ -194,9 +152,10 @@ const CreateNude: FC<CreateNudeProps> = () => {
           name="price"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>{t('common.price')}</FormLabel>
+              <FormLabel>Price</FormLabel>
               <FormSubLabel>
-                {t('common.creditHelperText', { creditAmount: totalPrice })}
+                Either {totalPrice} credits. Credits are the currency of our
+                platform.
               </FormSubLabel>
               <FormControl>
                 <div className="mt-14 px-4">
@@ -216,7 +175,7 @@ const CreateNude: FC<CreateNudeProps> = () => {
           name="tags"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>{t('common.tags')}</FormLabel>
+              <FormLabel>Tags</FormLabel>
               <FormControl>
                 <Select
                   {...field}
@@ -226,15 +185,15 @@ const CreateNude: FC<CreateNudeProps> = () => {
                   }
                   options={tagList.map((currentTag) => ({
                     value: currentTag,
-                    label: t(`nudeCategories.${currentTag}`),
+                    label: currentTag,
                   }))}
                   value={field.value}
                   classNamePrefix="react-select"
                   getOptionLabel={(el: TagsType) => el.label}
                   getOptionValue={(el: TagsType) => el.value}
                   closeMenuOnSelect={false}
-                  placeholder={t('common.selectTagPlaceholder')}
-                  noOptionsMessage={() => <span>{t('common.noOptions')}</span>}
+                  placeholder="Select tags"
+                  noOptionsMessage={() => <span>No Options</span>}
                   styles={{
                     control: (styles) => ({
                       ...styles,
@@ -293,25 +252,19 @@ const CreateNude: FC<CreateNudeProps> = () => {
           )}
         />
 
-        <Button
-          type="submit"
-          isLoading={isLoading || isEditLoading}
-          className="w-full"
-        >
-          {nudeId ? t('common.edit') : t('common.validate')}
+        <Button type="submit" isLoading={isPending} className="w-full">
+          Create a nude
         </Button>
 
         <GalleryModal
           open={openGalleryModal}
           setOpen={setOpenGalleryModal}
-          setSelectedMedias={setSelectedMedias}
-          selectedMedias={selectedMedias}
-          multiple={true}
-          mediaType={['image', 'video']}
+          setSelectedMedia={setSelectedMedia}
+          selectedMedia={selectedMedia}
         />
       </form>
     </Form>
   );
 };
 
-export default CreateNude;
+export default NudeForm;

@@ -7,7 +7,7 @@ import fr from 'javascript-time-ago/locale/fr';
 import moment from 'moment';
 import clsx from 'clsx';
 import { Notification } from '@/types/models/NotificationModel';
-import Text from './Text';
+import Text from '@/components/ui/Text';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 

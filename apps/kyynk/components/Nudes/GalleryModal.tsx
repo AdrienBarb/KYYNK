@@ -1,33 +1,32 @@
 import React, { FC, useState } from 'react';
 
-import MediasGallery from '@/components/MediasGallery';
-import { Media } from '@/types/models/Media';
+import MediasGallery from '@/components/nudes/MediasGallery';
 import { useTranslations } from 'next-intl';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from './ui/Dialog';
-import { Button } from './ui/Button';
+} from '@/components/ui/Dialog';
+import { Button } from '@/components/ui/Button';
 import toast from 'react-hot-toast';
-import Text from './Text';
+import Text from '@/components/ui/Text';
+import type { Media } from '@prisma/client';
 
 interface GalleryModalProps {
   setOpen: (e: boolean) => void;
   open: boolean;
-  setSelectedMedias: (medias: Media[]) => void;
-  selectedMedias: Media[];
-  multiple: boolean;
-  mediaType: string[];
+  setSelectedMedia: (media: Media) => void;
+  selectedMedia: Media | null;
 }
 
 const GalleryModal: FC<GalleryModalProps> = ({
   setOpen,
   open,
-  setSelectedMedias,
-  selectedMedias,
+  setSelectedMedia,
+  selectedMedia,
 }) => {
   //traduction
   const t = useTranslations();
@@ -40,7 +39,6 @@ const GalleryModal: FC<GalleryModalProps> = ({
   };
 
   const closeModal = () => {
-    console.log('closeModal');
     if (uploading) {
       toast.error(
         'Please wait until the upload is complete before closing the modal.',
@@ -72,17 +70,23 @@ const GalleryModal: FC<GalleryModalProps> = ({
           <>
             <DialogHeader>
               <DialogTitle>{t('common.gallery')}</DialogTitle>
+              <DialogDescription>
+                Here you can manage your videos. You can upload new videos,
+                delete existing ones, and select a video to use.
+              </DialogDescription>
             </DialogHeader>
 
             <MediasGallery
               setUploading={setUploading}
               setUploadProgress={setUploadProgress}
+              setSelectedMedia={setSelectedMedia}
+              selectedMedia={selectedMedia}
             />
 
             <DialogFooter>
               <Button
                 onClick={handleClickOnSelect}
-                disabled={selectedMedias.length === 0}
+                disabled={!selectedMedia}
                 className="w-full"
               >
                 Select

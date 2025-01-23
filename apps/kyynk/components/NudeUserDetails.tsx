@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styles from '@/styles/NudeUserDetails.module.scss';
 import { Nude } from '@/types/models/Nude';
 import UserAvatar from '@/components/UserAvatar';
-import Text from './Text';
+import Text from '@/components/ui/Text';
 import Link from 'next/link';
 
 interface Props {

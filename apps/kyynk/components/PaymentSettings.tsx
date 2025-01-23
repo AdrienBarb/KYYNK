@@ -8,7 +8,7 @@ import { faPen } from '@fortawesome/free-solid-svg-icons';
 import SettingSectionHeader from './SettingSectionHeader';
 import useApi from '@/lib/hooks/useApi';
 import { User } from '@/types/models/User';
-import Text from './Text';
+import Text from '@/components/ui/Text';
 import { useRouter } from 'next/navigation';
 
 const PaymentSettings = () => {

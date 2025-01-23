@@ -22,7 +22,7 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
     const newMedia = await prisma.media.create({
       data: {
         videoId,
-        userId,
+        userId: userId!,
       },
     });
 

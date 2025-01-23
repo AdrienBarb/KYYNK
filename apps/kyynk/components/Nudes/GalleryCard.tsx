@@ -1,23 +1,27 @@
 import React, { FC } from 'react';
-import clsx from 'clsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Media } from '@/types/models/Media';
-import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import useApi from '@/lib/hooks/useApi';
-import Text from './Text';
+
 import { Loader2 } from 'lucide-react';
+import { cn } from '@/utils/tailwind/cn';
+import type { Media } from '@prisma/client';
+import Text from '@/components/ui/Text';
 
 interface GalleryCardProps {
   media: Media;
   refetch: () => void;
+  setSelectedMedia: (media: Media) => void;
+  selectedMedia: Media | null;
 }
 
-const GalleryCard: FC<GalleryCardProps> = ({ media, refetch }) => {
-  // traduction
-  const t = useTranslations();
-
+const GalleryCard: FC<GalleryCardProps> = ({
+  media,
+  refetch,
+  setSelectedMedia,
+  selectedMedia,
+}) => {
   const { usePut } = useApi();
 
   const { mutate: archiveMedia } = usePut(`/api/medias/${media.id}/archive`, {
@@ -30,26 +34,29 @@ const GalleryCard: FC<GalleryCardProps> = ({ media, refetch }) => {
     await archiveMedia({});
   };
 
+  const isSelected = selectedMedia?.id === media.id;
+
   return (
     <div
-      className="relative aspect-square rounded-lg overflow-hidden flex-shrink-0 bg-primary"
-      // style={{ cursor: handleSelectMedia ? 'pointer' : 'inherit' }}
-      // onClick={() => {
-      //   if (handleSelectMedia) {
-      //     handleSelectMedia(media);
-      //   }
-      // }}
+      className="relative aspect-square rounded-lg overflow-hidden flex-shrink-0 bg-primary cursor-pointer"
+      onClick={() => {
+        if (!media.isReady) {
+          return;
+        }
+
+        setSelectedMedia(media);
+      }}
     >
-      {/* {handleSelectMedia && (
-          <div
-            className={clsx(
-              'absolute top-2 left-2 z-10 w-6 h-6 bg-white border border-primary flex items-center justify-center rounded',
-              isSelected && 'bg-primary text-white',
-            )}
-          >
-            {isSelected && <FontAwesomeIcon icon={faCheck} />}
-          </div>
-        )} */}
+      {media.isReady && (
+        <div
+          className={cn(
+            'absolute top-2 left-2 z-10 w-6 h-6 bg-white border border-primary flex items-center justify-center rounded',
+            isSelected && 'bg-primary',
+          )}
+        >
+          {isSelected && <FontAwesomeIcon icon={faCheck} color="#fff0eb" />}
+        </div>
+      )}
 
       <div
         onClick={handleClickOnTrash}
@@ -58,7 +65,7 @@ const GalleryCard: FC<GalleryCardProps> = ({ media, refetch }) => {
         <FontAwesomeIcon icon={faTrash} size="lg" />
       </div>
 
-      {media.isReady ? (
+      {media.isReady && media.thumbnailId ? (
         <Image
           src={media.thumbnailId}
           alt={`media`}

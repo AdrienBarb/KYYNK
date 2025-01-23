@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react';
 import ClassicButton from '@/components/Buttons/ClassicButton';
 import toast from 'react-hot-toast';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Text from '@/components/Text';
+import Text from '@/components/ui/Text';
 
 interface Props {
   params: {

@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import React, { useState, useMemo, useRef, useEffect } from "react";
-import styles from "@/styles/SalesTable.module.scss";
-import { useTranslations } from "next-intl";
-import useApi from "@/lib/hooks/useApi";
-import Text from "./Text";
-import { Invoice } from "@/types/models/Invoice";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import axiosInstance from "@/lib/axios/axiosConfig";
-import dynamic from "next/dynamic";
-import { useIntersectionObserver } from "@/lib/hooks/useIntersectionObserver";
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import styles from '@/styles/SalesTable.module.scss';
+import { useTranslations } from 'next-intl';
+import useApi from '@/lib/hooks/useApi';
+import Text from '@/components/ui/Text';
+import { Invoice } from '@/types/models/Invoice';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import axiosInstance from '@/lib/axios/axiosConfig';
+import dynamic from 'next/dynamic';
+import { useIntersectionObserver } from '@/lib/hooks/useIntersectionObserver';
 
-const Loader = dynamic(() => import("@/components/Loader"), { ssr: false });
+const Loader = dynamic(() => import('@/components/Loader'), { ssr: false });
 
 const InvoiceTable = () => {
   //localstate
   const [invoices, setInvoices] = useState([]);
-  const queryKey = useMemo(() => ["invoicesList", {}], []);
+  const queryKey = useMemo(() => ['invoicesList', {}], []);
 
   //traduction
   const t = useTranslations();
@@ -33,7 +33,7 @@ const InvoiceTable = () => {
     isFetching,
   } = useInfinite(
     queryKey,
-    "/api/incomes/invoices",
+    '/api/incomes/invoices',
     {},
     {
       getNextPageParam: (lastPage: any) => lastPage.nextCursor || undefined,
@@ -42,25 +42,25 @@ const InvoiceTable = () => {
         setInvoices(data?.pages.flatMap((page: any) => page.invoices));
       },
       refetchOnWindowFocus: false,
-    }
+    },
   );
 
   const handleDownloadInvoices = async (id: string) => {
     try {
       const response = await axiosInstance.get(`/api/incomes/invoices/${id}`, {
-        responseType: "arraybuffer",
+        responseType: 'arraybuffer',
       });
 
-      const blob = new Blob([response.data], { type: "application/pdf" });
+      const blob = new Blob([response.data], { type: 'application/pdf' });
 
-      const link = document.createElement("a");
+      const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
-      link.download = "invoice.pdf";
+      link.download = 'invoice.pdf';
       link.click();
 
       URL.revokeObjectURL(link.href);
     } catch (error) {
-      console.error("Error downloading the invoice:", error);
+      console.error('Error downloading the invoice:', error);
     }
   };
 
@@ -80,7 +80,7 @@ const InvoiceTable = () => {
             className={styles.saleCard}
             key={index}
             style={{
-              backgroundColor: "#cecaff",
+              backgroundColor: '#cecaff',
             }}
           >
             <div>
@@ -95,8 +95,8 @@ const InvoiceTable = () => {
                   <FontAwesomeIcon icon={faDownload} color="white" />
                 </div>
               ) : (
-                <Text customStyles={{ color: "white" }}>
-                  {t("incomes.waiting")}
+                <Text customStyles={{ color: 'white' }}>
+                  {t('incomes.waiting')}
                 </Text>
               )}
             </div>
@@ -105,10 +105,10 @@ const InvoiceTable = () => {
       })}
 
       <div
-        style={{ height: "10rem", display: hasNextPage ? "flex" : "none" }}
+        style={{ height: '10rem', display: hasNextPage ? 'flex' : 'none' }}
         ref={loadMoreRef}
       >
-        {isFetchingNextPage && <Loader style={{ color: "#cecaff" }} />}
+        {isFetchingNextPage && <Loader style={{ color: '#cecaff' }} />}
       </div>
     </div>
   );

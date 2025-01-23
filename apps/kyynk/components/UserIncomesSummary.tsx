@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl';
 import useApi from '@/lib/hooks/useApi';
 import { User } from '@/types/models/User';
 import toast from 'react-hot-toast';
-import Text from './Text';
+import Text from '@/components/ui/Text';
 import ConfirmationModal from './ConfirmationModal';
 import SuccessModal from './SucessModal';
 import SimplePopover from './SimplePopover';

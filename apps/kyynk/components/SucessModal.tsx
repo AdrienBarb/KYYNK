@@ -1,8 +1,8 @@
-import * as React from "react";
-import { useTranslations } from "next-intl";
-import CustomModal from "./Modal";
-import SimpleButton from "./Buttons/SimpleButton";
-import Text from "./Text";
+import * as React from 'react';
+import { useTranslations } from 'next-intl';
+import CustomModal from './Modal';
+import SimpleButton from './Buttons/SimpleButton';
+import Text from '@/components/ui/Text';
 
 interface Props {
   setOpen: (e: boolean) => void;
@@ -21,19 +21,19 @@ const SuccessModal: React.FC<Props> = ({ setOpen, open, title, text }) => {
       withCloseIcon
       title={title}
       customStyle={{
-        maxWidth: "400px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "2rem",
+        maxWidth: '400px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '2rem',
       }}
     >
       <Text textAlign="center">{text}</Text>
       <SimpleButton
         onClick={() => setOpen(false)}
-        customStyles={{ padding: "0.6rem 1rem" }}
+        customStyles={{ padding: '0.6rem 1rem' }}
       >
-        {t("common.close")}
+        {t('common.close')}
       </SimpleButton>
     </CustomModal>
   );

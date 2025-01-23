@@ -19,7 +19,7 @@ import toast from 'react-hot-toast';
 import GalleryCard from './GalleryCard';
 import CustomSlider from './CustomSlider';
 import { Switch } from '@mui/material';
-import Text from './Text';
+import Text from '@/components/ui/Text';
 import { User } from '@/types/models/User';
 
 interface CreatePushProps {}

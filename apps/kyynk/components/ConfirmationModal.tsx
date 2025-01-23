@@ -2,7 +2,7 @@ import * as React from 'react';
 import CustomModal from '@/components/Modal';
 import { useTranslations } from 'next-intl';
 import SimpleButton from '@/components/Buttons/SimpleButton';
-import Text from '@/components/Text';
+import Text from '@/components/ui/Text';
 
 interface ConfirmationModalProps {
   setOpen: (e: boolean) => void;

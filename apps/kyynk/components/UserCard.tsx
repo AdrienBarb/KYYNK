@@ -10,7 +10,7 @@ import S3Image from './S3Image';
 import { useTranslations } from 'next-intl';
 import { RootStateType } from '@/store/store';
 import { User } from '@/types/models/User';
-import Text from './Text';
+import Text from '@/components/ui/Text';
 import Link from 'next/link';
 
 interface Props {

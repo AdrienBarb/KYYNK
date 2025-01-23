@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import useApi from '@/lib/hooks/useApi';
 import Avatar from './ui/Avatar';
 import Title from './Title';
-import Text from './Text';
+import Text from '@/components/ui/Text';
 import OnlineStatus from '@/components/profile/OnlineStatus';
 
 interface Props {

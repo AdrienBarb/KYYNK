@@ -7,24 +7,28 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { VideoUploader } from '@api.video/video-uploader';
 import toast from 'react-hot-toast';
-import { v4 as uuidv4 } from 'uuid';
 import { useQueryClient } from '@tanstack/react-query';
+import Text from '@/components/ui/Text';
+import type { Media } from '@prisma/client';
 
 interface MediasGalleryProps {
   setUploading: (e: boolean) => void;
   setUploadProgress: (e: number | null) => void;
+  setSelectedMedia: (media: Media) => void;
+  selectedMedia: Media | null;
 }
 
 const MediasGallery: FC<MediasGalleryProps> = ({
   setUploading,
   setUploadProgress,
+  setSelectedMedia,
+  selectedMedia,
 }) => {
   const queryClient = useQueryClient();
-
   const { fetchData, usePost, useGet } = useApi();
 
   const { mutate: createMedia } = usePost('/api/medias', {
-    onSuccess: (newMedia) => {
+    onSuccess: (newMedia: Media) => {
       queryClient.setQueryData(
         ['get', { url: '/api/medias', params: {} }],
         (oldData: any) => {
@@ -83,7 +87,7 @@ const MediasGallery: FC<MediasGalleryProps> = ({
     <div className="overflow-y-auto h-full w-full">
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
         <div
-          className="aspect-square relative rounded-lg overflow-hidden cursor-pointer items-center justify-center bg-primary text-background flex flex-col gap-2"
+          className="aspect-square relative rounded-lg overflow-hidden cursor-pointer items-center justify-center bg-primary text-background flex flex-col gap-2 p-2 text-center"
           onClick={() => {
             const input = document.createElement('input');
             input.type = 'file';
@@ -99,13 +103,18 @@ const MediasGallery: FC<MediasGalleryProps> = ({
           }}
         >
           <FontAwesomeIcon icon={faPlus} size="lg" />
-          Add a new video
+          <Text className="text-background">Upload a new video</Text>
         </div>
 
-        {userMedias?.map((currentMedia) => {
+        {userMedias?.map((currentMedia: Media) => {
           return (
             <div key={currentMedia.id} className="aspect-square">
-              <GalleryCard media={currentMedia} refetch={refetch} />
+              <GalleryCard
+                media={currentMedia}
+                refetch={refetch}
+                setSelectedMedia={setSelectedMedia}
+                selectedMedia={selectedMedia}
+              />
             </div>
           );
         })}

@@ -1,5 +1,6 @@
+import NudeForm from '@/components/nudes/NudeForm';
+import Title from '@/components/Title';
 import React, { FC } from 'react';
-import CreateNude from '@/components/CreateNude';
 
 interface CreateNudePageProps {
   params: {
@@ -9,8 +10,11 @@ interface CreateNudePageProps {
 
 const CreateNudePage: FC<CreateNudePageProps> = ({ params: { nudeId } }) => {
   return (
-    <div className="max-w-screen-sm mx-auto">
-      <CreateNude />
+    <div className="max-w-md mx-auto">
+      <Title Tag="h2" className="mb-4">
+        Create a nude
+      </Title>
+      <NudeForm />
     </div>
   );
 };

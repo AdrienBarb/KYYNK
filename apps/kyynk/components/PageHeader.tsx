@@ -1,21 +1,21 @@
-import React, { FC, ReactNode } from "react";
-import styles from "@/styles/PageHeader.module.scss";
-import clsx from "clsx";
-import { useTranslations } from "next-intl";
-import Text from "./Text";
-import Title from "./Title";
+import React, { FC, ReactNode } from 'react';
+import styles from '@/styles/PageHeader.module.scss';
+import clsx from 'clsx';
+import { useTranslations } from 'next-intl';
+import Text from '@/components/ui/Text';
+import Title from './Title';
 
 interface PageHeaderProps {
   title: string;
   description?: string;
-  tag: "h1" | "h2" | "h3" | "h4";
+  tag: 'h1' | 'h2' | 'h3' | 'h4';
   children?: ReactNode;
 }
 
 const PageHeader: FC<PageHeaderProps> = ({
   title,
   description,
-  tag = "h1",
+  tag = 'h1',
   children,
 }) => {
   const t = useTranslations();

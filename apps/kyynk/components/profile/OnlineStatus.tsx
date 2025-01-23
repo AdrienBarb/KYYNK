@@ -5,7 +5,7 @@ import { faCircle } from '@fortawesome/free-solid-svg-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { User } from '@prisma/client';
-import Text from '@/components/Text';
+import Text from '@/components/ui/Text';
 
 interface Props {
   currentUser: User;

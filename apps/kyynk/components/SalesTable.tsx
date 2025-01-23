@@ -6,7 +6,7 @@ import { format, isBefore } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { useTranslations } from 'next-intl';
 import useApi from '@/lib/hooks/useApi';
-import Text from './Text';
+import Text from '@/components/ui/Text';
 import { Sale } from '@/types/models/Sale';
 import dynamic from 'next/dynamic';
 import { useIntersectionObserver } from '@/lib/hooks/useIntersectionObserver';
