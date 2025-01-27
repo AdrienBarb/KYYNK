@@ -15,8 +15,6 @@ import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import { Karla, Rubik } from 'next/font/google';
 import clsx from 'clsx';
-import MuiThemeProvider from '@/components/Common/ThemeProvider';
-import configService from '@/features/config/configService';
 import GlobalConfig from '@/components/GlobalConfig';
 import Fathom from '@/components/Fathom';
 import { getLocale, getMessages } from 'next-intl/server';

@@ -1,85 +1,76 @@
 import { prisma } from '@/lib/db/client';
 import { errorMessages } from '@/lib/constants/errorMessage';
-import { Prisma } from '@prisma/client';
 import { checkOrCreateSlug } from '@/lib/helpers/user/checkOrCreateSlug';
+import { Prisma, User } from '@prisma/client';
+import { z } from 'zod';
+import { updateUserSchema } from '@/schemas/users/updateUserSchema';
 
 export async function updateUser({
   userId,
   body,
 }: {
   userId: string;
-  body: {
-    pseudo: string;
-    email: string;
-    userType: 'member' | 'creator';
-    preferences: string[];
-    age: number;
-    description: string;
-    profileImageId: string;
-    gender: string;
-    bodyType: string;
-    hairColor: string;
-    country: string;
-    tags: string[];
-  };
-}) {
+  body: z.infer<typeof updateUserSchema>;
+}): Promise<Partial<User>> {
+  const validatedBody = updateUserSchema.parse(body);
+
   const data: Prisma.UserUpdateInput = {};
 
-  if (body.pseudo) {
+  if (validatedBody.pseudo) {
     const existingUser = await prisma.user.findUnique({
-      where: { pseudo: body.pseudo },
+      where: { pseudo: validatedBody.pseudo },
     });
 
     if (existingUser && existingUser.id !== userId) {
       throw new Error(errorMessages.PSEUDO_ALREADY_EXIST);
     }
 
-    data.pseudo = body.pseudo;
-    data.slug = await checkOrCreateSlug(body.pseudo);
+    data.pseudo = validatedBody.pseudo;
+    data.slug = await checkOrCreateSlug(validatedBody.pseudo);
   }
 
-  if (body.email) {
-    data.email = body.email;
+  if (validatedBody.email) {
+    data.email = validatedBody.email;
   }
 
-  if (body.userType) {
-    data.userType = body.userType;
+  if (validatedBody.userType) {
+    data.userType = validatedBody.userType;
   }
 
-  if (body.preferences) {
-    data.preferences = body.preferences;
+  if (validatedBody.preferences) {
+    data.preferences = validatedBody.preferences;
   }
 
-  if (body.description) {
-    data.description = body.description;
+  if (validatedBody.description) {
+    data.description = validatedBody.description;
   }
 
-  if (body.age) {
-    data.age = body.age;
+  if (validatedBody.age) {
+    data.age = validatedBody.age;
   }
 
-  if (body.gender) {
-    data.gender = body.gender;
+  if (validatedBody.gender) {
+    data.gender = validatedBody.gender;
   }
 
-  if (body.bodyType) {
-    data.bodyType = body.bodyType;
+  if (validatedBody.bodyType) {
+    data.bodyType = validatedBody.bodyType;
   }
 
-  if (body.hairColor) {
-    data.hairColor = body.hairColor;
+  if (validatedBody.hairColor) {
+    data.hairColor = validatedBody.hairColor;
   }
 
-  if (body.country) {
-    data.country = body.country;
+  if (validatedBody.country) {
+    data.country = validatedBody.country;
   }
 
-  if (body.tags) {
-    data.tags = body.tags;
+  if (validatedBody.tags) {
+    data.tags = validatedBody.tags;
   }
 
-  if (body.profileImageId) {
-    data.profileImageId = body.profileImageId;
+  if (validatedBody.profileImageId) {
+    data.profileImageId = validatedBody.profileImageId;
   }
 
   return prisma.user.update({

@@ -43,9 +43,7 @@ const UserPage = async ({ params }: { params: { slug: string } }) => {
 
   return (
     <PageContainer>
-      <BackButton isVisible={!!session} prevPath="/dashboard/community">
-        <UserProfileTopButtons />
-      </BackButton>
+      <UserProfileTopButtons />
 
       <UserUncompletedProfileBand />
       <UserProfileHeader initialUserDatas={user} />

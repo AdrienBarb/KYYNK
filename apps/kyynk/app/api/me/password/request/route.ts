@@ -8,7 +8,7 @@ import TestEmail from '@kyynk/transactional/emails/TestEmail';
 
 export const POST = async (req: NextRequest) => {
   try {
-    const { email, locale } = await req.json();
+    const { email } = await req.json();
 
     const user = await prisma.user.findUnique({
       where: { email: email },
@@ -34,7 +34,7 @@ export const POST = async (req: NextRequest) => {
       });
     }
 
-    const link = `${process.env.CLIENT_URL}/${locale}/login/password-reset/${user.id}/${userToken.token}`;
+    const link = `${process.env.CLIENT_URL}/login/password-reset/${user.id}/${userToken.token}`;
 
     const { data, error } = await resendClient.emails.send({
       from: 'contact@kyynk.com',

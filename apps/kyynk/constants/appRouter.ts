@@ -1,7 +1,11 @@
 export const appRouter = {
+  login: '/login',
+  register: '/register',
+  forgotPassword: '/login/forgot-password',
   preferences: '/register/preferences',
   userType: '/register/user-type',
-  explore: '/dashboard/explore',
+  models: '/models',
+
   editProfile: '/account/profile/edit',
   messages: '/dashboard/account/messages',
   notifications: '/dashboard/account/notifications',

@@ -87,7 +87,7 @@ const MediasGallery: FC<MediasGalleryProps> = ({
     <div className="overflow-y-auto h-full w-full">
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
         <div
-          className="aspect-square relative rounded-lg overflow-hidden cursor-pointer items-center justify-center bg-primary text-background flex flex-col gap-2 p-2 text-center"
+          className="aspect-square relative rounded-lg overflow-hidden cursor-pointer items-center justify-center bg-primary text-secondary flex flex-col gap-2 p-2 text-center"
           onClick={() => {
             const input = document.createElement('input');
             input.type = 'file';
@@ -103,7 +103,7 @@ const MediasGallery: FC<MediasGalleryProps> = ({
           }}
         >
           <FontAwesomeIcon icon={faPlus} size="lg" />
-          <Text className="text-background">Upload a new video</Text>
+          <Text className="text-secondary">Upload a new video</Text>
         </div>
 
         {userMedias?.map((currentMedia: Media) => {

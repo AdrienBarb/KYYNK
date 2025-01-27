@@ -2,16 +2,17 @@
 
 import React, { useState } from 'react';
 import PageContainer from '@/components/PageContainer';
-import { useTranslations } from 'next-intl';
 import useApi from '@/lib/hooks/useApi';
 
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { useUser } from '@/lib/hooks/useUser';
 import { appRouter } from '@/constants/appRouter';
+import { apiRouter } from '@/constants/apiRouter';
+import Title from '@/components/Title';
+import { User } from '@prisma/client';
 
 const SignUpPage = () => {
-  const t = useTranslations();
   const [userType, setUserType] = useState('');
 
   const { setUser, getUser } = useUser();
@@ -21,8 +22,8 @@ const SignUpPage = () => {
 
   const router = useRouter();
 
-  const { mutate: editUserType, isLoading } = usePut(`/api/me`, {
-    onSuccess: async ({ userType }) => {
+  const { mutate: editUserType, isPending } = usePut(apiRouter.me, {
+    onSuccess: async ({ userType }: Pick<User, 'userType'>) => {
       setUser({ userType });
 
       userType === 'member'
@@ -33,10 +34,10 @@ const SignUpPage = () => {
 
   return (
     <PageContainer>
-      <div className="max-w-lg mx-auto">
-        <h2 className="font-rubik text-xl font-semibold mb-16 mx-auto w-full text-center">
-          {t('common.whatKindOfUser')}
-        </h2>
+      <div className="max-w-lg mx-auto mt-12 flex flex-col items-center justify-center">
+        <Title Tag="h3" data-id="user-type-title" className="mb-12">
+          What kind of user are you?
+        </Title>
 
         <div className="flex flex-col lg:flex-row items-center justify-center gap-8 mb-12">
           <div
@@ -45,10 +46,8 @@ const SignUpPage = () => {
               userType === 'creator' ? 'bg-primary border-primary' : ''
             }`}
           >
-            <h3 className="font-karla font-medium text-lg">
-              {t('common.creator')}
-            </h3>
-            <p>{t('common.creatorTypeText')}</p>
+            <h3 className="font-karla font-medium text-lg">Creator</h3>
+            <p>Are you more of a content creator?</p>
           </div>
 
           <div
@@ -57,22 +56,20 @@ const SignUpPage = () => {
               userType === 'member' && 'bg-primary border-primary'
             }`}
           >
-            <h3 className="font-karla font-medium text-lg">
-              {t('common.buyer')}
-            </h3>
-            <p>{t('common.buyerTypeText')}</p>
+            <h3 className="font-karla font-medium text-lg">Buyer</h3>
+            <p>Or are you here to watch and enjoy?</p>
           </div>
         </div>
 
         <Button
           disabled={!userType}
-          isLoading={isLoading}
+          isLoading={isPending}
           onClick={() => {
             editUserType({ userType });
           }}
           className="w-full"
         >
-          {t('common.continue')}
+          Continue
         </Button>
       </div>
     </PageContainer>

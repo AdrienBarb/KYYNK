@@ -1,19 +1,19 @@
-import React from "react";
-import PageContainer from "@/components/PageContainer";
-import styles from "@/styles/AuthPage.module.scss";
-import SupportContact from "@/components/SupportContact";
-import UserForgotPasswordForm from "@/components/UserForgotPasswordForm";
-import { useTranslations } from "next-intl";
+import React from 'react';
+import PageContainer from '@/components/PageContainer';
+import UserForgotPasswordForm from '@/components/UserForgotPasswordForm';
+import Title from '@/components/Title';
+import SupportContact from '@/components/SupportContact';
+import Text from '@/components/ui/Text';
 
 const UserForgotPasswordPage = () => {
-  const t = useTranslations();
-
   return (
     <PageContainer>
-      <div className={styles.container}>
-        <div className={styles.titleWrapper}>
-          <h2>{t("common.forgot_password")}</h2>
-          <p>{t("common.re_init_password")}</p>
+      <div className="flex flex-col items-center justify-center max-w-lg mx-auto px-4 mt-12">
+        <div className="mb-12">
+          <Title Tag="h3" data-id="forgot-password-title">
+            Forgot Password
+          </Title>
+          <Text className="text-center">Re-initialize your password</Text>
         </div>
         <UserForgotPasswordForm />
       </div>

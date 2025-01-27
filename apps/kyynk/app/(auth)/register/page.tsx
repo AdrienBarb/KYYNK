@@ -1,24 +1,24 @@
 import React from 'react';
 import PageContainer from '@/components/PageContainer';
-import UserSignUpForm from '@/components/UserSignUpForm';
-import styles from '@/styles/AuthPage.module.scss';
-import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
+import UserSignUpForm from '@/components/auth/UserSignUpForm';
+import Title from '@/components/Title';
+import { appRouter } from '@/constants/appRouter';
 
 const SignUpPage = () => {
-  const t = useTranslations();
-
   return (
     <PageContainer>
-      <div className={styles.container}>
-        <div className={styles.titleWrapper}>
-          <h2>{t('common.signUp')}</h2>
+      <div className="flex flex-col items-center justify-center max-w-lg mx-auto px-4 mt-12">
+        <div className="mb-12">
+          <Title Tag="h3" data-id="sign-up-title">
+            Sign Up
+          </Title>
         </div>
         <UserSignUpForm />
-        <div className={styles.buttonsWrapper}>
+        <div className="flex flex-col gap-4 w-full my-5">
           <Button asChild variant="secondary">
-            <Link href="/login">{t('common.signIn')}</Link>
+            <Link href={appRouter.login}>Sign In</Link>
           </Button>
         </div>
       </div>

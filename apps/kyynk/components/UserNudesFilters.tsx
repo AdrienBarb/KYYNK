@@ -1,9 +1,9 @@
-import React, { FC, useState } from "react";
-import IconButton from "./Buttons/IconButton";
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
-import { AvailableFilters, NudeFilters } from "@/types";
-import { useTranslations } from "next-intl";
-import NudeFiltersModal from "./NudeFiltersModal";
+import React, { FC, useState } from 'react';
+import IconButton from './Buttons/IconButton';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { AvailableFilters, NudeFilters } from '@/types';
+import { useTranslations } from 'next-intl';
+import NudeFiltersModal from './NudeFiltersModal';
 
 interface Props {
   availableFilters: AvailableFilters;
@@ -24,7 +24,7 @@ const UserNudesFilters: FC<Props> = ({
       <div className="flex gap-2 overflow-x-auto">
         <IconButton
           icon={faFilter}
-          style={{ backgroundColor: "#fff0eb" }}
+          style={{ backgroundColor: '#fff0eb' }}
           iconColor="#cecaff"
           onClick={() => setOpenModal(true)}
         />
@@ -36,17 +36,15 @@ const UserNudesFilters: FC<Props> = ({
                 onClick={() => {
                   setFilters({
                     ...filters,
-                    tag: filters.tag === currentTag.tag ? "" : currentTag.tag,
+                    tag: filters.tag === currentTag.tag ? '' : currentTag.tag,
                   });
                 }}
                 className={` ${
                   filters.tag === currentTag.tag
-                    ? "text-background"
-                    : "text-primary"
+                    ? 'text-secondary'
+                    : 'text-primary'
                 } flex items-center justify-center border border-primary px-2 cursor-pointer rounded-md whitespace-nowrap ${
-                  filters.tag === currentTag.tag
-                    ? "bg-primary"
-                    : "bg-background"
+                  filters.tag === currentTag.tag ? 'bg-primary' : 'bg-secondary'
                 }`}
                 key={index}
               >{`${t(`nudeCategories.${currentTag.tag}`)} (${

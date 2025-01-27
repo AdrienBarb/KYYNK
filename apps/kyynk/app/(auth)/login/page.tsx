@@ -1,24 +1,24 @@
 import React from 'react';
 import PageContainer from '@/components/PageContainer';
-import styles from '@/styles/AuthPage.module.scss';
-import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import UserSignInForm from '@/components/auth/UserSignInForm';
+import Title from '@/components/Title';
+import { appRouter } from '@/constants/appRouter';
 
 const LoginPage = () => {
-  const t = useTranslations();
-
   return (
     <PageContainer>
-      <div className={styles.container}>
-        <div className={styles.titleWrapper}>
-          <h2 data-id="sign-in-title">{t('common.signIn')}</h2>
+      <div className="flex flex-col items-center justify-center max-w-lg mx-auto px-4 mt-12">
+        <div className="mb-12">
+          <Title Tag="h3" data-id="sign-in-title">
+            Sign In
+          </Title>
         </div>
         <UserSignInForm />
-        <div className={styles.buttonsWrapper}>
+        <div className="flex flex-col gap-4 w-full my-5">
           <Button asChild variant="secondary">
-            <Link href="/register">{t('common.signUp')}</Link>
+            <Link href={appRouter.register}>Sign Up</Link>
           </Button>
 
           <Button
@@ -26,9 +26,7 @@ const LoginPage = () => {
             variant="ghost"
             className="text-sm text-primary font-light"
           >
-            <Link href="/login/forgot-password">
-              {t('common.forgotPassword')}
-            </Link>
+            <Link href={appRouter.forgotPassword}>Forgot Password</Link>
           </Button>
         </div>
       </div>

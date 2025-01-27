@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, FC } from 'react';
-import styles from '@/styles/UserProfileTopButtons.module.scss';
 import { useParams, useRouter } from 'next/navigation';
 import ShareModal from '@/components/ShareModal';
 import { useUser } from '@/lib/hooks/useUser';
@@ -28,22 +27,14 @@ const UserProfileTopButtons: FC<Props> = () => {
 
   return (
     <>
-      <div className={styles.buttonsWrapper}>
+      <div className="flex justify-end space-x-2 mb-4">
         {user?.slug === slug && (
-          <Button
-            variant="defaultWithoutBorder"
-            size="icon"
-            onClick={handleEditAccountDetailsClick}
-          >
+          <Button size="icon" onClick={handleEditAccountDetailsClick}>
             <Pencil color="white" strokeWidth={3} />
           </Button>
         )}
 
-        <Button
-          variant="defaultWithoutBorder"
-          size="icon"
-          onClick={() => setOpenShareModal(true)}
-        >
+        <Button size="icon" onClick={() => setOpenShareModal(true)}>
           <Forward color="white" strokeWidth={3} />
         </Button>
       </div>

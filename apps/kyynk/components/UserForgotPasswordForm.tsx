@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import useApi from '@/lib/hooks/useApi';
 import { Button } from './ui/Button';
+import { apiRouter } from '@/constants/apiRouter';
 
 const UserForgotPasswordForm = () => {
   const { locale } = useParams<{ locale: string }>();
@@ -23,8 +24,8 @@ const UserForgotPasswordForm = () => {
       .required(t('error.field_required')),
   });
 
-  const { mutate: resetPasswordRequest, isLoading } = usePost(
-    `/api/me/password/request`,
+  const { mutate: resetPasswordRequest, isPending } = usePost(
+    apiRouter.forgotPassword,
     {
       onSuccess: () => {
         setIsEmailSend(true);
@@ -38,10 +39,7 @@ const UserForgotPasswordForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      resetPasswordRequest({
-        ...values,
-        locale,
-      });
+      resetPasswordRequest(values);
     },
   });
 
@@ -68,7 +66,7 @@ const UserForgotPasswordForm = () => {
           error={formik.touched.email && Boolean(formik.errors.email)}
           helperText={formik.touched.email && formik.errors.email}
         />
-        <Button type="submit" isLoading={isLoading}>
+        <Button type="submit" isLoading={isPending}>
           {t('common.send')}
         </Button>
       </form>

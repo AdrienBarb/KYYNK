@@ -5,7 +5,6 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import styles from '@/styles/Form.module.scss';
 import { useRouter } from 'next/navigation';
-import LoadingButton from '@/components/Buttons/LoadingButton';
 import CustomTextField from '@/components/Inputs/TextField';
 import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -33,7 +32,7 @@ const UserResetPasswordForm = () => {
 
   const { usePost } = useApi();
 
-  const { mutate: resetPassword, isLoading } = usePost(
+  const { mutate: resetPassword, isPending } = usePost(
     `/api/me/password/reset`,
     {
       onSuccess: () => {
@@ -145,7 +144,7 @@ const UserResetPasswordForm = () => {
           }}
         />
 
-        <Button type="submit" isLoading={isLoading}>
+        <Button type="submit" isLoading={isPending}>
           {t('common.validate')}
         </Button>
       </form>

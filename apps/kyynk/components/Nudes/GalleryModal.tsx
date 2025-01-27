@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react';
 
 import MediasGallery from '@/components/nudes/MediasGallery';
-import { useTranslations } from 'next-intl';
 import {
   Dialog,
   DialogContent,
@@ -28,9 +27,6 @@ const GalleryModal: FC<GalleryModalProps> = ({
   setSelectedMedia,
   selectedMedia,
 }) => {
-  //traduction
-  const t = useTranslations();
-
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
 
@@ -69,7 +65,7 @@ const GalleryModal: FC<GalleryModalProps> = ({
         ) : (
           <>
             <DialogHeader>
-              <DialogTitle>{t('common.gallery')}</DialogTitle>
+              <DialogTitle>Gallery</DialogTitle>
               <DialogDescription>
                 Here you can manage your videos. You can upload new videos,
                 delete existing ones, and select a video to use.

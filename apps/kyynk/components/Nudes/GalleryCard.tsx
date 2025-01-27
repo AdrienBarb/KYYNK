@@ -78,7 +78,7 @@ const GalleryCard: FC<GalleryCardProps> = ({
       ) : (
         <div className="flex flex-col items-center justify-center h-full w-full">
           <Loader2 className="mr-2 h-6 w-6 animate-spin" color="#fff0eb" />
-          <Text className="text-background mt-2 text-center text-xs">
+          <Text className="text-secondary mt-2 text-center text-xs">
             We are formatting your media, it can take some time.
           </Text>
         </div>

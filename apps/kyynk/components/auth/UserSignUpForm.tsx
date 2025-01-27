@@ -13,9 +13,9 @@ import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 
 import Link from 'next/link';
-import { register } from '@/app-features/auth/server-actions/register';
 import { Button } from '@/components/ui/Button';
 import { appRouter } from '@/constants/appRouter';
+import { register } from '@/server-actions/register';
 
 const UserSignUpForm = () => {
   //router

@@ -7,18 +7,22 @@ import FullButton from '@/components/Buttons/FullButton';
 import useApi from '@/lib/hooks/useApi';
 import { TAGS } from '@/constants/constants';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@/lib/hooks/useUser';
+import { apiRouter } from '@/constants/apiRouter';
+import Title from '@/components/Title';
 
 const SignUpPage = () => {
   const t = useTranslations();
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const { data: session } = useSession();
   const { usePut } = useApi();
   const router = useRouter();
 
-  const { mutate: editUserPreferences, isLoading } = usePut(`/api/me`, {
+  const { getUser } = useUser();
+  const user = getUser();
+
+  const { mutate: editUserPreferences, isPending } = usePut(apiRouter.me, {
     onSuccess: () => {
-      router.push(`/${session?.user?.slug}`);
+      router.push(`/${user?.slug}`);
     },
   });
 
@@ -36,10 +40,10 @@ const SignUpPage = () => {
 
   return (
     <PageContainer>
-      <div className="max-w-lg mx-auto">
-        <h2 className="font-rubik text-xl font-semibold mb-16 mx-auto w-full text-center">
+      <div className="max-w-lg mx-auto mt-12 flex flex-col items-center justify-center">
+        <Title Tag="h3" data-id="user-type-title" className="mb-12">
           {t('common.whatPreferences')}
-        </h2>
+        </Title>
 
         <div className="flex flex-wrap p-4 gap-4 mb-12 border border-neutral-200 w-full rounded-md">
           {TAGS.map((currentTag, index) => {
@@ -61,7 +65,7 @@ const SignUpPage = () => {
 
         <FullButton
           customStyles={{ width: '100%' }}
-          isLoading={isLoading}
+          isLoading={isPending}
           onClick={() => {
             editUserPreferences({ preferences: selectedTags });
           }}

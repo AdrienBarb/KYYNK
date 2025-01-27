@@ -8,7 +8,7 @@ const Footer = () => {
 
   return (
     <footer
-      className="bg-black text-background px-4 py-8"
+      className="bg-black text-secondary px-4 py-8"
       data-id="homepage-footer"
     >
       <div className="w-full max-w-7xl flex flex-col md:flex-row gap-8 justify-between items-center mx-auto">
