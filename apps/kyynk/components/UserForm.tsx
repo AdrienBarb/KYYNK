@@ -39,6 +39,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select';
+import { User } from '@prisma/client';
 
 const UserForm = () => {
   //router
@@ -54,8 +55,8 @@ const UserForm = () => {
 
   const { usePut } = useApi();
 
-  const { mutate: doPost, isLoading } = usePut('/api/me', {
-    onSuccess: async (user) => {
+  const { mutate: doPost, isPending } = usePut('/api/me', {
+    onSuccess: async (user: User) => {
       setUser(user);
 
       router.push(`/${user?.slug}`);
@@ -63,7 +64,7 @@ const UserForm = () => {
   });
 
   const { mutate: setProfileImageId } = usePut('/api/me', {
-    onSuccess: async ({ profileImageId }) => {
+    onSuccess: async ({ profileImageId }: Pick<User, 'profileImageId'>) => {
       setUser({ profileImageId });
     },
   });
@@ -303,7 +304,7 @@ const UserForm = () => {
           />
         </div>
 
-        <Button className="w-full" type="submit" isLoading={isLoading}>
+        <Button className="w-full" type="submit" isLoading={isPending}>
           {t('common.validate')}
         </Button>
       </form>

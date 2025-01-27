@@ -15,7 +15,7 @@ interface AvatarProps {
 }
 
 const avatarVariants = cva(
-  'relative flex shrink-0 overflow-hidden rounded-full',
+  'relative flex shrink-0 overflow-hidden rounded-md',
   {
     variants: {
       size: {
@@ -31,7 +31,7 @@ const avatarVariants = cva(
 );
 
 const avatarFallbackVariants = cva(
-  'flex h-full w-full items-center justify-center rounded-full bg-primary text-white font-bold',
+  'flex h-full w-full items-center justify-center rounded-md bg-primary text-white font-bold',
   {
     variants: {
       size: {

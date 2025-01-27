@@ -7,6 +7,8 @@ import Link from 'next/link';
 import React, { FC, ReactNode } from 'react';
 import { getCookie } from 'cookies-next/server';
 import { appRouter } from '@/constants/appRouter';
+import { getCurrentUser } from '@/services/users/getCurrentUser';
+import { User } from '@prisma/client';
 
 interface Props {
   children: ReactNode;
@@ -20,12 +22,18 @@ const AppLayout: FC<Props> = async ({ children }) => {
 
   const isLoggedIn = !!session?.user;
 
+  let user: User | null = null;
+
+  if (isLoggedIn) {
+    user = await getCurrentUser({ userId: session.user.id });
+  }
+
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
-      <AppSidebar />
+      <AppSidebar user={user} />
       <main className="w-full">
         <div className="p-4 flex justify-between align-center">
-          <div>{isLoggedIn && <SidebarTrigger />}</div>
+          <SidebarTrigger />
           {!isLoggedIn && (
             <Button asChild>
               <Link href={appRouter.login}>Login</Link>

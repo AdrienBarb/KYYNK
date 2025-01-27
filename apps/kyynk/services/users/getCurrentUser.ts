@@ -20,6 +20,7 @@ export const getCurrentUser = async ({ userId }: { userId: string }) => {
         hairColor: true,
         country: true,
         tags: true,
+        creditsAmount: true,
       },
     });
 
