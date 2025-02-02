@@ -128,7 +128,7 @@ const UserForm = () => {
       >
         <div className="relative self-center ">
           <Avatar
-            size="l"
+            size={164}
             imageId={user?.profileImageId}
             pseudo={user?.pseudo}
           />

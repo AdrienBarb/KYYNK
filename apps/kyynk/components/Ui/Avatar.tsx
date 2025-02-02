@@ -3,58 +3,26 @@
 import * as React from 'react';
 import * as AvatarPrimitive from '@radix-ui/react-avatar';
 import { cn } from '@/utils/tailwind/cn';
-import { cva, type VariantProps } from 'class-variance-authority';
 import Image from 'next/image';
-
-export type Size = 's' | 'm' | 'l';
+import imgixLoader from '@/lib/imgix/loader';
 
 interface AvatarProps {
   pseudo?: string;
   imageId?: string | null;
-  size?: Size;
+  size?: number;
 }
-
-const avatarVariants = cva(
-  'relative flex shrink-0 overflow-hidden rounded-md',
-  {
-    variants: {
-      size: {
-        s: 'h-8 w-8',
-        m: 'h-16 w-16',
-        l: 'h-40 w-40',
-      },
-    },
-    defaultVariants: {
-      size: 'm',
-    },
-  },
-);
-
-const avatarFallbackVariants = cva(
-  'flex h-full w-full items-center justify-center rounded-md bg-primary text-white font-bold',
-  {
-    variants: {
-      size: {
-        s: 'text-lg',
-        m: 'text-lg',
-        l: 'text-3xl',
-      },
-    },
-    defaultVariants: {
-      size: 'm',
-    },
-  },
-);
 
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> &
-    AvatarProps &
-    VariantProps<typeof avatarVariants>
->(({ className, pseudo, imageId, size, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> & AvatarProps
+>(({ className, pseudo, imageId, size = 64, ...props }, ref) => (
   <AvatarPrimitive.Root
     ref={ref}
-    className={cn(avatarVariants({ size }), className)}
+    className={cn(
+      'relative flex shrink-0 overflow-hidden rounded-full',
+      className,
+    )}
+    style={{ width: size, height: size }}
     {...props}
   >
     {imageId ? (
@@ -71,22 +39,21 @@ const AvatarImage = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image> & {
     imageId: string;
     alt?: string;
-    size?: Size;
+    size?: number;
   }
->(({ alt, imageId, size }) => {
-  const sizeMap = {
-    s: 32,
-    m: 64,
-    l: 160,
-  };
-  const dimension = sizeMap[size || 'm'];
+>(({ alt, imageId, size = 64 }) => {
+  const imageUrl = imgixLoader({
+    src: imageId,
+    width: size,
+    quality: 80,
+  });
 
   return (
     <Image
-      src={imageId}
+      src={imageUrl}
       alt={alt ?? 'Image'}
-      width={dimension}
-      height={dimension}
+      width={size}
+      height={size}
       quality={80}
       priority
       className="object-cover object-center"
@@ -99,13 +66,17 @@ const AvatarFallback = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Fallback>,
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Fallback> & {
     pseudo?: string;
-    size?: Size;
+    size?: number;
   }
->(({ className, pseudo, size, ...props }, ref) => {
+>(({ className, pseudo, size = 64, ...props }, ref) => {
   return (
     <AvatarPrimitive.Fallback
       ref={ref}
-      className={cn(avatarFallbackVariants({ size }), className)}
+      className={cn(
+        'flex items-center justify-center rounded-full bg-primary text-white font-bold',
+        className,
+      )}
+      style={{ width: size, height: size, fontSize: size / 2 }}
       {...props}
     >
       {pseudo?.charAt(0).toUpperCase() || '?'}

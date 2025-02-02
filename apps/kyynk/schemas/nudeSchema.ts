@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const createNudeSchema = z.object({
+export const nudeSchema = z.object({
   description: z
     .string({ required_error: 'This field is required' })
     .min(1, {

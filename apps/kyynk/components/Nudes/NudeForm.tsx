@@ -27,28 +27,25 @@ import Text from '@/components/ui/Text';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import { Pencil } from 'lucide-react';
-import type { Media } from '@prisma/client';
+import type { Media, Nude } from '@prisma/client';
 import { useUser } from '@/lib/hooks/useUser';
-import { createNudeSchema } from '@/schemas/nudeSchema';
+import { nudeSchema } from '@/schemas/nudeSchema';
 import CustomSlider from '../CustomSlider';
+import imgixLoader from '@/lib/imgix/loader';
 
-interface NudeFormProps {}
+interface Props {
+  nude?: Nude;
+}
 
-const NudeForm: FC<NudeFormProps> = () => {
-  // Local state
+const NudeForm: FC<Props> = ({ nude }) => {
   const [openGalleryModal, setOpenGalleryModal] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
-  const [fetchedPrice, setFetchedPrice] = useState<number>(0);
 
-  // Hooks
-  const { usePost } = useApi();
-
-  const router = useRouter();
-
+  const { usePost, usePut } = useApi();
   const { getUser } = useUser();
   const user = getUser();
+  const router = useRouter();
 
-  // Mutations
   const { mutate: createNude, isPending } = usePost(`/api/nudes`, {
     onSuccess: () => {
       // TODO: If user verified, redirect to success page
@@ -56,21 +53,21 @@ const NudeForm: FC<NudeFormProps> = () => {
     },
   });
 
-  // const { mutate: editNude, isLoading: isEditLoading } = usePut(
-  //   `/api/nudes/${nudeId}`,
-  //   {
-  //     onSuccess: () => {
-  //       router.push(`/dashboard/community/${session?.user?.id}`);
-  //     },
-  //   },
-  // );
+  const { mutate: editNude, isPending: isEditLoading } = usePut(
+    `/api/nudes/${nude?.id}`,
+    {
+      onSuccess: () => {
+        router.push(`/${user?.slug}`);
+      },
+    },
+  );
 
-  const form = useForm<z.infer<typeof createNudeSchema>>({
-    resolver: zodResolver(createNudeSchema),
+  const form = useForm<z.infer<typeof nudeSchema>>({
+    resolver: zodResolver(nudeSchema),
     defaultValues: {
-      description: '',
-      price: 0,
-      tags: [],
+      description: nude?.description || '',
+      price: nude?.fiatPrice || 0,
+      tags: nude?.tags.map((tag) => ({ value: tag, label: tag })) || [],
     },
   });
 
@@ -79,19 +76,23 @@ const NudeForm: FC<NudeFormProps> = () => {
   const totalPrice = getMediaPrice(form.watch('price') || 0);
 
   const onSubmit = handleSubmit((values) => {
-    if (!selectedMedia) {
+    if (!nude && !selectedMedia) {
       toast.error('You forgot to upload a video');
       return;
     }
 
     const payload = {
-      mediaId: selectedMedia.id,
+      ...(selectedMedia && { mediaId: selectedMedia.id }),
       description: values.description,
       price: values.price,
       tags: values.tags,
     };
 
-    createNude(payload);
+    if (nude) {
+      editNude(payload);
+    } else {
+      createNude(payload);
+    }
   });
 
   return (
@@ -100,38 +101,43 @@ const NudeForm: FC<NudeFormProps> = () => {
         onSubmit={onSubmit}
         className="space-y-8 flex flex-col items-center w-full"
       >
-        <FormItem className="w-full">
-          <FormLabel>Video*</FormLabel>
-          {selectedMedia && selectedMedia.thumbnailId ? (
-            <div className="aspect-[4/5] relative rounded-md overflow-hidden">
-              <Button
-                variant="defaultWithoutBorder"
-                size="icon"
+        {!nude && (
+          <FormItem className="w-full">
+            <FormLabel>Video*</FormLabel>
+            {selectedMedia && selectedMedia.thumbnailId ? (
+              <div className="aspect-[4/5] relative rounded-md overflow-hidden">
+                <Button
+                  size="icon"
+                  onClick={() => setOpenGalleryModal(true)}
+                  className="absolute top-2 right-2 z-10"
+                >
+                  <Pencil color="white" strokeWidth={3} />
+                </Button>
+                <Image
+                  src={imgixLoader({
+                    src: selectedMedia.thumbnailId,
+                    width: 300,
+                    quality: 80,
+                  })}
+                  alt={`media`}
+                  layout="fill"
+                  objectFit="cover"
+                  quality={80}
+                  priority
+                  className="object-cover object-center"
+                />
+              </div>
+            ) : (
+              <div
+                className="rounded-md border-dashed border border-black mt-2 cursor-pointer aspect-[4/5] flex items-center justify-center text-center flex-col gap-2"
                 onClick={() => setOpenGalleryModal(true)}
-                className="absolute top-2 right-2 z-10"
               >
-                <Pencil color="white" strokeWidth={3} />
-              </Button>
-              <Image
-                src={selectedMedia.thumbnailId}
-                alt={`media`}
-                layout="fill"
-                objectFit="cover"
-                quality={80}
-                priority
-                className="object-cover object-center"
-              />
-            </div>
-          ) : (
-            <div
-              className="rounded-md border-dashed border border-black mt-2 cursor-pointer aspect-[4/5] flex items-center justify-center text-center flex-col gap-2"
-              onClick={() => setOpenGalleryModal(true)}
-            >
-              <FontAwesomeIcon icon={faPlus} size="lg" />
-              <Text className="text-custom-black">Add a video</Text>
-            </div>
-          )}
-        </FormItem>
+                <FontAwesomeIcon icon={faPlus} size="lg" />
+                <Text className="text-custom-black">Add a video</Text>
+              </div>
+            )}
+          </FormItem>
+        )}
 
         <FormField
           control={form.control}
@@ -161,7 +167,7 @@ const NudeForm: FC<NudeFormProps> = () => {
                 <div className="mt-14 px-4">
                   <CustomSlider
                     setValue={(value: number) => setValue('price', value)}
-                    fetchedPrice={fetchedPrice}
+                    fetchedPrice={field.value}
                   />
                 </div>
               </FormControl>
@@ -252,8 +258,12 @@ const NudeForm: FC<NudeFormProps> = () => {
           )}
         />
 
-        <Button type="submit" isLoading={isPending} className="w-full">
-          Create a nude
+        <Button
+          type="submit"
+          isLoading={isPending || isEditLoading}
+          className="w-full"
+        >
+          {nude ? 'Edit a nude' : 'Create a nude'}
         </Button>
 
         <GalleryModal

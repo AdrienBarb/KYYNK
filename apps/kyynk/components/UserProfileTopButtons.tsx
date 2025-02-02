@@ -30,12 +30,12 @@ const UserProfileTopButtons: FC<Props> = () => {
       <div className="flex justify-end space-x-2 mb-4">
         {user?.slug === slug && (
           <Button size="icon" onClick={handleEditAccountDetailsClick}>
-            <Pencil color="white" strokeWidth={3} />
+            <Pencil color="#fff0eb" strokeWidth={3} />
           </Button>
         )}
 
         <Button size="icon" onClick={() => setOpenShareModal(true)}>
-          <Forward color="white" strokeWidth={3} />
+          <Forward color="#fff0eb" strokeWidth={3} />
         </Button>
       </div>
 

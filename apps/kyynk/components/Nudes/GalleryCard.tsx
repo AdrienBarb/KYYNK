@@ -8,6 +8,7 @@ import { Loader2 } from 'lucide-react';
 import { cn } from '@/utils/tailwind/cn';
 import type { Media } from '@prisma/client';
 import Text from '@/components/ui/Text';
+import imgixLoader from '@/lib/imgix/loader';
 
 interface GalleryCardProps {
   media: Media;
@@ -67,11 +68,14 @@ const GalleryCard: FC<GalleryCardProps> = ({
 
       {media.isReady && media.thumbnailId ? (
         <Image
-          src={media.thumbnailId}
+          src={imgixLoader({
+            src: media.thumbnailId,
+            width: 300,
+            quality: 80,
+          })}
           alt={`media`}
           layout="fill"
           objectFit="cover"
-          quality={80}
           priority
           className="object-cover object-center"
         />

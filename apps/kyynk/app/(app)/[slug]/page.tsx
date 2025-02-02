@@ -4,13 +4,17 @@ import { genPageMetadata } from '@/app/seo';
 import { redirect } from 'next/navigation';
 import ErrorMessage from '@/components/ErrorMessage';
 import { getTranslations } from 'next-intl/server';
-import BackButton from '@/components/Common/BackButton';
 import UserProfileTopButtons from '@/components/UserProfileTopButtons';
 import { auth } from '@/auth';
 import UserUncompletedProfileBand from '@/components/UserUncompletedProfileBand';
 import UserProfileHeader from '@/components/UserProfileHeader';
 import PageContainer from '@/components/PageContainer';
 import { getUserBySlug } from '@/services/users/getUserBySlug';
+import { getUserNudesById } from '@/services/nudes/getUserNudesById';
+import UserNudes from '@/components/nudes/UserNudes';
+import { addPermissionsToNudes } from '@/utils/nudes/addPermissionsToNudes';
+import { User } from '@prisma/client';
+import { NudeType } from '@/types/nudes';
 
 export async function generateMetadata({
   params: { slug },
@@ -31,7 +35,7 @@ const UserPage = async ({ params }: { params: { slug: string } }) => {
   const t = await getTranslations();
   const session = await auth();
 
-  const user = await getUserBySlug({ slug });
+  const user = (await getUserBySlug({ slug })) as User;
 
   if (!user) {
     redirect('/404');
@@ -41,16 +45,18 @@ const UserPage = async ({ params }: { params: { slug: string } }) => {
     return <ErrorMessage message={t('error.userArchived')} />;
   }
 
+  const nudes = (await getUserNudesById({ userId: user.id })) as NudeType[];
+  const nudesWithPermissions = addPermissionsToNudes(nudes, session?.user.id);
+
   return (
     <PageContainer>
       <UserProfileTopButtons />
 
       <UserUncompletedProfileBand />
+
       <UserProfileHeader initialUserDatas={user} />
-      {/* {(initialUserDatas?.isAccountVerified || session?.user?.id === userId) &&
-        initialUserDatas?.userType === 'creator' && (
-          <div className={styles.contentContainer}>{children}</div>
-        )} */}
+
+      <UserNudes initialNudes={nudesWithPermissions} />
     </PageContainer>
   );
 };

@@ -1,34 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { strictlyAuth } from '@/hoc/strictlyAuth';
 import { prisma } from '@/lib/db/client';
 import { nudeSchema } from '@/schemas/nudeSchema';
 import { errorHandler } from '@/lib/utils/errors/errorHandler';
+import { errorMessages } from '@/lib/constants/errorMessage';
 
-const formSchema = nudeSchema.extend({
-  mediaId: z.string(),
-});
-
-export const POST = strictlyAuth(async (req: NextRequest) => {
+export const PUT = strictlyAuth(async (req: NextRequest, { params }) => {
   try {
     const { auth } = req;
     const userId = auth?.user.id;
+    const { id: nudeId } = params;
 
     const body = await req.json();
-    const payload = formSchema.parse(body);
+    const payload = nudeSchema.parse(body);
 
-    const newNude = await prisma.nude.create({
+    const existingNude = await prisma.nude.findUnique({
+      where: { id: nudeId },
+    });
+
+    if (!existingNude || existingNude.userId !== userId) {
+      return NextResponse.json(
+        { error: errorMessages.NOT_AUTHORIZED },
+        { status: 401 },
+      );
+    }
+
+    const updatedNude = await prisma.nude.update({
+      where: { id: nudeId },
       data: {
-        media: {
-          connect: {
-            id: payload.mediaId,
-          },
-        },
-        user: {
-          connect: {
-            id: userId,
-          },
-        },
         description: payload.description,
         fiatPrice: payload.price,
         creditPrice: payload.price * 2,
@@ -37,7 +36,7 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
       },
     });
 
-    return NextResponse.json(newNude, { status: 201 });
+    return NextResponse.json(updatedNude, { status: 200 });
   } catch (error) {
     return errorHandler(error);
   }

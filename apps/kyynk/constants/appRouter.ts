@@ -6,7 +6,7 @@ export const appRouter = {
   preferences: '/register/preferences',
   userType: '/register/user-type',
   models: '/models',
-  addNudes: '/account/add/nudes',
+  addNudes: '/account/nudes',
 
   editProfile: '/account/profile/edit',
   messages: '/dashboard/account/messages',

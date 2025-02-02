@@ -8,7 +8,7 @@ import React, { FC, ReactNode } from 'react';
 import { getCookie } from 'cookies-next/server';
 import { appRouter } from '@/constants/appRouter';
 import { getCurrentUser } from '@/services/users/getCurrentUser';
-import { User } from '@prisma/client';
+import { LoggedUserType } from '@/types/users';
 
 interface Props {
   children: ReactNode;
@@ -22,7 +22,7 @@ const AppLayout: FC<Props> = async ({ children }) => {
 
   const isLoggedIn = !!session?.user;
 
-  let user: User | null = null;
+  let user: LoggedUserType | null = null;
 
   if (isLoggedIn) {
     user = await getCurrentUser({ userId: session.user.id });

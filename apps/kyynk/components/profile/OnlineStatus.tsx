@@ -26,7 +26,7 @@ const OnlineStatus: FC<Props> = ({ currentUser }) => {
   const isOnline = onlineSlugs?.includes(currentUser?.slug);
 
   return (
-    <div className="font-karla mt-4 w-full text-center">
+    <div className="font-karla w-full text-center">
       {isOnline ? (
         <div className="flex items-center justify-center gap-1">
           <div className="w-3 flex justify-center items-center">

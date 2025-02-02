@@ -1,4 +1,4 @@
-import { Home, Plus, UsersRound } from 'lucide-react';
+import { CirclePlus, Home, Plus, UsersRound } from 'lucide-react';
 
 import {
   Sidebar,
@@ -7,14 +7,16 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/Sidebar';
 import { NavUser } from './NavUser';
-import { User } from '@prisma/client';
 import Link from 'next/link';
 import { appRouter } from '@/constants/appRouter';
+import { Button } from '../ui/Button';
+import { LoggedUserType } from '@/types/users';
 
 const platforms = [
   {
@@ -38,12 +40,20 @@ const creators = [
 ];
 
 interface Props {
-  user: User;
+  user: LoggedUserType | null;
 }
 
 export function AppSidebar({ user }: Props) {
   return (
     <Sidebar>
+      <SidebarHeader>
+        <Button asChild variant="secondary" size="sm">
+          <Link href={appRouter.addNudes} className="flex items-center gap-2">
+            <CirclePlus size={18} />
+            Add nude
+          </Link>
+        </Button>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Platform</SidebarGroupLabel>

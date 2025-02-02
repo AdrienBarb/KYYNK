@@ -1,15 +1,6 @@
 'use client';
 
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  Coins,
-  CreditCard,
-  LogOut,
-  Sparkles,
-  User,
-} from 'lucide-react';
+import { BadgeCheck, ChevronsUpDown, Coins, LogOut, User } from 'lucide-react';
 
 import Avatar from '@/components/ui/Avatar';
 
@@ -28,12 +19,12 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/Sidebar';
-import { User as UserType } from '@prisma/client';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import toast from 'react-hot-toast';
+import { LoggedUserType } from '@/types/users';
 
-export function NavUser({ user }: { user: UserType }) {
+export function NavUser({ user }: { user: LoggedUserType }) {
   const { isMobile } = useSidebar();
 
   const logout = () => {
@@ -44,7 +35,11 @@ export function NavUser({ user }: { user: UserType }) {
   const UserDetails = () => {
     return (
       <>
-        <Avatar size="s" imageId={user?.profileImageId} pseudo={user?.pseudo} />
+        <Avatar
+          size={32}
+          imageId={user?.profileImageId}
+          pseudo={user?.pseudo}
+        />
         <div className="grid flex-1 text-left text-sm leading-tight">
           <span className="truncate font-semibold">{user.pseudo}</span>
           <span className="truncate text-xs">{user.creditsAmount} credits</span>

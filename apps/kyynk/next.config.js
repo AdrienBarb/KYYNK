@@ -22,8 +22,6 @@ const nextConfig = {
         hostname: 'kyynk-296765883.imgix.net',
       },
     ],
-    loader: 'custom',
-    loaderFile: './lib/imgix/loader.ts',
   },
 };
 

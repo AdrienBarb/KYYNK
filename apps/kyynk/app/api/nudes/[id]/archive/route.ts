@@ -8,31 +8,31 @@ export const PUT = strictlyAuth(async (req: NextRequest, { params }) => {
   try {
     const { auth } = req;
     const userId = auth?.user.id;
-    const mediaId = params.id;
+    const nudeId = params.id;
 
-    const media = await prisma.media.findUnique({
+    const nude = await prisma.nude.findUnique({
       where: {
-        id: mediaId,
+        id: nudeId,
       },
     });
 
-    if (!media || media.userId !== userId) {
+    if (!nude || nude.userId !== userId) {
       return NextResponse.json(
         { error: errorMessages.NOT_AUTHORIZED },
         { status: 401 },
       );
     }
 
-    const archivedMedia = await prisma.media.update({
+    const archivedNude = await prisma.nude.update({
       where: {
-        id: mediaId,
+        id: nudeId,
       },
       data: {
         isArchived: true,
       },
     });
 
-    return NextResponse.json(archivedMedia, { status: 200 });
+    return NextResponse.json(archivedNude, { status: 200 });
   } catch (error) {
     return errorHandler(error);
   }
