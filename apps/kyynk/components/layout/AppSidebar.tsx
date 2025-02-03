@@ -1,5 +1,6 @@
-import { CirclePlus, Home, Plus, UsersRound } from 'lucide-react';
+'use client';
 
+import { CirclePlus, Home, Plus, UsersRound } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -16,7 +17,7 @@ import { NavUser } from './NavUser';
 import Link from 'next/link';
 import { appRouter } from '@/constants/appRouter';
 import { Button } from '../ui/Button';
-import { LoggedUserType } from '@/types/users';
+import { useUser } from '@/lib/hooks/useUser';
 
 const platforms = [
   {
@@ -39,11 +40,9 @@ const creators = [
   },
 ];
 
-interface Props {
-  user: LoggedUserType | null;
-}
+export function AppSidebar() {
+  const { user } = useUser();
 
-export function AppSidebar({ user }: Props) {
   return (
     <Sidebar>
       <SidebarHeader>
@@ -92,7 +91,7 @@ export function AppSidebar({ user }: Props) {
       </SidebarContent>
       {user && (
         <SidebarFooter>
-          <NavUser user={user} />
+          <NavUser />
         </SidebarFooter>
       )}
     </Sidebar>

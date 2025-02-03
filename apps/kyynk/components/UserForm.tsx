@@ -48,8 +48,7 @@ const UserForm = () => {
   //traduction
   const t = useTranslations();
 
-  const { setUser, getUser } = useUser();
-  const user = getUser();
+  const { user, refetch } = useUser();
 
   const profilInput = useRef<HTMLInputElement>(null);
 
@@ -57,7 +56,7 @@ const UserForm = () => {
 
   const { mutate: doPost, isPending } = usePut('/api/me', {
     onSuccess: async (user: User) => {
-      setUser(user);
+      refetch();
 
       router.push(`/${user?.slug}`);
     },
@@ -65,7 +64,7 @@ const UserForm = () => {
 
   const { mutate: setProfileImageId } = usePut('/api/me', {
     onSuccess: async ({ profileImageId }: Pick<User, 'profileImageId'>) => {
-      setUser({ profileImageId });
+      refetch();
     },
   });
 

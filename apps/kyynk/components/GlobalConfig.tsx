@@ -1,10 +1,8 @@
 'use client';
 
-import configService from '@/features/config/configService';
 import React, { FC, ReactNode, useEffect, useState } from 'react';
 import Maintenance from './Maintenance';
 import { useSession } from 'next-auth/react';
-import useApi from '@/lib/hooks/useApi';
 import { useUser } from '@/lib/hooks/useUser';
 
 interface Props {
@@ -14,8 +12,7 @@ interface Props {
 const GlobalConfig: FC<Props> = ({ children }) => {
   const [shouldAllowAccess, setShouldAllowAccess] = useState(true);
   const { data: session } = useSession();
-  const { fetchData } = useApi();
-  const { setUser, clearUser, getUser } = useUser();
+  const { refetch } = useUser();
 
   // TODO: DECOMMENT
   // useEffect(() => {
@@ -32,18 +29,11 @@ const GlobalConfig: FC<Props> = ({ children }) => {
   //   getConfig();
   // }, []);
 
-  const initUser = async () => {
-    const r = await fetchData(`/api/me`);
-    setUser(r);
-  };
-
   useEffect(() => {
     if (session?.user?.id) {
-      initUser();
-    } else {
-      clearUser();
+      refetch();
     }
-  }, [session?.user?.id]);
+  }, [session?.user?.id, refetch]);
 
   if (!shouldAllowAccess) {
     return <Maintenance />;

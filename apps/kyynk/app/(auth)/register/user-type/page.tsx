@@ -15,8 +15,7 @@ import { User } from '@prisma/client';
 const SignUpPage = () => {
   const [userType, setUserType] = useState('');
 
-  const { setUser, getUser } = useUser();
-  const user = getUser();
+  const { setUser, user } = useUser();
 
   const { usePut } = useApi();
 

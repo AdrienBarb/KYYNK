@@ -16,6 +16,7 @@ export type StoredUser = Pick<
   | 'country'
   | 'tags'
   | 'profileImageId'
+  | 'creditsAmount'
 >;
 
 interface UserState {

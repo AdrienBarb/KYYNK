@@ -15,8 +15,7 @@ const UserProfileTopButtons: FC<Props> = () => {
   const router = useRouter();
   const { slug } = useParams<{ slug: string }>();
 
-  const { getUser } = useUser();
-  const user = getUser();
+  const { user } = useUser();
 
   //localstate
   const [openShareModal, setOpenShareModal] = useState(false);

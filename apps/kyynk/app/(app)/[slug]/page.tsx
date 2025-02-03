@@ -12,7 +12,7 @@ import PageContainer from '@/components/PageContainer';
 import { getUserBySlug } from '@/services/users/getUserBySlug';
 import { getUserNudesById } from '@/services/nudes/getUserNudesById';
 import UserNudes from '@/components/nudes/UserNudes';
-import { addPermissionsToNudes } from '@/utils/nudes/addPermissionsToNudes';
+import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
 import { User } from '@prisma/client';
 import { NudeType } from '@/types/nudes';
 
@@ -46,7 +46,9 @@ const UserPage = async ({ params }: { params: { slug: string } }) => {
   }
 
   const nudes = (await getUserNudesById({ userId: user.id })) as NudeType[];
-  const nudesWithPermissions = addPermissionsToNudes(nudes, session?.user.id);
+  const nudesWithPermissions = nudes.map((currentNude) =>
+    formatNudeWithPermissions(currentNude, session?.user.id),
+  );
 
   return (
     <PageContainer>

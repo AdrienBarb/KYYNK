@@ -1,8 +1,12 @@
 import React from 'react';
-import LandingButton from './LandingButton';
 import { Button } from './ui/Button';
+import Link from 'next/link';
+import { appRouter } from '@/constants/appRouter';
+import { auth } from '@/auth';
 
-const Landing = () => {
+const Landing = async () => {
+  const session = await auth();
+
   return (
     <div className="bg-primary lg:h-[80dvh] flex justify-center items-center mt-12 mx-8 rounded-md px-8 py-16 h-3/4">
       <div className="flex flex-col justify-between items-center gap-16 max-w-5xl w-full">
@@ -19,7 +23,11 @@ const Landing = () => {
           </h2>
 
           <div className="mt-4">
-            <Button variant="secondary">Let&apos;s get nasty</Button>
+            <Button variant="secondary" asChild>
+              <Link href={session ? appRouter.models : appRouter.login}>
+                Let&apos;s get nasty
+              </Link>
+            </Button>
           </div>
         </div>
       </div>

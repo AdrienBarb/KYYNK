@@ -15,8 +15,7 @@ const UserAddMenu = () => {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
-  const { getUser } = useUser();
-  const user = getUser();
+  const { user } = useUser();
 
   //router
   const router = useRouter();

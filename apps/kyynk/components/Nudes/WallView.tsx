@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
-import { Nude } from '@prisma/client';
 import { cn } from '@/utils/tailwind/cn';
 import NudeCard from './NudeCard';
 import { useRouter } from 'next/navigation';
+import { NudeType } from '@/types/nudes';
 
 interface Props {
-  nudes: Nude[];
+  nudes: NudeType[];
 }
 
 const WallView: FC<Props> = ({ nudes }) => {
@@ -22,7 +22,7 @@ const WallView: FC<Props> = ({ nudes }) => {
         'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-screen-lg',
       )}
     >
-      {nudes.map((nude: Nude) => (
+      {nudes.map((nude: NudeType) => (
         <NudeCard
           key={nude.id}
           nude={nude}

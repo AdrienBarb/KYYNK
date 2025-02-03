@@ -32,6 +32,8 @@ model User {
   lastLogin      DateTime?
   createdAt      DateTime   @default(now())
   updatedAt      DateTime   @updatedAt
+  salesAsSeller  Sale[]     @relation("SellerSales")
+  salesAsBuyer   Sale[]     @relation("BuyerSales")
 }
 
 model UserToken {
@@ -53,6 +55,7 @@ model Nude {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
   media       Media?
+  buyers      String[] @default([])
   isArchived  Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -72,7 +75,27 @@ model Media {
   updatedAt   DateTime @updatedAt
 }
 
+model Sale {
+  id            String   @id @default(cuid())
+  creditAmount  Int
+  type          SaleType
+  isPaid        Boolean  @default(false)
+  availableDate DateTime @default(dbgenerated("now() + interval '7 days'"))
+  seller        User     @relation("SellerSales", fields: [sellerId], references: [id], onDelete: Cascade)
+  sellerId      String
+  buyer         User     @relation("BuyerSales", fields: [buyerId], references: [id], onDelete: Cascade)
+  buyerId       String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
 enum UserType {
   member
   creator
+}
+
+enum SaleType {
+  nude
+  tip
+  message
 }

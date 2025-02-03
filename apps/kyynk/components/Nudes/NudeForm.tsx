@@ -42,8 +42,7 @@ const NudeForm: FC<Props> = ({ nude }) => {
   const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
 
   const { usePost, usePut } = useApi();
-  const { getUser } = useUser();
-  const user = getUser();
+  const { user } = useUser();
   const router = useRouter();
 
   const { mutate: createNude, isPending } = usePost(`/api/nudes`, {

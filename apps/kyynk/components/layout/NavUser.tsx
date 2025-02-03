@@ -22,10 +22,11 @@ import {
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import toast from 'react-hot-toast';
-import { LoggedUserType } from '@/types/users';
+import { useUser } from '@/lib/hooks/useUser';
 
-export function NavUser({ user }: { user: LoggedUserType }) {
+export function NavUser() {
   const { isMobile } = useSidebar();
+  const { user } = useUser();
 
   const logout = () => {
     toast.success('You are logged out');
@@ -41,8 +42,10 @@ export function NavUser({ user }: { user: LoggedUserType }) {
           pseudo={user?.pseudo}
         />
         <div className="grid flex-1 text-left text-sm leading-tight">
-          <span className="truncate font-semibold">{user.pseudo}</span>
-          <span className="truncate text-xs">{user.creditsAmount} credits</span>
+          <span className="truncate font-semibold">{user?.pseudo}</span>
+          <span className="truncate text-xs">
+            {user?.creditsAmount} credits
+          </span>
         </div>
       </>
     );

@@ -1,26 +1,51 @@
 import { StoredUser, useUserStore } from '@/stores/UserStore';
+import useApi from '@/lib/hooks/useApi';
+import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 
 export const useUser = () => {
-  const user = useUserStore((state) => state.user);
-  const setUserStore = useUserStore((state) => state.setUser);
-  const clearUserStore = useUserStore((state) => state.clearUser);
+  const { user, setUser: setUserStore, clearUser } = useUserStore();
+  const { useGet } = useApi();
+  const { data: session } = useSession();
+
+  const {
+    data: fetchedUser,
+    isLoading,
+    error,
+    refetch,
+  } = useGet(
+    `/api/me`,
+    {},
+    {
+      enabled: !!session?.user?.id,
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: true,
+    },
+  );
 
   const setUser = (partialUser: Partial<StoredUser>) => {
     const updatedUser = { ...user, ...partialUser };
     setUserStore(updatedUser as StoredUser);
   };
 
-  const isLoggedIn = () => !!user;
+  useEffect(() => {
+    if (fetchedUser) {
+      setUserStore(fetchedUser);
+    }
+  }, [fetchedUser, setUserStore]);
 
-  const getUser = () => user;
-
-  const clearUser = () => clearUserStore();
+  useEffect(() => {
+    if (!session?.user?.id) {
+      clearUser();
+    }
+  }, [session?.user?.id, clearUser]);
 
   return {
     user,
+    isLoading,
+    error,
+    refetch,
+    isLoggedIn: () => !!user,
     setUser,
-    getUser,
-    isLoggedIn,
-    clearUser,
   };
 };

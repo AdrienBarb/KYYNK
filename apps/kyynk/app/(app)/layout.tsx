@@ -22,15 +22,9 @@ const AppLayout: FC<Props> = async ({ children }) => {
 
   const isLoggedIn = !!session?.user;
 
-  let user: LoggedUserType | null = null;
-
-  if (isLoggedIn) {
-    user = await getCurrentUser({ userId: session.user.id });
-  }
-
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
-      <AppSidebar user={user} />
+      <AppSidebar />
       <main className="w-full">
         <div className="p-4 flex justify-between align-center">
           <SidebarTrigger />

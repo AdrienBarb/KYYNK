@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/db/client';
+import { getNudeSelectFields } from '@/utils/nudes/getNudeSelectFields';
 
 export const getUserNudesById = async ({ userId }: { userId: string }) => {
   try {
@@ -10,27 +11,7 @@ export const getUserNudesById = async ({ userId }: { userId: string }) => {
       orderBy: {
         createdAt: 'desc',
       },
-      select: {
-        id: true,
-        description: true,
-        creditPrice: true,
-        createdAt: true,
-        userId: true,
-        media: {
-          select: {
-            id: true,
-            thumbnailId: true,
-            videoId: true,
-          },
-        },
-        user: {
-          select: {
-            id: true,
-            pseudo: true,
-            profileImageId: true,
-          },
-        },
-      },
+      select: getNudeSelectFields(),
     });
 
     return nudes;

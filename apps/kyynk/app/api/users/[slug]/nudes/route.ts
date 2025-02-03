@@ -3,7 +3,7 @@ import { errorMessages } from '@/lib/constants/errorMessage';
 import { errorHandler } from '@/lib/utils/errors/errorHandler';
 import { prisma } from '@/lib/db/client';
 import { getUserNudesById } from '@/services/nudes/getUserNudesById';
-import { addPermissionsToNudes } from '@/utils/nudes/addPermissionsToNudes';
+import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
 import { auth } from '@/auth';
 import { NudeType } from '@/types/nudes';
 
@@ -35,7 +35,10 @@ export const GET = async (
     }
 
     const nudes = (await getUserNudesById({ userId: user.id })) as NudeType[];
-    const nudesWithPermissions = addPermissionsToNudes(nudes, session?.user.id);
+
+    const nudesWithPermissions = nudes.map((currentNude) =>
+      formatNudeWithPermissions(currentNude, session?.user.id),
+    );
 
     return NextResponse.json(nudesWithPermissions, { status: 200 });
   } catch (error) {

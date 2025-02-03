@@ -1,8 +1,8 @@
 import { genPageMetadata } from '@/app/seo';
 import AppFAQ from '@/components/AppFAQ';
-import Footer from '@/components/Footer';
 import Landing from '@/components/Landing';
 import LandingFeatures from '@/components/LandingFeatures';
+import Footer from '@/components/layout/Footer';
 import ModelOffer from '@/components/ModelOffer';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
@@ -21,15 +21,13 @@ export async function generateMetadata({
 }
 
 const Home = async () => {
-  // const { users } = await userService.getAllUsers({});
-
   return (
     <>
       <Landing />
       <ModelOffer />
       <LandingFeatures />
-      {/* <LastUsersHomeSection users={users} /> */}
       <AppFAQ />
+      <Footer />
     </>
   );
 };

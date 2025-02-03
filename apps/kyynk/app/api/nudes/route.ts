@@ -33,7 +33,7 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
         fiatPrice: payload.price,
         creditPrice: payload.price * 2,
         tags: payload.tags.map((tag) => tag.value),
-        currency: 'USD',
+        currency: 'EUR',
       },
     });
 

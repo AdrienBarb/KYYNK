@@ -16,9 +16,7 @@ const SignUpPage = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { usePut } = useApi();
   const router = useRouter();
-
-  const { getUser } = useUser();
-  const user = getUser();
+  const { user } = useUser();
 
   const { mutate: editUserPreferences, isPending } = usePut(apiRouter.me, {
     onSuccess: () => {
