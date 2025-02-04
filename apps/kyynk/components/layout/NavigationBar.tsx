@@ -18,22 +18,13 @@ const NavigationBar = async () => {
     <header>
       <div className="bg-secondary w-full px-8 py-4 h-[48px] fixed top-0 right-0 left-0 z-[1000] border-b border-custom-black/20 flex">
         <div className="flex justify-between mx-auto w-full max-w-7xl items-center">
-          <Menu />
-
           <NavLogo />
 
-          <div className="flex items-center justify-center gap-4">
-            {!isUserConnected && (
-              <SimpleButton href="/login" dataId="sign-in-button">
-                {t('common.signIn')}
-              </SimpleButton>
-            )}
-
-            {isUserConnected && <UserAddMenu />}
-            {isUserConnected && <CreditAmount />}
-
-            <LanguageSwitcher />
-          </div>
+          {!isUserConnected && (
+            <SimpleButton href="/login" dataId="sign-in-button">
+              {t('common.signIn')}
+            </SimpleButton>
+          )}
         </div>
       </div>
     </header>

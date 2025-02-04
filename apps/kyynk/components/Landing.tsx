@@ -8,7 +8,7 @@ const Landing = async () => {
   const session = await auth();
 
   return (
-    <div className="bg-primary lg:h-[80dvh] flex justify-center items-center mt-12 mx-8 rounded-md px-8 py-16 h-3/4">
+    <div className="bg-primary lg:h-[80dvh] flex justify-center items-center mt-16 mx-8 rounded-md px-8 py-16 h-3/4">
       <div className="flex flex-col justify-between items-center gap-16 max-w-5xl w-full">
         <div className="flex flex-col text-center items-center justify-center lg:max-w-lg">
           <h1

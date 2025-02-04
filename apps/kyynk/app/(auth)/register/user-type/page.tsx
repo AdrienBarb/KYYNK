@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/Button';
 import { useUser } from '@/lib/hooks/useUser';
 import { appRouter } from '@/constants/appRouter';
 import { apiRouter } from '@/constants/apiRouter';
-import Title from '@/components/Title';
+import Title from '@/components/ui/Title';
 import { User } from '@prisma/client';
 
 const SignUpPage = () => {

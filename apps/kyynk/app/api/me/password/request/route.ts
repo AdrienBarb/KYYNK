@@ -4,7 +4,7 @@ import { resendClient } from '@/lib/resend/resendClient';
 import { errorHandler } from '@/lib/utils/errors/errorHandler';
 import { randomBytes } from 'crypto';
 import { NextResponse, NextRequest } from 'next/server';
-import TestEmail from '@kyynk/transactional/emails/TestEmail';
+import ResetPasswordEmail from '@kyynk/transactional/emails/ResetPasswordEmail';
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -40,7 +40,7 @@ export const POST = async (req: NextRequest) => {
       from: 'contact@kyynk.com',
       to: user.email,
       subject: 'Password reset',
-      react: TestEmail({ link: link }),
+      react: ResetPasswordEmail({ link: link }),
     });
 
     if (error) {

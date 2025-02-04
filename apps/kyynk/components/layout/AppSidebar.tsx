@@ -18,6 +18,7 @@ import Link from 'next/link';
 import { appRouter } from '@/constants/appRouter';
 import { Button } from '../ui/Button';
 import { useUser } from '@/lib/hooks/useUser';
+import { isCreator } from '@/utils/users/isCreator';
 
 const platforms = [
   {
@@ -45,14 +46,16 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader>
-        <Button asChild variant="secondary" size="sm">
-          <Link href={appRouter.addNudes} className="flex items-center gap-2">
-            <CirclePlus size={18} />
-            Add nude
-          </Link>
-        </Button>
-      </SidebarHeader>
+      {isCreator({ user }) && (
+        <SidebarHeader>
+          <Button asChild variant="secondary" size="sm">
+            <Link href={appRouter.addNudes} className="flex items-center gap-2">
+              <CirclePlus size={18} />
+              Add nude
+            </Link>
+          </Button>
+        </SidebarHeader>
+      )}
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -71,23 +74,25 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Creators</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {creators.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {isCreator({ user }) && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Creators</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {creators.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
       {user && (
         <SidebarFooter>

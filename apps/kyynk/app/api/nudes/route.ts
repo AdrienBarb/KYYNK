@@ -37,6 +37,11 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
       },
     });
 
+    await prisma.user.update({
+      where: { id: userId },
+      data: { nudesCount: { increment: 1 } },
+    });
+
     return NextResponse.json(newNude, { status: 201 });
   } catch (error) {
     return errorHandler(error);

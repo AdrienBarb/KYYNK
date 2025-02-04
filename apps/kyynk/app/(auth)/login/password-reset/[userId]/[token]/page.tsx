@@ -1,7 +1,7 @@
 import React from 'react';
 import PageContainer from '@/components/PageContainer';
 import UserResetPasswordForm from '@/components/UserResetPasswordForm';
-import Title from '@/components/Title';
+import Title from '@/components/ui/Title';
 import Text from '@/components/ui/Text';
 
 const UserResetPasswordPage = () => {

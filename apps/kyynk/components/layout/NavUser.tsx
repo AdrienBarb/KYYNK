@@ -23,6 +23,7 @@ import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import { useUser } from '@/lib/hooks/useUser';
+import { appRouter } from '@/constants/appRouter';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -30,7 +31,7 @@ export function NavUser() {
 
   const logout = () => {
     toast.success('You are logged out');
-    signOut();
+    signOut({ redirectTo: '/' });
   };
 
   const UserDetails = () => {
@@ -75,7 +76,7 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <Link href={`/${user.slug}`}>
+                <Link href={`/${user?.slug}`}>
                   <User />
                   My Profile
                 </Link>
@@ -87,9 +88,11 @@ export function NavUser() {
                 <Coins />
                 Buy credits
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Become a creator
+              <DropdownMenuItem asChild>
+                <Link href={appRouter.becomeCreator}>
+                  <BadgeCheck />
+                  Become a creator
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

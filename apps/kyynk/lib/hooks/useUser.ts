@@ -1,7 +1,8 @@
-import { StoredUser, useUserStore } from '@/stores/UserStore';
+import { useUserStore } from '@/stores/UserStore';
 import useApi from '@/lib/hooks/useApi';
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
+import { LoggedUserType } from '@/types/users';
 
 export const useUser = () => {
   const { user, setUser: setUserStore, clearUser } = useUserStore();
@@ -23,9 +24,9 @@ export const useUser = () => {
     },
   );
 
-  const setUser = (partialUser: Partial<StoredUser>) => {
+  const setUser = (partialUser: Partial<LoggedUserType>) => {
     const updatedUser = { ...user, ...partialUser };
-    setUserStore(updatedUser as StoredUser);
+    setUserStore(updatedUser as LoggedUserType);
   };
 
   useEffect(() => {

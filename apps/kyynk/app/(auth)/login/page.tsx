@@ -3,7 +3,7 @@ import PageContainer from '@/components/PageContainer';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import UserSignInForm from '@/components/auth/UserSignInForm';
-import Title from '@/components/Title';
+import Title from '@/components/ui/Title';
 import { appRouter } from '@/constants/appRouter';
 
 const LoginPage = () => {

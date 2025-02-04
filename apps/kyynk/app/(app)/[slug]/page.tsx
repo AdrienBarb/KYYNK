@@ -6,7 +6,7 @@ import ErrorMessage from '@/components/ErrorMessage';
 import { getTranslations } from 'next-intl/server';
 import UserProfileTopButtons from '@/components/UserProfileTopButtons';
 import { auth } from '@/auth';
-import UserUncompletedProfileBand from '@/components/UserUncompletedProfileBand';
+import UserUncompletedProfileBanner from '@/components/profile/UserUncompletedProfileBanner';
 import UserProfileHeader from '@/components/UserProfileHeader';
 import PageContainer from '@/components/PageContainer';
 import { getUserBySlug } from '@/services/users/getUserBySlug';
@@ -32,6 +32,7 @@ export async function generateMetadata({
 
 const UserPage = async ({ params }: { params: { slug: string } }) => {
   const { slug } = params;
+  console.log('🚀 ~ UserPage ~ slug:', slug);
   const t = await getTranslations();
   const session = await auth();
 
@@ -52,12 +53,9 @@ const UserPage = async ({ params }: { params: { slug: string } }) => {
 
   return (
     <PageContainer>
+      <UserUncompletedProfileBanner />
       <UserProfileTopButtons />
-
-      <UserUncompletedProfileBand />
-
       <UserProfileHeader initialUserDatas={user} />
-
       <UserNudes initialNudes={nudesWithPermissions} />
     </PageContainer>
   );

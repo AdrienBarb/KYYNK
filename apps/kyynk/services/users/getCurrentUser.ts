@@ -21,6 +21,9 @@ export const getCurrentUser = async ({ userId }: { userId: string }) => {
         country: true,
         tags: true,
         creditsAmount: true,
+        isEmailVerified: true,
+        identityVerificationStatus: true,
+        nudesCount: true,
       },
     });
 

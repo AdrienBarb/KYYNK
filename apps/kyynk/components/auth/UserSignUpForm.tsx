@@ -16,10 +16,13 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { appRouter } from '@/constants/appRouter';
 import { register } from '@/server-actions/register';
+import { useUser } from '@/lib/hooks/useUser';
 
 const UserSignUpForm = () => {
   //router
   const router = useRouter();
+
+  const { refetch } = useUser();
 
   //translation
   const t = useTranslations();
@@ -84,6 +87,8 @@ const UserSignUpForm = () => {
           email: values.email,
           password: values.password,
         });
+
+        await refetch();
 
         router.push(appRouter.userType, {});
 

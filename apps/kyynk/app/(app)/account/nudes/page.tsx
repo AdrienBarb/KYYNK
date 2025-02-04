@@ -1,5 +1,5 @@
 import NudeForm from '@/components/nudes/NudeForm';
-import Title from '@/components/Title';
+import Title from '@/components/ui/Title';
 import React, { FC } from 'react';
 
 const CreateNudePage = () => {

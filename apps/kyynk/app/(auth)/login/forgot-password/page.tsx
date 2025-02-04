@@ -1,7 +1,7 @@
 import React from 'react';
 import PageContainer from '@/components/PageContainer';
 import UserForgotPasswordForm from '@/components/UserForgotPasswordForm';
-import Title from '@/components/Title';
+import Title from '@/components/ui/Title';
 import SupportContact from '@/components/SupportContact';
 import Text from '@/components/ui/Text';
 

@@ -1,10 +1,8 @@
 'use client';
 
 import PageContainer from '@/components/PageContainer';
-import dynamic from 'next/dynamic';
+import UserForm from '@/components/UserForm';
 import React from 'react';
-
-const UserForm = dynamic(() => import('@/components/UserForm'), { ssr: false });
 
 const EditProfilPage = () => {
   return (

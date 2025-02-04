@@ -1,113 +1,88 @@
-"use client";
+'use client';
 
-import React, { useEffect } from "react";
-import AccountVerification from "@/components/AccountVerification";
-import CenterHeader from "@/components/CenterHeader";
-import { useTranslations } from "next-intl";
-import PaddingContainer from "@/components/PaddingContainer";
-import { useSession } from "next-auth/react";
-import AppMessage from "@/components/AppMessage";
-import { TwitterShareButton } from "react-share";
-import ClassicButton from "@/components/Buttons/ClassicButton";
-import toast from "react-hot-toast";
-import { useParams } from "next/navigation";
-import useApi from "@/lib/hooks/useApi";
-import useCheckIfUserVerified from "@/lib/hooks/useCheckIfUserVerified";
+import React, { useEffect } from 'react';
+import AccountVerification from '@/components/AccountVerification';
+import toast from 'react-hot-toast';
+import useApi from '@/lib/hooks/useApi';
+import { useUser } from '@/lib/hooks/useUser';
+import { isCreator } from '@/utils/users/isCreator';
+import AppMessage from '@/components/AppMessage';
+import { Button } from '@/components/ui/Button';
+import { apiRouter } from '@/constants/apiRouter';
+import { isUserVerified } from '@/utils/users/isUserVerified';
+import { TwitterShareButton } from 'react-share';
 
 const VerificationPage = () => {
-  const t = useTranslations();
-  const { data: session, update } = useSession();
-  const { locale } = useParams();
-  const checkIfUserVerified = useCheckIfUserVerified();
-
-  const URL = `${process.env.NEXT_PUBLIC_BASE_URL}/${locale}/dashboard/community/${session?.user?.id}`;
+  const { user, refetch } = useUser();
   const { usePut } = useApi();
 
+  const URL = `${process.env.NEXT_PUBLIC_BASE_URL}/${user?.slug}`;
+
   useEffect(() => {
-    checkIfUserVerified();
+    refetch();
   }, []);
 
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(URL);
-      toast.success(t("common.linkCopied"));
+      toast.success('Link Copied');
     } catch (error) {
       console.error(error);
     }
   };
 
-  const { mutate: editUserType, isLoading } = usePut(`/api/users/user-type`, {
-    onSuccess: ({ userType }) => {
-      if (session) {
-        const updatedSession = {
-          ...session,
-          user: {
-            ...session.user,
-            userType,
-          },
-        };
-
-        update(updatedSession);
-      }
+  const { mutate: editUserType, isPending } = usePut(apiRouter.me, {
+    onSuccess: () => {
+      refetch();
     },
   });
 
-  if (session?.user?.userType === "member") {
+  if (isUserVerified({ user })) {
     return (
-      <PaddingContainer>
-        <AppMessage
-          title={t("common.wantBecomeACreator?")}
-          text={t("common.clicOnButton")}
+      <AppMessage
+        title="Your profile is verified!"
+        text="Share your profile now on your social medias and start building your community."
+      >
+        <TwitterShareButton
+          url={URL}
+          title="Come discover my last nude"
+          style={{ width: '100%' }}
         >
-          <ClassicButton
-            customStyles={{ width: "100%" }}
-            onClick={() => editUserType({ userType: "creator" })}
-            isLoading={isLoading}
-          >
-            {t("common.becomingCreator")}
-          </ClassicButton>
-        </AppMessage>
-      </PaddingContainer>
+          <Button variant="secondary" className="w-full">
+            Share on Twitter
+          </Button>
+        </TwitterShareButton>
+        <Button
+          onClick={copyToClipboard}
+          variant={'secondary'}
+          className="w-full mt-4"
+        >
+          Copy my profile link
+        </Button>
+      </AppMessage>
     );
   }
 
-  if (session?.user?.isAccountVerified) {
+  if (!isCreator({ user })) {
     return (
-      <PaddingContainer>
-        <AppMessage
-          title={t("common.yourProfileIsVerified")}
-          text={t("common.yourCanNowShareYourProfile")}
+      <AppMessage
+        title="Want to become a creator?"
+        text="Then click on the button below."
+      >
+        <Button
+          onClick={() => editUserType({ userType: 'creator' })}
+          isLoading={isPending}
+          variant="secondary"
         >
-          <TwitterShareButton
-            url={URL}
-            title={t("profile.shareTitleSocialMedia")}
-            style={{ width: "100%" }}
-          >
-            <ClassicButton customStyles={{ width: "100%" }}>
-              {t("common.shareOnTwitter")}
-            </ClassicButton>
-          </TwitterShareButton>
-          <ClassicButton
-            customStyles={{ width: "100%" }}
-            onClick={copyToClipboard}
-          >
-            {t("common.copyLink")}
-          </ClassicButton>
-        </AppMessage>
-      </PaddingContainer>
+          Become a Creator
+        </Button>
+      </AppMessage>
     );
   }
 
-  return (
-    <PaddingContainer>
-      <CenterHeader
-        tag="h2"
-        title={t("common.becomeCreator")}
-        description={t("common.accountVerificationExplanation")}
-      />
-      <AccountVerification />
-    </PaddingContainer>
-  );
+  if (isCreator({ user })) {
+    return <AccountVerification />;
+  }
 };
 
 export default VerificationPage;

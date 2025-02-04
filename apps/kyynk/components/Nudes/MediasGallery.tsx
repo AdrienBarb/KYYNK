@@ -24,17 +24,11 @@ const MediasGallery: FC<MediasGalleryProps> = ({
   setSelectedMedia,
   selectedMedia,
 }) => {
-  const queryClient = useQueryClient();
   const { fetchData, usePost, useGet } = useApi();
 
   const { mutate: createMedia } = usePost('/api/medias', {
-    onSuccess: (newMedia: Media) => {
-      queryClient.setQueryData(
-        ['get', { url: '/api/medias', params: {} }],
-        (oldData: any) => {
-          return [newMedia, ...(oldData || [])];
-        },
-      );
+    onSuccess: () => {
+      refetch();
     },
   });
 

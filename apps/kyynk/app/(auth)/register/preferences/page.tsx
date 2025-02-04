@@ -9,7 +9,7 @@ import { TAGS } from '@/constants/constants';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/lib/hooks/useUser';
 import { apiRouter } from '@/constants/apiRouter';
-import Title from '@/components/Title';
+import Title from '@/components/ui/Title';
 
 const SignUpPage = () => {
   const t = useTranslations();

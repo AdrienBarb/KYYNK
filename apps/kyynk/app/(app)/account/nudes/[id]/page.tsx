@@ -1,6 +1,6 @@
 import { auth } from '@/auth';
 import NudeForm from '@/components/nudes/NudeForm';
-import Title from '@/components/Title';
+import Title from '@/components/ui/Title';
 import { getNudeById } from '@/services/nudes/getNudesById';
 import { redirect } from 'next/navigation';
 import React, { FC } from 'react';

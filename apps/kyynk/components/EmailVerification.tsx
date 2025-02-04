@@ -1,49 +1,32 @@
 'use client';
 
 import React, { FC, useState } from 'react';
-import styles from '@/styles/EmailVerification.module.scss';
-import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
-import CustomTextField from './Inputs/TextField';
-import FullButton from './Buttons/FullButton';
+import { Button } from './ui/Button'; // Import the default Button
 import useApi from '@/lib/hooks/useApi';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@/lib/hooks/useUser';
+import { appRouter } from '@/constants/appRouter';
+import { Input } from './ui/Input'; // Import the Input component
 
-interface VerificationCodeButtonProps {
-  nextPath: string;
-}
-
-const VerificationCodeButton: FC<VerificationCodeButtonProps> = ({
-  nextPath,
-}) => {
+const VerificationCodeButton = ({}) => {
   const [code, setCode] = useState('');
-  const { data: session, update } = useSession();
-  const t = useTranslations();
   const router = useRouter();
+  const { refetch } = useUser();
 
   const { usePost } = useApi();
 
-  const { mutate: verifyVerificationCode, isLoading } = usePost(
-    `/api/email/verify-code`,
+  const { mutate: verifyVerificationCode, isPending } = usePost(
+    `/api/me/emails/verify-code`,
     {
-      onSuccess: ({ emailVerified }) => {
-        if (session) {
-          const updatedSession = {
-            ...session,
-            user: {
-              ...session.user,
-              emailVerified: emailVerified,
-            },
-          };
-
-          update(updatedSession);
-          router.push(nextPath);
-        }
+      onSuccess: () => {
+        refetch();
+        router.push(appRouter.becomeCreator);
       },
     },
   );
 
-  const handleCodeChange = (event: any) => {
+  const handleCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCode(event.target.value);
   };
 
@@ -56,47 +39,36 @@ const VerificationCodeButton: FC<VerificationCodeButtonProps> = ({
   };
 
   return (
-    <div className={styles.inputWrapper}>
-      <CustomTextField
-        variant="standard"
-        fullWidth
-        label={t('common.verification_code')}
+    <div className="flex flex-col gap-4 w-full">
+      <Input
+        type="text"
+        placeholder="Verification Code"
         value={code}
         onChange={handleCodeChange}
+        className="w-full"
       />
 
-      <FullButton
+      <Button
         onClick={handleVerifyCode}
         disabled={!code}
-        isLoading={isLoading}
-        customStyles={{
-          width: '100%',
-        }}
+        isLoading={isPending}
+        className="w-full"
+        variant="default"
       >
-        {t('common.confirm_code')}
-      </FullButton>
+        Confirm Code
+      </Button>
     </div>
   );
 };
 
-interface EmailVerificationProps {
-  nextPath: string;
-}
-
-const EmailVerification: FC<EmailVerificationProps> = ({ nextPath }) => {
-  //redux
+const EmailVerification = () => {
   const { data: session } = useSession();
-
-  //localstate
   const [isCodeSended, setIsCodeSended] = useState(false);
 
   const { usePost } = useApi();
 
-  //traduction
-  const t = useTranslations();
-
-  const { mutate: sendVerificationCode, isLoading } = usePost(
-    `/api/email/send-verification-code`,
+  const { mutate: sendVerificationCode, isPending } = usePost(
+    `/api/me/emails/send-verification-code`,
     {
       onSuccess: () => {
         setIsCodeSended(true);
@@ -109,41 +81,36 @@ const EmailVerification: FC<EmailVerificationProps> = ({ nextPath }) => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.wrapper}>
-        {isCodeSended ? (
-          <div className={styles.content}>
-            <div>
-              {t('common.we_send_code', {
-                emailAddress: session?.user?.email,
-              })}
-            </div>
-            <VerificationCodeButton nextPath={nextPath} />
-            <div>
-              {t('common.didnt_receive_code')}{' '}
-              <span
-                className={styles.resendLink}
-                onClick={() => setIsCodeSended(false)}
-              >
-                {t('common.send_back_code')}
-              </span>
-            </div>
+    <div className="w-full">
+      {isCodeSended ? (
+        <div className="flex flex-col gap-4 items-center">
+          <div className="text-center">
+            We have sent a code to your email: {session?.user?.email}
           </div>
-        ) : (
-          <div className={styles.content}>
-            <div>{t('common.code_explanation')}</div>
-            <FullButton
-              onClick={handleSendCode}
-              isLoading={isLoading}
-              customStyles={{
-                width: '100%',
-              }}
+          <VerificationCodeButton />
+          <div>
+            Didn&apos;t receive the code?{' '}
+            <span
+              className="cursor-pointer underline"
+              onClick={() => setIsCodeSended(false)}
             >
-              {t('common.send_code')}
-            </FullButton>
+              Send it again
+            </span>
           </div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-4 items-center">
+          <div>Please enter the verification code sent to your email.</div>
+          <Button
+            onClick={handleSendCode}
+            isLoading={isPending}
+            className="w-full"
+            variant="default"
+          >
+            Send Code
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

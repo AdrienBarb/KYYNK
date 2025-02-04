@@ -16,6 +16,7 @@ export const getUserBySlug = async ({ slug }: { slug: string }) => {
         isArchived: true,
       },
     });
+    console.log('🚀 ~ getUserBySlug ~ user:', user);
 
     return user;
   } catch (error) {

@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
-import styles from '@/styles/VerificationCard.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import Link from 'next/link';
+import { cn } from '@/utils/tailwind/cn';
+import { ArrowRight, Check } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface VerificationCardProps {
   isValid: boolean;
@@ -15,27 +14,31 @@ const VerificationCard: FC<VerificationCardProps> = ({
   label,
   path,
 }) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    if (isValid) {
+      return;
+    }
+
+    router.push(path);
+  };
+
   return (
-    <Link
-      href={path}
-      prefetch
-      className={styles.container}
-      style={{
-        backgroundColor: isValid ? '#cecaff' : 'transparent',
-        color: isValid ? 'white' : 'black',
-      }}
+    <div
+      onClick={handleClick}
+      className={cn(
+        'flex justify-between items-center p-4 rounded-md transition-colors',
+        isValid
+          ? 'bg-primary text-secondary border border-primary cursor-default'
+          : 'bg-transparent text-custom-black border border-custom-black cursor-pointer',
+      )}
     >
       <div>
-        <div className={styles.label}>{label}</div>
+        <div className="text-lg font-medium">{label}</div>
       </div>
-      <div>
-        {isValid ? (
-          <FontAwesomeIcon icon={faCheck} size="1x" />
-        ) : (
-          <FontAwesomeIcon icon={faArrowRight} size="1x" />
-        )}
-      </div>
-    </Link>
+      <div>{isValid ? <Check size={16} /> : <ArrowRight size={16} />}</div>
+    </div>
   );
 };
 

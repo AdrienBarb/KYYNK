@@ -10,4 +10,5 @@ export const errorMessages = {
   INVALID_LINK: 'invalidLink',
   EMAIL_ERROR: 'emailError',
   NOT_AUTHORIZED: 'notAuthorized',
+  INVALID_CODE: 'invalidCode',
 };

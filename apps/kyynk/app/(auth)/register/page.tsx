@@ -3,7 +3,7 @@ import PageContainer from '@/components/PageContainer';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import UserSignUpForm from '@/components/auth/UserSignUpForm';
-import Title from '@/components/Title';
+import Title from '@/components/ui/Title';
 import { appRouter } from '@/constants/appRouter';
 
 const SignUpPage = () => {

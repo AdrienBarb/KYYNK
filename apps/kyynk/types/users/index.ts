@@ -16,4 +16,7 @@ export type LoggedUserType = Pick<
   | 'country'
   | 'tags'
   | 'creditsAmount'
+  | 'isEmailVerified'
+  | 'identityVerificationStatus'
+  | 'nudesCount'
 >;

@@ -3,6 +3,7 @@ import AppFAQ from '@/components/AppFAQ';
 import Landing from '@/components/Landing';
 import LandingFeatures from '@/components/LandingFeatures';
 import Footer from '@/components/layout/Footer';
+import NavigationBar from '@/components/layout/NavigationBar';
 import ModelOffer from '@/components/ModelOffer';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
@@ -23,6 +24,7 @@ export async function generateMetadata({
 const Home = async () => {
   return (
     <>
+      <NavigationBar />
       <Landing />
       <ModelOffer />
       <LandingFeatures />

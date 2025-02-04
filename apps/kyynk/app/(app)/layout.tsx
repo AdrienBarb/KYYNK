@@ -26,7 +26,7 @@ const AppLayout: FC<Props> = async ({ children }) => {
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
       <main className="w-full">
-        <div className="p-4 flex justify-between align-center">
+        <div className="p-4 flex justify-between align-center bg-secondary-dark border-b border-custom-black/20">
           <SidebarTrigger />
           {!isLoggedIn && (
             <Button asChild>

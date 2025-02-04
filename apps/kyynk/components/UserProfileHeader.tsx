@@ -5,9 +5,9 @@ import { useParams } from 'next/navigation';
 import { User } from '@prisma/client';
 import useApi from '@/lib/hooks/useApi';
 import Avatar from './ui/Avatar';
-import Title from './Title';
 import Text from '@/components/ui/Text';
 import OnlineStatus from '@/components/profile/OnlineStatus';
+import Title from '@/components/ui/Title';
 
 interface Props {
   initialUserDatas: User;

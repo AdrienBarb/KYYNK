@@ -7,12 +7,14 @@ export const appRouter = {
   userType: '/register/user-type',
   models: '/models',
   addNudes: '/account/nudes',
-
   editProfile: '/account/profile/edit',
+  becomeCreator: '/account/become-creator',
+  becomeCreatorEmail: '/account/become-creator/email',
+  becomeCreatorIdentity: '/account/become-creator/identity',
+
   messages: '/dashboard/account/messages',
   notifications: '/dashboard/account/notifications',
   parameters: '/dashboard/account/parameters',
   incomes: '/dashboard/account/incomes',
   verification: '/dashboard/account/verification',
-  becomeCreator: '/dashboard/account/become-creator',
 };
