@@ -3,7 +3,7 @@ import styles from '@/styles/PageHeader.module.scss';
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import Text from '@/components/ui/Text';
-import Title from './Title';
+import Title from './ui/Title';
 
 interface PageHeaderProps {
   title: string;

@@ -1,13 +1,9 @@
 import React from 'react';
-import SimpleButton from '@/components/Buttons/SimpleButton';
-import UserAddMenu from '@/components/UserAddMenu';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
-import CreditAmount from '@/components/CreditAmount';
 import NavLogo from '../NavLogo';
 import { getTranslations } from 'next-intl/server';
 import { auth } from '@/auth';
-import Menu from '@/components/Menu';
-import { SidebarTrigger } from '../ui/Sidebar';
+import { Button } from '../ui/Button';
+import Link from 'next/link';
 
 const NavigationBar = async () => {
   const t = await getTranslations();
@@ -21,9 +17,9 @@ const NavigationBar = async () => {
           <NavLogo />
 
           {!isUserConnected && (
-            <SimpleButton href="/login" dataId="sign-in-button">
-              {t('common.signIn')}
-            </SimpleButton>
+            <Button asChild>
+              <Link href="/login">{t('common.signIn')}</Link>
+            </Button>
           )}
         </div>
       </div>

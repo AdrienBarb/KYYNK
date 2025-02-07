@@ -1,8 +1,8 @@
-import React from "react";
-import { useTranslations } from "next-intl";
-import FeatureCard from "./FeatureCard";
-import LandingHeader from "./LandingHeader";
-import FullButton from "./Buttons/FullButton";
+import React from 'react';
+import { useTranslations } from 'next-intl';
+import LandingHeader from './LandingHeader';
+import { Button } from './ui/Button';
+import Link from 'next/link';
 
 const ModelOffer = () => {
   const t = useTranslations();
@@ -10,10 +10,12 @@ const ModelOffer = () => {
   return (
     <section className="max-w-4xl mx-auto py-20 px-4 flex flex-col items-center">
       <LandingHeader
-        title={t("home.youreModel")}
-        description={t("home.modelOffer")}
+        title={t('home.youreModel')}
+        description={t('home.modelOffer')}
       />
-      <FullButton href="/register">{t("common.signUp")}</FullButton>
+      <Button asChild>
+        <Link href="/register">{t('common.signUp')}</Link>
+      </Button>
     </section>
   );
 };
