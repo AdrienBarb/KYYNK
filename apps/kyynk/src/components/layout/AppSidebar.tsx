@@ -26,34 +26,37 @@ import { Button } from '../ui/Button';
 import { useUser } from '@/hooks/users/useUser';
 import { isCreator } from '@/utils/users/isCreator';
 
-const platforms = [
-  {
-    title: 'Home',
-    url: appRouter.home,
-    icon: Home,
-  },
-  {
-    title: 'Models',
-    url: appRouter.models,
-    icon: UsersRound,
-  },
-  {
-    title: 'Conversations',
-    url: appRouter.conversations,
-    icon: MessageCircle,
-  },
-];
-
-const creators = [
-  {
-    title: 'Add a nude',
-    url: appRouter.addNudes,
-    icon: Plus,
-  },
-];
-
 export function AppSidebar() {
   const { user } = useUser();
+
+  const platforms = [
+    {
+      title: 'Home',
+      url: appRouter.home,
+      icon: Home,
+      isVisible: true,
+    },
+    {
+      title: 'Models',
+      url: appRouter.models,
+      icon: UsersRound,
+      isVisible: true,
+    },
+    {
+      title: 'Conversations',
+      url: appRouter.conversations,
+      icon: MessageCircle,
+      isVisible: !!user,
+    },
+  ];
+
+  const creators = [
+    {
+      title: 'Add a nude',
+      url: appRouter.addNudes,
+      icon: Plus,
+    },
+  ];
 
   return (
     <Sidebar>
@@ -72,16 +75,19 @@ export function AppSidebar() {
           <SidebarGroupLabel>Platform</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {platforms.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {platforms.map(
+                (item) =>
+                  item.isVisible && (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton asChild>
+                        <Link href={item.url}>
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ),
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

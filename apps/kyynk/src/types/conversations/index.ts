@@ -4,6 +4,6 @@ export type ConversationType = Pick<
   Conversation,
   'id' | 'createdAt' | 'updatedAt' | 'isArchived'
 > & {
-  participants: Pick<User, 'id' | 'pseudo' | 'profileImageId'>[];
+  participants: Pick<User, 'id' | 'pseudo' | 'profileImageId' | 'slug'>[];
   hasUnreadMessages: boolean;
 };

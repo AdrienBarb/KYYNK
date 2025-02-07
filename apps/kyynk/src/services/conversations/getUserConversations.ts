@@ -16,6 +16,7 @@ export const getUserConversations = async ({ userId }: { userId: string }) => {
           select: {
             id: true,
             pseudo: true,
+            slug: true,
             profileImageId: true,
           },
         },

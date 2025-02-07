@@ -3,6 +3,7 @@ import { auth } from '@/auth';
 import { getUserConversations } from '@/services/conversations/getUserConversations';
 import ConversationList from '@/components/conversations/ConversationList';
 import PageHeader from '@/components/layout/PageHeader';
+
 const MessagesPage = async () => {
   const session = await auth();
 

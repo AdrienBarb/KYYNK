@@ -4,6 +4,7 @@ import { strictlyAuth } from '@/hoc/strictlyAuth';
 import { prisma } from '@/lib/db/client';
 import { errorHandler } from '@/utils/errors/errorHandler';
 import { getUserConversations } from '@/services/conversations/getUserConversations';
+import { errorMessages } from '@/lib/constants/errorMessage';
 
 const conversationSchema = z.object({
   slug: z.string(),
@@ -23,7 +24,10 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
     });
 
     if (!userToTalkWith) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: errorMessages.USER_NOT_FOUND },
+        { status: 404 },
+      );
     }
 
     const existingConversation = await prisma.conversation.findFirst({

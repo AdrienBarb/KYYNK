@@ -3,14 +3,14 @@ import { User } from '@prisma/client';
 import { useUser } from '@/hooks/users/useUser';
 
 const useConversationUsers = (
-  participants: Pick<User, 'id' | 'pseudo' | 'profileImageId'>[],
+  participants: Pick<User, 'id' | 'pseudo' | 'profileImageId' | 'slug'>[],
 ) => {
   const { user } = useUser();
 
   const otherUser = useMemo(() => {
     return (
       participants.find(
-        (p: Pick<User, 'id' | 'pseudo' | 'profileImageId'>) =>
+        (p: Pick<User, 'id' | 'pseudo' | 'profileImageId' | 'slug'>) =>
           p.id !== user?.id,
       ) || null
     );
@@ -19,7 +19,7 @@ const useConversationUsers = (
   const currentUser = useMemo(() => {
     return (
       participants.find(
-        (p: Pick<User, 'id' | 'pseudo' | 'profileImageId'>) =>
+        (p: Pick<User, 'id' | 'pseudo' | 'profileImageId' | 'slug'>) =>
           p.id === user?.id,
       ) || null
     );
