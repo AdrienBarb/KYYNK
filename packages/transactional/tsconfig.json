@@ -1,0 +1,10 @@
+{
+  "extends": "@kyynk/typescript-config",
+  "compilerOptions": {
+    "moduleResolution": "bundler",
+    "module": "esnext",
+    "outDir": "dist"
+  },
+  "include": ["."],
+  "exclude": ["dist", "node_modules"]
+}

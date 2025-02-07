@@ -1,10 +1,5 @@
+import sharedConfig from '@kyynk/tailwind-config';
+
 export const tailwindConfig = {
-  theme: {
-    extend: {
-      colors: {
-        primary: '#cecaff',
-        secondary: '#fff0eb',
-      },
-    },
-  },
+  presets: [sharedConfig],
 };

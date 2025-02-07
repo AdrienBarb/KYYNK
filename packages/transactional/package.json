@@ -8,6 +8,8 @@
     "export": "email export"
   },
   "devDependencies": {
+    "@kyynk/tailwind-config": "workspace:*",
+    "@kyynk/typescript-config": "workspace:*",
     "react-email": "3.0.1"
   },
   "dependencies": {
