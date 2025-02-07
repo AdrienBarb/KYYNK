@@ -15,10 +15,6 @@ const GlobalErrorProvider = () => {
         router.push('/404');
       }
 
-      if (statusCode && statusCode >= 500) {
-        router.push('/500');
-      }
-
       if (statusCode === 401) {
         router.push('/401');
       }
