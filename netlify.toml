@@ -1,0 +1,44 @@
+# Main Kyynk App
+[build]
+base = "apps/kyynk"
+command = "next build"
+publish = ".next"
+
+[build.environment]
+NODE_VERSION = "18"
+NEXT_TELEMETRY_DISABLED = "1"
+
+[[plugins]]
+package = "@netlify/plugin-nextjs"
+
+# Admin Dashboard App
+[context.admin-dashboard]
+base = "apps/admin-dashboard"
+command = "next build"
+publish = ".next"
+
+[context.admin-dashboard.environment]
+NODE_VERSION = "18"
+NEXT_TELEMETRY_DISABLED = "1"
+
+# Build settings
+[build.processing]
+skip_processing = false
+
+[build.processing.css]
+bundle = true
+minify = true
+
+[build.processing.js]
+bundle = true
+minify = true
+
+[build.processing.html]
+pretty_urls = true
+
+[build.processing.images]
+compress = true
+
+# Environment variables will be managed in Netlify UI
+# Add site-specific environment variables there for security
+
