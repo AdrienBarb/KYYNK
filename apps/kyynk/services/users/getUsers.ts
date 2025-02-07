@@ -5,6 +5,15 @@ export const getUsers = async () => {
     const users = await prisma.user.findMany({
       where: {
         isArchived: false,
+        userType: 'creator',
+        isEmailVerified: true,
+        identityVerificationStatus: 'verified',
+        profileImageId: {
+          not: null,
+        },
+        nudesCount: {
+          gt: 0,
+        },
       },
       orderBy: {
         createdAt: 'desc',

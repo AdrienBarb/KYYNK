@@ -41,6 +41,8 @@ model User {
   salesAsSeller              Sale[]             @relation("SellerSales")
   salesAsBuyer               Sale[]             @relation("BuyerSales")
   verificationCodes          VerificationCode[]
+  conversations              Conversation[]     @relation("UserConversations")
+  messages                   Message[]
 }
 
 model UserToken {
@@ -106,6 +108,26 @@ model VerificationCode {
   expireOn  DateTime @default(dbgenerated("now() + interval '24 hours'"))
 }
 
+model Conversation {
+  id           String    @id @default(cuid())
+  participants User[]    @relation("UserConversations")
+  messages     Message[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  isArchived   Boolean   @default(false)
+}
+
+model Message {
+  id             String        @id @default(cuid())
+  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId String
+  sender         User          @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  senderId       String
+  content        String
+  createdAt      DateTime      @default(now())
+  status         MessageStatus @default(sent)
+}
+
 enum UserType {
   member
   creator
@@ -122,4 +144,10 @@ enum VerificationStatus {
   pending
   verified
   rejected
+}
+
+enum MessageStatus {
+  sent
+  delivered
+  read
 }

@@ -15,7 +15,7 @@ import { User } from '@prisma/client';
 const SignUpPage = () => {
   const [userType, setUserType] = useState('');
 
-  const { setUser, user } = useUser();
+  const { refetch, user } = useUser();
 
   const { usePut } = useApi();
 
@@ -23,7 +23,7 @@ const SignUpPage = () => {
 
   const { mutate: editUserType, isPending } = usePut(apiRouter.me, {
     onSuccess: async ({ userType }: Pick<User, 'userType'>) => {
-      setUser({ userType });
+      refetch();
 
       userType === 'member'
         ? router.push(appRouter.preferences)

@@ -1,6 +1,10 @@
-import { LoggedUserType } from '@/types/users';
+import { FetchedUserType, LoggedUserType } from '@/types/users';
 
-export const isUserVerified = ({ user }: { user: LoggedUserType | null }) => {
+export const isUserVerified = ({
+  user,
+}: {
+  user: LoggedUserType | FetchedUserType | null;
+}) => {
   if (!user) {
     return false;
   }

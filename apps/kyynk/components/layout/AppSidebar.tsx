@@ -1,6 +1,12 @@
 'use client';
 
-import { CirclePlus, Home, Plus, UsersRound } from 'lucide-react';
+import {
+  CirclePlus,
+  Home,
+  MessageCircle,
+  Plus,
+  UsersRound,
+} from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -23,13 +29,18 @@ import { isCreator } from '@/utils/users/isCreator';
 const platforms = [
   {
     title: 'Home',
-    url: '/',
+    url: appRouter.home,
     icon: Home,
   },
   {
     title: 'Models',
-    url: '/models',
+    url: appRouter.models,
     icon: UsersRound,
+  },
+  {
+    title: 'Conversations',
+    url: appRouter.conversations,
+    icon: MessageCircle,
   },
 ];
 

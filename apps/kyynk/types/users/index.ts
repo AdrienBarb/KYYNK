@@ -20,3 +20,17 @@ export type LoggedUserType = Pick<
   | 'identityVerificationStatus'
   | 'nudesCount'
 >;
+
+export type FetchedUserType = Pick<
+  User,
+  | 'id'
+  | 'pseudo'
+  | 'slug'
+  | 'userType'
+  | 'description'
+  | 'profileImageId'
+  | 'isArchived'
+  | 'isEmailVerified'
+  | 'identityVerificationStatus'
+  | 'nudesCount'
+>;

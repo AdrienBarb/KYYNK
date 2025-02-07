@@ -1,13 +1,15 @@
 'use client';
 
 import React, { FC } from 'react';
-import { useParams } from 'next/navigation';
-import { User } from '@prisma/client';
+import { useParams, useRouter } from 'next/navigation';
+import { Conversation, User } from '@prisma/client';
 import useApi from '@/lib/hooks/useApi';
 import Avatar from './ui/Avatar';
 import Text from '@/components/ui/Text';
 import OnlineStatus from '@/components/profile/OnlineStatus';
 import Title from '@/components/ui/Title';
+import { Button } from './ui/Button';
+import { useUser } from '@/lib/hooks/useUser';
 
 interface Props {
   initialUserDatas: User;
@@ -15,8 +17,9 @@ interface Props {
 
 const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
   const { slug } = useParams<{ slug: string }>();
-
-  const { useGet } = useApi();
+  const { user: loggedUser } = useUser();
+  const { useGet, usePost } = useApi();
+  const router = useRouter();
 
   const { data: user } = useGet(
     `/api/users/${slug}`,
@@ -24,6 +27,15 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
     {
       initialData: initialUserDatas,
       refetchOnWindowFocus: true,
+    },
+  );
+
+  const { mutate: createConversation, isPending } = usePost(
+    `/api/conversations`,
+    {
+      onSuccess: (newConversation: Conversation) => {
+        router.push(`/account/conversations/${newConversation.id}`);
+      },
     },
   );
 
@@ -38,6 +50,16 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
           <Text className="mt-2 text-center">{user.description}</Text>
           <OnlineStatus currentUser={user} />
         </div>
+      </div>
+      <div className="flex gap-2">
+        {loggedUser && loggedUser?.slug !== slug && (
+          <Button
+            onClick={() => createConversation({ slug })}
+            isLoading={isPending}
+          >
+            Discuss
+          </Button>
+        )}
       </div>
     </div>
   );

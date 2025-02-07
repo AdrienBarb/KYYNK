@@ -32,7 +32,6 @@ export async function generateMetadata({
 
 const UserPage = async ({ params }: { params: { slug: string } }) => {
   const { slug } = params;
-  console.log('🚀 ~ UserPage ~ slug:', slug);
   const t = await getTranslations();
   const session = await auth();
 
@@ -49,14 +48,14 @@ const UserPage = async ({ params }: { params: { slug: string } }) => {
   const nudes = (await getUserNudesById({ userId: user.id })) as NudeType[];
   const nudesWithPermissions = nudes.map((currentNude) =>
     formatNudeWithPermissions(currentNude, session?.user.id),
-  );
+  ) as NudeType[];
 
   return (
     <PageContainer>
       <UserUncompletedProfileBanner />
       <UserProfileTopButtons />
       <UserProfileHeader initialUserDatas={user} />
-      <UserNudes initialNudes={nudesWithPermissions} />
+      <UserNudes initialNudes={nudesWithPermissions} user={user} />
     </PageContainer>
   );
 };

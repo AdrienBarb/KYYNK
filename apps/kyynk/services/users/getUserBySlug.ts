@@ -14,9 +14,11 @@ export const getUserBySlug = async ({ slug }: { slug: string }) => {
         description: true,
         profileImageId: true,
         isArchived: true,
+        isEmailVerified: true,
+        identityVerificationStatus: true,
+        nudesCount: true,
       },
     });
-    console.log('🚀 ~ getUserBySlug ~ user:', user);
 
     return user;
   } catch (error) {

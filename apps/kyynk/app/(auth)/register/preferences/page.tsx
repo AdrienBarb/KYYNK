@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '@/lib/hooks/useUser';
 import { apiRouter } from '@/constants/apiRouter';
 import Title from '@/components/ui/Title';
+import { Button } from '@/components/ui/Button';
 
 const SignUpPage = () => {
   const t = useTranslations();
@@ -61,15 +62,15 @@ const SignUpPage = () => {
           })}
         </div>
 
-        <FullButton
-          customStyles={{ width: '100%' }}
+        <Button
+          className="w-full"
           isLoading={isPending}
           onClick={() => {
             editUserPreferences({ preferences: selectedTags });
           }}
         >
           {t('common.continue')}
-        </FullButton>
+        </Button>
       </div>
     </PageContainer>
   );
