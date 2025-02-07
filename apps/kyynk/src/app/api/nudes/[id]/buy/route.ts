@@ -63,8 +63,16 @@ export const POST = strictlyAuth(async (req: NextRequest, { params }) => {
         data: {
           creditAmount: nude.creditPrice,
           type: 'nude',
-          sellerId: nude.userId,
-          buyerId: userId,
+          seller: {
+            connect: {
+              id: nude.userId!,
+            },
+          },
+          buyer: {
+            connect: {
+              id: userId!,
+            },
+          },
         },
       }),
     ]);
