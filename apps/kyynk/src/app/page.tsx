@@ -1,10 +1,10 @@
 import { genPageMetadata } from '@/app/seo';
-import AppFAQ from '@/components/AppFAQ';
-import Landing from '@/components/Landing';
-import LandingFeatures from '@/components/LandingFeatures';
+import AppFAQ from '@/components/home/AppFAQ';
+import Landing from '@/components/home/Landing';
+import LandingFeatures from '@/components/home/LandingFeatures';
 import Footer from '@/components/layout/Footer';
 import NavigationBar from '@/components/layout/NavigationBar';
-import ModelOffer from '@/components/ModelOffer';
+import ModelOffer from '@/components/home/ModelOffer';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 

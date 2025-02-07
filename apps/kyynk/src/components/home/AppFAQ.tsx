@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import LandingHeader from "./LandingHeader";
-import { useTranslations } from "next-intl";
+import React, { FC } from 'react';
+import LandingHeader from '@/components/home/LandingHeader';
+import { useTranslations } from 'next-intl';
 
 interface Props {}
 
@@ -10,23 +10,23 @@ const AppFAQ: FC<Props> = ({}) => {
   const data = {
     rows: [
       {
-        title: t("home.question1"),
-        content: t("home.content1"),
+        title: t('home.question1'),
+        content: t('home.content1'),
       },
       {
-        title: t("home.question2"),
-        content: t("home.content2"),
+        title: t('home.question2'),
+        content: t('home.content2'),
       },
       {
-        title: t("home.question3"),
-        content: t("home.content3"),
+        title: t('home.question3'),
+        content: t('home.content3'),
       },
     ],
   };
 
   return (
     <section className="max-w-4xl mx-auto py-16 px-4">
-      <LandingHeader title={t("home.faqTitle")} />
+      <LandingHeader title={t('home.faqTitle')} />
       <div className="flex flex-col gap-4">
         {data.rows.map((item, index) => (
           <div key={index} className="bg-primary rounded-md p-4">

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import LandingHeader from './LandingHeader';
-import { Button } from './ui/Button';
+import LandingHeader from '@/components/home/LandingHeader';
+import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 
 const ModelOffer = () => {

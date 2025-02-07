@@ -2,12 +2,12 @@
 
 import React, { FC, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { Button } from './ui/Button'; // Import the default Button
+import { Button } from './ui/Button';
 import useApi from '@/hooks/requests/useApi';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/hooks/users/useUser';
 import { appRouter } from '@/constants/appRouter';
-import { Input } from './ui/Input'; // Import the Input component
+import { Input } from './ui/Input';
 
 const VerificationCodeButton = ({}) => {
   const [code, setCode] = useState('');

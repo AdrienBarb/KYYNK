@@ -1,12 +1,15 @@
-import React, { FC } from "react";
-import styles from "../../styles/NoResults.module.scss";
+import React, { FC } from 'react';
 
 interface Props {
   text: string;
 }
 
 const NoResults: FC<Props> = ({ text }) => {
-  return <div className={styles.container}>{text}</div>;
+  return (
+    <div className="text-center p-12 font-light font-karla text-base text-custom-black">
+      {text}
+    </div>
+  );
 };
 
 export default NoResults;

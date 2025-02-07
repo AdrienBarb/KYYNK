@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { useErrorStore } from '@/stores/ErrorStore';
 
-const GlobalErrorHandler = () => {
+const GlobalErrorProvider = () => {
   const router = useRouter();
   const { isError, statusCode, errorMessage, clearError } = useErrorStore();
 
@@ -34,4 +34,4 @@ const GlobalErrorHandler = () => {
   return <></>;
 };
 
-export default GlobalErrorHandler;
+export default GlobalErrorProvider;

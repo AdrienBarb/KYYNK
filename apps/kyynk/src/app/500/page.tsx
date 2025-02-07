@@ -1,11 +1,10 @@
-import React from "react";
-import { useTranslations } from "next-intl";
-import PageCenterMessage from "@/components/PageCenterMessage";
-import { genPageMetadata } from "@/app/seo";
-import ReportBugForm from "@/components/TypeForms/ReportBugForm";
+import React from 'react';
+import { useTranslations } from 'next-intl';
+import PageCenterMessage from '@/components/PageCenterMessage';
+import { genPageMetadata } from '@/app/seo';
 
 export const metadata = genPageMetadata({
-  title: "500",
+  title: '500',
   description:
     "Une erreur interne du serveur s'est produite. Veuillez réessayer ultérieurement ou contacter notre équipe de support.",
 });
@@ -13,11 +12,7 @@ export const metadata = genPageMetadata({
 const ErrorServerPage = () => {
   const t = useTranslations();
 
-  return (
-    <PageCenterMessage text={t("error.error_500_text")}>
-      <ReportBugForm />
-    </PageCenterMessage>
-  );
+  return <PageCenterMessage text={t('error.error_500_text')} />;
 };
 
 export default ErrorServerPage;

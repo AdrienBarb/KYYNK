@@ -3,10 +3,8 @@ import '@/styles/globals.scss';
 import '@/styles/tailwind.css';
 import siteMetadata from '@/data/siteMetadata';
 import Script from 'next/script';
-import CustomQueryClientProvider from '@/components/Common/CustomQueryClientProvider';
-import CustomSessionProvider from '@/components/Common/CustomSessionProvider';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
-import GlobalErrorHandler from '@/components/Common/GlobalErrorHandler';
+import GlobalErrorProvider from '@/components/provider/GlobalErrorProvider';
 import { Toaster } from 'react-hot-toast';
 import { FC, ReactNode } from 'react';
 import '@fortawesome/fontawesome-svg-core/styles.css';
@@ -16,6 +14,8 @@ import clsx from 'clsx';
 import GlobalConfig from '@/components/GlobalConfig';
 import Fathom from '@/components/Fathom';
 import { getLocale, getMessages } from 'next-intl/server';
+import CustomQueryClientProvider from '@/components/provider/CustomQueryClientProvider';
+import CustomSessionProvider from '@/components/provider/CustomSessionProvider';
 
 config.autoAddCss = false;
 
@@ -113,7 +113,7 @@ const RootLayout: FC<Props> = async ({ children }) => {
                 <Toaster position="bottom-center" />
                 <GlobalConfig>{children}</GlobalConfig>
                 <Fathom />
-                <GlobalErrorHandler />
+                <GlobalErrorProvider />
               </body>
             </html>
           </NextIntlClientProvider>

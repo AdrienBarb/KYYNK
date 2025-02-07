@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import PageContainer from '@/components/PageContainer';
 import { useTranslations } from 'next-intl';
-import FullButton from '@/components/Buttons/FullButton';
 import useApi from '@/hooks/requests/useApi';
 import { TAGS } from '@/constants/constants';
 import { useRouter } from 'next/navigation';
