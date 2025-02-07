@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import styles from '@/styles/SalesTable.module.scss';
 import { useTranslations } from 'next-intl';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import Text from '@/components/ui/Text';
 import { Invoice } from '@/types/models/Invoice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

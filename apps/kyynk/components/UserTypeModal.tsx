@@ -8,7 +8,7 @@ import Title from './Title';
 import Text from '@/components/ui/Text';
 import clsx from 'clsx';
 import SimpleButton from './Buttons/SimpleButton';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';

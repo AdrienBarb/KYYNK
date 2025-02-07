@@ -2,11 +2,11 @@
 
 import React, { useState } from 'react';
 import PageContainer from '@/components/PageContainer';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
-import { useUser } from '@/lib/hooks/useUser';
+import { useUser } from '@/hooks/users/useUser';
 import { appRouter } from '@/constants/appRouter';
 import { apiRouter } from '@/constants/apiRouter';
 import Title from '@/components/ui/Title';

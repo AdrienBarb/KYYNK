@@ -23,7 +23,7 @@ import { NavUser } from './NavUser';
 import Link from 'next/link';
 import { appRouter } from '@/constants/appRouter';
 import { Button } from '../ui/Button';
-import { useUser } from '@/lib/hooks/useUser';
+import { useUser } from '@/hooks/users/useUser';
 import { isCreator } from '@/utils/users/isCreator';
 
 const platforms = [

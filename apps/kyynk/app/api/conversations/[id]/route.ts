@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { strictlyAuth } from '@/hoc/strictlyAuth';
-import { errorHandler } from '@/lib/utils/errors/errorHandler';
+import { errorHandler } from '@/utils/errors/errorHandler';
 import { getConversationById } from '@/services/conversations/getConversationById';
 import { errorMessages } from '@/lib/constants/errorMessage';
 

@@ -1,12 +1,8 @@
 import axios from 'axios';
-import { store } from '../../store/store';
-import {
-  setToastError,
-  setStatusCode,
-} from '../../features/error-handling/errorHandlingSlice';
 import { getSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
+import { useErrorStore } from '@/stores/ErrorStore';
 
 const isServer = typeof window === 'undefined';
 
@@ -17,50 +13,51 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log('🚀 ~ error:', error);
     const errorStatus = error?.response?.status;
+    const setStatusCode = useErrorStore.getState().setStatusCode;
+    const setErrorMessage = useErrorStore.getState().setErrorMessage;
 
     if (errorStatus === 404) {
       if (isServer) {
         redirect('/404');
       } else {
-        store.dispatch(setStatusCode(errorStatus));
+        setStatusCode(errorStatus);
       }
 
-      return Promise.reject(error.response?.data?.message || 'not_found');
+      return Promise.reject(error.response?.data?.message || 'Not found');
     }
 
     if (errorStatus >= 500) {
-      let message = error.response?.data?.message || 'server_error';
+      let message = error.response?.data?.message || 'Server error';
       if (isServer) {
         redirect('/500');
       } else {
-        store.dispatch(setToastError(message));
-        store.dispatch(setStatusCode(errorStatus));
+        setErrorMessage(message);
+        setStatusCode(errorStatus);
       }
       return Promise.reject(message);
     }
 
     if (errorStatus === 400) {
-      let message = error.response?.data?.message || 'bad_request';
+      let message = error.response?.data?.message || 'Bad request';
 
       if (isServer) {
         redirect('/500');
       } else {
-        store.dispatch(setToastError(message));
-        store.dispatch(setStatusCode(errorStatus));
+        setErrorMessage(message);
+        setStatusCode(errorStatus);
       }
 
       return Promise.reject(message);
     }
 
     if (errorStatus === 401) {
-      let message = error.response?.data?.message || 'need_login';
+      let message = error.response?.data?.message || 'Need to login';
       if (isServer) {
         redirect('/401');
       } else {
-        store.dispatch(setStatusCode(errorStatus));
-        store.dispatch(setToastError(message));
+        setStatusCode(errorStatus);
+        setErrorMessage(message);
       }
       return Promise.reject(message);
     }
@@ -72,18 +69,6 @@ axiosInstance.interceptors.response.use(
 );
 
 axiosInstance.interceptors.request.use(async (config) => {
-  let session;
-
-  if (isServer) {
-    session = await auth();
-  } else {
-    session = await getSession();
-  }
-
-  if (session?.user?.accessToken) {
-    config.headers['Authorization'] = `Bearer ${session?.user?.accessToken}`;
-  }
-
   if (config.data instanceof FormData) {
     delete config.headers['Content-Type'];
   }

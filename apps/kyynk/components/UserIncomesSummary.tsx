@@ -5,7 +5,7 @@ import styles from '@/styles/UserIncomesSummary.module.scss';
 import HeaderSection from './HeaderSection';
 import SimpleButton from './Buttons/SimpleButton';
 import { useTranslations } from 'next-intl';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import { User } from '@/types/models/User';
 import toast from 'react-hot-toast';
 import Text from '@/components/ui/Text';

@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import React, { FC, useEffect, useState } from "react";
-import styles from "@/styles/UserSecondaryProfileImageGallery.module.scss";
-import S3Image from "./S3Image";
-import { Media } from "@/types/models/Media";
-import { useParams } from "next/navigation";
-import useApi from "@/lib/hooks/useApi";
-import UserSecondaryProfileImage from "./UserSecondaryProfileImage";
+import React, { FC, useEffect, useState } from 'react';
+import styles from '@/styles/UserSecondaryProfileImageGallery.module.scss';
+import S3Image from './S3Image';
+import { Media } from '@/types/models/Media';
+import { useParams } from 'next/navigation';
+import useApi from '@/hooks/requests/useApi';
+import UserSecondaryProfileImage from './UserSecondaryProfileImage';
 
 interface Props {
   images: Media[];

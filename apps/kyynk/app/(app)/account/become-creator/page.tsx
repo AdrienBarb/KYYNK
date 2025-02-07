@@ -3,8 +3,8 @@
 import React, { useEffect } from 'react';
 import AccountVerification from '@/components/AccountVerification';
 import toast from 'react-hot-toast';
-import useApi from '@/lib/hooks/useApi';
-import { useUser } from '@/lib/hooks/useUser';
+import useApi from '@/hooks/requests/useApi';
+import { useUser } from '@/hooks/users/useUser';
 import { isCreator } from '@/utils/users/isCreator';
 import AppMessage from '@/components/AppMessage';
 import { Button } from '@/components/ui/Button';

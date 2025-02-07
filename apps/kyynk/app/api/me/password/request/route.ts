@@ -1,7 +1,7 @@
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { prisma } from '@/lib/db/client';
 import { resendClient } from '@/lib/resend/resendClient';
-import { errorHandler } from '@/lib/utils/errors/errorHandler';
+import { errorHandler } from '@/utils/errors/errorHandler';
 import { randomBytes } from 'crypto';
 import { NextResponse, NextRequest } from 'next/server';
 import ResetPasswordEmail from '@kyynk/transactional/emails/ResetPasswordEmail';

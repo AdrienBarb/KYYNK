@@ -4,7 +4,7 @@ import React, { FC, useEffect, useState } from 'react';
 import PaddingContainer from '@/components/PaddingContainer';
 import ContainerWithBackArrow from '@/components/ContainerWithBackArrow';
 import { useTranslations } from 'next-intl';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import FullButton from '@/components/Buttons/FullButton';
 import { TAGS } from '@/constants/constants';
 import { useRouter } from 'next/navigation';

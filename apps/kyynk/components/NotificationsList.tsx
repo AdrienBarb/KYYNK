@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import React, { FC, useEffect, useMemo, useRef, useState } from "react";
-import styles from "@/styles/NotificationsList.module.scss";
-import useApi from "@/lib/hooks/useApi";
-import { Notification } from "@/types/models/NotificationModel";
-import NotificationCard from "./NotificationCard";
-import { useAppDispatch } from "@/store/store";
-import { setUnreadNotifications } from "@/features/notification/notificationSlice";
-import { USER_INAPP_NOTIFICATION } from "@/constants/constants";
-import { useTranslations } from "next-intl";
-import FiltersWrapper from "./FiltersWrapper";
-import FilterSelect from "./FilterSelect";
-import AppMessage from "./AppMessage";
-import dynamic from "next/dynamic";
-import { useIntersectionObserver } from "@/lib/hooks/useIntersectionObserver";
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
+import styles from '@/styles/NotificationsList.module.scss';
+import useApi from '@/hooks/requests/useApi';
+import { Notification } from '@/types/models/NotificationModel';
+import NotificationCard from './NotificationCard';
+import { useAppDispatch } from '@/store/store';
+import { setUnreadNotifications } from '@/features/notification/notificationSlice';
+import { USER_INAPP_NOTIFICATION } from '@/constants/constants';
+import { useTranslations } from 'next-intl';
+import FiltersWrapper from './FiltersWrapper';
+import FilterSelect from './FilterSelect';
+import AppMessage from './AppMessage';
+import dynamic from 'next/dynamic';
+import { useIntersectionObserver } from '@/lib/hooks/useIntersectionObserver';
 
-const Loader = dynamic(() => import("@/components/Loader"), { ssr: false });
+const Loader = dynamic(() => import('@/components/Loader'), { ssr: false });
 
 interface Props {
   initialNotificationsData: {
@@ -26,13 +26,13 @@ interface Props {
 
 const NotificationsList: FC<Props> = ({ initialNotificationsData }) => {
   const [notificationsList, setNotificationsList] = useState(
-    initialNotificationsData.notifications
+    initialNotificationsData.notifications,
   );
 
-  const [notificationFilters, setNotificationFilters] = useState<string>("");
+  const [notificationFilters, setNotificationFilters] = useState<string>('');
   const queryKey = useMemo(
-    () => ["notificationList", { notificationFilters }],
-    [notificationFilters]
+    () => ['notificationList', { notificationFilters }],
+    [notificationFilters],
   );
   const dispatch = useAppDispatch();
   const t = useTranslations();
@@ -42,7 +42,7 @@ const NotificationsList: FC<Props> = ({ initialNotificationsData }) => {
   const { data, fetchNextPage, hasNextPage, refetch, isFetchingNextPage } =
     useInfinite(
       queryKey,
-      "/api/notifications",
+      '/api/notifications',
       { notificationType: notificationFilters },
       {
         getNextPageParam: (lastPage: any) => lastPage.nextCursor || undefined,
@@ -57,11 +57,11 @@ const NotificationsList: FC<Props> = ({ initialNotificationsData }) => {
         },
         onSuccess: (data: any) => {
           setNotificationsList(
-            data?.pages.flatMap((page: any) => page.notifications)
+            data?.pages.flatMap((page: any) => page.notifications),
           );
         },
         refetchOnWindowFocus: false,
-      }
+      },
     );
 
   const loadMoreRef = useRef(null);
@@ -79,7 +79,7 @@ const NotificationsList: FC<Props> = ({ initialNotificationsData }) => {
         refetch();
         dispatch(setUnreadNotifications(false));
       },
-    }
+    },
   );
 
   useEffect(() => {
@@ -90,16 +90,16 @@ const NotificationsList: FC<Props> = ({ initialNotificationsData }) => {
     value: {
       value: string;
       label: string;
-    } | null
+    } | null,
   ) => {
-    setNotificationFilters(value ? value.value : "");
+    setNotificationFilters(value ? value.value : '');
   };
 
   if (notificationsList.length === 0) {
     return (
       <AppMessage
-        title={t("error.noNotifications")}
-        text={t("common.noNotificationFound")}
+        title={t('error.noNotifications')}
+        text={t('common.noNotificationFound')}
       />
     );
   }
@@ -109,7 +109,7 @@ const NotificationsList: FC<Props> = ({ initialNotificationsData }) => {
       <FiltersWrapper>
         <FilterSelect
           handleChange={handleNotificationChange}
-          placeholder={t("notification.labelFilter")}
+          placeholder={t('notification.labelFilter')}
           options={USER_INAPP_NOTIFICATION.map((el) => {
             return { value: el, label: t(`notification.${el}`) };
           })}
@@ -125,10 +125,10 @@ const NotificationsList: FC<Props> = ({ initialNotificationsData }) => {
       </ul>
 
       <div
-        style={{ height: "4rem", display: hasNextPage ? "flex" : "none" }}
+        style={{ height: '4rem', display: hasNextPage ? 'flex' : 'none' }}
         ref={loadMoreRef}
       >
-        {isFetchingNextPage && <Loader style={{ color: "#cecaff" }} />}
+        {isFetchingNextPage && <Loader style={{ color: '#cecaff' }} />}
       </div>
     </div>
   );

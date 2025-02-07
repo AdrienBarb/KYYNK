@@ -11,9 +11,9 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import { useRouter } from 'next/navigation';
-import { useUser } from '@/lib/hooks/useUser';
+import { useUser } from '@/hooks/users/useUser';
 import '@uploadcare/react-uploader/core.css';
 import Avatar from './ui/Avatar';
 import { Button } from '@/components/ui/Button';

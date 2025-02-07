@@ -6,7 +6,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import styles from '@/styles/CreatorAddMenu.module.scss';
 import { Popover } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { useUser } from '@/lib/hooks/useUser';
+import { useUser } from '@/hooks/users/useUser';
 import { appRouter } from '@/constants/appRouter';
 
 const UserAddMenu = () => {

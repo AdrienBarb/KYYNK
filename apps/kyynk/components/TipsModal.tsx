@@ -1,15 +1,15 @@
-import React, { FC, useState } from "react";
-import styles from "@/styles/TipsModal.module.scss";
-import CustomModal from "@/components/Modal";
-import { useTranslations } from "next-intl";
-import SimpleButton from "./Buttons/SimpleButton";
-import useApi from "@/lib/hooks/useApi";
-import ConfirmationModal from "./ConfirmationModal";
-import useNavigateToPayment from "@/lib/hooks/useNavigateToPayment";
-import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
-import { RootStateType, useAppDispatch } from "@/store/store";
-import { getCreditAmount } from "@/features/user/userSlice";
+import React, { FC, useState } from 'react';
+import styles from '@/styles/TipsModal.module.scss';
+import CustomModal from '@/components/Modal';
+import { useTranslations } from 'next-intl';
+import SimpleButton from './Buttons/SimpleButton';
+import useApi from '@/hooks/requests/useApi';
+import ConfirmationModal from './ConfirmationModal';
+import useNavigateToPayment from '@/lib/hooks/useNavigateToPayment';
+import toast from 'react-hot-toast';
+import { useSelector } from 'react-redux';
+import { RootStateType, useAppDispatch } from '@/store/store';
+import { getCreditAmount } from '@/features/user/userSlice';
 
 interface Props {
   open: boolean;
@@ -47,10 +47,10 @@ const TipsModal: FC<Props> = ({ open, setOpen, userId }) => {
     onSuccess: (creditAmount) => {
       dispatch(getCreditAmount());
       toast(
-        t("common.youSendCreditAmount", { creditAmount: creditAmount / 100 }),
+        t('common.youSendCreditAmount', { creditAmount: creditAmount / 100 }),
         {
-          icon: "❤️",
-        }
+          icon: '❤️',
+        },
       );
       setOpen(false);
     },
@@ -74,7 +74,7 @@ const TipsModal: FC<Props> = ({ open, setOpen, userId }) => {
         <div className={styles.container} data-id="tips-modal">
           <div className={styles.creditWrapper}>
             <span className={styles.creditlabel}>
-              {t("common.youreGonnaSend")}
+              {t('common.youreGonnaSend')}
             </span>
             <input
               type="number"
@@ -85,7 +85,7 @@ const TipsModal: FC<Props> = ({ open, setOpen, userId }) => {
               step={1}
               pattern="\d+"
             />
-            <span className={styles.creditlabel}>{t("common.credits")}</span>
+            <span className={styles.creditlabel}>{t('common.credits')}</span>
           </div>
           <div className={styles.wrapper}>
             {tipsValue.map((currentTip, index) => {
@@ -102,10 +102,10 @@ const TipsModal: FC<Props> = ({ open, setOpen, userId }) => {
           </div>
           <SimpleButton
             onClick={handleSendTips}
-            customStyles={{ padding: "0.6rem 1rem" }}
+            customStyles={{ padding: '0.6rem 1rem' }}
             isLoading={isLoading}
           >
-            {t("profile.sendTips")}
+            {t('profile.sendTips')}
           </SimpleButton>
         </div>
       </CustomModal>
@@ -113,9 +113,9 @@ const TipsModal: FC<Props> = ({ open, setOpen, userId }) => {
         open={openCreditModal}
         setOpen={setOpenCreditModal}
         confirmAction={navigateToPayment}
-        title={t("common.shouldByCredits")}
-        text={t("common.notEnoughCredit")}
-        buttonText={t("common.buyCredits")}
+        title={t('common.shouldByCredits')}
+        text={t('common.notEnoughCredit')}
+        buttonText={t('common.buyCredits')}
       />
     </>
   );

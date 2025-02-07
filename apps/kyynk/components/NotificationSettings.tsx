@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState, ChangeEvent } from "react";
-import styles from "@/styles/UserSettings.module.scss";
-import { Divider, Switch } from "@mui/material";
-import { USER_INAPP_NOTIFICATION, Notification } from "@/constants/constants";
-import { useTranslations } from "next-intl";
-import SettingSectionHeader from "./SettingSectionHeader";
-import useApi from "@/lib/hooks/useApi";
-import { User } from "@/types/models/User";
+import React, { useEffect, useState, ChangeEvent } from 'react';
+import styles from '@/styles/UserSettings.module.scss';
+import { Divider, Switch } from '@mui/material';
+import { USER_INAPP_NOTIFICATION, Notification } from '@/constants/constants';
+import { useTranslations } from 'next-intl';
+import SettingSectionHeader from './SettingSectionHeader';
+import useApi from '@/hooks/requests/useApi';
+import { User } from '@/types/models/User';
 
 const NotificationSettings = () => {
   //traduction
@@ -33,7 +33,7 @@ const NotificationSettings = () => {
   }, []);
 
   const { mutate: editEmailNotification } = usePut(
-    "/api/users/email-notification",
+    '/api/users/email-notification',
     {
       onSuccess: ({ emailNotification }) => {
         if (currentUser) {
@@ -43,11 +43,11 @@ const NotificationSettings = () => {
           });
         }
       },
-    }
+    },
   );
 
   const { mutate: editInappNotification } = usePut(
-    "/api/users/inapp-notification",
+    '/api/users/inapp-notification',
     {
       onSuccess: ({ inappNotification }) => {
         if (currentUser) {
@@ -57,11 +57,11 @@ const NotificationSettings = () => {
           });
         }
       },
-    }
+    },
   );
 
   const handleEmailNotificationChange = (
-    event: ChangeEvent<HTMLInputElement>
+    event: ChangeEvent<HTMLInputElement>,
   ) => {
     editEmailNotification({ emailNotification: event.target.checked });
   };
@@ -76,7 +76,7 @@ const NotificationSettings = () => {
     <div className={styles.container}>
       <div className={styles.flex}>
         <SettingSectionHeader
-          title={t("settings.email_notification")}
+          title={t('settings.email_notification')}
           type="main"
         />
         <Switch
@@ -84,20 +84,20 @@ const NotificationSettings = () => {
           checked={currentUser?.emailNotification || false}
           onChange={(e) => handleEmailNotificationChange(e)}
           sx={{
-            color: "#Cecaff !important",
-            ".Mui-checked": {
-              color: "#Cecaff !important",
+            color: '#Cecaff !important',
+            '.Mui-checked': {
+              color: '#Cecaff !important',
             },
-            ".MuiSwitch-track": {
-              backgroundColor: "#Cecaff !important",
+            '.MuiSwitch-track': {
+              backgroundColor: '#Cecaff !important',
             },
           }}
         />
       </div>
       <Divider sx={{ my: 2 }} />
       <SettingSectionHeader
-        title={t("settings.inapp_notification")}
-        subTitle={t("settings.inapp_notification_description")}
+        title={t('settings.inapp_notification')}
+        subTitle={t('settings.inapp_notification_description')}
         type="main"
       />
       <div className={styles.carrierContainer}>
@@ -115,20 +115,20 @@ const NotificationSettings = () => {
                     checked={
                       Boolean(
                         currentUser?.inappNotification?.includes(
-                          currentNotification
-                        )
+                          currentNotification,
+                        ),
                       ) || false
                     }
                     onChange={(e) =>
                       handleInappNotificationChange(currentNotification)
                     }
                     sx={{
-                      color: "#Cecaff !important",
-                      ".Mui-checked": {
-                        color: "#Cecaff !important",
+                      color: '#Cecaff !important',
+                      '.Mui-checked': {
+                        color: '#Cecaff !important',
                       },
-                      ".MuiSwitch-track": {
-                        backgroundColor: "#Cecaff !important",
+                      '.MuiSwitch-track': {
+                        backgroundColor: '#Cecaff !important',
                       },
                     }}
                   />
@@ -136,7 +136,7 @@ const NotificationSettings = () => {
                 <Divider sx={{ my: 2 }} />
               </>
             );
-          }
+          },
         )}
       </div>
     </div>

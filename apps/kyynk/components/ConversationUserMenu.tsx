@@ -1,11 +1,11 @@
-import React, { FC } from "react";
-import { useTranslations } from "next-intl";
-import { useParams } from "next/navigation";
-import DotMenuContainer from "./Common/Menu/DotMenuContainer";
-import MenuElement from "./Common/Menu/MenuElement";
-import useApi from "@/lib/hooks/useApi";
-import { Conversation } from "@/types/models/Conversation";
-import { User } from "@/types/models/User";
+import React, { FC } from 'react';
+import { useTranslations } from 'next-intl';
+import { useParams } from 'next/navigation';
+import DotMenuContainer from './Common/Menu/DotMenuContainer';
+import MenuElement from './Common/Menu/MenuElement';
+import useApi from '@/hooks/requests/useApi';
+import { Conversation } from '@/types/models/Conversation';
+import { User } from '@/types/models/User';
 
 interface Props {
   conversation: Conversation;
@@ -34,7 +34,7 @@ const ConversationUserMenu: FC<Props> = ({
           blockedUsers: data,
         });
       },
-    }
+    },
   );
 
   const handleMemberBlocking = () => {
@@ -45,8 +45,8 @@ const ConversationUserMenu: FC<Props> = ({
     <DotMenuContainer>
       <MenuElement onClick={handleMemberBlocking}>
         {conversation.blockedUsers?.includes(user._id)
-          ? t("common.unlock")
-          : t("common.lock")}
+          ? t('common.unlock')
+          : t('common.lock')}
       </MenuElement>
     </DotMenuContainer>
   );

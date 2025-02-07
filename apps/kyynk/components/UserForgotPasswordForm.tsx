@@ -7,7 +7,7 @@ import styles from '@/styles/Form.module.scss';
 import CustomTextField from '@/components/Inputs/TextField';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import { Button } from './ui/Button';
 import { apiRouter } from '@/constants/apiRouter';
 

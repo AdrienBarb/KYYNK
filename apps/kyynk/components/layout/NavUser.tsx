@@ -22,7 +22,7 @@ import {
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import toast from 'react-hot-toast';
-import { useUser } from '@/lib/hooks/useUser';
+import { useUser } from '@/hooks/users/useUser';
 import { appRouter } from '@/constants/appRouter';
 
 export function NavUser() {

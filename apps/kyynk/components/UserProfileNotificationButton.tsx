@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import React, { FC } from "react";
-import { useParams } from "next/navigation";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import ProfileButton from "@/components/ProfileButton";
-import { useTranslations } from "next-intl";
-import { useSession } from "next-auth/react";
-import { User } from "@/types/models/User";
-import useApi from "@/lib/hooks/useApi";
-import useRedirectToLoginPage from "@/lib/hooks/useRedirectToLoginPage";
+import React, { FC } from 'react';
+import { useParams } from 'next/navigation';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import ProfileButton from '@/components/ProfileButton';
+import { useTranslations } from 'next-intl';
+import { useSession } from 'next-auth/react';
+import { User } from '@/types/models/User';
+import useApi from '@/hooks/requests/useApi';
+import useRedirectToLoginPage from '@/lib/hooks/useRedirectToLoginPage';
 
 interface Props {
   currentUser: User;
@@ -33,7 +33,7 @@ const UserProfileNotificationButton: FC<Props> = ({
 
   const { usePost } = useApi();
   const { mutate: notificationSubscribe, isLoading } = usePost(
-    "/api/users/notification-subscribe",
+    '/api/users/notification-subscribe',
     {
       onSuccess: (data) => {
         setCurrentUser({
@@ -41,16 +41,16 @@ const UserProfileNotificationButton: FC<Props> = ({
           notificationSubscribers: data,
         });
       },
-    }
+    },
   );
 
   const IS_SUBSCRIBE = Boolean(
     session?.user?.id &&
-      currentUser.notificationSubscribers.includes(session?.user?.id)
+      currentUser.notificationSubscribers.includes(session?.user?.id),
   );
 
   const handleNotificationSubscribe = () => {
-    if (status === "unauthenticated") {
+    if (status === 'unauthenticated') {
       redirectToLoginPage();
       return;
     }
@@ -69,8 +69,8 @@ const UserProfileNotificationButton: FC<Props> = ({
         dataId="profile-follow-btn"
       >
         {IS_SUBSCRIBE
-          ? t("profile.popover_desactive_notification")
-          : t("profile.popover_active_notification")}
+          ? t('profile.popover_desactive_notification')
+          : t('profile.popover_active_notification')}
       </ProfileButton>
     </div>
   );

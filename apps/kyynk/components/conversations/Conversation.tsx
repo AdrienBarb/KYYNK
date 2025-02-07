@@ -3,7 +3,7 @@
 import React, { useState, useEffect, FC, useMemo, useRef } from 'react';
 import { useChatScroll } from '@/lib/hooks/useChatScroll';
 import { useParams } from 'next/navigation';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import { ConversationType } from '@/types/conversations';
 import { Message } from '@prisma/client';
 import useConversationUsers from '@/hooks/conversations/useConversationUsers';

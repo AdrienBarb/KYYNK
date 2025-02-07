@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import React, { FC, useEffect, useMemo, useRef, useState } from "react";
-import styles from "@/styles/NudesExplore.module.scss";
-import { Nude } from "@/types/models/Nude";
-import NudeCard from "./NudeCard";
-import useApi from "@/lib/hooks/useApi";
-import { useSession } from "next-auth/react";
-import { useTranslations } from "next-intl";
-import NoResults from "./Common/NoResults";
-import FilterSelect from "./FilterSelect";
-import { TAGS, tagList } from "@/constants/constants";
-import FiltersWrapper from "./FiltersWrapper";
-import dynamic from "next/dynamic";
-import { useIntersectionObserver } from "@/lib/hooks/useIntersectionObserver";
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
+import styles from '@/styles/NudesExplore.module.scss';
+import { Nude } from '@/types/models/Nude';
+import NudeCard from './NudeCard';
+import useApi from '@/hooks/requests/useApi';
+import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+import NoResults from './Common/NoResults';
+import FilterSelect from './FilterSelect';
+import { TAGS, tagList } from '@/constants/constants';
+import FiltersWrapper from './FiltersWrapper';
+import dynamic from 'next/dynamic';
+import { useIntersectionObserver } from '@/lib/hooks/useIntersectionObserver';
 
 interface Props {
   initialNudesDatas: {
@@ -21,7 +21,7 @@ interface Props {
   };
 }
 
-const Loader = dynamic(() => import("@/components/Loader"), { ssr: false });
+const Loader = dynamic(() => import('@/components/Loader'), { ssr: false });
 
 const NudesExplore: FC<Props> = ({ initialNudesDatas }) => {
   const [filters, setFilters] = useState<{
@@ -29,13 +29,13 @@ const NudesExplore: FC<Props> = ({ initialNudesDatas }) => {
     isFree: string | null;
     tag: string | null;
   }>({
-    state: "",
-    isFree: "",
-    tag: "",
+    state: '',
+    isFree: '',
+    tag: '',
   });
   const t = useTranslations();
   const [globalLoading, setGlobalLoading] = useState(false);
-  const queryKey = useMemo(() => ["exploreList", { filters }], [filters]);
+  const queryKey = useMemo(() => ['exploreList', { filters }], [filters]);
   const [nudeList, setNudeList] = useState<Nude[]>(initialNudesDatas.nudes);
 
   const { data: session } = useSession();
@@ -43,7 +43,7 @@ const NudesExplore: FC<Props> = ({ initialNudesDatas }) => {
   const { useInfinite } = useApi();
   const { fetchNextPage, hasNextPage, isFetchingNextPage } = useInfinite(
     queryKey,
-    "/api/nudes",
+    '/api/nudes',
     filters,
     {
       getNextPageParam: (lastPage: any) => lastPage.nextCursor || undefined,
@@ -61,7 +61,7 @@ const NudesExplore: FC<Props> = ({ initialNudesDatas }) => {
         setGlobalLoading(false);
       },
       refetchOnWindowFocus: false,
-    }
+    },
   );
 
   const loadMoreRef = useRef(null);
@@ -73,7 +73,7 @@ const NudesExplore: FC<Props> = ({ initialNudesDatas }) => {
   });
 
   const handleSelectStateChange = (
-    value: { value: string; label: string } | null
+    value: { value: string; label: string } | null,
   ) => {
     setGlobalLoading(true);
     setFilters({
@@ -83,7 +83,7 @@ const NudesExplore: FC<Props> = ({ initialNudesDatas }) => {
   };
 
   const handleSelectTypeChange = (
-    value: { value: string; label: string } | null
+    value: { value: string; label: string } | null,
   ) => {
     setGlobalLoading(true);
     setFilters({
@@ -96,7 +96,7 @@ const NudesExplore: FC<Props> = ({ initialNudesDatas }) => {
     value: {
       value: string;
       label: string;
-    } | null
+    } | null,
   ) => {
     setGlobalLoading(true);
     setFilters({
@@ -110,7 +110,7 @@ const NudesExplore: FC<Props> = ({ initialNudesDatas }) => {
       <FiltersWrapper>
         <FilterSelect
           handleChange={handleSelectCategoryChange}
-          placeholder={t("common.category")}
+          placeholder={t('common.category')}
           options={tagList.map((currentTag) => {
             return {
               value: currentTag,
@@ -120,23 +120,23 @@ const NudesExplore: FC<Props> = ({ initialNudesDatas }) => {
         />
         <FilterSelect
           handleChange={handleSelectTypeChange}
-          placeholder={"Payant ou gratuit"}
+          placeholder={'Payant ou gratuit'}
           options={[
-            { value: "pays", label: t("common.pays") },
-            { value: "free", label: t("common.free") },
+            { value: 'pays', label: t('common.pays') },
+            { value: 'free', label: t('common.free') },
           ]}
         />
         {session?.user?.id && (
           <FilterSelect
             handleChange={handleSelectStateChange}
-            placeholder={"Status"}
-            options={[{ value: "bought", label: t("common.paid") }]}
+            placeholder={'Status'}
+            options={[{ value: 'bought', label: t('common.paid') }]}
           />
         )}
       </FiltersWrapper>
 
       {globalLoading ? (
-        <Loader style={{ color: "#cecaff" }} />
+        <Loader style={{ color: '#cecaff' }} />
       ) : (
         <>
           {nudeList.length ? (
@@ -146,14 +146,14 @@ const NudesExplore: FC<Props> = ({ initialNudesDatas }) => {
               })}
             </div>
           ) : (
-            <NoResults text={t("common.noPosts")} />
+            <NoResults text={t('common.noPosts')} />
           )}
 
           <div
-            style={{ height: "10rem", display: hasNextPage ? "flex" : "none" }}
+            style={{ height: '10rem', display: hasNextPage ? 'flex' : 'none' }}
             ref={loadMoreRef}
           >
-            {isFetchingNextPage && <Loader style={{ color: "#cecaff" }} />}
+            {isFetchingNextPage && <Loader style={{ color: '#cecaff' }} />}
           </div>
         </>
       )}

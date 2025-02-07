@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import CustomTextField from './Inputs/TextField';
 import CustomLoadingButton from './Buttons/LoadingButton';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import { signOut } from 'next-auth/react';
 
 const validationSchema = yup.object({

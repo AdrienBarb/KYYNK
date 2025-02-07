@@ -94,34 +94,31 @@ const RootLayout: FC<Props> = async ({ children }) => {
       </Script>
       <CustomQueryClientProvider>
         <CustomSessionProvider>
-          <ReduxStoreProvider>
-            <NextIntlClientProvider messages={messages}>
-              <html
-                lang={locale}
-                className={clsx(karlaFont.variable, rubikFont.variable)}
-              >
-                <link
-                  rel="icon"
-                  type="image/png"
-                  sizes="32x32"
-                  href="/images/favicon-32x32.png"
-                />
-                <link
-                  rel="icon"
-                  type="image/png"
-                  sizes="16x16"
-                  href="/images/favicon-16x16.png"
-                />
-                <body>
-                  <Toaster position="bottom-center" />
-                  <GlobalConfig>{children}</GlobalConfig>
-                  <Fathom />
-                  <SocketIO />
-                  <GlobalErrorHandler />
-                </body>
-              </html>
-            </NextIntlClientProvider>
-          </ReduxStoreProvider>
+          <NextIntlClientProvider messages={messages}>
+            <html
+              lang={locale}
+              className={clsx(karlaFont.variable, rubikFont.variable)}
+            >
+              <link
+                rel="icon"
+                type="image/png"
+                sizes="32x32"
+                href="/images/favicon-32x32.png"
+              />
+              <link
+                rel="icon"
+                type="image/png"
+                sizes="16x16"
+                href="/images/favicon-16x16.png"
+              />
+              <body>
+                <Toaster position="bottom-center" />
+                <GlobalConfig>{children}</GlobalConfig>
+                <Fathom />
+                <GlobalErrorHandler />
+              </body>
+            </html>
+          </NextIntlClientProvider>
         </CustomSessionProvider>
       </CustomQueryClientProvider>
     </>

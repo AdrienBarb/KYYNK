@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { setLoggedUser } from "@/features/user/userSlice";
-import useApi from "@/lib/hooks/useApi";
-import { useAppDispatch } from "@/store/store";
-import { useSession } from "next-auth/react";
-import React, { useEffect } from "react";
+import { setLoggedUser } from '@/features/user/userSlice';
+import useApi from '@/hooks/requests/useApi';
+import { useAppDispatch } from '@/store/store';
+import { useSession } from 'next-auth/react';
+import React, { useEffect } from 'react';
 
 const FetchOwner = () => {
   const { data: session } = useSession();
@@ -13,7 +13,7 @@ const FetchOwner = () => {
 
   const getOwner = async () => {
     try {
-      const owner = await fetchData("/api/users/owner");
+      const owner = await fetchData('/api/users/owner');
 
       dispatch(setLoggedUser(owner));
     } catch (error) {

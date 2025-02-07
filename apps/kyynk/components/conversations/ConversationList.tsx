@@ -1,7 +1,7 @@
 'use client';
 
 import React, { FC } from 'react';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import AppMessage from '@/components/AppMessage';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';

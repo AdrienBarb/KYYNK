@@ -3,7 +3,7 @@
 import { signIn } from '@/auth';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { prisma } from '@/lib/db/client';
-import { checkOrCreateSlug } from '@/lib/helpers/user/checkOrCreateSlug';
+import { checkOrCreateSlug } from '@/utils/users/checkOrCreateSlug';
 import bcrypt from 'bcryptjs';
 
 export async function register({

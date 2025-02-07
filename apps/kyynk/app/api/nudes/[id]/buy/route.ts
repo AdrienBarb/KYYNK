@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/client';
 import { strictlyAuth } from '@/hoc/strictlyAuth';
 import { errorMessages } from '@/lib/constants/errorMessage';
-import { errorHandler } from '@/lib/utils/errors/errorHandler';
+import { errorHandler } from '@/utils/errors/errorHandler';
 import { getNudeSelectFields } from '@/utils/nudes/getNudeSelectFields';
 import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
 import { NudeType } from '@/types/nudes';

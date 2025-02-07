@@ -6,7 +6,7 @@ import * as yup from 'yup';
 import { useTranslations } from 'next-intl';
 import CustomTextField from './Inputs/TextField';
 import CustomLoadingButton from './Buttons/LoadingButton';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import styles from '@/styles/Form.module.scss';
 import { FormControl, FormHelperText, MenuItem } from '@mui/material';
 import InputLabel from './InputLabel';

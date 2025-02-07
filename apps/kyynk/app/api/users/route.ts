@@ -1,4 +1,4 @@
-import { errorHandler } from '@/lib/utils/errors/errorHandler';
+import { errorHandler } from '@/utils/errors/errorHandler';
 import { getUsers } from '@/services/users/getUsers';
 import { NextResponse } from 'next/server';
 

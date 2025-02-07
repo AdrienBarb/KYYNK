@@ -1,16 +1,16 @@
-import React, { FC, useState } from "react";
-import FullButton from "@/components/Buttons/FullButton";
-import { Nude } from "@/types/models/Nude";
-import { useTranslations } from "next-intl";
-import ConfirmationModal from "../ConfirmationModal";
-import useNavigateToPayment from "@/lib/hooks/useNavigateToPayment";
-import { useSession } from "next-auth/react";
-import useApi from "@/lib/hooks/useApi";
-import SimpleButton from "./SimpleButton";
-import { useSelector } from "react-redux";
-import { RootStateType, useAppDispatch } from "@/store/store";
-import { getCreditAmount } from "@/features/user/userSlice";
-import useRedirectToLoginPage from "@/lib/hooks/useRedirectToLoginPage";
+import React, { FC, useState } from 'react';
+import FullButton from '@/components/Buttons/FullButton';
+import { Nude } from '@/types/models/Nude';
+import { useTranslations } from 'next-intl';
+import ConfirmationModal from '../ConfirmationModal';
+import useNavigateToPayment from '@/lib/hooks/useNavigateToPayment';
+import { useSession } from 'next-auth/react';
+import useApi from '@/hooks/requests/useApi';
+import SimpleButton from './SimpleButton';
+import { useSelector } from 'react-redux';
+import { RootStateType, useAppDispatch } from '@/store/store';
+import { getCreditAmount } from '@/features/user/userSlice';
+import useRedirectToLoginPage from '@/lib/hooks/useRedirectToLoginPage';
 
 interface Props {
   nude: Nude;
@@ -32,7 +32,7 @@ const BuyMediaButton: FC<Props> = ({ nude, callback }) => {
   //hooks
   const navigateToPayment = useNavigateToPayment();
   const { usePost } = useApi();
-  const { mutate: buyNude, isLoading } = usePost("/api/nudes/buy", {
+  const { mutate: buyNude, isLoading } = usePost('/api/nudes/buy', {
     onSuccess: (updatedNude) => {
       dispatch(getCreditAmount());
 
@@ -48,7 +48,7 @@ const BuyMediaButton: FC<Props> = ({ nude, callback }) => {
   const redirectToLoginPage = useRedirectToLoginPage();
 
   const handleBuyClick = () => {
-    if (status === "unauthenticated") {
+    if (status === 'unauthenticated') {
       redirectToLoginPage();
       return;
     }
@@ -71,14 +71,14 @@ const BuyMediaButton: FC<Props> = ({ nude, callback }) => {
         onClick={handleBuyClick}
         isLoading={isLoading}
         customStyles={{
-          padding: "0.4rem 0.8rem",
-          position: "absolute",
-          width: "100%",
-          maxWidth: "260px",
-          minHeight: "40px",
+          padding: '0.4rem 0.8rem',
+          position: 'absolute',
+          width: '100%',
+          maxWidth: '260px',
+          minHeight: '40px',
         }}
       >
-        {t("common.unlockForCredit", {
+        {t('common.unlockForCredit', {
           creditNumber: nude.priceDetails.creditPrice / 100,
         })}
       </SimpleButton>
@@ -86,19 +86,19 @@ const BuyMediaButton: FC<Props> = ({ nude, callback }) => {
         open={openCreditModal}
         setOpen={setOpenCreditModal}
         confirmAction={navigateToPayment}
-        title={t("common.shouldByCredits")}
-        text={t("common.notEnoughCredit")}
-        buttonText={t("common.buyCredits")}
+        title={t('common.shouldByCredits')}
+        text={t('common.notEnoughCredit')}
+        buttonText={t('common.buyCredits')}
       />
       <ConfirmationModal
         open={openConfirmationModal}
         setOpen={setOpenConfirmationModal}
         isLoading={isLoading}
         confirmAction={handleBuyNude}
-        text={t("common.unlockCreditConfirmation", {
+        text={t('common.unlockCreditConfirmation', {
           creditNumber: nude.priceDetails.creditPrice / 100,
         })}
-        buttonText={t("common.unlockNow")}
+        buttonText={t('common.unlockNow')}
       />
     </>
   );

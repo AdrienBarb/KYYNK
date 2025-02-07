@@ -1,4 +1,4 @@
-import { useUser } from '@/lib/hooks/useUser';
+import { useUser } from '@/hooks/users/useUser';
 import { Button } from '../ui/Button';
 import {
   AlertDialog,
@@ -12,7 +12,7 @@ import {
 } from '../ui/AlertDialog';
 import { useState } from 'react';
 import { NudeType } from '@/types/nudes';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 

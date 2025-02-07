@@ -2,7 +2,7 @@
 
 import React, { FC, useState } from 'react';
 import GalleryCard from './GalleryCard';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { VideoUploader } from '@api.video/video-uploader';

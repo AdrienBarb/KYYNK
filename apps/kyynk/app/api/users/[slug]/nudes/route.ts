@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { errorMessages } from '@/lib/constants/errorMessage';
-import { errorHandler } from '@/lib/utils/errors/errorHandler';
+import { errorHandler } from '@/utils/errors/errorHandler';
 import { prisma } from '@/lib/db/client';
 import { getUserNudesById } from '@/services/nudes/getUserNudesById';
 import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';

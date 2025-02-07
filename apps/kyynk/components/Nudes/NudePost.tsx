@@ -14,7 +14,7 @@ import { NudeType } from '@/types/nudes';
 import Link from 'next/link';
 import Avatar from '../ui/Avatar';
 import NudeCard from './NudeCard';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import ApiVideoPlayer from '@api.video/react-player';

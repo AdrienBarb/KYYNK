@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { strictlyAuth } from '@/hoc/strictlyAuth';
 import { prisma } from '@/lib/db/client';
 import { nudeSchema } from '@/schemas/nudeSchema';
-import { errorHandler } from '@/lib/utils/errors/errorHandler';
+import { errorHandler } from '@/utils/errors/errorHandler';
 
 const formSchema = nudeSchema.extend({
   mediaId: z.string(),

@@ -1,8 +1,8 @@
-import React, { FC, useEffect, useState } from "react";
-import useApi from "@/lib/hooks/useApi";
-import NudeMediaSkeleton from "./LoadingSkeleton/NudeMediaSkeleton";
-import styles from "@/styles/MessageNude.module.scss";
-import PrivateNudeCard from "./PrivateNudeCard";
+import React, { FC, useEffect, useState } from 'react';
+import useApi from '@/hooks/requests/useApi';
+import NudeMediaSkeleton from './LoadingSkeleton/NudeMediaSkeleton';
+import styles from '@/styles/MessageNude.module.scss';
+import PrivateNudeCard from './PrivateNudeCard';
 
 interface Props {
   nudeId: string;

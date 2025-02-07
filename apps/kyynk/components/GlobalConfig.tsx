@@ -3,7 +3,7 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react';
 import Maintenance from './Maintenance';
 import { useSession } from 'next-auth/react';
-import { useUser } from '@/lib/hooks/useUser';
+import { useUser } from '@/hooks/users/useUser';
 
 interface Props {
   children: ReactNode;

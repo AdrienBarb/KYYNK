@@ -2,11 +2,11 @@
 
 import React, { FC } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import FeedView from './FeedView';
 import WallView from './WallView';
 import { NudeType } from '@/types/nudes';
-import { useUser } from '@/lib/hooks/useUser';
+import { useUser } from '@/hooks/users/useUser';
 import { isUserVerified } from '@/utils/users/isUserVerified';
 import { FetchedUserType } from '@/types/users';
 

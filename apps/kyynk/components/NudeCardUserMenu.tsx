@@ -3,7 +3,7 @@ import React, { FC, useState } from 'react';
 import { Nude } from '@/types/models/Nude';
 import ConfirmationModal from './ConfirmationModal';
 import { useTranslations } from 'next-intl';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import DotMenuContainer from './Common/Menu/DotMenuContainer';
 import MenuElement from './Common/Menu/MenuElement';
 import { useRouter } from 'next/navigation';

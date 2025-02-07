@@ -1,5 +1,5 @@
 import { errorMessages } from '@/lib/constants/errorMessage';
-import { errorHandler } from '@/lib/utils/errors/errorHandler';
+import { errorHandler } from '@/utils/errors/errorHandler';
 import { getUserBySlug } from '@/services/users/getUserBySlug';
 import { NextResponse } from 'next/server';
 

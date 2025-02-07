@@ -3,7 +3,7 @@
 import React, { useState, FC } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import ShareModal from '@/components/ShareModal';
-import { useUser } from '@/lib/hooks/useUser';
+import { useUser } from '@/hooks/users/useUser';
 import { Forward, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { appRouter } from '@/constants/appRouter';

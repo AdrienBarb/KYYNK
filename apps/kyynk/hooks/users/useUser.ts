@@ -1,5 +1,5 @@
 import { useUserStore } from '@/stores/UserStore';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 import { LoggedUserType } from '@/types/users';

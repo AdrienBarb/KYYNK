@@ -13,7 +13,7 @@ import CustomLoadingButton from './Buttons/LoadingButton';
 import InputWrapper from './InputWrapper';
 import { useTranslations } from 'next-intl';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import GalleryCard from './GalleryCard';

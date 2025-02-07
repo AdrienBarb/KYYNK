@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { User } from '@prisma/client';
-import { useUser } from '@/lib/hooks/useUser';
+import { useUser } from '@/hooks/users/useUser';
 
 const useConversationUsers = (
   participants: Pick<User, 'id' | 'pseudo' | 'profileImageId'>[],

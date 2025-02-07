@@ -16,7 +16,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { appRouter } from '@/constants/appRouter';
 import { register } from '@/server-actions/register';
-import { useUser } from '@/lib/hooks/useUser';
+import { useUser } from '@/hooks/users/useUser';
 
 const UserSignUpForm = () => {
   //router

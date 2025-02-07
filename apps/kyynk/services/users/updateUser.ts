@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/db/client';
 import { errorMessages } from '@/lib/constants/errorMessage';
-import { checkOrCreateSlug } from '@/lib/helpers/user/checkOrCreateSlug';
+import { checkOrCreateSlug } from '@/utils/users/checkOrCreateSlug';
 import { Prisma, User } from '@prisma/client';
 import { z } from 'zod';
 import { updateUserSchema } from '@/schemas/users/updateUserSchema';

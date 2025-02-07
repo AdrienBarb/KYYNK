@@ -3,13 +3,13 @@
 import React, { FC } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Conversation, User } from '@prisma/client';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import Avatar from './ui/Avatar';
 import Text from '@/components/ui/Text';
 import OnlineStatus from '@/components/profile/OnlineStatus';
 import Title from '@/components/ui/Title';
 import { Button } from './ui/Button';
-import { useUser } from '@/lib/hooks/useUser';
+import { useUser } from '@/hooks/users/useUser';
 
 interface Props {
   initialUserDatas: User;

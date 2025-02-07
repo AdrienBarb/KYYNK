@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { strictlyAuth } from '@/hoc/strictlyAuth';
 import { prisma } from '@/lib/db/client';
-import { errorHandler } from '@/lib/utils/errors/errorHandler';
+import { errorHandler } from '@/utils/errors/errorHandler';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { fetchMessagesByConversationId } from '@/services/conversations/fetchMessagesByConversationId';
 

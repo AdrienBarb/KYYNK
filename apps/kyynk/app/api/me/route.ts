@@ -1,5 +1,5 @@
 import { errorMessages } from '@/lib/constants/errorMessage';
-import { errorHandler } from '@/lib/utils/errors/errorHandler';
+import { errorHandler } from '@/utils/errors/errorHandler';
 import { strictlyAuth } from '@/hoc/strictlyAuth';
 import { getCurrentUser } from '@/services/users/getCurrentUser';
 import { updateUser } from '@/services/users/updateUser';

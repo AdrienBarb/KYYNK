@@ -1,12 +1,6 @@
-import {
-  useQuery,
-  useMutation,
-  useInfiniteQuery,
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
-import axios, { AxiosResponse } from 'axios';
-import axiosInstance from '../axios/axiosConfig';
+import axiosInstance from '@/lib/axios/axiosConfig';
+import { useQuery, useMutation, useInfiniteQuery } from '@tanstack/react-query';
+import { AxiosResponse } from 'axios';
 
 interface FetchParams {
   url: string;

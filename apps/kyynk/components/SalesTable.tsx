@@ -5,7 +5,7 @@ import styles from '@/styles/SalesTable.module.scss';
 import { format, isBefore } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { useTranslations } from 'next-intl';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import Text from '@/components/ui/Text';
 import { Sale } from '@/types/models/Sale';
 import dynamic from 'next/dynamic';

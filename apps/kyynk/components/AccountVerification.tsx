@@ -2,7 +2,7 @@
 
 import React from 'react';
 import VerificationCard from './VerificationCard';
-import { useUser } from '@/lib/hooks/useUser';
+import { useUser } from '@/hooks/users/useUser';
 import { appRouter } from '@/constants/appRouter';
 
 const AccountVerification = () => {

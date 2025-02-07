@@ -8,8 +8,8 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Select from 'react-select';
 import { TagsType, tagList } from '@/constants/constants';
-import { getMediaPrice } from '@/lib/utils/price/getMediaPrice';
-import useApi from '@/lib/hooks/useApi';
+import { getMediaPrice } from '@/utils/prices/getMediaPrice';
+import useApi from '@/hooks/requests/useApi';
 import GalleryModal from '@/components/nudes/GalleryModal';
 import {
   Form,
@@ -28,7 +28,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import { Pencil } from 'lucide-react';
 import type { Media, Nude } from '@prisma/client';
-import { useUser } from '@/lib/hooks/useUser';
+import { useUser } from '@/hooks/users/useUser';
 import { nudeSchema } from '@/schemas/nudeSchema';
 import CustomSlider from '../CustomSlider';
 import imgixLoader from '@/lib/imgix/loader';

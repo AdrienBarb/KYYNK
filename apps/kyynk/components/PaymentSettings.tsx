@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import IconButton from './Buttons/IconButton';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import SettingSectionHeader from './SettingSectionHeader';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import { User } from '@/types/models/User';
 import Text from '@/components/ui/Text';
 import { useRouter } from 'next/navigation';

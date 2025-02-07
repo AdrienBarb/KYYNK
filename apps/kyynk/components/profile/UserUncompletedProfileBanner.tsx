@@ -4,7 +4,7 @@ import React from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/Alert';
-import { useUser } from '@/lib/hooks/useUser';
+import { useUser } from '@/hooks/users/useUser';
 import { isCreator } from '@/utils/users/isCreator';
 import { isUserVerified } from '@/utils/users/isUserVerified';
 import { Button } from '@/components/ui/Button';

@@ -6,7 +6,7 @@ import { faMessage } from '@fortawesome/free-solid-svg-icons';
 import ProfileButton from '@/components/ProfileButton';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
-import useApi from '@/lib/hooks/useApi';
+import useApi from '@/hooks/requests/useApi';
 import useRedirectToLoginPage from '@/lib/hooks/useRedirectToLoginPage';
 
 interface Props {}
