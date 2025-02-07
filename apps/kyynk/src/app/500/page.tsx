@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslations } from 'next-intl';
 import PageCenterMessage from '@/components/PageCenterMessage';
 import { genPageMetadata } from '@/app/seo';
 
@@ -10,9 +9,10 @@ export const metadata = genPageMetadata({
 });
 
 const ErrorServerPage = () => {
-  const t = useTranslations();
+  const errorMessage =
+    "Une erreur interne du serveur s'est produite. Veuillez réessayer ultérieurement ou contacter notre équipe de support.";
 
-  return <PageCenterMessage text={t('error.error_500_text')} />;
+  return <PageCenterMessage text={errorMessage} />;
 };
 
 export default ErrorServerPage;

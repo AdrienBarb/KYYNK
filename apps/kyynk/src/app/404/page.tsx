@@ -1,6 +1,5 @@
 import React from 'react';
 import PageCenterMessage from '@/components/PageCenterMessage';
-import { useTranslations } from 'next-intl';
 import { genPageMetadata } from '@/app/seo';
 
 export const metadata = genPageMetadata({
@@ -10,9 +9,10 @@ export const metadata = genPageMetadata({
 });
 
 const ErrorNotFoundPage = () => {
-  const t = useTranslations();
+  const errorMessage =
+    "Sorry, but the page you requested could not be found. You may have followed an outdated link or typed the page address incorrectly. Please check the address and try again or use the search bar to find what you're looking for.";
 
-  return <PageCenterMessage text={t('error.error_404_text')} />;
+  return <PageCenterMessage text={errorMessage} />;
 };
 
 export default ErrorNotFoundPage;
