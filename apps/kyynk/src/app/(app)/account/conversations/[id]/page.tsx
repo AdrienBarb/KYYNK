@@ -2,6 +2,8 @@ import { fetchMessagesByConversationId } from '@/services/conversations/fetchMes
 import { getConversationById } from '@/services/conversations/getConversationById';
 import React from 'react';
 import Conversation from '@/components/conversations/Conversation';
+import { ConversationType } from '@/types/conversations';
+
 const CurrentConversationPage = async ({
   params,
 }: {
@@ -9,7 +11,9 @@ const CurrentConversationPage = async ({
 }) => {
   const { id } = params;
 
-  const conversation = await getConversationById({ conversationId: id });
+  const conversation = (await getConversationById({
+    conversationId: id,
+  })) as ConversationType;
   const messages = await fetchMessagesByConversationId({
     conversationId: id,
   });

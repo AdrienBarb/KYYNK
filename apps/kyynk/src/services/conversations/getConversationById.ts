@@ -33,7 +33,12 @@ export const getConversationById = async ({
       throw new Error('Conversation not found');
     }
 
-    return conversation;
+    return {
+      ...conversation,
+      hasUnreadMessages: conversation.messages.some(
+        (message) => message.status !== 'read',
+      ),
+    };
   } catch (error) {
     console.log(error);
     throw new Error('Failed to fetch conversation');
