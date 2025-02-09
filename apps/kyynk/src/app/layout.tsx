@@ -76,6 +76,8 @@ const RootLayout: FC<Props> = async ({ children }) => {
   const locale = await getLocale();
   const messages = await getMessages();
 
+  console.log(process.env.NEXTAUTH_URL);
+
   return (
     <>
       <Script id="hotjarAnalytics" strategy="afterInteractive">
