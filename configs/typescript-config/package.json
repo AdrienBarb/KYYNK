@@ -2,7 +2,5 @@
   "name": "@kyynk/typescript-config",
   "version": "0.0.0",
   "private": true,
-  "exports": {
-    ".": "./base.json"
-  }
+  "main": "base.json"
 }

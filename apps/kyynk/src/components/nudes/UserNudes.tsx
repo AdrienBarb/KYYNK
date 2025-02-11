@@ -1,7 +1,7 @@
 'use client';
 
 import React, { FC } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import useApi from '@/hooks/requests/useApi';
 import FeedView from './FeedView';
 import WallView from './WallView';
@@ -9,6 +9,7 @@ import { NudeType } from '@/types/nudes';
 import { useUser } from '@/hooks/users/useUser';
 import { isUserVerified } from '@/utils/users/isUserVerified';
 import { FetchedUserType } from '@/types/users';
+import { useQueryState } from 'nuqs';
 
 interface Props {
   initialNudes: NudeType[];
@@ -19,8 +20,8 @@ const UserNudes: FC<Props> = ({ initialNudes, user }) => {
   const { slug } = useParams<{ slug: string }>();
   const { user: loggedUser } = useUser();
   const { useGet } = useApi();
-  const searchParams = useSearchParams();
-  const isFeedView = searchParams.get('view') === 'feed';
+  const [view] = useQueryState('view');
+  const isFeedView = view === 'feed';
 
   const { data: nudes } = useGet(
     `/api/users/${slug}/nudes`,

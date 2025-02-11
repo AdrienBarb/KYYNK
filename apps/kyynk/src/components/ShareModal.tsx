@@ -1,6 +1,4 @@
 import React, { FC, useState } from 'react';
-import styles from '@/styles/ShareModal.module.scss';
-
 import {
   TwitterShareButton,
   TelegramShareButton,
@@ -12,6 +10,13 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import { useTranslations } from 'next-intl';
 import { useParams, usePathname } from 'next/navigation';
+import {
+  Dialog,
+  DialogContent,
+  DialogOverlay,
+  DialogTrigger,
+  DialogClose,
+} from '@/components/ui/Dialog';
 
 interface ShareModalProps {
   open: boolean;
@@ -37,49 +42,65 @@ const ShareModal: FC<ShareModalProps> = ({ open, setOpen }) => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.shareIconsList}>
-        <TwitterShareButton
-          url={urlToShare}
-          title={t('profile.shareTitleSocialMedia')}
-        >
-          <div className={styles.iconContainer}>
-            <div className={styles.iconsWrapper}>
-              <TwitterIcon sx={{ color: '#FFF0EB' }} />
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg">
+        <div className="flex flex-wrap justify-around items-center gap-8">
+          <TwitterShareButton
+            url={urlToShare}
+            title={t('profile.shareTitleSocialMedia')}
+          >
+            <div className="flex flex-col items-center gap-2 cursor-pointer">
+              <div className="bg-primary w-10 h-10 flex items-center justify-center rounded-full">
+                <TwitterIcon sx={{ color: '#FFF0EB' }} />
+              </div>
+              <p className="font-karla font-light text-xs text-custom-black">
+                Twitter
+              </p>
             </div>
-            <p>Twitter</p>
-          </div>
-        </TwitterShareButton>
-        <FacebookShareButton
-          url={urlToShare}
-          title={t('profile.shareTitleSocialMedia')}
-        >
-          <div className={styles.iconContainer}>
-            <div className={styles.iconsWrapper}>
-              <FacebookIcon sx={{ color: '#FFF0EB' }} />
+          </TwitterShareButton>
+          <FacebookShareButton
+            url={urlToShare}
+            title={t('profile.shareTitleSocialMedia')}
+          >
+            <div className="flex flex-col items-center gap-2 cursor-pointer">
+              <div className="bg-primary w-10 h-10 flex items-center justify-center rounded-full">
+                <FacebookIcon sx={{ color: '#FFF0EB' }} />
+              </div>
+              <p className="font-karla font-light text-xs text-custom-black">
+                Facebook
+              </p>
             </div>
-            <p>Facebook</p>
-          </div>
-        </FacebookShareButton>
-        <TelegramShareButton
-          url={urlToShare}
-          title={t('profile.shareTitleSocialMedia')}
-        >
-          <div className={styles.iconContainer}>
-            <div className={styles.iconsWrapper}>
-              <TelegramIcon sx={{ color: '#FFF0EB' }} />
+          </FacebookShareButton>
+          <TelegramShareButton
+            url={urlToShare}
+            title={t('profile.shareTitleSocialMedia')}
+          >
+            <div className="flex flex-col items-center gap-2 cursor-pointer">
+              <div className="bg-primary w-10 h-10 flex items-center justify-center rounded-full">
+                <TelegramIcon sx={{ color: '#FFF0EB' }} />
+              </div>
+              <p className="font-karla font-light text-xs text-custom-black">
+                Telegram
+              </p>
             </div>
-            <p>Telegram</p>
+          </TelegramShareButton>
+          <div
+            className="flex flex-col items-center gap-2 cursor-pointer"
+            onClick={copyToClipboard}
+          >
+            <div className="bg-primary w-10 h-10 flex items-center justify-center rounded-full">
+              <LinkIcon sx={{ color: '#FFF0EB' }} />
+            </div>
+            <p className="font-karla font-light text-xs text-custom-black">
+              {isLinkCopied ? 'Lien copié' : 'Lien'}
+            </p>
           </div>
-        </TelegramShareButton>
-        <div className={styles.iconContainer} onClick={copyToClipboard}>
-          <div className={styles.iconsWrapper}>
-            <LinkIcon sx={{ color: '#FFF0EB' }} />
-          </div>
-          <p>{isLinkCopied ? 'Lien copié' : 'Lien'}</p>
         </div>
-      </div>
-    </div>
+        <DialogClose className="absolute right-4 top-4">
+          <span className="sr-only">Close</span>
+        </DialogClose>
+      </DialogContent>
+    </Dialog>
   );
 };
 

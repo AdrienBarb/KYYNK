@@ -47,7 +47,9 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
           {user.pseudo}
         </Title>
         <div>
-          <Text className="mt-2 text-center">{user.description}</Text>
+          <Text className="mt-2 text-center whitespace-pre-wrap">
+            {user.description}
+          </Text>
           <OnlineStatus currentUser={user} />
         </div>
       </div>

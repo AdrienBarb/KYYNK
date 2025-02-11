@@ -16,6 +16,7 @@ import Fathom from '@/components/Fathom';
 import { getLocale, getMessages } from 'next-intl/server';
 import CustomQueryClientProvider from '@/components/provider/CustomQueryClientProvider';
 import CustomSessionProvider from '@/components/provider/CustomSessionProvider';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 config.autoAddCss = false;
 
@@ -113,7 +114,9 @@ const RootLayout: FC<Props> = async ({ children }) => {
               />
               <body>
                 <Toaster position="bottom-center" />
-                <GlobalConfig>{children}</GlobalConfig>
+                <GlobalConfig>
+                  <NuqsAdapter>{children}</NuqsAdapter>
+                </GlobalConfig>
                 <Fathom />
                 <GlobalErrorProvider />
               </body>

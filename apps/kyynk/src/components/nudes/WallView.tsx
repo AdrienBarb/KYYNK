@@ -1,18 +1,20 @@
 import React, { FC } from 'react';
 import { cn } from '@/utils/tailwind/cn';
 import NudeCard from './NudeCard';
-import { useRouter } from 'next/navigation';
 import { NudeType } from '@/types/nudes';
+import { useQueryState } from 'nuqs';
 
 interface Props {
   nudes: NudeType[];
 }
 
 const WallView: FC<Props> = ({ nudes }) => {
-  const router = useRouter();
+  const [view, setView] = useQueryState('view');
+  const [nudeId, setNudeId] = useQueryState('n');
 
   const handleNudeClick = (nudeId: string) => {
-    router.push(`?view=feed&n=${nudeId}`);
+    setView('feed');
+    setNudeId(nudeId);
   };
 
   return (

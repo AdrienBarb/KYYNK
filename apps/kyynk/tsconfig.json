@@ -1,5 +1,5 @@
 {
-  "extends": "@kyynk/typescript-config",
+  "extends": "@kyynk/typescript-config/base.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

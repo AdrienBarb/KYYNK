@@ -112,7 +112,7 @@ const NudePost: FC<NudePostProps> = ({ nude, refCallback }) => {
           </DropdownMenu>
         </div>
 
-        <Text>{nude.description}</Text>
+        <Text className="whitespace-pre-wrap">{nude.description}</Text>
 
         {nude.permissions.canView ? (
           <div className="rounded-md overflow-hidden">
