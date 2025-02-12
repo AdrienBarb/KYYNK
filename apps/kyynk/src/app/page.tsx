@@ -24,7 +24,7 @@ export async function generateMetadata({
 const Home = async () => {
   return (
     <>
-      <NavigationBar />
+      <NavigationBar type="app" />
       <Landing />
       <ModelOffer />
       <LandingFeatures />

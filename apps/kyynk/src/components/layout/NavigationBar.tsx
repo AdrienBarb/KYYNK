@@ -16,7 +16,7 @@ const NavigationBar = async ({ type }: { type: 'auth' | 'app' }) => {
         <div className="flex justify-between mx-auto w-full items-center">
           <NavLogo />
 
-          {type === 'auth' && !isUserConnected && (
+          {type === 'app' && !isUserConnected && (
             <Button asChild size="sm">
               <Link href="/login">{t('common.signIn')}</Link>
             </Button>
