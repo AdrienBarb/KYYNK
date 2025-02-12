@@ -46,7 +46,10 @@ const MediasGallery: FC<MediasGalleryProps> = ({
     setUploadProgress(0);
 
     try {
-      const { uploadToken } = await fetchData('/api/medias/upload-token');
+      const { uploadToken, videoId } = await fetchData(
+        '/api/medias/upload-token',
+      );
+      console.log('🚀 ~ handleUpload ~ videoId:', videoId);
 
       if (!uploadToken) throw new Error('Failed to retrieve upload token');
 
@@ -54,6 +57,7 @@ const MediasGallery: FC<MediasGalleryProps> = ({
         uploadToken,
         file,
         retries: 3,
+        ...(videoId && { videoId }),
       });
 
       uploader.onProgress((event) => {
@@ -64,6 +68,11 @@ const MediasGallery: FC<MediasGalleryProps> = ({
       });
 
       const uploadResult = await uploader.upload();
+
+      console.log(
+        '🚀 ~ handleUpload ~ uploadResult.videoId:',
+        uploadResult.videoId,
+      );
 
       createMedia({
         videoId: uploadResult.videoId,

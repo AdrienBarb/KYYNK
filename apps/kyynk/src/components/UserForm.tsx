@@ -72,7 +72,7 @@ const UserForm = () => {
     pseudo: z
       .string()
       .min(3, { message: 'Pseudo must be at least 3 characters long.' })
-      .max(30, { message: 'Pseudo must be at most 30 characters long.' })
+      .max(12, { message: 'Pseudo must be at most 12 characters long.' })
       .regex(
         /^[a-zA-Z0-9](?!.*[_.-]{2})[a-zA-Z0-9._-]*[a-zA-Z0-9]$/,
         'Pseudo can only contain letters, numbers, "_", "-", ".", and must not start or end with special characters.',

@@ -7,8 +7,6 @@ import Link from 'next/link';
 import React, { FC, ReactNode } from 'react';
 import { getCookie } from 'cookies-next/server';
 import { appRouter } from '@/constants/appRouter';
-import { getCurrentUser } from '@/services/users/getCurrentUser';
-import { LoggedUserType } from '@/types/users';
 
 interface Props {
   children: ReactNode;
@@ -29,9 +27,11 @@ const AppLayout: FC<Props> = async ({ children }) => {
         <div className="p-4 flex justify-between align-center bg-secondary-dark border-b border-custom-black/20">
           <SidebarTrigger />
           {!isLoggedIn && (
-            <Button asChild>
-              <Link href={appRouter.login}>Login</Link>
-            </Button>
+            <div>
+              <Button asChild>
+                <Link href={appRouter.login}>Login</Link>
+              </Button>
+            </div>
           )}
         </div>
         <div className="p-4">{children}</div>

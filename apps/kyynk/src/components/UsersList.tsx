@@ -1,7 +1,6 @@
 'use client';
 
 import React, { FC } from 'react';
-import { useSearchParams } from 'next/navigation';
 import useApi from '@/hooks/requests/useApi';
 import { User } from '@prisma/client';
 import { cn } from '@/utils/tailwind/cn';
@@ -27,7 +26,7 @@ const UsersList: FC<Props> = ({ initialUsers }) => {
     <div
       className={cn(
         'grid gap-4 mx-auto mt-8',
-        'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-screen-lg',
+        'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-screen-lg',
       )}
     >
       {users.map((user: User) => (

@@ -18,7 +18,7 @@ const UserCard = ({ user }: Props) => {
   return (
     <Link href={`/${user.slug}`} prefetch={true}>
       <div className="flex flex-col">
-        <div className="relative aspect-[4/5] w-full  overflow-hidden rounded-md">
+        <div className="relative aspect-square w-full  overflow-hidden rounded-md">
           <Image
             src={imageUrl}
             alt={user.pseudo}

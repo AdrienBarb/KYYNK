@@ -12,65 +12,63 @@ export async function updateUser({
   userId: string;
   body: z.infer<typeof updateUserSchema>;
 }): Promise<Partial<User>> {
-  const validatedBody = updateUserSchema.parse(body);
-
   const data: Prisma.UserUpdateInput = {};
 
-  if (validatedBody.pseudo) {
+  if (body.pseudo) {
     const existingUser = await prisma.user.findUnique({
-      where: { pseudo: validatedBody.pseudo },
+      where: { pseudo: body.pseudo },
     });
 
     if (existingUser && existingUser.id !== userId) {
       throw new Error(errorMessages.PSEUDO_ALREADY_EXIST);
     }
 
-    data.pseudo = validatedBody.pseudo;
-    data.slug = await checkOrCreateSlug(validatedBody.pseudo);
+    data.pseudo = body.pseudo;
+    data.slug = await checkOrCreateSlug(body.pseudo);
   }
 
-  if (validatedBody.email) {
-    data.email = validatedBody.email;
+  if (body.email) {
+    data.email = body.email;
   }
 
-  if (validatedBody.userType) {
-    data.userType = validatedBody.userType;
+  if (body.userType) {
+    data.userType = body.userType;
   }
 
-  if (validatedBody.preferences) {
-    data.preferences = validatedBody.preferences;
+  if (body.preferences) {
+    data.preferences = body.preferences;
   }
 
-  if (validatedBody.description) {
-    data.description = validatedBody.description;
+  if (body.description) {
+    data.description = body.description;
   }
 
-  if (validatedBody.age) {
-    data.age = validatedBody.age;
+  if (body.age) {
+    data.age = body.age;
   }
 
-  if (validatedBody.gender) {
-    data.gender = validatedBody.gender;
+  if (body.gender) {
+    data.gender = body.gender;
   }
 
-  if (validatedBody.bodyType) {
-    data.bodyType = validatedBody.bodyType;
+  if (body.bodyType) {
+    data.bodyType = body.bodyType;
   }
 
-  if (validatedBody.hairColor) {
-    data.hairColor = validatedBody.hairColor;
+  if (body.hairColor) {
+    data.hairColor = body.hairColor;
   }
 
-  if (validatedBody.country) {
-    data.country = validatedBody.country;
+  if (body.country) {
+    data.country = body.country;
   }
 
-  if (validatedBody.tags) {
-    data.tags = validatedBody.tags;
+  if (body.tags) {
+    data.tags = body.tags;
   }
 
-  if (validatedBody.profileImageId) {
-    data.profileImageId = validatedBody.profileImageId;
+  if (body.profileImageId) {
+    data.profileImageId = body.profileImageId;
   }
 
   return prisma.user.update({

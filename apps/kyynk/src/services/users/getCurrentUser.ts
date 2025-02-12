@@ -24,6 +24,7 @@ export const getCurrentUser = async ({ userId }: { userId: string }) => {
         isEmailVerified: true,
         identityVerificationStatus: true,
         nudesCount: true,
+        watermarkId: true,
       },
     });
 

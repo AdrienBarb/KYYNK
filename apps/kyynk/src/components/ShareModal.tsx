@@ -42,8 +42,8 @@ const ShareModal: FC<ShareModalProps> = ({ open, setOpen }) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-lg">
+    <Dialog open={open} onOpenChange={setOpen} modal={true}>
+      <DialogContent className="z-[1000] bg-secondary p-16">
         <div className="flex flex-wrap justify-around items-center gap-8">
           <TwitterShareButton
             url={urlToShare}

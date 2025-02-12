@@ -9,7 +9,7 @@ import { appRouter } from '@/constants/appRouter';
 const LoginPage = () => {
   return (
     <PageContainer>
-      <div className="flex flex-col items-center justify-center max-w-lg mx-auto px-4 mt-12">
+      <div className="flex flex-col items-center justify-center">
         <div className="mb-12">
           <Title Tag="h3" data-id="sign-in-title">
             Sign In

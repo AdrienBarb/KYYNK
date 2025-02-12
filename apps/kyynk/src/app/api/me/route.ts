@@ -4,22 +4,36 @@ import { strictlyAuth } from '@/hoc/strictlyAuth';
 import { getCurrentUser } from '@/services/users/getCurrentUser';
 import { updateUser } from '@/services/users/updateUser';
 import { NextResponse, NextRequest } from 'next/server';
+import { createWatermark } from '@/utils/users/createWatermark';
+import { updateUserSchema } from '@/schemas/users/updateUserSchema';
 
 export const PUT = strictlyAuth(async (req: NextRequest) => {
   try {
     const { auth } = req;
     const userId = auth?.user.id;
 
-    if (!userId) {
+    const currentUser = await getCurrentUser({ userId: userId! });
+
+    if (!currentUser) {
       return NextResponse.json(
-        { error: errorMessages.MISSING_FIELDS },
+        { error: errorMessages.USER_NOT_FOUND },
         { status: 400 },
       );
     }
 
     const body = await req.json();
+    const validatedBody = updateUserSchema.parse(body);
+    const user = await updateUser({ userId: userId!, body: validatedBody });
 
-    const user = await updateUser({ userId, body });
+    const isCreator =
+      validatedBody.userType === 'creator' ||
+      currentUser.userType === 'creator';
+    const pseudoChanged =
+      validatedBody.pseudo && validatedBody.pseudo !== currentUser.pseudo;
+
+    if (isCreator && pseudoChanged) {
+      await createWatermark({ userId: userId!, slug: user.slug! });
+    }
 
     return NextResponse.json(user, { status: 200 });
   } catch (error) {

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import PageContainer from '@/components/PageContainer';
 import { useTranslations } from 'next-intl';
 import useApi from '@/hooks/requests/useApi';
 import { TAGS } from '@/constants/constants';
@@ -37,41 +36,39 @@ const SignUpPage = () => {
   };
 
   return (
-    <PageContainer>
-      <div className="max-w-lg mx-auto mt-12 flex flex-col items-center justify-center">
-        <Title Tag="h3" data-id="user-type-title" className="mb-12">
-          {t('common.whatPreferences')}
-        </Title>
+    <div className="flex flex-col items-center justify-center">
+      <Title Tag="h3" data-id="user-type-title" className="mb-12">
+        {t('common.whatPreferences')}
+      </Title>
 
-        <div className="flex flex-wrap p-4 gap-4 mb-12 border border-neutral-200 w-full rounded-md">
-          {TAGS.map((currentTag, index) => {
-            return (
-              <div
-                key={index}
-                onClick={() => handleTagSelection(currentTag.value)}
-                className={`text-center lg:w-fit border border-neutral-200 rounded-md p-2 cursor-pointer hover:border-neutral-200 hover:bg-neutral-200 ${
-                  selectedTags.includes(currentTag.value)
-                    ? 'bg-primary border-primary'
-                    : ''
-                }`}
-              >
-                {t(`nudeCategories.${currentTag.label}`)}
-              </div>
-            );
-          })}
-        </div>
-
-        <Button
-          className="w-full"
-          isLoading={isPending}
-          onClick={() => {
-            editUserPreferences({ preferences: selectedTags });
-          }}
-        >
-          {t('common.continue')}
-        </Button>
+      <div className="flex flex-wrap p-4 gap-4 mb-12 border border-neutral-200 w-full rounded-md">
+        {TAGS.map((currentTag, index) => {
+          return (
+            <div
+              key={index}
+              onClick={() => handleTagSelection(currentTag.value)}
+              className={`text-center lg:w-fit border border-neutral-200 rounded-md p-2 cursor-pointer hover:border-neutral-200 hover:bg-neutral-200 ${
+                selectedTags.includes(currentTag.value)
+                  ? 'bg-primary border-primary'
+                  : ''
+              }`}
+            >
+              {t(`nudeCategories.${currentTag.label}`)}
+            </div>
+          );
+        })}
       </div>
-    </PageContainer>
+
+      <Button
+        className="w-full"
+        isLoading={isPending}
+        onClick={() => {
+          editUserPreferences({ preferences: selectedTags });
+        }}
+      >
+        {t('common.continue')}
+      </Button>
+    </div>
   );
 };
 
