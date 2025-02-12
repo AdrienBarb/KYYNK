@@ -11,8 +11,6 @@ const CustomSessionProvider: FC<CustomSessionProviderProps> = async ({
 }) => {
   const session = await auth();
 
-  console.log('🚀 ~ session:', session);
-
   return (
     <SessionProvider session={session} key={session?.user?.id}>
       {children}

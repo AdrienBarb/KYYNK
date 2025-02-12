@@ -12,7 +12,7 @@ interface Props {
 const GlobalConfig: FC<Props> = ({ children }) => {
   const [shouldAllowAccess, setShouldAllowAccess] = useState(true);
   const { data: session } = useSession();
-  console.log('🚀 ~ session:', session);
+
   const { refetch } = useUser();
 
   // TODO: DECOMMENT
@@ -31,9 +31,7 @@ const GlobalConfig: FC<Props> = ({ children }) => {
   // }, []);
 
   useEffect(() => {
-    console.log('🚀 ~ useEffect ~ session?.user?.id:', session?.user?.id);
     if (session?.user?.id) {
-      console.log('🚀 ~ useEffect ~ refetching');
       refetch();
     }
   }, [session?.user?.id, refetch]);

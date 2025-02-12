@@ -12,8 +12,8 @@ import Title from './ui/Title';
 import Text from './ui/Text';
 import { Separator } from './ui/Separator';
 import { Button } from './ui/Button';
-import { uploadToS3 } from '@/utils/s3Uploader';
 import { appRouter } from '@/constants/appRouter';
+import axios from 'axios';
 
 interface Props {}
 
@@ -49,26 +49,46 @@ const IdentityVerificationForm: FC<Props> = () => {
     setFrontAndFaceIdentity(acceptedFiles[0]);
   };
 
+  const handleFileUpload = async (file: File, folder: string) => {
+    try {
+      const response = await axios.post('/api/medias/signed-url', {
+        fileType: file.type,
+        folder,
+      });
+
+      const { signedUrl, fileKey } = response.data;
+
+      await axios.put(signedUrl, file, {
+        headers: {
+          'Content-Type': file.type,
+        },
+      });
+
+      return fileKey;
+    } catch (err) {
+      console.error('Error uploading file:', err);
+      toast.error('Something went wrong!');
+      return null;
+    }
+  };
+
   const handleSubmitForm = async () => {
     if (!frontIdentity || !backIdentity || !frontAndFaceIdentity) {
       toast.error('Missing pictures');
       return;
     }
 
-    const frontIdentityKey = await uploadToS3({
-      file: frontIdentity,
-      folder: 'identity',
-    });
+    const frontIdentityKey = await handleFileUpload(frontIdentity, 'identity');
+    const backIdentityKey = await handleFileUpload(backIdentity, 'identity');
+    const frontAndFaceIdentityKey = await handleFileUpload(
+      frontAndFaceIdentity,
+      'identity',
+    );
 
-    const backIdentityKey = await uploadToS3({
-      file: backIdentity,
-      folder: 'identity',
-    });
-
-    const frontAndFaceIdentityKey = await uploadToS3({
-      file: frontAndFaceIdentity,
-      folder: 'identity',
-    });
+    if (!frontIdentityKey || !backIdentityKey || !frontAndFaceIdentityKey) {
+      toast.error('Failed to upload one or more files');
+      return;
+    }
 
     identityVerification({
       frontIdentity: frontIdentityKey,

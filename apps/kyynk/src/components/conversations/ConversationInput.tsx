@@ -37,7 +37,7 @@ const ConversationInput = ({ refetch }: { refetch: () => void }) => {
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Type your message..."
-        className="w-full"
+        className="w-full text-base"
         rows={3}
       />
       <div className="flex justify-between w-full">

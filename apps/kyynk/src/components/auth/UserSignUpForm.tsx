@@ -84,7 +84,7 @@ const UserSignUpForm = () => {
       try {
         await register({
           pseudo: values.pseudo,
-          email: values.email,
+          email: values.email.toLowerCase(),
           password: values.password,
         });
       } catch (error) {

@@ -44,7 +44,7 @@ const UserSignInForm = () => {
       setIsLoading(true);
       try {
         await authenticate({
-          email: values.email,
+          email: values.email.toLowerCase(),
           password: values.password,
           previousPath,
         });

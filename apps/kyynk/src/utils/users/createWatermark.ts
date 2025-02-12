@@ -37,6 +37,11 @@ export const generateWatermark = async (slug: string): Promise<string> => {
   const img = PImage.make(width, height);
   const ctx = img.getContext('2d');
 
+  const fontPath = path.join(process.cwd(), 'public', 'fonts', 'ARIAL.TTF');
+
+  const font = PImage.registerFont(fontPath, 'Arial');
+  await font.loadSync();
+
   // Background color (fully transparent)
   ctx.clearRect(0, 0, width, height);
 

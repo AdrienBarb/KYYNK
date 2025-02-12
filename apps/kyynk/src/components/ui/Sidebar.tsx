@@ -84,7 +84,6 @@ const SidebarProvider = React.forwardRef<
           _setOpen(openState);
         }
 
-        console.log('🚀 ~ openState:', openState);
         // This sets the cookie to keep the sidebar state.
         setCookie(SIDEBAR_COOKIE_NAME, openState, {
           maxAge: SIDEBAR_COOKIE_MAX_AGE,

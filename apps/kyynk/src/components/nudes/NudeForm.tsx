@@ -145,7 +145,7 @@ const NudeForm: FC<Props> = ({ nude }) => {
             <FormItem className="w-full">
               <FormLabel>Description*</FormLabel>
               <FormControl>
-                <Textarea rows={4} {...field} className="mt-2" />
+                <Textarea rows={4} {...field} className="mt-2 text-base" />
               </FormControl>
               <FormMessage />
             </FormItem>

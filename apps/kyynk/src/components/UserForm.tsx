@@ -17,7 +17,6 @@ import { useUser } from '@/hooks/users/useUser';
 import '@uploadcare/react-uploader/core.css';
 import Avatar from './ui/Avatar';
 import { Button } from '@/components/ui/Button';
-import { uploadToS3 } from '@/utils/s3Uploader';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -40,6 +39,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select';
 import { User } from '@prisma/client';
+import axios from 'axios';
 
 const UserForm = () => {
   //router
@@ -111,10 +111,22 @@ const UserForm = () => {
     const file = event.target.files[0];
 
     try {
-      const imageKey = await uploadToS3({ file, folder: 'medias' });
+      const response = await axios.post('/api/medias/signed-url', {
+        fileType: file.type,
+        folder: 'medias',
+      });
 
-      setProfileImageId({ profileImageId: imageKey });
+      const { signedUrl, fileKey } = response.data;
+
+      await axios.put(signedUrl, file, {
+        headers: {
+          'Content-Type': file.type,
+        },
+      });
+
+      setProfileImageId({ profileImageId: fileKey });
     } catch (err) {
+      console.error('Error uploading file:', err);
       toast.error('Something went wrong!');
     }
   };
@@ -172,7 +184,7 @@ const UserForm = () => {
             <FormItem className="w-full">
               <FormLabel>{t('db.description')}</FormLabel>
               <FormControl>
-                <Textarea {...field} />
+                <Textarea {...field} className="text-base" />
               </FormControl>
               <FormMessage />
             </FormItem>
