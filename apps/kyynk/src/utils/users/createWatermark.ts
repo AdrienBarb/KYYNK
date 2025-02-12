@@ -1,9 +1,8 @@
 import apiVideoClient from '@/lib/api-video/client';
-import { createCanvas } from 'canvas';
 import path from 'path';
-import fs from 'fs/promises';
-import { createReadStream } from 'fs';
+import { createReadStream, createWriteStream } from 'fs';
 import { prisma } from '@/lib/db/client';
+import * as PImage from 'pureimage';
 
 export const createWatermark = async ({
   userId,
@@ -35,22 +34,21 @@ export const createWatermark = async ({
 export const generateWatermark = async (slug: string): Promise<string> => {
   const width = 975;
   const height = 150;
-  const canvas = createCanvas(width, height);
-  const ctx = canvas.getContext('2d');
+  const img = PImage.make(width, height);
+  const ctx = img.getContext('2d');
 
   // Background color (fully transparent)
   ctx.clearRect(0, 0, width, height);
 
   // Add text with bold style
-  ctx.font = 'bold 65px Arial';
+  ctx.font = '65pt Arial';
   ctx.fillStyle = 'white'; // Text color
   ctx.textAlign = 'right';
   ctx.fillText(`kyynk.com/${slug}`, width, height / 2 + 60); // Move text down by 20 pixels
 
   // Save the image
   const watermarkPath = path.join('/tmp', `watermark-${slug}.png`);
-  const buffer = canvas.toBuffer('image/png');
+  await PImage.encodePNGToStream(img, createWriteStream(watermarkPath));
 
-  await fs.writeFile(watermarkPath, buffer);
   return watermarkPath;
 };
