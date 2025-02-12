@@ -1,16 +1,23 @@
-"use client";
-
-import React, { FC, ReactNode } from "react";
-import { SessionProvider } from "next-auth/react";
+import React, { FC, ReactNode } from 'react';
+import { SessionProvider } from 'next-auth/react';
+import { auth } from '@/auth';
 
 interface CustomSessionProviderProps {
   children: ReactNode;
 }
 
-const CustomSessionProvider: FC<CustomSessionProviderProps> = ({
+const CustomSessionProvider: FC<CustomSessionProviderProps> = async ({
   children,
 }) => {
-  return <SessionProvider>{children}</SessionProvider>;
+  const session = await auth();
+
+  console.log('🚀 ~ session:', session);
+
+  return (
+    <SessionProvider session={session} key={session?.user?.id}>
+      {children}
+    </SessionProvider>
+  );
 };
 
 export default CustomSessionProvider;

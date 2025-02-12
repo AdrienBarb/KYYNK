@@ -29,6 +29,8 @@ import { isCreator } from '@/utils/users/isCreator';
 export function AppSidebar() {
   const { user } = useUser();
 
+  console.log('🚀 ~ AppSidebar ~ user:', user);
+
   const platforms = [
     {
       title: 'Home',

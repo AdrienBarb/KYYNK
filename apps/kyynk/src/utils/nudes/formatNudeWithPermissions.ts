@@ -15,6 +15,10 @@ export const formatNudeWithPermissions = (
 
   return {
     ...nude,
+    media: {
+      ...nude.media,
+      videoId: canView ? nude.media.videoId : null,
+    },
     permissions: {
       canView,
       canEdit,

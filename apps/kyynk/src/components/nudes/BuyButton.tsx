@@ -15,7 +15,8 @@ import { NudeType } from '@/types/nudes';
 import useApi from '@/hooks/requests/useApi';
 import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
-
+import { appRouter } from '@/constants/appRouter';
+import { useRouter } from 'next/navigation';
 interface Props {
   nude: NudeType;
 }
@@ -25,7 +26,7 @@ const BuyButton = ({ nude }: Props) => {
   const { slug } = useParams<{ slug: string }>();
   const [openNotEnoughCreditModal, setOpenNotEnoughCreditModal] =
     useState(false);
-
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const { usePost } = useApi();
@@ -47,6 +48,7 @@ const BuyButton = ({ nude }: Props) => {
 
   const handleBuy = () => {
     if (!user) {
+      router.push(appRouter.login);
       return;
     }
 

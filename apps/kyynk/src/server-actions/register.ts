@@ -1,10 +1,13 @@
 'use server';
 
 import { signIn } from '@/auth';
+import { appRouter } from '@/constants/appRouter';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { prisma } from '@/lib/db/client';
 import { checkOrCreateSlug } from '@/utils/users/checkOrCreateSlug';
 import bcrypt from 'bcryptjs';
+import { AuthError } from 'next-auth';
+import { isRedirectError } from 'next/dist/client/components/redirect';
 
 export async function register({
   pseudo,
@@ -59,11 +62,20 @@ export async function register({
     await signIn('credentials', {
       email: lowerCaseEmail,
       password: password,
-      redirect: false,
+      redirect: true,
+      redirectTo: appRouter.userType,
     });
 
     return createdUser;
   } catch (error: any) {
-    throw new Error(error.message || errorMessages.FAILED_TO_AUTHENTICATE);
+    if (isRedirectError(error)) {
+      throw error;
+    }
+
+    if (error instanceof AuthError) {
+      throw new Error(error?.cause?.err?.message);
+    } else {
+      throw new Error(errorMessages.FAILED_TO_AUTHENTICATE);
+    }
   }
 }

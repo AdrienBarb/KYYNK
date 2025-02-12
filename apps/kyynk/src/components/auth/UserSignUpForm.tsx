@@ -87,13 +87,11 @@ const UserSignUpForm = () => {
           email: values.email,
           password: values.password,
         });
-
-        await refetch();
-
-        router.push(appRouter.userType, {});
-
-        setIsLoading(false);
       } catch (error) {
+        if (error instanceof Error) {
+          toast.error(error.message);
+        }
+      } finally {
         setIsLoading(false);
       }
     },

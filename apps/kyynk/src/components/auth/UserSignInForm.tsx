@@ -10,16 +10,14 @@ import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { authenticate } from '../../server-actions/authenticate';
+import { useQueryState } from 'nuqs';
 
 const UserSignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations();
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const previousPath = searchParams.get('previousPath');
+  const [previousPath] = useQueryState('previousPath');
 
   const handleClickShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -45,20 +43,18 @@ const UserSignInForm = () => {
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        const user = await authenticate({
+        await authenticate({
           email: values.email,
           password: values.password,
+          previousPath,
         });
-
-        toast.success(t('success.login'));
-        router.push(previousPath ? previousPath : `/${user?.slug}`);
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);
         }
+      } finally {
+        setIsLoading(false);
       }
-
-      setIsLoading(false);
     },
   });
 
