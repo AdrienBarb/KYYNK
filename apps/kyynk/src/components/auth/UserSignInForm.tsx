@@ -12,6 +12,7 @@ import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { authenticate } from '../../server-actions/authenticate';
 import { useQueryState } from 'nuqs';
+import posthog from 'posthog-js';
 
 const UserSignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -47,6 +48,9 @@ const UserSignInForm = () => {
           email: values.email.toLowerCase(),
           password: values.password,
           previousPath,
+        });
+        posthog.capture('sign_in', {
+          email: values.email,
         });
       } catch (error) {
         if (error instanceof Error) {

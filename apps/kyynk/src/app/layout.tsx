@@ -17,6 +17,7 @@ import { getLocale, getMessages } from 'next-intl/server';
 import CustomQueryClientProvider from '@/components/provider/CustomQueryClientProvider';
 import CustomSessionProvider from '@/components/provider/CustomSessionProvider';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { PostHogProvider } from '@/components/provider/PostHogProvider';
 
 config.autoAddCss = false;
 
@@ -115,9 +116,10 @@ const RootLayout: FC<Props> = async ({ children }) => {
               <body>
                 <Toaster position="bottom-center" />
                 <GlobalConfig>
-                  <NuqsAdapter>{children}</NuqsAdapter>
+                  <NuqsAdapter>
+                    <PostHogProvider>{children}</PostHogProvider>
+                  </NuqsAdapter>
                 </GlobalConfig>
-                <Fathom />
                 <GlobalErrorProvider />
               </body>
             </html>
