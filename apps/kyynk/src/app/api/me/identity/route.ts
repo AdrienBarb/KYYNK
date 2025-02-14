@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { errorHandler } from '@/utils/errors/errorHandler';
 import { strictlyAuth } from '@/hoc/strictlyAuth';

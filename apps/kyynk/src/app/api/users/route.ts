@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import { errorHandler } from '@/utils/errors/errorHandler';
 import { getUsers } from '@/services/users/getUsers';
 import { NextResponse } from 'next/server';

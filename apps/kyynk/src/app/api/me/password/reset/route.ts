@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { prisma } from '@/lib/db/client';
 import { errorHandler } from '@/utils/errors/errorHandler';

@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import { NextRequest, NextResponse } from 'next/server';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { errorHandler } from '@/utils/errors/errorHandler';
