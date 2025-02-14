@@ -6,7 +6,9 @@
     "DIRECT_URL",
     "AUTH_SECRET",
     "RESEND_API_KEY",
-    "API_VIDEO_KEY"
+    "API_VIDEO_KEY",
+    "NEXTAUTH_URL",
+    "CLIENT_URL"
   ],
   "tasks": {
     "dev": {
@@ -22,7 +24,9 @@
         "DIRECT_URL",
         "AUTH_SECRET",
         "RESEND_API_KEY",
-        "API_VIDEO_KEY"
+        "API_VIDEO_KEY",
+        "NEXTAUTH_URL",
+        "CLIENT_URL"
       ]
     },
     "start": {
