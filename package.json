@@ -19,7 +19,8 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "start": "turbo run start",
-    "lint": "turbo run lint"
+    "lint": "turbo run lint",
+    "clean": "pnpm -r exec rm -rf dist node_modules .turbo .next"
   },
   "dependencies": {
     "@types/react": "^18",
