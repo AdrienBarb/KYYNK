@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import apiVideoClient from '@/lib/api-video/client';
 import { strictlyAuth } from '@/hoc/strictlyAuth';
-import { getCurrentUser } from '@/services/users/getCurrentUser';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { prisma } from '@/lib/db/client';
 
