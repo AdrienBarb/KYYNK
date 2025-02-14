@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { NextRequest, NextResponse } from 'next/server';
 import apiVideoClient from '@/lib/api-video/client';
 import { strictlyAuth } from '@/hoc/strictlyAuth';

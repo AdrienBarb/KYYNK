@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { errorHandler } from '@/utils/errors/errorHandler';
 import { strictlyAuth } from '@/hoc/strictlyAuth';
 import { getCurrentUser } from '@/services/users/getCurrentUser';
