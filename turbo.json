@@ -1,6 +1,13 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": [],
+  "globalEnv": [
+    "DATABASE_URL",
+    "DIRECT_URL",
+    "AUTH_SECRET",
+    "RESEND_API_KEY",
+    "API_VIDEO_KEY"
+  ],
   "tasks": {
     "dev": {
       "cache": false,
@@ -9,6 +16,13 @@
     "build": {
       "outputs": [
         ".next/**"
+      ],
+      "env": [
+        "DATABASE_URL",
+        "DIRECT_URL",
+        "AUTH_SECRET",
+        "RESEND_API_KEY",
+        "API_VIDEO_KEY"
       ]
     },
     "start": {
