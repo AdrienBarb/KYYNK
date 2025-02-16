@@ -16,15 +16,20 @@ axiosInstance.interceptors.response.use(
     const errorStatus = error?.response?.status;
     const setStatusCode = useErrorStore.getState().setStatusCode;
     const setErrorMessage = useErrorStore.getState().setErrorMessage;
+    const setIsError = useErrorStore.getState().setIsError;
 
     if (errorStatus === 404) {
+      let message = error.response?.data?.message || 'Server error';
+
       if (isServer) {
         redirect('/404');
       } else {
         setStatusCode(errorStatus);
+        setErrorMessage(message);
+        setIsError(true);
       }
 
-      return Promise.reject(error.response?.data?.message || 'Not found');
+      return Promise.reject(message);
     }
 
     if (errorStatus >= 500) {
@@ -34,6 +39,7 @@ axiosInstance.interceptors.response.use(
       } else {
         setErrorMessage(message);
         setStatusCode(errorStatus);
+        setIsError(true);
       }
       return Promise.reject(message);
     }
@@ -46,10 +52,13 @@ axiosInstance.interceptors.response.use(
       } else {
         setErrorMessage(message);
         setStatusCode(errorStatus);
+        setIsError(true);
       }
 
       return Promise.reject(message);
     }
+
+    console.log('🚀 ~ errorStatus:', errorStatus);
 
     if (errorStatus === 401) {
       let message = error.response?.data?.message || 'Need to login';
@@ -58,6 +67,7 @@ axiosInstance.interceptors.response.use(
       } else {
         setStatusCode(errorStatus);
         setErrorMessage(message);
+        setIsError(true);
       }
       return Promise.reject(message);
     }

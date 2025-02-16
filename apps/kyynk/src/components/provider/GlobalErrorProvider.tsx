@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { useErrorStore } from '@/stores/ErrorStore';
+import { signOut } from 'next-auth/react';
 
 const GlobalErrorProvider = () => {
   const router = useRouter();
@@ -16,7 +17,7 @@ const GlobalErrorProvider = () => {
       }
 
       if (statusCode === 401) {
-        router.push('/401');
+        signOut({ redirectTo: '/' });
       }
 
       if (errorMessage) {

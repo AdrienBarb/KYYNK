@@ -49,9 +49,6 @@ const UserSignInForm = () => {
           password: values.password,
           previousPath,
         });
-        posthog.capture('sign_in', {
-          email: values.email,
-        });
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);

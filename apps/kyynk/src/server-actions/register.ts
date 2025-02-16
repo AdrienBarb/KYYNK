@@ -4,6 +4,8 @@ import { signIn } from '@/auth';
 import { appRouter } from '@/constants/appRouter';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { prisma } from '@/lib/db/client';
+import { postHogClient } from '@/lib/post-hog/postHogClient';
+import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
 import { checkOrCreateSlug } from '@/utils/users/checkOrCreateSlug';
 import bcrypt from 'bcryptjs';
 import { AuthError } from 'next-auth';
@@ -64,6 +66,15 @@ export async function register({
       password: password,
       redirect: true,
       redirectTo: appRouter.userType,
+    });
+
+    sendPostHogEvent({
+      distinctId: createdUser.id,
+      event: 'user signed up',
+      properties: {
+        email: lowerCaseEmail,
+        pseudo: pseudo,
+      },
     });
 
     return createdUser;
