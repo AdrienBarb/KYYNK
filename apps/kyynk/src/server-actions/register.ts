@@ -61,23 +61,22 @@ export async function register({
       },
     });
 
-    await signIn('credentials', {
-      email: lowerCaseEmail,
-      password: password,
-      redirect: true,
-      redirectTo: appRouter.userType,
-    });
-
     sendPostHogEvent({
       distinctId: createdUser.id,
       event: 'user signed up',
       properties: {
         email: lowerCaseEmail,
         pseudo: pseudo,
+        $process_person_profile: false,
       },
     });
 
-    return createdUser;
+    await signIn('credentials', {
+      email: lowerCaseEmail,
+      password: password,
+      redirect: true,
+      redirectTo: appRouter.userType,
+    });
   } catch (error: any) {
     if (isRedirectError(error)) {
       throw error;

@@ -11,13 +11,15 @@ export const sendPostHogEvent = ({
   event,
   properties,
 }: SendPostHogEventParams) => {
-  if (process.env.NODE_ENV === 'production') {
-    postHogClient.capture({
-      distinctId,
-      event,
-      properties,
-    });
-  } else {
-    console.log('🚀 ~ sendPostHogEvent ~ event:', event);
+  try {
+    if (process.env.NODE_ENV === 'production') {
+      postHogClient.capture({
+        distinctId,
+        event,
+        properties,
+      });
+    }
+  } catch (error) {
+    console.error(error);
   }
 };

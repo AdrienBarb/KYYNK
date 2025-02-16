@@ -4,6 +4,7 @@ import { checkOrCreateSlug } from '@/utils/users/checkOrCreateSlug';
 import { Prisma, User } from '@prisma/client';
 import { z } from 'zod';
 import { updateUserSchema } from '@/schemas/users/updateUserSchema';
+import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
 
 export async function updateUser({
   userId,
@@ -33,6 +34,15 @@ export async function updateUser({
 
   if (body.userType) {
     data.userType = body.userType;
+
+    sendPostHogEvent({
+      distinctId: userId,
+      event: 'user type',
+      properties: {
+        userType: body.userType,
+        $process_person_profile: false,
+      },
+    });
   }
 
   if (body.preferences) {
