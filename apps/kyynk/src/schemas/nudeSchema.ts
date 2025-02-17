@@ -10,6 +10,12 @@ export const nudeSchema = z.object({
       message: 'Description must be at most 300 characters long.',
     }),
   price: z.number().int(),
-  isPrivate: z.boolean().optional(),
   tags: z.array(z.object({ value: z.string(), label: z.string() })).optional(),
+});
+
+export const privateNudeSchema = z.object({
+  description: z.string({ required_error: 'This field is required' }).min(1, {
+    message: 'This field is required',
+  }),
+  price: z.number().int(),
 });

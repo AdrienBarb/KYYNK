@@ -6,6 +6,7 @@ import { ConversationType } from '@/types/conversations';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { appRouter } from '@/constants/appRouter';
+import { MessageType } from '@/types/messages';
 
 const CurrentConversationPage = async ({
   params,
@@ -29,9 +30,9 @@ const CurrentConversationPage = async ({
     redirect(appRouter.home);
   }
 
-  const messages = await fetchMessagesByConversationId({
+  const messages = (await fetchMessagesByConversationId({
     conversationId: id,
-  });
+  })) as MessageType[];
 
   return (
     <Conversation

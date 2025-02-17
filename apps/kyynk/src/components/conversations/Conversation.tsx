@@ -5,17 +5,17 @@ import { useChatScroll } from '@/lib/hooks/useChatScroll';
 import { useParams } from 'next/navigation';
 import useApi from '@/hooks/requests/useApi';
 import { ConversationType } from '@/types/conversations';
-import { Message } from '@prisma/client';
 import useConversationUsers from '@/hooks/conversations/useConversationUsers';
 import ConversationInput from './ConversationInput';
 import { useUser } from '@/hooks/users/useUser';
 import Avatar from '../ui/Avatar';
 import Link from 'next/link';
 import Text from '../ui/Text';
+import { MessageType } from '@/types/messages';
 
 interface Props {
   initialConversation: ConversationType;
-  initialMessages: Message[];
+  initialMessages: MessageType[];
 }
 
 const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
@@ -32,6 +32,7 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
       initialData: initialMessages,
     },
   );
+  console.log('🚀 ~ messages:', messages);
 
   const ref = useChatScroll(messages);
 
@@ -54,7 +55,7 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
         className="flex flex-col gap-4 px-4 h-[100%] w-full overflow-y-scroll"
         ref={ref}
       >
-        {messages.map((currentMessage: Message) => {
+        {messages.map((currentMessage: MessageType) => {
           const isMyMessage = currentMessage.senderId === user?.id;
 
           return (

@@ -12,5 +12,25 @@ export const fetchMessagesByConversationId = async ({
     orderBy: {
       createdAt: 'asc',
     },
+    select: {
+      id: true,
+      content: true,
+      senderId: true,
+      createdAt: true,
+      status: true,
+      nude: {
+        select: {
+          id: true,
+          creditPrice: true,
+          media: {
+            select: {
+              id: true,
+              thumbnailId: true,
+              videoId: true,
+            },
+          },
+        },
+      },
+    },
   });
 };

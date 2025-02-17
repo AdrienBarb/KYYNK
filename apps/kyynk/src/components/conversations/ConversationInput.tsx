@@ -90,6 +90,7 @@ const ConversationInput = ({
       <PrivateNudeModal
         open={openPrivateNudeModal}
         setOpen={setOpenPrivateNudeModal}
+        refetch={refetch}
       />
     </div>
   );

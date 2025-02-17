@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { nudeSchema } from '@/schemas/nudeSchema';
+import { privateNudeSchema } from '@/schemas/nudeSchema';
 import { useForm } from 'react-hook-form';
 import { getMediaPrice } from '@/utils/prices/getMediaPrice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -36,22 +36,22 @@ import CustomSlider from '../CustomSlider';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
 import imgixLoader from '@/lib/imgix/loader';
+import useApi from '@/hooks/requests/useApi';
+import { useParams } from 'next/navigation';
 
 interface Props {
   setOpen: (e: boolean) => void;
   open: boolean;
+  refetch: () => void;
 }
 
-const PrivateNudeModal: FC<Props> = ({ setOpen, open }) => {
+const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
   const [openGalleryModal, setOpenGalleryModal] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
+  const { id: conversationId } = useParams();
 
-  const closeModal = () => {
-    setOpen(false);
-  };
-
-  const form = useForm<z.infer<typeof nudeSchema>>({
-    resolver: zodResolver(nudeSchema),
+  const form = useForm<z.infer<typeof privateNudeSchema>>({
+    resolver: zodResolver(privateNudeSchema),
     defaultValues: {
       description: '',
       price: 0,
@@ -62,25 +62,32 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open }) => {
 
   const { creditPrice } = getMediaPrice(form.watch('price') || 0);
 
+  const { usePost } = useApi();
+  const { mutate: createPrivateNudeMessage, isPending } = usePost(
+    `/api/conversations/${conversationId}/messages/nudes`,
+    {
+      onSuccess: () => {
+        setOpen(false);
+        refetch();
+      },
+    },
+  );
+
   const onSubmit = handleSubmit((values) => {
-    console.log('🚀 ~ onSubmit ~ selectedMedia:', selectedMedia);
     if (!selectedMedia) {
       toast.error('You forgot to upload a video');
       return;
     }
 
-    const payload = {
+    createPrivateNudeMessage({
       mediaId: selectedMedia.id,
       description: values.description,
       price: values.price,
-      isPrivate: true,
-    };
-
-    console.log('send', payload);
+    });
   });
 
   return (
-    <Dialog open={open} onOpenChange={closeModal} modal={true}>
+    <Dialog open={open} onOpenChange={setOpen} modal={true}>
       <DialogContent className="z-[1000] h-[100vh] sm:h-[80vh] overflow-y-scroll">
         <DialogHeader>
           <DialogTitle>Send a private nude</DialogTitle>
@@ -132,25 +139,6 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open }) => {
 
             <FormField
               control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Message*</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      rows={4}
-                      {...field}
-                      className="mt-2 text-base"
-                      placeholder="Type your message..."
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
               name="price"
               render={({ field }) => (
                 <FormItem className="w-full">
@@ -172,7 +160,26 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open }) => {
               )}
             />
 
-            <Button type="submit" className="w-full">
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Message*</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      rows={4}
+                      {...field}
+                      className="mt-2 text-base"
+                      placeholder="Type your message..."
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button type="submit" className="w-full" isLoading={isPending}>
               Send
             </Button>
           </form>
