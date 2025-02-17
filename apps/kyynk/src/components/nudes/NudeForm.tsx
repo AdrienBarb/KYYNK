@@ -72,7 +72,7 @@ const NudeForm: FC<Props> = ({ nude }) => {
 
   const { handleSubmit, setValue } = form;
 
-  const totalPrice = getMediaPrice(form.watch('price') || 0);
+  const { creditPrice } = getMediaPrice(form.watch('price') || 0);
 
   const onSubmit = handleSubmit((values) => {
     if (!nude && !selectedMedia) {
@@ -159,7 +159,7 @@ const NudeForm: FC<Props> = ({ nude }) => {
             <FormItem className="w-full">
               <FormLabel>Price</FormLabel>
               <FormSubLabel>
-                Either {totalPrice} credits. Credits are the currency of our
+                Either {creditPrice} credits. Credits are the currency of our
                 platform.
               </FormSubLabel>
               <FormControl>

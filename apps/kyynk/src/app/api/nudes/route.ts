@@ -4,6 +4,7 @@ import { strictlyAuth } from '@/hoc/strictlyAuth';
 import { prisma } from '@/lib/db/client';
 import { nudeSchema } from '@/schemas/nudeSchema';
 import { errorHandler } from '@/utils/errors/errorHandler';
+import { getMediaPrice } from '@/utils/prices/getMediaPrice';
 
 const formSchema = nudeSchema.extend({
   mediaId: z.string(),
@@ -16,6 +17,8 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
 
     const body = await req.json();
     const payload = formSchema.parse(body);
+
+    const { creditPrice, fiatPrice } = getMediaPrice(payload.price);
 
     const newNude = await prisma.nude.create({
       data: {
@@ -30,8 +33,8 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
           },
         },
         description: payload.description,
-        fiatPrice: payload.price,
-        creditPrice: payload.price * 2,
+        fiatPrice: fiatPrice,
+        creditPrice: creditPrice,
         tags: payload.tags.map((tag) => tag.value),
         currency: 'EUR',
       },

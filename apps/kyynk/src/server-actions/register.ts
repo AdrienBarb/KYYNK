@@ -81,6 +81,7 @@ export async function register({
       redirectTo: appRouter.userType,
     });
   } catch (error: any) {
+    console.log('🚀 ~ error:', error);
     if (isRedirectError(error)) {
       throw error;
     }

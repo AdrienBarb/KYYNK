@@ -25,6 +25,12 @@ export const getCurrentUser = async ({ userId }: { userId: string }) => {
         identityVerificationStatus: true,
         nudesCount: true,
         watermarkId: true,
+        settings: {
+          select: {
+            fiatMessage: true,
+            creditMessage: true,
+          },
+        },
       },
     });
 

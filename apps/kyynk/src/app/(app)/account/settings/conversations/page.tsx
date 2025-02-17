@@ -14,7 +14,7 @@ const SettingsConversationsPage = async () => {
 
   return (
     <PaddingContainer>
-      <PageHeader title="Conversations" className="mb-8" />
+      <PageHeader title="Conversations Settings" className="mb-8" />
       <ConversationSettings />
     </PaddingContainer>
   );

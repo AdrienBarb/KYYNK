@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { User, UserSettings } from '@prisma/client';
 
 export type LoggedUserType = Pick<
   User,
@@ -19,7 +19,9 @@ export type LoggedUserType = Pick<
   | 'isEmailVerified'
   | 'identityVerificationStatus'
   | 'nudesCount'
->;
+> & {
+  settings: Pick<UserSettings, 'fiatMessage' | 'creditMessage'>;
+};
 
 export type FetchedUserType = Pick<
   User,

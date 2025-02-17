@@ -1,3 +1,5 @@
+'use client';
+
 import Text from '../ui/Text';
 import {
   Select,
@@ -8,6 +10,8 @@ import {
   SelectItem,
 } from '../ui/Select';
 import { Separator } from '../ui/Separator';
+import { useUser } from '@/hooks/users/useUser';
+import useApi from '@/hooks/requests/useApi';
 
 const priceOptions = [
   { label: 'Free', value: '0' },
@@ -34,6 +38,24 @@ const priceOptions = [
 ];
 
 const ConversationSettings = () => {
+  const { user, refetch } = useUser();
+  console.log('🚀 ~ ConversationSettings ~ user:', user);
+  const { usePut } = useApi();
+
+  const { mutate: updatePrice } = usePut(
+    '/api/settings/conversations/messages-price',
+    {
+      onSuccess: () => {
+        refetch();
+      },
+    },
+  );
+
+  const handlePriceChange = (value: string) => {
+    console.log('🚀 ~ handlePriceChange ~ value:', value);
+    updatePrice({ fiatMessage: value });
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center gap-4">
@@ -44,7 +66,10 @@ const ConversationSettings = () => {
             Change the price here
           </Text>
         </div>
-        <Select defaultValue="0">
+        <Select
+          value={user?.settings?.fiatMessage.toString()}
+          onValueChange={handlePriceChange}
+        >
           <SelectTrigger className="w-24">
             <SelectValue />
           </SelectTrigger>
