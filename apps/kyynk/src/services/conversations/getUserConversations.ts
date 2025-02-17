@@ -23,6 +23,7 @@ export const getUserConversations = async ({ userId }: { userId: string }) => {
         messages: {
           select: {
             status: true,
+            senderId: true,
           },
           where: {
             status: {
@@ -39,7 +40,7 @@ export const getUserConversations = async ({ userId }: { userId: string }) => {
     const conversationsWithUnreadFlag = conversations.map((conversation) => ({
       ...conversation,
       hasUnreadMessages: conversation.messages.some(
-        (message) => message.status !== 'read',
+        (message) => message.status !== 'read' && message.senderId !== userId,
       ),
     }));
 

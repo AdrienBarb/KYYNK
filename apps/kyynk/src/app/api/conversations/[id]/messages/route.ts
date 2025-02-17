@@ -72,21 +72,56 @@ export const POST = strictlyAuth(async (req: NextRequest, { params }) => {
       );
     }
 
-    const isParticipant = await prisma.conversation.findFirst({
+    const currentUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { creditsAmount: true },
+    });
+
+    if (!currentUser) {
+      return NextResponse.json(
+        { error: errorMessages.USER_NOT_FOUND },
+        { status: 404 },
+      );
+    }
+
+    const conversation = await prisma.conversation.findFirst({
       where: {
         id: conversationId,
+        participants: { some: { id: userId } },
+      },
+      include: {
         participants: {
-          some: {
-            id: userId,
+          select: {
+            id: true,
+            settings: { select: { creditMessage: true } },
           },
         },
       },
     });
 
-    if (!isParticipant) {
+    if (!conversation) {
       return NextResponse.json(
         { error: errorMessages.NOT_AUTHORIZED },
+        { status: 400 },
+      );
+    }
+
+    const recipient = conversation.participants.find(
+      (participant) => participant.id !== userId,
+    );
+
+    if (!recipient) {
+      return NextResponse.json(
+        { error: errorMessages.USER_NOT_FOUND },
         { status: 404 },
+      );
+    }
+
+    const requiredCredits = recipient?.settings?.creditMessage || 0;
+    if (requiredCredits > 0 && currentUser.creditsAmount < requiredCredits) {
+      return NextResponse.json(
+        { error: errorMessages.NOT_AUTHORIZED },
+        { status: 400 },
       );
     }
 
@@ -99,6 +134,23 @@ export const POST = strictlyAuth(async (req: NextRequest, { params }) => {
         senderId: userId!,
       },
     });
+
+    if (requiredCredits > 0) {
+      await prisma.$transaction([
+        prisma.sale.create({
+          data: {
+            creditAmount: requiredCredits,
+            type: 'message',
+            seller: { connect: { id: recipient.id } },
+            buyer: { connect: { id: userId } },
+          },
+        }),
+        prisma.user.update({
+          where: { id: userId },
+          data: { creditsAmount: { decrement: requiredCredits } },
+        }),
+      ]);
+    }
 
     return NextResponse.json(message, { status: 201 });
   } catch (error) {

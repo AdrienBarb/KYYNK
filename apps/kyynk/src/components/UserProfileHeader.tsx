@@ -10,6 +10,7 @@ import OnlineStatus from '@/components/profile/OnlineStatus';
 import Title from '@/components/ui/Title';
 import { Button } from './ui/Button';
 import { useUser } from '@/hooks/users/useUser';
+import { isUserVerified } from '@/utils/users/isUserVerified';
 
 interface Props {
   initialUserDatas: User;
@@ -54,14 +55,16 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
         </div>
       </div>
       <div className="flex gap-2">
-        {loggedUser && loggedUser?.slug !== slug && (
-          <Button
-            onClick={() => createConversation({ slug })}
-            isLoading={isPending}
-          >
-            Discuss
-          </Button>
-        )}
+        {loggedUser &&
+          loggedUser?.slug !== slug &&
+          isUserVerified({ user }) && (
+            <Button
+              onClick={() => createConversation({ slug })}
+              isLoading={isPending}
+            >
+              Discuss
+            </Button>
+          )}
       </div>
     </div>
   );

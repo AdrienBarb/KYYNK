@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import PageContainer from '@/components/PageContainer';
+import PaddingContainer from '@/components/layout/PaddingContainer';
 import UserForm from '@/components/UserForm';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -12,9 +12,9 @@ const EditProfilPage = async () => {
   }
 
   return (
-    <PageContainer>
+    <PaddingContainer>
       <UserForm />
-    </PageContainer>
+    </PaddingContainer>
   );
 };
 

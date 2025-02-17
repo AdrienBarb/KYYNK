@@ -1,9 +1,10 @@
 import { Conversation, User } from '@prisma/client';
+import { ConversationUser } from '../users';
 
 export type ConversationType = Pick<
   Conversation,
   'id' | 'createdAt' | 'updatedAt' | 'isArchived'
 > & {
-  participants: Pick<User, 'id' | 'pseudo' | 'profileImageId' | 'slug'>[];
+  participants: ConversationUser[];
   hasUnreadMessages: boolean;
 };

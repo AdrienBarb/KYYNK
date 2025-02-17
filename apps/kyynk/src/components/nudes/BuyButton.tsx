@@ -1,15 +1,5 @@
 import { useUser } from '@/hooks/users/useUser';
 import { Button } from '../ui/Button';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '../ui/AlertDialog';
 import { useState } from 'react';
 import { NudeType } from '@/types/nudes';
 import useApi from '@/hooks/requests/useApi';
@@ -17,6 +7,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { appRouter } from '@/constants/appRouter';
 import { useRouter } from 'next/navigation';
+import NotEnoughCreditsModal from '../modals/NotEnoughCreditsModal';
+
 interface Props {
   nude: NudeType;
 }
@@ -66,24 +58,10 @@ const BuyButton = ({ nude }: Props) => {
         onClick={handleBuy}
         isLoading={isPending}
       >{`Buy for ${nude.creditPrice} credits`}</Button>
-      <AlertDialog
+      <NotEnoughCreditsModal
         open={openNotEnoughCreditModal}
         onOpenChange={setOpenNotEnoughCreditModal}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Not Enough Credits</AlertDialogTitle>
-            <AlertDialogDescription>
-              You do not have enough credits to buy this nude. Would you like to
-              buy more credits?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Buy more credits</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      />
     </>
   );
 };

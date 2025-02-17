@@ -36,3 +36,10 @@ export type FetchedUserType = Pick<
   | 'identityVerificationStatus'
   | 'nudesCount'
 >;
+
+export type ConversationUser = Pick<
+  User,
+  'id' | 'pseudo' | 'profileImageId' | 'slug'
+> & {
+  settings: Pick<UserSettings, 'creditMessage'>;
+};

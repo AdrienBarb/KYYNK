@@ -5,11 +5,23 @@ import toast from 'react-hot-toast';
 import { messageSchema } from '@/schemas/conversations/messageSchema';
 import useApi from '@/hooks/requests/useApi';
 import { useParams } from 'next/navigation';
+import { useUser } from '@/hooks/users/useUser';
+import NotEnoughCreditsModal from '../modals/NotEnoughCreditsModal';
+import { ConversationUser } from '@/types/users';
 
-const ConversationInput = ({ refetch }: { refetch: () => void }) => {
+const ConversationInput = ({
+  refetch,
+  otherUser,
+}: {
+  refetch: () => void;
+  otherUser: ConversationUser;
+}) => {
   const [message, setMessage] = useState('');
   const { usePost } = useApi();
   const { id: conversationId } = useParams();
+  const { user, refetch: refetchUser } = useUser();
+  const [openNotEnoughCreditModal, setOpenNotEnoughCreditModal] =
+    useState(false);
 
   const { mutate: sendMessage, isPending } = usePost(
     `/api/conversations/${conversationId}/messages`,
@@ -17,6 +29,7 @@ const ConversationInput = ({ refetch }: { refetch: () => void }) => {
       onSuccess: () => {
         setMessage('');
         refetch();
+        refetchUser();
       },
     },
   );
@@ -24,7 +37,15 @@ const ConversationInput = ({ refetch }: { refetch: () => void }) => {
   const handleSendMessage = () => {
     try {
       messageSchema.parse(message);
-      console.log('Message sent:', message);
+
+      if (
+        otherUser?.settings.creditMessage > 0 &&
+        user?.creditsAmount! < otherUser.settings.creditMessage
+      ) {
+        setOpenNotEnoughCreditModal(true);
+        return;
+      }
+
       sendMessage({ content: message });
     } catch (e) {
       toast.error('Something went wrong');
@@ -48,9 +69,15 @@ const ConversationInput = ({ refetch }: { refetch: () => void }) => {
           disabled={!message}
           className="flex items-center"
         >
-          Send
+          {otherUser?.settings.creditMessage > 0
+            ? `Send for ${otherUser?.settings.creditMessage} credits`
+            : 'Send'}
         </Button>
       </div>
+      <NotEnoughCreditsModal
+        open={openNotEnoughCreditModal}
+        onOpenChange={setOpenNotEnoughCreditModal}
+      />
     </div>
   );
 };

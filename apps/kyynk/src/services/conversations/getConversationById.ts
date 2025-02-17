@@ -17,6 +17,11 @@ export const getConversationById = async ({
             pseudo: true,
             slug: true,
             profileImageId: true,
+            settings: {
+              select: {
+                creditMessage: true,
+              },
+            },
           },
         },
         messages: {

@@ -21,6 +21,7 @@ interface Props {
 const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
   const { id: conversationId } = useParams();
   const { otherUser } = useConversationUsers(initialConversation.participants);
+
   const { useGet } = useApi();
   const { user } = useUser();
 
@@ -72,7 +73,7 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
       </div>
 
       <div className="sticky bottom-0 mt-8 p-4">
-        <ConversationInput refetch={refetch} />
+        <ConversationInput refetch={refetch} otherUser={otherUser!} />
       </div>
     </div>
   );
