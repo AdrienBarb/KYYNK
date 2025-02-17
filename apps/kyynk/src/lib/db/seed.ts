@@ -42,6 +42,9 @@ async function main() {
           nudesCount: 2,
           identityVerificationStatus: VerificationStatus.verified,
           creditsAmount: 0,
+          settings: {
+            create: {},
+          },
         },
       });
 

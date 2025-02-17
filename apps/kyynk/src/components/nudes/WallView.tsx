@@ -21,7 +21,7 @@ const WallView: FC<Props> = ({ nudes }) => {
     <div
       className={cn(
         'grid gap-4 mx-auto mt-8',
-        'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-screen-lg',
+        'grid-cols-2 lg:grid-cols-3 max-w-screen-lg',
       )}
     >
       {nudes.map((nude: NudeType) => (

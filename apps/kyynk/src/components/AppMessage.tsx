@@ -11,7 +11,7 @@ interface AppMessageProps {
 
 const AppMessage: FC<AppMessageProps> = ({ title, text, children }) => {
   return (
-    <div className="flex flex-col items-center p-4 bg-primary rounded-lg shadow-md">
+    <div className="flex flex-col items-center p-4 bg-primary rounded-lg shadow-md max-w-md mx-auto mt-16">
       <div className="flex flex-col items-center">
         <div className="relative w-16 h-16 mb-4">
           <Image

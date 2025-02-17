@@ -52,6 +52,9 @@ export async function register({
         email: lowerCaseEmail,
         password: hashedPassword,
         slug: await checkOrCreateSlug(pseudo),
+        settings: {
+          create: {},
+        },
       },
       select: {
         id: true,

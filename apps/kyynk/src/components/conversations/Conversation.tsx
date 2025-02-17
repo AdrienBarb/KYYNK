@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, FC, useMemo, useRef } from 'react';
+import React, { FC } from 'react';
 import { useChatScroll } from '@/lib/hooks/useChatScroll';
 import { useParams } from 'next/navigation';
 import useApi from '@/hooks/requests/useApi';
@@ -12,6 +12,7 @@ import { useUser } from '@/hooks/users/useUser';
 import Avatar from '../ui/Avatar';
 import Link from 'next/link';
 import Text from '../ui/Text';
+
 interface Props {
   initialConversation: ConversationType;
   initialMessages: Message[];
@@ -34,8 +35,8 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
   const ref = useChatScroll(messages);
 
   return (
-    <div className="flex flex-col" style={{ height: '90vh' }}>
-      <div className="flex justify-between items-center mb-2">
+    <div className="flex flex-col" style={{ height: 'calc(100dvh - 60px)' }}>
+      <div className="flex justify-between items-center mb-2 p-4">
         <Link href={`/${otherUser?.slug}`}>
           <div className="flex items-center gap-2">
             <Avatar
@@ -47,8 +48,9 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
           </div>
         </Link>
       </div>
+
       <div
-        className="flex-grow flex flex-col gap-4 overflow-y-scroll"
+        className="flex flex-col gap-4 px-4 h-[100%] w-full overflow-y-scroll"
         ref={ref}
       >
         {messages.map((currentMessage: Message) => {
@@ -68,7 +70,8 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
           );
         })}
       </div>
-      <div className="sticky bottom-0 mt-8">
+
+      <div className="sticky bottom-0 mt-8 p-4">
         <ConversationInput refetch={refetch} />
       </div>
     </div>

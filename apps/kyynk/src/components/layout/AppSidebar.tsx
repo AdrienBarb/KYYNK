@@ -1,10 +1,12 @@
 'use client';
 
 import {
+  ChevronRight,
   CirclePlus,
   Home,
   MessageCircle,
   Plus,
+  Settings,
   UsersRound,
 } from 'lucide-react';
 import {
@@ -18,6 +20,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
 } from '@/components/ui/Sidebar';
 import { NavUser } from './NavUser';
 import Link from 'next/link';
@@ -25,6 +29,11 @@ import { appRouter } from '@/constants/appRouter';
 import { Button } from '../ui/Button';
 import { useUser } from '@/hooks/users/useUser';
 import { isCreator } from '@/utils/users/isCreator';
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '../ui/collapsible';
 
 export function AppSidebar() {
   const { user } = useUser();
@@ -88,6 +97,31 @@ export function AppSidebar() {
                     </SidebarMenuItem>
                   ),
               )}
+              <Collapsible defaultOpen={false} className="group/collapsible">
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton>
+                      <Settings />
+                      <span className="text-sm font-rubik">Settings</span>
+                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {isCreator({ user }) && (
+                        <SidebarMenuSubItem>
+                          <SidebarMenuButton asChild>
+                            <Link href={appRouter.settingsConversations}>
+                              <MessageCircle />
+                              <span>Conversations</span>
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuSubItem>
+                      )}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </SidebarMenuItem>
+              </Collapsible>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

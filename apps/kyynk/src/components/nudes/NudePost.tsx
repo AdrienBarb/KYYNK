@@ -57,23 +57,25 @@ const NudePost: FC<NudePostProps> = ({ nude, refCallback }) => {
     <>
       <div ref={refCallback} className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Avatar
-              size={48}
-              imageId={nude?.user?.profileImageId}
-              pseudo={nude?.user?.pseudo}
-            />
-            <div className="flex flex-col">
-              <span className="text-base font-bold font-karla leading-none">
-                {nude?.user?.pseudo}
-              </span>
-              <span className="text-sm font-normal font-karla text-custom-black/50">
-                {formatDistanceToNow(new Date(nude.createdAt), {
-                  addSuffix: true,
-                })}
-              </span>
+          <Link href={`/${nude.user.slug}`}>
+            <div className="flex items-center gap-2">
+              <Avatar
+                size={48}
+                imageId={nude?.user?.profileImageId}
+                pseudo={nude?.user?.pseudo}
+              />
+              <div className="flex flex-col">
+                <span className="text-base font-bold font-karla leading-none">
+                  {nude?.user?.pseudo}
+                </span>
+                <span className="text-sm font-normal font-karla text-custom-black/50">
+                  {formatDistanceToNow(new Date(nude.createdAt), {
+                    addSuffix: true,
+                  })}
+                </span>
+              </div>
             </div>
-          </div>
+          </Link>
 
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>

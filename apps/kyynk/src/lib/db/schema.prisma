@@ -44,6 +44,7 @@ model User {
   verificationCodes          VerificationCode[]
   conversations              Conversation[]     @relation("UserConversations")
   messages                   Message[]
+  settings                   UserSettings?
 }
 
 model UserToken {
@@ -127,6 +128,16 @@ model Message {
   content        String
   createdAt      DateTime      @default(now())
   status         MessageStatus @default(sent)
+}
+
+model UserSettings {
+  id                        String   @id @default(cuid())
+  user                      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId                    String   @unique
+  fiatMessage               Int      @default(0)
+  creditMessage             Int      @default(0)
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
 }
 
 enum UserType {

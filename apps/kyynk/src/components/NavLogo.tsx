@@ -1,6 +1,5 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { FC } from 'react';
@@ -10,14 +9,8 @@ import { appRouter } from '@/constants/appRouter';
 interface Props {}
 
 const NavLogo: FC<Props> = ({}) => {
-  const { status } = useSession();
-
   return (
-    <Link
-      href={status === 'authenticated' ? appRouter.models : appRouter.home}
-      passHref
-      prefetch
-    >
+    <Link href={appRouter.home} passHref prefetch>
       <div className="cursor-pointer">
         <Image
           src={logo}

@@ -5,7 +5,7 @@ export type NudeType = Pick<
   'id' | 'description' | 'creditPrice' | 'userId' | 'buyers' | 'createdAt'
 > & {
   media: Pick<Media, 'id' | 'thumbnailId' | 'videoId'>;
-  user: Pick<User, 'id' | 'pseudo' | 'profileImageId'>;
+  user: Pick<User, 'id' | 'pseudo' | 'profileImageId' | 'slug'>;
   permissions: {
     canView: boolean;
     canEdit: boolean;

@@ -15,7 +15,7 @@ import UserNudes from '@/components/nudes/UserNudes';
 import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
 import { User } from '@prisma/client';
 import { NudeType } from '@/types/nudes';
-
+import PaddingContainer from '@/components/layout/PaddingContainer';
 export async function generateMetadata({
   params: { slug },
 }: {
@@ -52,10 +52,12 @@ const UserPage = async ({ params }: { params: { slug: string } }) => {
 
   return (
     <PageContainer>
-      <UserUncompletedProfileBanner />
-      <UserProfileTopButtons />
-      <UserProfileHeader initialUserDatas={user} />
-      <UserNudes initialNudes={nudesWithPermissions} user={user} />
+      <PaddingContainer>
+        <UserUncompletedProfileBanner />
+        <UserProfileTopButtons />
+        <UserProfileHeader initialUserDatas={user} />
+        <UserNudes initialNudes={nudesWithPermissions} user={user} />
+      </PaddingContainer>
     </PageContainer>
   );
 };

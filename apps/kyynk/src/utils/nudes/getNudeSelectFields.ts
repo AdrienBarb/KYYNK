@@ -17,6 +17,7 @@ export const getNudeSelectFields = () => ({
       id: true,
       pseudo: true,
       profileImageId: true,
+      slug: true,
     },
   },
 });

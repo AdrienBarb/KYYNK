@@ -6,7 +6,6 @@ import React from 'react';
 
 const EditProfilPage = async () => {
   const session = await auth();
-  console.log('🚀 ~ EditProfilPage ~ session:', session);
 
   if (!session) {
     redirect('/login');

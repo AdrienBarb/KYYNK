@@ -12,9 +12,5 @@ export const appRouter = {
   becomeCreatorEmail: '/account/become-creator/email',
   becomeCreatorIdentity: '/account/become-creator/identity',
   conversations: '/account/conversations',
-
-  notifications: '/dashboard/account/notifications',
-  parameters: '/dashboard/account/parameters',
-  incomes: '/dashboard/account/incomes',
-  verification: '/dashboard/account/verification',
+  settingsConversations: '/account/settings/conversations',
 };
