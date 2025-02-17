@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { VideoUploader } from '@api.video/video-uploader';
 import toast from 'react-hot-toast';
-import { useQueryClient } from '@tanstack/react-query';
 import Text from '@/components/ui/Text';
 import type { Media } from '@prisma/client';
 
@@ -49,7 +48,6 @@ const MediasGallery: FC<MediasGalleryProps> = ({
       const { uploadToken, videoId } = await fetchData(
         '/api/medias/upload-token',
       );
-      console.log('🚀 ~ handleUpload ~ videoId:', videoId);
 
       if (!uploadToken) throw new Error('Failed to retrieve upload token');
 
@@ -68,11 +66,6 @@ const MediasGallery: FC<MediasGalleryProps> = ({
       });
 
       const uploadResult = await uploader.upload();
-
-      console.log(
-        '🚀 ~ handleUpload ~ uploadResult.videoId:',
-        uploadResult.videoId,
-      );
 
       createMedia({
         videoId: uploadResult.videoId,

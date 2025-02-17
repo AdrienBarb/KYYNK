@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import styles from '@/styles/Form.module.scss';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   BODY_TYPE,
   GENDER,
@@ -40,6 +39,7 @@ import {
 } from '@/components/ui/Select';
 import { User } from '@prisma/client';
 import axios from 'axios';
+import { Pencil } from 'lucide-react';
 
 const UserForm = () => {
   //router
@@ -53,6 +53,8 @@ const UserForm = () => {
   const profilInput = useRef<HTMLInputElement>(null);
 
   const { usePut } = useApi();
+
+  const [isUploading, setIsUploading] = useState(false);
 
   const { mutate: doPost, isPending } = usePut('/api/me', {
     onSuccess: async (user: User) => {
@@ -109,6 +111,7 @@ const UserForm = () => {
     if (!event.target.files) return;
 
     const file = event.target.files[0];
+    setIsUploading(true);
 
     try {
       const response = await axios.post('/api/medias/signed-url', {
@@ -128,6 +131,8 @@ const UserForm = () => {
     } catch (err) {
       console.error('Error uploading file:', err);
       toast.error('Something went wrong!');
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -137,7 +142,7 @@ const UserForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8 flex flex-col items-center w-full"
       >
-        <div className="relative self-center ">
+        <div className="relative self-center">
           <Avatar
             size={164}
             imageId={user?.profileImageId}
@@ -148,18 +153,23 @@ const UserForm = () => {
             ref={profilInput}
             onChange={(e) => handleFileUpload(e)}
             type="file"
-            style={{ display: 'none' }}
+            className="hidden"
             multiple={false}
             accept="image/png, image/jpeg"
           />
 
-          <div
-            className={clsx(styles.photoIcon, 'right-[10px] bottom-[10px]')}
-            onClick={() => {
-              profilInput.current?.click();
-            }}
-          >
-            <EditIcon sx={{ color: '#FFF0EB' }} fontSize="small" />
+          <div className="absolute right-2.5 bottom-2.5 w-8 h-8">
+            <Button
+              size="icon"
+              className="rounded-full"
+              onClick={(e) => {
+                e.preventDefault();
+                profilInput.current?.click();
+              }}
+              isLoading={isUploading}
+            >
+              <Pencil color="#fff0eb" />
+            </Button>
           </div>
         </div>
 

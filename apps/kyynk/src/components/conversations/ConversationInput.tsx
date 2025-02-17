@@ -8,7 +8,10 @@ import { useParams } from 'next/navigation';
 import { useUser } from '@/hooks/users/useUser';
 import NotEnoughCreditsModal from '../modals/NotEnoughCreditsModal';
 import { ConversationUser } from '@/types/users';
-
+import { isCreator } from '@/utils/users/isCreator';
+import { isUserVerified } from '@/utils/users/isUserVerified';
+import { Camera } from 'lucide-react';
+import PrivateNudeModal from '../modals/PrivateNudeModal';
 const ConversationInput = ({
   refetch,
   otherUser,
@@ -22,7 +25,7 @@ const ConversationInput = ({
   const { user, refetch: refetchUser } = useUser();
   const [openNotEnoughCreditModal, setOpenNotEnoughCreditModal] =
     useState(false);
-
+  const [openPrivateNudeModal, setOpenPrivateNudeModal] = useState(false);
   const { mutate: sendMessage, isPending } = usePost(
     `/api/conversations/${conversationId}/messages`,
     {
@@ -62,7 +65,13 @@ const ConversationInput = ({
         rows={3}
       />
       <div className="flex justify-between w-full">
-        <div></div>
+        <div>
+          {isCreator({ user }) && isUserVerified({ user }) && (
+            <Button size="icon" onClick={() => setOpenPrivateNudeModal(true)}>
+              <Camera />
+            </Button>
+          )}
+        </div>
         <Button
           onClick={handleSendMessage}
           isLoading={isPending}
@@ -77,6 +86,10 @@ const ConversationInput = ({
       <NotEnoughCreditsModal
         open={openNotEnoughCreditModal}
         onOpenChange={setOpenNotEnoughCreditModal}
+      />
+      <PrivateNudeModal
+        open={openPrivateNudeModal}
+        setOpen={setOpenPrivateNudeModal}
       />
     </div>
   );

@@ -7,6 +7,7 @@ export const getUserNudesById = async ({ userId }: { userId: string }) => {
       where: {
         userId,
         isArchived: false,
+        isPrivate: false,
       },
       orderBy: {
         createdAt: 'desc',
