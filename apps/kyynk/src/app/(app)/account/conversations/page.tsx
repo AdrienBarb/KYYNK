@@ -4,12 +4,14 @@ import { getUserConversations } from '@/services/conversations/getUserConversati
 import ConversationList from '@/components/conversations/ConversationList';
 import PageHeader from '@/components/layout/PageHeader';
 import PaddingContainer from '@/components/layout/PaddingContainer';
+import { ConversationType } from '@/types/conversations';
+
 const MessagesPage = async () => {
   const session = await auth();
 
-  const conversations = await getUserConversations({
+  const conversations = (await getUserConversations({
     userId: session?.user.id!,
-  });
+  })) as ConversationType[];
 
   return (
     <PaddingContainer>

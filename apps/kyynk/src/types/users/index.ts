@@ -42,5 +42,5 @@ export type ConversationUser = Pick<
   User,
   'id' | 'pseudo' | 'profileImageId' | 'slug'
 > & {
-  settings: Pick<UserSettings, 'creditMessage'>;
+  settings?: Pick<UserSettings, 'creditMessage'>;
 };
