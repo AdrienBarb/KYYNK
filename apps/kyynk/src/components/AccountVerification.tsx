@@ -21,6 +21,11 @@ const AccountVerification = () => {
         label={'Confirm your email'}
       />
       <VerificationCard
+        isValid={user?.contentProviderPolicyAccepted!}
+        path={appRouter.becomeCreatorContentProviderPolicy}
+        label={'Accept the content provider policy'}
+      />
+      <VerificationCard
         isValid={user?.identityVerificationStatus === 'verified'}
         path={appRouter.becomeCreatorIdentity}
         label={'Verify your identity'}

@@ -23,6 +23,7 @@ export const PUT = strictlyAuth(async (req: NextRequest) => {
 
     const body = await req.json();
     const validatedBody = updateUserSchema.parse(body);
+    console.log('🚀 ~ PUT ~ validatedBody:', validatedBody);
     const user = await updateUser({ userId: userId!, body: validatedBody });
 
     const isCreator =

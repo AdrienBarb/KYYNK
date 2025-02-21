@@ -25,6 +25,7 @@ export const getCurrentUser = async ({ userId }: { userId: string }) => {
         identityVerificationStatus: true,
         nudesCount: true,
         watermarkId: true,
+        contentProviderPolicyAccepted: true,
         settings: {
           select: {
             fiatMessage: true,

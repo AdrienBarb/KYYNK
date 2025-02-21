@@ -19,6 +19,7 @@ export type LoggedUserType = Pick<
   | 'isEmailVerified'
   | 'identityVerificationStatus'
   | 'nudesCount'
+  | 'contentProviderPolicyAccepted'
 > & {
   settings: Pick<UserSettings, 'fiatMessage' | 'creditMessage'>;
 };

@@ -25,6 +25,7 @@ model User {
   isArchived                 Boolean            @default(false)
   isEmailVerified            Boolean            @default(false)
   identityVerificationStatus VerificationStatus @default(unverified)
+  contentProviderPolicyAccepted Boolean @default(false)
   preferences                String[]           @default([])
   userType                   UserType?          @default(member)
   userToken                  UserToken?

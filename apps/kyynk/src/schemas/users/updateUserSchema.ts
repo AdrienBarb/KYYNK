@@ -13,4 +13,5 @@ export const updateUserSchema = z.object({
   hairColor: z.string().optional(),
   country: z.string().optional(),
   tags: z.array(z.string()).optional(),
+  contentProviderPolicyAccepted: z.boolean().optional(),
 });

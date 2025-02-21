@@ -81,6 +81,10 @@ export async function updateUser({
     data.profileImageId = body.profileImageId;
   }
 
+  if (body.contentProviderPolicyAccepted) {
+    data.contentProviderPolicyAccepted = body.contentProviderPolicyAccepted;
+  }
+
   return prisma.user.update({
     where: { id: userId },
     data,
@@ -99,6 +103,7 @@ export async function updateUser({
       hairColor: true,
       country: true,
       tags: true,
+      contentProviderPolicyAccepted: true,
     },
   });
 }
