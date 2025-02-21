@@ -2,8 +2,7 @@ import type { Metadata } from 'next';
 import '@/styles/globals.scss';
 import '@/styles/tailwind.css';
 import siteMetadata from '@/data/siteMetadata';
-import Script from 'next/script';
-import { NextIntlClientProvider, useMessages } from 'next-intl';
+import { NextIntlClientProvider } from 'next-intl';
 import GlobalErrorProvider from '@/components/provider/GlobalErrorProvider';
 import { Toaster } from 'react-hot-toast';
 import { FC, ReactNode } from 'react';
@@ -12,7 +11,6 @@ import { config } from '@fortawesome/fontawesome-svg-core';
 import { Karla, Rubik } from 'next/font/google';
 import clsx from 'clsx';
 import GlobalConfig from '@/components/GlobalConfig';
-import Fathom from '@/components/Fathom';
 import { getLocale, getMessages } from 'next-intl/server';
 import CustomQueryClientProvider from '@/components/provider/CustomQueryClientProvider';
 import CustomSessionProvider from '@/components/provider/CustomSessionProvider';
@@ -81,52 +79,38 @@ const RootLayout: FC<Props> = async ({ children }) => {
   console.log(process.env.NEXTAUTH_URL);
 
   return (
-    <>
-      <Script id="hotjarAnalytics" strategy="afterInteractive">
-        {`
-      (function(h,o,t,j,a,r){
-        h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-        h._hjSettings={hjid:3531486,hjsv:6};
-        a=o.getElementsByTagName('head')[0];
-        r=o.createElement('script');r.async=1;
-        r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-        a.appendChild(r);
-      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-    `}
-      </Script>
-      <CustomQueryClientProvider>
-        <CustomSessionProvider>
-          <NextIntlClientProvider messages={messages}>
-            <html
-              lang={locale}
-              className={clsx(karlaFont.variable, rubikFont.variable)}
-            >
-              <link
-                rel="icon"
-                type="image/png"
-                sizes="32x32"
-                href="/images/favicon-32x32.png"
-              />
-              <link
-                rel="icon"
-                type="image/png"
-                sizes="16x16"
-                href="/images/favicon-16x16.png"
-              />
-              <body>
-                <Toaster position="bottom-center" />
-                <GlobalConfig>
-                  <NuqsAdapter>
-                    <PostHogProvider>{children}</PostHogProvider>
-                  </NuqsAdapter>
-                </GlobalConfig>
-                <GlobalErrorProvider />
-              </body>
-            </html>
-          </NextIntlClientProvider>
-        </CustomSessionProvider>
-      </CustomQueryClientProvider>
-    </>
+    <CustomQueryClientProvider>
+      <CustomSessionProvider>
+        <NextIntlClientProvider messages={messages}>
+          <html
+            lang={locale}
+            className={clsx(karlaFont.variable, rubikFont.variable)}
+          >
+            <link
+              rel="icon"
+              type="image/png"
+              sizes="32x32"
+              href="/images/favicon-32x32.png"
+            />
+            <link
+              rel="icon"
+              type="image/png"
+              sizes="16x16"
+              href="/images/favicon-16x16.png"
+            />
+            <body>
+              <Toaster position="bottom-center" />
+              <GlobalConfig>
+                <NuqsAdapter>
+                  <PostHogProvider>{children}</PostHogProvider>
+                </NuqsAdapter>
+              </GlobalConfig>
+              <GlobalErrorProvider />
+            </body>
+          </html>
+        </NextIntlClientProvider>
+      </CustomSessionProvider>
+    </CustomQueryClientProvider>
   );
 };
 

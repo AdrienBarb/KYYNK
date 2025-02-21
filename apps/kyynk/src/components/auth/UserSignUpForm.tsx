@@ -4,26 +4,17 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import styles from '@/styles/Form.module.scss';
-import { useRouter } from 'next/navigation';
 import CustomTextField from '@/components/Inputs/TextField';
 import { Checkbox } from '@mui/material';
 import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
-
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
-import { appRouter } from '@/constants/appRouter';
 import { register } from '@/server-actions/register';
-import { useUser } from '@/hooks/users/useUser';
 
 const UserSignUpForm = () => {
-  //router
-  const router = useRouter();
-
-  const { refetch } = useUser();
-
   //translation
   const t = useTranslations();
 
@@ -221,11 +212,21 @@ const UserSignUpForm = () => {
               />
               <div className={styles.text}>
                 {t('common.i_read')}{' '}
-                <Link className={styles.bold} href={'/legal/privacy'}>
+                <Link
+                  className={styles.bold}
+                  href={'/privacy-policy'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {t('common.privacy')}
                 </Link>{' '}
                 {t('common.and')}{' '}
-                <Link className={styles.bold} href="/legal/terms-of-use">
+                <Link
+                  className={styles.bold}
+                  href="/terms-of-service"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {t('common.terms')}
                 </Link>
               </div>

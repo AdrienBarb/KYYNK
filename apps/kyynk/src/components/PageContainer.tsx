@@ -7,7 +7,9 @@ interface PageContainerProps {
 }
 
 const PageContainer: FC<PageContainerProps> = ({ children, className }) => {
-  return <div className={cn('w-full min-h-[80vh]', className)}>{children}</div>;
+  return (
+    <div className={cn('w-full min-h-[100vh]', className)}>{children}</div>
+  );
 };
 
 export default PageContainer;

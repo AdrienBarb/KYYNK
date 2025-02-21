@@ -12,7 +12,7 @@ import Avatar from '../ui/Avatar';
 import Link from 'next/link';
 import Text from '../ui/Text';
 import { MessageType } from '@/types/messages';
-
+import NudeCard from '../nudes/NudeCard';
 interface Props {
   initialConversation: ConversationType;
   initialMessages: MessageType[];
@@ -32,7 +32,6 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
       initialData: initialMessages,
     },
   );
-  console.log('🚀 ~ messages:', messages);
 
   const ref = useChatScroll(messages);
 
@@ -59,15 +58,23 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
           const isMyMessage = currentMessage.senderId === user?.id;
 
           return (
-            <div
-              key={currentMessage.id}
-              className={`p-2 rounded-lg max-w-[80%] ${
-                isMyMessage
-                  ? 'bg-primary text-custom-black self-end'
-                  : 'bg-secondary-dark text-custom-black self-start'
-              }`}
-            >
-              <p>{currentMessage.content}</p>
+            <div key={currentMessage.id}>
+              {currentMessage.nude && (
+                <NudeCard
+                  key={currentMessage.nude.id}
+                  nude={currentMessage.nude}
+                  // onClick={() => handleNudeClick(currentMessage.nude.id)}
+                />
+              )}
+              <div
+                className={`p-2 rounded-lg max-w-[80%] ${
+                  isMyMessage
+                    ? 'bg-primary text-custom-black self-end'
+                    : 'bg-secondary-dark text-custom-black self-start'
+                }`}
+              >
+                <p>{currentMessage.content}</p>
+              </div>
             </div>
           );
         })}
