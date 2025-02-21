@@ -16,7 +16,7 @@ import CustomQueryClientProvider from '@/components/provider/CustomQueryClientPr
 import CustomSessionProvider from '@/components/provider/CustomSessionProvider';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { PostHogProvider } from '@/components/provider/PostHogProvider';
-
+import AgeVerificationModal from '@/components/modals/AgeVerificationModal';
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
@@ -106,6 +106,7 @@ const RootLayout: FC<Props> = async ({ children }) => {
                 </NuqsAdapter>
               </GlobalConfig>
               <GlobalErrorProvider />
+              <AgeVerificationModal />
             </body>
           </html>
         </NextIntlClientProvider>

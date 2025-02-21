@@ -1,10 +1,9 @@
 import React from 'react';
 import PageContainer from '@/components/PageContainer';
-import styles from '@/styles/Legal.module.scss';
-import { useTranslations } from 'next-intl';
 import { genPageMetadata } from '@/app/seo';
 import Title from '@/components/ui/Title';
 import Text from '@/components/ui/Text';
+import PaddingContainer from '@/components/layout/PaddingContainer';
 
 export const metadata = genPageMetadata({
   title: 'Terms of Service',
@@ -13,11 +12,9 @@ export const metadata = genPageMetadata({
 });
 
 const TermsOfUsePage = () => {
-  const t = useTranslations();
-
   return (
     <PageContainer>
-      <div className={styles.container}>
+      <PaddingContainer className="max-w-screen-lg mx-auto">
         <Title Tag="h1">Terms of Service</Title>
         <Text>Last Updated: February 2025</Text>
         <Title Tag="h2">1. Introduction</Title>
@@ -132,7 +129,7 @@ const TermsOfUsePage = () => {
           <strong>User Complaints & Content Removal:</strong>{' '}
           complaints@kyynk.com
         </Text>
-      </div>
+      </PaddingContainer>
     </PageContainer>
   );
 };

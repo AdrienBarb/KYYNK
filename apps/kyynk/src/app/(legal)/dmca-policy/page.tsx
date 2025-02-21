@@ -1,10 +1,9 @@
 import React from 'react';
 import PageContainer from '@/components/PageContainer';
-import styles from '@/styles/Legal.module.scss';
-
 import { genPageMetadata } from '@/app/seo';
 import Title from '@/components/ui/Title';
 import Text from '@/components/ui/Text';
+import PaddingContainer from '@/components/layout/PaddingContainer';
 
 export const metadata = genPageMetadata({
   title: 'DMCA Policy',
@@ -15,7 +14,7 @@ export const metadata = genPageMetadata({
 const dmcaPolicyPage = () => {
   return (
     <PageContainer>
-      <div className={styles.container}>
+      <PaddingContainer className="max-w-screen-lg mx-auto">
         <Title Tag="h1">DMCA Policy</Title>
         <Text>Last Updated: February 2025</Text>
         <Title Tag="h2">1. Introduction</Title>
@@ -89,7 +88,7 @@ const dmcaPolicyPage = () => {
         <Text>
           <strong>Email:</strong> legal@kyynk.com
         </Text>
-      </div>
+      </PaddingContainer>
     </PageContainer>
   );
 };

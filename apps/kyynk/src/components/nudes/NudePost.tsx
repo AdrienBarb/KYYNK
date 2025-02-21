@@ -93,6 +93,12 @@ const NudePost: FC<NudePostProps> = ({ nude, refCallback }) => {
                 <DropdownMenuItem className="text-base font-medium">
                   Share
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  asChild
+                  className="text-base font-medium font-karla"
+                >
+                  <Link href={`/contact-us`}>Report</Link>
+                </DropdownMenuItem>
                 {nude.permissions.canEdit && (
                   <>
                     <DropdownMenuItem
