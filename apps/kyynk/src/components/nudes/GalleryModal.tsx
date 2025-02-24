@@ -46,9 +46,9 @@ const GalleryModal: FC<GalleryModalProps> = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={closeModal} modal={true}>
+    <Dialog open={open} onOpenChange={closeModal}>
       <DialogContent
-        className="h-[100vh] sm:h-[80vh] z-[1000] flex flex-col"
+        className="h-[100vh] sm:h-[80vh] flex flex-col"
         onInteractOutside={(e) => {
           e.preventDefault();
         }}

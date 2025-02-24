@@ -8,6 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '../ui/AlertDialog';
+import { usePaymentModalStore } from '@/stores/PaymentModalStore';
 
 interface NotEnoughCreditsModalProps {
   open: boolean;
@@ -18,6 +19,13 @@ const NotEnoughCreditsModal = ({
   open,
   onOpenChange,
 }: NotEnoughCreditsModalProps) => {
+  const openPaymentModal = usePaymentModalStore((state) => state.openModal);
+
+  const handleBuyMoreCredits = () => {
+    onOpenChange(false); // Close NotEnoughCreditsModal
+    openPaymentModal(); // Open PaymentModal
+  };
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
@@ -30,7 +38,9 @@ const NotEnoughCreditsModal = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Buy more credits</AlertDialogAction>
+          <AlertDialogAction onClick={handleBuyMoreCredits}>
+            Buy more credits
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

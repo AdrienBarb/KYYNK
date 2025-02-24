@@ -21,14 +21,14 @@ export const POST = strictlyAuth(async (req: NextRequest, { params }) => {
     if (!nude || nude.userId === userId) {
       return NextResponse.json(
         { error: errorMessages.NOT_AUTHORIZED },
-        { status: 401 },
+        { status: 400 },
       );
     }
 
     if (nude.buyers.includes(userId!)) {
       return NextResponse.json(
         { error: errorMessages.NOT_AUTHORIZED },
-        { status: 401 },
+        { status: 400 },
       );
     }
 

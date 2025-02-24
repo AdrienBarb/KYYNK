@@ -17,6 +17,7 @@ import CustomSessionProvider from '@/components/provider/CustomSessionProvider';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { PostHogProvider } from '@/components/provider/PostHogProvider';
 import AgeVerificationModal from '@/components/modals/AgeVerificationModal';
+import PaymentModal from '@/components/modals/PaymentModal';
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
@@ -107,6 +108,7 @@ const RootLayout: FC<Props> = async ({ children }) => {
               </GlobalConfig>
               <GlobalErrorProvider />
               <AgeVerificationModal />
+              <PaymentModal />
             </body>
           </html>
         </NextIntlClientProvider>

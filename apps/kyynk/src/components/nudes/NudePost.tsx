@@ -45,6 +45,19 @@ const NudePost: FC<NudePostProps> = ({ nude, refCallback }) => {
     },
   });
 
+  const handleAfterBuyAction = (newNude: NudeType) => {
+    queryClient.setQueryData(
+      ['get', { url: `/api/users/${slug}/nudes`, params: {} }],
+      (oldData: any) => {
+        return oldData
+          ? oldData.map((item: NudeType) =>
+              item.id === newNude.id ? newNude : item,
+            )
+          : [newNude];
+      },
+    );
+  };
+
   const handleDeleteNude = async () => {
     setConfirmationModalOpen(true);
   };
@@ -135,7 +148,9 @@ const NudePost: FC<NudePostProps> = ({ nude, refCallback }) => {
           <NudeCard nude={nude} />
         )}
 
-        {nude.permissions.canBuy && <BuyButton nude={nude} />}
+        {nude.permissions.canBuy && (
+          <BuyButton nude={nude} afterBuyAction={handleAfterBuyAction} />
+        )}
       </div>
       <DeleteConfirmationModal
         open={isConfirmationModalOpen}

@@ -12,7 +12,7 @@ const NavigationBar = async ({ type }: { type: 'auth' | 'app' }) => {
 
   return (
     <header>
-      <div className="bg-secondary w-full px-8 py-4 h-[48px] fixed top-0 right-0 left-0 z-[1000] border-b border-custom-black/20 flex">
+      <div className="bg-secondary w-full px-8 py-4 h-[48px] fixed top-0 right-0 left-0 z-40 border-b border-custom-black/20 flex">
         <div className="flex justify-between mx-auto w-full items-center">
           <NavLogo />
 

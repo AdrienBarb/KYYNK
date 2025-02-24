@@ -11,4 +11,5 @@ export const errorMessages = {
   EMAIL_ERROR: 'emailError',
   NOT_AUTHORIZED: 'notAuthorized',
   INVALID_CODE: 'invalidCode',
+  INVALID_PACKAGE: 'invalidPackage',
 };

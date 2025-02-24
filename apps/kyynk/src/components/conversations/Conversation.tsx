@@ -14,6 +14,8 @@ import Text from '../ui/Text';
 import { MessageType } from '@/types/messages';
 import NudeCard from '../nudes/NudeCard';
 import { cn } from '@/utils/tailwind/cn';
+import NudeModal from '@/components/modals/NudeModal';
+import { NudeType } from '@/types/nudes';
 
 interface Props {
   initialConversation: ConversationType;
@@ -37,6 +39,16 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
 
   const ref = useChatScroll(messages);
 
+  const [isModalOpen, setModalOpen] = React.useState(false);
+  const [selectedNude, setSelectedNude] = React.useState<
+    NudeType | undefined | null
+  >(null);
+
+  const handleNudeClick = (nude: NudeType | undefined) => {
+    setSelectedNude(nude);
+    setModalOpen(true);
+  };
+
   return (
     <div className="flex flex-col" style={{ height: 'calc(100dvh - 60px)' }}>
       <div className="flex justify-between items-center mb-2 p-4">
@@ -58,14 +70,14 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
       >
         {messages.map((currentMessage: MessageType) => {
           const isMyMessage = currentMessage.senderId === user?.id;
-          console.log('🚀 ~ {messages.map ~ isMyMessage:', isMyMessage);
 
           return (
             <div
               key={currentMessage.id}
               className={cn(
-                'max-w-[80%] flex flex-col items-end',
+                'max-w-[80%] flex flex-col',
                 isMyMessage ? 'self-end' : 'self-start',
+                isMyMessage ? 'items-end' : 'items-start',
               )}
             >
               {currentMessage.nude && (
@@ -73,7 +85,7 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
                   <NudeCard
                     key={currentMessage.nude.id}
                     nude={currentMessage.nude}
-                    // onClick={() => handleNudeClick(currentMessage.nude.id)}
+                    onClick={() => handleNudeClick(currentMessage.nude)}
                   />
                 </div>
               )}
@@ -95,6 +107,14 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
       <div className="sticky bottom-0 mt-8 p-4">
         <ConversationInput refetch={refetch} otherUser={otherUser!} />
       </div>
+
+      <NudeModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        nude={selectedNude}
+        refetch={refetch}
+        setSelectedNude={setSelectedNude}
+      />
     </div>
   );
 };

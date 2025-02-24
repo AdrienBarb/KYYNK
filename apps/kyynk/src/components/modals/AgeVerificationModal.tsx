@@ -31,7 +31,7 @@ const AgeVerificationModal = () => {
 
   return (
     <AlertDialog open={shouldOpen}>
-      <AlertDialogContent className="max-w-xl overflow-y-scroll z-[1000]">
+      <AlertDialogContent className="max-w-xl overflow-y-scroll">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-center">
             This is a website intended for adults

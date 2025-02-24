@@ -24,10 +24,12 @@ import { signOut } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import { useUser } from '@/hooks/users/useUser';
 import { appRouter } from '@/constants/appRouter';
+import { usePaymentModalStore } from '@/stores/PaymentModalStore';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { user } = useUser();
+  const { isOpen, openModal, closeModal } = usePaymentModalStore();
 
   const logout = () => {
     toast.success('You are logged out');
@@ -84,12 +86,12 @@ export function NavUser() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={openModal}>
                 <Coins />
                 Buy credits
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href={appRouter.becomeCreator}>
+                <Link href={appRouter.becomeCreator} className="font-light">
                   <BadgeCheck />
                   Become a creator
                 </Link>

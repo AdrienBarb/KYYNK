@@ -58,7 +58,7 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
     },
   });
 
-  const { handleSubmit, setValue } = form;
+  const { handleSubmit, setValue, reset } = form;
 
   const { creditPrice } = getMediaPrice(form.watch('price') || 0);
 
@@ -68,6 +68,9 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
     {
       onSuccess: () => {
         setOpen(false);
+        setOpenGalleryModal(false);
+        setSelectedMedia(null);
+        reset();
         refetch();
       },
     },
@@ -87,112 +90,114 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
   });
 
   return (
-    <Dialog open={open} onOpenChange={setOpen} modal={true}>
-      <DialogContent className="z-[1000] h-[100vh] sm:h-[80vh] overflow-y-scroll">
-        <DialogHeader>
-          <DialogTitle>Send a private nude</DialogTitle>
-          <DialogDescription>
-            Here you can send a private nude to the user.
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="h-[100vh] sm:h-[80vh] overflow-y-scroll">
+          <DialogHeader>
+            <DialogTitle>Send a private nude</DialogTitle>
+            <DialogDescription>
+              Here you can send a private nude to the user.
+            </DialogDescription>
+          </DialogHeader>
 
-        <Form {...form}>
-          <form
-            onSubmit={onSubmit}
-            className="space-y-8 flex flex-col items-center w-full"
-          >
-            <FormItem className="w-full">
-              <FormLabel>Video*</FormLabel>
-              {selectedMedia && selectedMedia.thumbnailId ? (
-                <div className="aspect-[4/5] relative rounded-md overflow-hidden">
-                  <Button
-                    size="icon"
-                    onClick={() => setOpenGalleryModal(true)}
-                    className="absolute top-2 right-2 z-10"
-                  >
-                    <Pencil color="white" strokeWidth={3} />
-                  </Button>
-                  <Image
-                    src={imgixLoader({
-                      src: selectedMedia.thumbnailId,
-                      width: 300,
-                      quality: 80,
-                    })}
-                    alt={`media`}
-                    layout="fill"
-                    objectFit="cover"
-                    quality={80}
-                    priority
-                    className="object-cover object-center"
-                  />
-                </div>
-              ) : (
-                <div
-                  className="rounded-md border-dashed border border-black mt-2 cursor-pointer aspect-[4/5] flex items-center justify-center text-center flex-col gap-2"
-                  onClick={() => setOpenGalleryModal(true)}
-                >
-                  <FontAwesomeIcon icon={faPlus} size="lg" />
-                  <Text className="text-custom-black">Add a video</Text>
-                </div>
-              )}
-            </FormItem>
-
-            <FormField
-              control={form.control}
-              name="price"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Price</FormLabel>
-                  <FormSubLabel>
-                    Either {creditPrice} credits. Credits are the currency of
-                    our platform.
-                  </FormSubLabel>
-                  <FormControl>
-                    <div className="mt-14 px-4">
-                      <CustomSlider
-                        setValue={(value: number) => setValue('price', value)}
-                        fetchedPrice={field.value}
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Message*</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      rows={4}
-                      {...field}
-                      className="mt-2 text-base"
-                      placeholder="Type your message..."
+          <Form {...form}>
+            <form className="space-y-8 flex flex-col items-center w-full">
+              <FormItem className="w-full">
+                <FormLabel>Video*</FormLabel>
+                {selectedMedia && selectedMedia.thumbnailId ? (
+                  <div className="aspect-[4/5] relative rounded-md overflow-hidden">
+                    <Button
+                      size="icon"
+                      onClick={() => setOpenGalleryModal(true)}
+                      className="absolute top-2 right-2 z-10"
+                    >
+                      <Pencil color="white" strokeWidth={3} />
+                    </Button>
+                    <Image
+                      src={imgixLoader({
+                        src: selectedMedia.thumbnailId,
+                        width: 300,
+                        quality: 80,
+                      })}
+                      alt={`media`}
+                      layout="fill"
+                      objectFit="cover"
+                      quality={80}
+                      priority
+                      className="object-cover object-center"
                     />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                  </div>
+                ) : (
+                  <div
+                    className="rounded-md border-dashed border border-black mt-2 cursor-pointer aspect-[4/5] flex items-center justify-center text-center flex-col gap-2"
+                    onClick={() => setOpenGalleryModal(true)}
+                  >
+                    <FontAwesomeIcon icon={faPlus} size="lg" />
+                    <Text className="text-custom-black">Add a video</Text>
+                  </div>
+                )}
+              </FormItem>
 
-            <Button type="submit" className="w-full" isLoading={isPending}>
-              Send
-            </Button>
-          </form>
-        </Form>
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Price</FormLabel>
+                    <FormSubLabel>
+                      Either {creditPrice} credits. Credits are the currency of
+                      our platform.
+                    </FormSubLabel>
+                    <FormControl>
+                      <div className="mt-14 px-4">
+                        <CustomSlider
+                          setValue={(value: number) => setValue('price', value)}
+                          fetchedPrice={field.value}
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        <GalleryModal
-          open={openGalleryModal}
-          setOpen={setOpenGalleryModal}
-          setSelectedMedia={setSelectedMedia}
-          selectedMedia={selectedMedia}
-        />
-      </DialogContent>
-    </Dialog>
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Message*</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        rows={4}
+                        {...field}
+                        className="mt-2 text-base"
+                        placeholder="Type your message..."
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button
+                onClick={onSubmit}
+                className="w-full"
+                isLoading={isPending}
+              >
+                Send
+              </Button>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+      <GalleryModal
+        open={openGalleryModal}
+        setOpen={setOpenGalleryModal}
+        setSelectedMedia={setSelectedMedia}
+        selectedMedia={selectedMedia}
+      />
+    </>
   );
 };
 
