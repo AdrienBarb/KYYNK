@@ -21,12 +21,24 @@ export const fetchMessagesByConversationId = async ({
       nude: {
         select: {
           id: true,
+          description: true,
           creditPrice: true,
+          userId: true,
+          buyers: true,
+          createdAt: true,
           media: {
             select: {
               id: true,
               thumbnailId: true,
               videoId: true,
+            },
+          },
+          user: {
+            select: {
+              id: true,
+              pseudo: true,
+              profileImageId: true,
+              slug: true,
             },
           },
         },

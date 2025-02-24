@@ -65,7 +65,8 @@ model Nude {
   tags        String[] @default([])
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
-  media       Media?
+  media       Media    @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  mediaId     String
   buyers      String[] @default([])
   isPrivate   Boolean  @default(false)
   isArchived  Boolean  @default(false)
@@ -80,7 +81,7 @@ model Media {
   videoId     String   @unique
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
-  nude        Nude?    @relation(fields: [nudeId], references: [id], onDelete: Cascade)
+  nudes       Nude[]  
   nudeId      String?  @unique
   isReady     Boolean  @default(false)
   isArchived  Boolean  @default(false)

@@ -4,6 +4,7 @@ export const formatNudeWithPermissions = (
   nude: NudeType,
   connectedUserId: string | undefined,
 ) => {
+  console.log('🚀 ~ nude:', nude);
   const isFree = nude.creditPrice === 0;
   const isConnectedUserBoughtTheNude =
     connectedUserId && nude.buyers.includes(connectedUserId);

@@ -40,6 +40,7 @@ export const POST = strictlyAuth(async (req: NextRequest, { params }) => {
     }
 
     const payload = formSchema.parse(requestBody);
+    console.log('🚀 ~ POST ~ payload:', payload);
     const { creditPrice, fiatPrice } = getMediaPrice(payload.price);
 
     const newNude = await prisma.nude.create({
@@ -61,6 +62,7 @@ export const POST = strictlyAuth(async (req: NextRequest, { params }) => {
         isPrivate: true,
       },
     });
+    console.log('🚀 ~ POST ~ newNude:', newNude);
 
     const message = await prisma.message.create({
       data: {

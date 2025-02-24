@@ -1,4 +1,5 @@
 import { auth } from '@/auth';
+import PaddingContainer from '@/components/layout/PaddingContainer';
 import NudeForm from '@/components/nudes/NudeForm';
 import Title from '@/components/ui/Title';
 import { getNudeById } from '@/services/nudes/getNudesById';
@@ -21,12 +22,12 @@ const CreateNudePage: FC<Props> = async ({ params: { id: nudeId } }) => {
   }
 
   return (
-    <div className="max-w-md mx-auto">
+    <PaddingContainer className="max-w-md mx-auto">
       <Title Tag="h2" className="mb-4">
         Edit a nude
       </Title>
       <NudeForm nude={nude} />
-    </div>
+    </PaddingContainer>
   );
 };
 

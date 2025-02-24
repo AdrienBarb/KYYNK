@@ -12,6 +12,7 @@ import { isCreator } from '@/utils/users/isCreator';
 import { isUserVerified } from '@/utils/users/isUserVerified';
 import { Camera } from 'lucide-react';
 import PrivateNudeModal from '../modals/PrivateNudeModal';
+
 const ConversationInput = ({
   refetch,
   otherUser,
@@ -42,7 +43,8 @@ const ConversationInput = ({
       messageSchema.parse(message);
 
       if (
-        otherUser?.settings.creditMessage > 0 &&
+        otherUser?.settings &&
+        otherUser.settings.creditMessage > 0 &&
         user?.creditsAmount! < otherUser.settings.creditMessage
       ) {
         setOpenNotEnoughCreditModal(true);
@@ -78,8 +80,8 @@ const ConversationInput = ({
           disabled={!message}
           className="flex items-center"
         >
-          {otherUser?.settings.creditMessage > 0
-            ? `Send for ${otherUser?.settings.creditMessage} credits`
+          {otherUser?.settings && otherUser.settings.creditMessage > 0
+            ? `Send for ${otherUser.settings.creditMessage} credits`
             : 'Send'}
         </Button>
       </div>

@@ -13,6 +13,8 @@ import Link from 'next/link';
 import Text from '../ui/Text';
 import { MessageType } from '@/types/messages';
 import NudeCard from '../nudes/NudeCard';
+import { cn } from '@/utils/tailwind/cn';
+
 interface Props {
   initialConversation: ConversationType;
   initialMessages: MessageType[];
@@ -56,25 +58,35 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
       >
         {messages.map((currentMessage: MessageType) => {
           const isMyMessage = currentMessage.senderId === user?.id;
+          console.log('🚀 ~ {messages.map ~ isMyMessage:', isMyMessage);
 
           return (
-            <div key={currentMessage.id}>
-              {currentMessage.nude && (
-                <NudeCard
-                  key={currentMessage.nude.id}
-                  nude={currentMessage.nude}
-                  // onClick={() => handleNudeClick(currentMessage.nude.id)}
-                />
+            <div
+              key={currentMessage.id}
+              className={cn(
+                'max-w-[80%] flex flex-col items-end',
+                isMyMessage ? 'self-end' : 'self-start',
               )}
-              <div
-                className={`p-2 rounded-lg max-w-[80%] ${
+            >
+              {currentMessage.nude && (
+                <div className="w-32 mb-2">
+                  <NudeCard
+                    key={currentMessage.nude.id}
+                    nude={currentMessage.nude}
+                    // onClick={() => handleNudeClick(currentMessage.nude.id)}
+                  />
+                </div>
+              )}
+              <p
+                className={cn(
+                  'p-2 rounded-lg',
                   isMyMessage
-                    ? 'bg-primary text-custom-black self-end'
-                    : 'bg-secondary-dark text-custom-black self-start'
-                }`}
+                    ? 'bg-primary text-custom-black'
+                    : 'bg-secondary-dark text-custom-black',
+                )}
               >
-                <p>{currentMessage.content}</p>
-              </div>
+                {currentMessage.content}
+              </p>
             </div>
           );
         })}

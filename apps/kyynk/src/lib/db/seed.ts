@@ -51,6 +51,15 @@ async function main() {
       console.log(`Created user: ${user.pseudo}`);
 
       for (const nudeData of userData.nudes) {
+        const media = await prisma.media.create({
+          data: {
+            thumbnailId: nudeData.thumbnail,
+            videoId: nudeData.videoKey,
+            userId: user.id,
+            isReady: true,
+          },
+        });
+
         // Create the nude
         const nude = await prisma.nude.create({
           data: {
@@ -59,17 +68,8 @@ async function main() {
             creditPrice: nudeData.fiatPrice * 2,
             currency: 'USD',
             userId: user.id,
+            mediaId: media.id,
             tags: ['nsfw'],
-          },
-        });
-
-        await prisma.media.create({
-          data: {
-            thumbnailId: nudeData.thumbnail,
-            videoId: nudeData.videoKey,
-            userId: user.id,
-            nudeId: nude.id,
-            isReady: true,
           },
         });
 

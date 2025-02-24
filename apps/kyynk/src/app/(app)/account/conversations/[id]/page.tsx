@@ -7,6 +7,8 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { appRouter } from '@/constants/appRouter';
 import { MessageType } from '@/types/messages';
+import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
+import { NudeType } from '@/types/nudes';
 
 const CurrentConversationPage = async ({
   params,
@@ -34,10 +36,23 @@ const CurrentConversationPage = async ({
     conversationId: id,
   })) as MessageType[];
 
+  const messagesWithPermissions = messages.map((message) => {
+    if (message.nude) {
+      return {
+        ...message,
+        nude: formatNudeWithPermissions(
+          message.nude as NudeType,
+          session.user.id,
+        ),
+      };
+    }
+    return message;
+  }) as MessageType[];
+
   return (
     <Conversation
       initialConversation={conversation}
-      initialMessages={messages}
+      initialMessages={messagesWithPermissions}
     />
   );
 };
