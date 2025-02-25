@@ -11,7 +11,7 @@ interface Props {
 
 const PageHeader: FC<Props> = ({ title, description, className }) => {
   return (
-    <div className={cn(className)}>
+    <div className={cn('mb-8', className)}>
       <Title Tag="h2">{title}</Title>
       {description && <Text>{description}</Text>}
     </div>

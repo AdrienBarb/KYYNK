@@ -3,6 +3,7 @@
 import React from 'react';
 import PageHeader from '@/components/layout/PageHeader';
 import PaddingContainer from '@/components/layout/PaddingContainer';
+import { Card } from '@/components/ui/Card';
 
 const BecomeCreatorLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -10,10 +11,9 @@ const BecomeCreatorLayout = ({ children }: { children: React.ReactNode }) => {
       <PageHeader
         title="Become a Creator"
         description="You need to complete these steps for your profile to be visible to other users."
+        className="mb-4"
       />
-      <div className="max-w-screen-sm mx-auto mt-16 p-8 border border-custom-black/20 rounded-lg">
-        {children}
-      </div>
+      <Card className="max-w-screen-sm mx-auto">{children}</Card>
     </PaddingContainer>
   );
 };

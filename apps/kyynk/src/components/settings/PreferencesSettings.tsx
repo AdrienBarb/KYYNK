@@ -8,14 +8,12 @@ import { apiRouter } from '@/constants/apiRouter';
 import { Button } from '@/components/ui/Button';
 import { toast } from 'react-hot-toast';
 import Text from '../ui/Text';
-import { Separator } from '../ui/Separator';
+import { Card } from '../ui/Card';
 
 const PreferencesSettings = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { usePut } = useApi();
   const { user, refetch } = useUser();
-
-  console.log('🚀 ~ PreferencesSettings ~ user:', user);
 
   useEffect(() => {
     if (user?.preferences) {
@@ -43,7 +41,7 @@ const PreferencesSettings = () => {
   };
 
   return (
-    <div>
+    <Card>
       <div className="w-full mb-4">
         <Text className="font-bold">User Preferences</Text>
         <Text className="text-sm">
@@ -76,8 +74,7 @@ const PreferencesSettings = () => {
       >
         Save
       </Button>
-      <Separator className="my-4" />
-    </div>
+    </Card>
   );
 };
 

@@ -15,7 +15,7 @@ const SettingsPaymentPage = async () => {
 
   return (
     <PaddingContainer>
-      <PageHeader title="Payment Settings" className="mb-8" />
+      <PageHeader title="Payment Settings" />
       <PaymentSettings />
     </PaddingContainer>
   );

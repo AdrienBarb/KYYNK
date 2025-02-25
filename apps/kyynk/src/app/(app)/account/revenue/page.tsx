@@ -1,6 +1,7 @@
 import { auth } from '@/auth';
 import PaddingContainer from '@/components/layout/PaddingContainer';
 import PageHeader from '@/components/layout/PageHeader';
+import RevenueDashboard from '@/components/revenue/RevenueDashboard';
 import { redirect } from 'next/navigation';
 import React from 'react';
 
@@ -14,6 +15,7 @@ const RevenuePage = async () => {
   return (
     <PaddingContainer>
       <PageHeader title="Revenue" />
+      <RevenueDashboard />
     </PaddingContainer>
   );
 };

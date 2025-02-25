@@ -15,7 +15,7 @@ const PreferencesPage = async () => {
 
   return (
     <PaddingContainer>
-      <PageHeader title="Preferences Settings" className="mb-8" />
+      <PageHeader title="Preferences Settings" />
       <PreferencesSettings />
     </PaddingContainer>
   );

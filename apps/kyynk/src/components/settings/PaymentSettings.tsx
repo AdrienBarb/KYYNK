@@ -20,6 +20,7 @@ import Text from '../ui/Text';
 import { Separator } from '../ui/Separator';
 import { bankDetailsSchema } from '@/schemas/settings/payment/bankDetails';
 import { toast } from 'react-hot-toast';
+import { Card } from '../ui/Card';
 
 const PaymentSettings = () => {
   const { user, refetch } = useUser();
@@ -59,7 +60,7 @@ const PaymentSettings = () => {
   };
 
   return (
-    <div>
+    <Card>
       <div className="w-full mb-4">
         <Text className="font-bold">Bank Details</Text>
         <Text className="text-sm">
@@ -99,8 +100,7 @@ const PaymentSettings = () => {
           </Button>
         </form>
       </Form>
-      <Separator className="my-4" />
-    </div>
+    </Card>
   );
 };
 

@@ -43,7 +43,7 @@ const ConversationList: FC<Props> = ({ initConversations }) => {
   }
 
   return (
-    <div className="h-full w-full overflow-y-scroll flex flex-col gap-2 mt-16">
+    <div className="h-full w-full overflow-y-scroll flex flex-col gap-2">
       {conversations.map((currentConversation: ConversationType) => {
         return (
           <ConversationCard

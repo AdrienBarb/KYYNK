@@ -12,7 +12,7 @@ import {
 import { Separator } from '../ui/Separator';
 import { useUser } from '@/hooks/users/useUser';
 import useApi from '@/hooks/requests/useApi';
-
+import { Card } from '../ui/Card';
 const priceOptions = [
   { label: 'Free', value: '0' },
   { label: '0.25 €', value: '0.25' },
@@ -55,7 +55,7 @@ const ConversationSettings = () => {
   };
 
   return (
-    <div>
+    <Card>
       <div className="flex justify-between items-center gap-4">
         <div className="w-full">
           <Text className="font-bold">Private message</Text>
@@ -82,8 +82,7 @@ const ConversationSettings = () => {
           </SelectContent>
         </Select>
       </div>
-      <Separator className="my-4" />
-    </div>
+    </Card>
   );
 };
 
