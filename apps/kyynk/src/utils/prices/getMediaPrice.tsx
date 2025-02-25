@@ -8,3 +8,14 @@ export const getMediaPrice = (price: any) => {
     creditPrice: formattedPrice * 2,
   };
 };
+
+export const getPriceWithCredits = (credits: any) => {
+  if (isNaN(credits)) return { fiatPrice: 0, creditPrice: 0 };
+
+  let formattedCredits = parseFloat(credits);
+
+  return {
+    fiatPrice: formattedCredits / 2,
+    creditPrice: formattedCredits,
+  };
+};

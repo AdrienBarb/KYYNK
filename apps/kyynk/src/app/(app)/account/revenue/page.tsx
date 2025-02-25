@@ -2,6 +2,7 @@ import { auth } from '@/auth';
 import PaddingContainer from '@/components/layout/PaddingContainer';
 import PageHeader from '@/components/layout/PageHeader';
 import RevenueDashboard from '@/components/revenue/RevenueDashboard';
+import { getUserSales } from '@/services/sales/getUserSales';
 import { redirect } from 'next/navigation';
 import React from 'react';
 
