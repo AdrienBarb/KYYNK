@@ -15,4 +15,7 @@ export const appRouter = {
     '/account/become-creator/content-provider-policy',
   conversations: '/account/conversations',
   settingsConversations: '/account/settings/conversations',
+  settingsPayment: '/account/settings/payment',
+  settingsPreferences: '/account/settings/preferences',
+  revenue: '/account/revenue',
 };

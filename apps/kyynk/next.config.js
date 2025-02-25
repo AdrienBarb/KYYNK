@@ -1,4 +1,5 @@
 import createNextIntlPlugin from 'next-intl/plugin';
+import { withAxiom } from 'next-axiom';
 
 const withNextIntl = createNextIntlPlugin('./src/lib/i18n/request.ts');
 
@@ -25,4 +26,4 @@ const nextConfig = {
   },
 };
 
-export default withNextIntl(nextConfig);
+export default withAxiom(withNextIntl(nextConfig));

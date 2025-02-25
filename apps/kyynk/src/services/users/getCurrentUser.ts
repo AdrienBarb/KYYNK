@@ -20,6 +20,7 @@ export const getCurrentUser = async ({ userId }: { userId: string }) => {
         hairColor: true,
         country: true,
         tags: true,
+        preferences: true,
         creditsAmount: true,
         isEmailVerified: true,
         identityVerificationStatus: true,
@@ -30,6 +31,8 @@ export const getCurrentUser = async ({ userId }: { userId: string }) => {
           select: {
             fiatMessage: true,
             creditMessage: true,
+            bankAccountName: true,
+            iban: true,
           },
         },
       },

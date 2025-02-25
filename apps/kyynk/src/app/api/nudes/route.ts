@@ -40,9 +40,24 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
       },
     });
 
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { tags: true },
+    });
+
+    const updatedTags = Array.from(
+      new Set([
+        ...(user?.tags || []),
+        ...(payload.tags?.map((tag) => tag.value) || []),
+      ]),
+    );
+
     await prisma.user.update({
       where: { id: userId },
-      data: { nudesCount: { increment: 1 } },
+      data: {
+        nudesCount: { increment: 1 },
+        tags: updatedTags,
+      },
     });
 
     return NextResponse.json(newNude, { status: 201 });

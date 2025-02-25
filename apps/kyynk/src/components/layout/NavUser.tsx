@@ -91,7 +91,7 @@ export function NavUser() {
                 Buy credits
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href={appRouter.becomeCreator} className="font-light">
+                <Link href={appRouter.becomeCreator} className="font-karla">
                   <BadgeCheck />
                   Become a creator
                 </Link>

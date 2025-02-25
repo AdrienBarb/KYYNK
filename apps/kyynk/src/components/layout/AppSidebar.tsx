@@ -8,6 +8,9 @@ import {
   Plus,
   Settings,
   UsersRound,
+  CreditCard,
+  Sliders,
+  BadgeEuro,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -36,7 +39,7 @@ import {
 } from '../ui/collapsible';
 
 export function AppSidebar() {
-  const { user } = useUser();
+  const { user, isLoggedIn } = useUser();
 
   const platforms = [
     {
@@ -61,9 +64,30 @@ export function AppSidebar() {
 
   const creators = [
     {
-      title: 'Add a nude',
-      url: appRouter.addNudes,
-      icon: Plus,
+      title: 'Revenue',
+      url: appRouter.revenue,
+      icon: BadgeEuro,
+    },
+  ];
+
+  const settings = [
+    {
+      title: 'Conversations',
+      url: appRouter.settingsConversations,
+      icon: MessageCircle,
+      isVisible: isLoggedIn() && isCreator({ user }),
+    },
+    {
+      title: 'Payment',
+      url: appRouter.settingsPayment,
+      icon: CreditCard,
+      isVisible: isLoggedIn() && isCreator({ user }),
+    },
+    {
+      title: 'Preferences',
+      url: appRouter.settingsPreferences,
+      icon: Sliders,
+      isVisible: isLoggedIn(),
     },
   ];
 
@@ -97,31 +121,36 @@ export function AppSidebar() {
                     </SidebarMenuItem>
                   ),
               )}
-              <Collapsible defaultOpen={false} className="group/collapsible">
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton>
-                      <Settings />
-                      <span className="text-sm font-rubik">Settings</span>
-                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {isCreator({ user }) && (
-                        <SidebarMenuSubItem>
-                          <SidebarMenuButton asChild>
-                            <Link href={appRouter.settingsConversations}>
-                              <MessageCircle />
-                              <span>Conversations</span>
-                            </Link>
-                          </SidebarMenuButton>
-                        </SidebarMenuSubItem>
-                      )}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                </SidebarMenuItem>
-              </Collapsible>
+              {isLoggedIn() && (
+                <Collapsible defaultOpen={false} className="group/collapsible">
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton>
+                        <Settings />
+                        <span className="text-sm font-rubik">Settings</span>
+                        <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {settings.map(
+                          (item) =>
+                            item.isVisible && (
+                              <SidebarMenuSubItem key={item.title}>
+                                <SidebarMenuButton asChild>
+                                  <Link href={item.url}>
+                                    <item.icon />
+                                    <span>{item.title}</span>
+                                  </Link>
+                                </SidebarMenuButton>
+                              </SidebarMenuSubItem>
+                            ),
+                        )}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

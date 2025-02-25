@@ -15,13 +15,17 @@ export type LoggedUserType = Pick<
   | 'hairColor'
   | 'country'
   | 'tags'
+  | 'preferences'
   | 'creditsAmount'
   | 'isEmailVerified'
   | 'identityVerificationStatus'
   | 'nudesCount'
   | 'contentProviderPolicyAccepted'
 > & {
-  settings: Pick<UserSettings, 'fiatMessage' | 'creditMessage'>;
+  settings: Pick<
+    UserSettings,
+    'fiatMessage' | 'creditMessage' | 'bankAccountName' | 'iban'
+  >;
 };
 
 export type FetchedUserType = Pick<

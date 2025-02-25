@@ -39,7 +39,6 @@ const priceOptions = [
 
 const ConversationSettings = () => {
   const { user, refetch } = useUser();
-  console.log('🚀 ~ ConversationSettings ~ user:', user);
   const { usePut } = useApi();
 
   const { mutate: updatePrice } = usePut(
@@ -52,7 +51,6 @@ const ConversationSettings = () => {
   );
 
   const handlePriceChange = (value: string) => {
-    console.log('🚀 ~ handlePriceChange ~ value:', value);
     updatePrice({ fiatMessage: value });
   };
 
