@@ -6,11 +6,17 @@ import { getUserSales } from '@/services/sales/getUserSales';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { getFiatWithCredits } from '@/utils/prices/getMediaPrice';
 import { MIN_CREDITS_AMOUNT_FOR_WITHDRAWAL } from '@/constants/constants';
+import { calculateNetRevenue } from '@/utils/revenues/calculateNetRevenue';
 
 export const POST = strictlyAuth(async (req: NextRequest) => {
   try {
     const { auth } = req;
     const userId = auth?.user.id;
+
+    const user = await prisma.user.findUnique({
+      where: { id: userId! },
+      select: { feeFreeUntil: true },
+    });
 
     const sales = await getUserSales({ userId: userId! });
 
@@ -21,12 +27,17 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
       );
     }
 
-    const totalAmount = sales.reduce(
+    const totalGrossAmount = sales.reduce(
       (sum: number, sale: { creditAmount: number }) => sum + sale.creditAmount,
       0,
     );
 
-    if (totalAmount < MIN_CREDITS_AMOUNT_FOR_WITHDRAWAL) {
+    const totalNetAmount = calculateNetRevenue(
+      totalGrossAmount,
+      user?.feeFreeUntil,
+    );
+
+    if (totalNetAmount < MIN_CREDITS_AMOUNT_FOR_WITHDRAWAL) {
       return NextResponse.json(
         { message: errorMessages.INSUFFICIENT_CREDITS },
         { status: 400 },
@@ -34,23 +45,23 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
     }
 
     const saleIds = sales.map((sale) => sale.id);
+    const { fiatPrice } = getFiatWithCredits(totalNetAmount);
 
-    await prisma.sale.updateMany({
-      where: { id: { in: saleIds } },
-      data: { isPaid: true },
-    });
-
-    const { fiatPrice } = getFiatWithCredits(totalAmount);
-
-    await prisma.invoice.create({
-      data: {
-        userId: userId!,
-        fiatAmount: fiatPrice,
-        sales: {
-          connect: saleIds.map((id) => ({ id })),
+    await prisma.$transaction([
+      prisma.sale.updateMany({
+        where: { id: { in: saleIds } },
+        data: { isPaid: true },
+      }),
+      prisma.invoice.create({
+        data: {
+          userId: userId!,
+          fiatAmount: fiatPrice,
+          sales: {
+            connect: saleIds.map((id) => ({ id })),
+          },
         },
-      },
-    });
+      }),
+    ]);
 
     return NextResponse.json({ message: 'OK' });
   } catch (error) {

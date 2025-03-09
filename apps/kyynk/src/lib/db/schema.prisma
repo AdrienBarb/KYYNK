@@ -47,6 +47,7 @@ model User {
   conversations                 Conversation[]     @relation("UserConversations")
   messages                      Message[]
   settings                      UserSettings?
+  feeFreeUntil                  DateTime           @default(dbgenerated("now() + interval '3 months'"))
 }
 
 model UserToken {

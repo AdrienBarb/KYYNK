@@ -4,6 +4,7 @@ import React, { FC } from 'react';
 import { Button } from '@/components/ui/Button';
 import useApi from '@/hooks/requests/useApi';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 interface AskPaymentButtonProps {
   disabled: boolean;
@@ -18,6 +19,7 @@ const AskPaymentButton: FC<AskPaymentButtonProps> = ({ disabled }) => {
     {
       onSuccess: () => {
         router.refresh();
+        toast.success('Payment request sent successfully!');
       },
     },
   );

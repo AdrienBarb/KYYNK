@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/db/client';
+import { calculateNetRevenue } from '@/utils/revenues/calculateNetRevenue';
 import { Sale } from '@prisma/client';
 import { isBefore } from 'date-fns';
 
@@ -8,6 +9,11 @@ export const getUserRevenues = async ({
   userId: string;
 }): Promise<{ incomingRevenue: number; availableRevenue: number }> => {
   try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { feeFreeUntil: true },
+    });
+
     const sales = await prisma.sale.findMany({
       where: {
         sellerId: userId,
@@ -28,7 +34,13 @@ export const getUserRevenues = async ({
       )
       .reduce((acc: number, sale: Sale) => acc + sale.creditAmount, 0);
 
-    return { incomingRevenue, availableRevenue };
+    return {
+      incomingRevenue: calculateNetRevenue(incomingRevenue, user?.feeFreeUntil),
+      availableRevenue: calculateNetRevenue(
+        availableRevenue,
+        user?.feeFreeUntil,
+      ),
+    };
   } catch (error) {
     console.error('Error fetching user sales:', error);
     throw error;
