@@ -12,6 +12,7 @@ import { isCreator } from '@/utils/users/isCreator';
 import { isUserVerified } from '@/utils/users/isUserVerified';
 import { Camera } from 'lucide-react';
 import PrivateNudeModal from '../modals/PrivateNudeModal';
+import { formatCredits } from '@/utils/prices/formatCredits';
 
 const ConversationInput = ({
   refetch,
@@ -81,7 +82,9 @@ const ConversationInput = ({
           className="flex items-center"
         >
           {otherUser?.settings && otherUser.settings.creditMessage > 0
-            ? `Send for ${otherUser.settings.creditMessage} credits`
+            ? `Send for ${formatCredits(
+                otherUser.settings.creditMessage,
+              )} credits`
             : 'Send'}
         </Button>
       </div>

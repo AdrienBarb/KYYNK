@@ -25,11 +25,12 @@ import toast from 'react-hot-toast';
 import { useUser } from '@/hooks/users/useUser';
 import { appRouter } from '@/constants/appRouter';
 import { usePaymentModalStore } from '@/stores/PaymentModalStore';
+import { formatCredits } from '@/utils/prices/formatCredits';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { user } = useUser();
-  const { isOpen, openModal, closeModal } = usePaymentModalStore();
+  const { openModal } = usePaymentModalStore();
 
   const logout = () => {
     toast.success('You are logged out');
@@ -47,7 +48,7 @@ export function NavUser() {
         <div className="grid flex-1 text-left text-sm leading-tight">
           <span className="truncate font-semibold">{user?.pseudo}</span>
           <span className="truncate text-xs">
-            {user?.creditsAmount} credits
+            {formatCredits(user?.creditsAmount || 0)} credits
           </span>
         </div>
       </>

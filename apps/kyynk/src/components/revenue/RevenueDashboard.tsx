@@ -2,8 +2,10 @@ import { Card } from '../ui/Card';
 import Text from '../ui/Text';
 import { Tooltip, TooltipTrigger, TooltipContent } from '../ui/Tooltip';
 import { Info } from 'lucide-react';
-import { getPriceWithCredits } from '@/utils/prices/getMediaPrice';
+import { getFiatWithCredits } from '@/utils/prices/getMediaPrice';
 import React, { FC } from 'react';
+import { formatCredits } from '@/utils/prices/formatCredits';
+import { formatFiat } from '@/utils/prices/formatFiat';
 
 interface RevenueDashboardProps {
   availableRevenue: number;
@@ -15,12 +17,12 @@ const RevenueDashboard: FC<RevenueDashboardProps> = async ({
   incomingRevenue,
 }) => {
   const { fiatPrice: incomingRevenueFiat, creditPrice: incomingRevenueCredit } =
-    getPriceWithCredits(incomingRevenue);
+    getFiatWithCredits(incomingRevenue);
 
   const {
     fiatPrice: availableRevenueFiat,
     creditPrice: availableRevenueCredit,
-  } = getPriceWithCredits(availableRevenue);
+  } = getFiatWithCredits(availableRevenue);
 
   return (
     <div>
@@ -35,13 +37,19 @@ const RevenueDashboard: FC<RevenueDashboardProps> = async ({
                 </span>
               </TooltipTrigger>
               <TooltipContent>
-                <Text>Information about incoming revenue</Text>
+                <Text>
+                  The incoming revenue is from your sales that are currently
+                  being validated. It takes 7 days to validate, so this revenue
+                  will be available in 7 days.
+                </Text>
               </TooltipContent>
             </Tooltip>
           </div>
-          <Text className="text-2xl font-bold">{incomingRevenueFiat} €</Text>
+          <Text className="text-2xl font-bold">
+            {formatFiat(incomingRevenueFiat)} €
+          </Text>
           <Text className="text-sm font-thin">
-            {incomingRevenueCredit} credits
+            {formatCredits(incomingRevenueCredit)} credits
           </Text>
         </Card>
         <Card>
@@ -54,13 +62,18 @@ const RevenueDashboard: FC<RevenueDashboardProps> = async ({
                 </span>
               </TooltipTrigger>
               <TooltipContent>
-                <Text>Information about available revenue</Text>
+                <Text>
+                  The available revenue is the amount you can withdraw. It needs
+                  to be higher than 50 euros to be eligible for withdrawal.
+                </Text>
               </TooltipContent>
             </Tooltip>
           </div>
-          <Text className="text-2xl font-bold">{availableRevenueFiat} €</Text>
+          <Text className="text-2xl font-bold">
+            {formatFiat(availableRevenueFiat)} €
+          </Text>
           <Text className="text-sm font-thin">
-            {availableRevenueCredit} credits
+            {formatCredits(availableRevenueCredit)} credits
           </Text>
         </Card>
       </div>

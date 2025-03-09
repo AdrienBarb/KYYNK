@@ -5,7 +5,7 @@ import { getCurrentUser } from '@/services/users/getCurrentUser';
 import { prisma } from '@/lib/db/client';
 import { NextResponse, NextRequest } from 'next/server';
 import { z } from 'zod';
-import { getMediaPrice } from '@/utils/prices/getMediaPrice';
+import { getCreditsWithFiat } from '@/utils/prices/getMediaPrice';
 
 const updatePriceSchema = z.object({
   fiatMessage: z.string().transform((val) => parseFloat(val)),
@@ -28,7 +28,7 @@ export const PUT = strictlyAuth(async (req: NextRequest) => {
     const body = await req.json();
     const { fiatMessage } = updatePriceSchema.parse(body);
 
-    const { creditPrice, fiatPrice } = getMediaPrice(fiatMessage);
+    const { creditPrice, fiatPrice } = getCreditsWithFiat(fiatMessage);
 
     const updatedSettings = await prisma.userSettings.update({
       where: { userId },

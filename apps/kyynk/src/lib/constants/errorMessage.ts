@@ -13,4 +13,5 @@ export const errorMessages = {
   INVALID_CODE: 'invalidCode',
   INVALID_PACKAGE: 'invalidPackage',
   NO_UNPAID_SALES: 'noUnpaidSales',
+  INSUFFICIENT_CREDITS: 'insufficientCredits',
 };

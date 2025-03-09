@@ -3,7 +3,7 @@ import PaddingContainer from '@/components/layout/PaddingContainer';
 import PageHeader from '@/components/layout/PageHeader';
 import AskPaymentButton from '@/components/revenue/AskPaymentButton';
 import RevenueDashboard from '@/components/revenue/RevenueDashboard';
-import { Button } from '@/components/ui/Button';
+import { MIN_CREDITS_AMOUNT_FOR_WITHDRAWAL } from '@/constants/constants';
 import { getUserRevenues } from '@/services/sales/getUserRevenues';
 import { redirect } from 'next/navigation';
 import React from 'react';
@@ -22,7 +22,9 @@ const RevenuePage = async () => {
   return (
     <PaddingContainer>
       <PageHeader title="Revenue">
-        <AskPaymentButton disabled={availableRevenue === 0} />
+        <AskPaymentButton
+          disabled={availableRevenue < MIN_CREDITS_AMOUNT_FOR_WITHDRAWAL}
+        />
       </PageHeader>
       <RevenueDashboard
         availableRevenue={availableRevenue}

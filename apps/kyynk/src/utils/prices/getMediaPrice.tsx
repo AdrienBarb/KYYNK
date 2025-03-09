@@ -1,21 +1,17 @@
-export const getMediaPrice = (price: any) => {
+export const getCreditsWithFiat = (price: number) => {
   if (isNaN(price)) return { fiatPrice: 0, creditPrice: 0 };
 
-  let formattedPrice = parseFloat(price);
-
   return {
-    fiatPrice: formattedPrice,
-    creditPrice: formattedPrice * 2,
+    fiatPrice: Math.round(price),
+    creditPrice: Math.round(price * 2),
   };
 };
 
-export const getPriceWithCredits = (credits: any) => {
+export const getFiatWithCredits = (credits: number) => {
   if (isNaN(credits)) return { fiatPrice: 0, creditPrice: 0 };
 
-  let formattedCredits = parseFloat(credits);
-
   return {
-    fiatPrice: formattedCredits / 2,
-    creditPrice: formattedCredits,
+    fiatPrice: Math.round(credits / 2),
+    creditPrice: Math.round(credits),
   };
 };

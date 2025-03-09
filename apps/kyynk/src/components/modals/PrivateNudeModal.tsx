@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/Dialog';
@@ -12,13 +11,11 @@ import { Button } from '@/components/ui/Button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { privateNudeSchema } from '@/schemas/nudeSchema';
 import { useForm } from 'react-hook-form';
-import { getMediaPrice } from '@/utils/prices/getMediaPrice';
+import { getCreditsWithFiat } from '@/utils/prices/getMediaPrice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import { Pencil } from 'lucide-react';
-import Select from 'react-select';
-import { TagsType, tagList } from '@/constants/constants';
 import GalleryModal from '@/components/nudes/GalleryModal';
 import {
   Form,
@@ -60,7 +57,7 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
 
   const { handleSubmit, setValue, reset } = form;
 
-  const { creditPrice } = getMediaPrice(form.watch('price') || 0);
+  const { creditPrice } = getCreditsWithFiat(form.watch('price') || 0);
 
   const { usePost } = useApi();
   const { mutate: createPrivateNudeMessage, isPending } = usePost(
@@ -85,7 +82,7 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
     createPrivateNudeMessage({
       mediaId: selectedMedia.id,
       description: values.description,
-      price: values.price,
+      price: values.price * 100,
     });
   });
 

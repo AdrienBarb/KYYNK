@@ -4,7 +4,8 @@ import { errorHandler } from '@/utils/errors/errorHandler';
 import { strictlyAuth } from '@/hoc/strictlyAuth';
 import { getUserSales } from '@/services/sales/getUserSales';
 import { errorMessages } from '@/lib/constants/errorMessage';
-import { getPriceWithCredits } from '@/utils/prices/getMediaPrice';
+import { getFiatWithCredits } from '@/utils/prices/getMediaPrice';
+import { MIN_CREDITS_AMOUNT_FOR_WITHDRAWAL } from '@/constants/constants';
 
 export const POST = strictlyAuth(async (req: NextRequest) => {
   try {
@@ -20,6 +21,18 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
       );
     }
 
+    const totalAmount = sales.reduce(
+      (sum: number, sale: { creditAmount: number }) => sum + sale.creditAmount,
+      0,
+    );
+
+    if (totalAmount < MIN_CREDITS_AMOUNT_FOR_WITHDRAWAL) {
+      return NextResponse.json(
+        { message: errorMessages.INSUFFICIENT_CREDITS },
+        { status: 400 },
+      );
+    }
+
     const saleIds = sales.map((sale) => sale.id);
 
     await prisma.sale.updateMany({
@@ -27,12 +40,7 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
       data: { isPaid: true },
     });
 
-    const totalAmount = sales.reduce(
-      (sum: number, sale: { creditAmount: number }) => sum + sale.creditAmount,
-      0,
-    );
-
-    const { fiatPrice } = getPriceWithCredits(totalAmount);
+    const { fiatPrice } = getFiatWithCredits(totalAmount);
 
     await prisma.invoice.create({
       data: {

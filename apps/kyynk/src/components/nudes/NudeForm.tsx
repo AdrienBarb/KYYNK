@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Select from 'react-select';
 import { TagsType, tagList } from '@/constants/constants';
-import { getMediaPrice } from '@/utils/prices/getMediaPrice';
+import { getCreditsWithFiat } from '@/utils/prices/getMediaPrice';
 import useApi from '@/hooks/requests/useApi';
 import GalleryModal from '@/components/nudes/GalleryModal';
 import {
@@ -72,7 +72,7 @@ const NudeForm: FC<Props> = ({ nude }) => {
 
   const { handleSubmit, setValue } = form;
 
-  const { creditPrice } = getMediaPrice(form.watch('price') || 0);
+  const { creditPrice } = getCreditsWithFiat(form.watch('price') || 0);
 
   const onSubmit = handleSubmit((values) => {
     if (!nude && !selectedMedia) {
@@ -83,7 +83,7 @@ const NudeForm: FC<Props> = ({ nude }) => {
     const payload = {
       ...(selectedMedia && { mediaId: selectedMedia.id }),
       description: values.description,
-      price: values.price,
+      price: values.price * 100,
       tags: values.tags,
     };
 

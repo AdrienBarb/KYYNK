@@ -4,7 +4,7 @@ import { prisma } from '@/lib/db/client';
 import { errorHandler } from '@/utils/errors/errorHandler';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { z } from 'zod';
-import { getMediaPrice } from '@/utils/prices/getMediaPrice';
+import { getCreditsWithFiat } from '@/utils/prices/getMediaPrice';
 import { privateNudeSchema } from '@/schemas/nudeSchema';
 
 const formSchema = privateNudeSchema.extend({
@@ -40,8 +40,7 @@ export const POST = strictlyAuth(async (req: NextRequest, { params }) => {
     }
 
     const payload = formSchema.parse(requestBody);
-    console.log('🚀 ~ POST ~ payload:', payload);
-    const { creditPrice, fiatPrice } = getMediaPrice(payload.price);
+    const { creditPrice, fiatPrice } = getCreditsWithFiat(payload.price);
 
     const newNude = await prisma.nude.create({
       data: {
@@ -62,7 +61,6 @@ export const POST = strictlyAuth(async (req: NextRequest, { params }) => {
         isPrivate: true,
       },
     });
-    console.log('🚀 ~ POST ~ newNude:', newNude);
 
     const message = await prisma.message.create({
       data: {

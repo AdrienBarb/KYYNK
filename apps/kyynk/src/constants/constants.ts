@@ -8,6 +8,8 @@ export interface SupportedCountry {
   label: string;
 }
 
+export const MIN_CREDITS_AMOUNT_FOR_WITHDRAWAL = 10000;
+
 export type Notification = 'profile_viewed';
 
 export const IMGIX_URL = 'https://kyynk-296765883.imgix.net/';

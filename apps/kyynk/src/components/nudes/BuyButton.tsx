@@ -6,6 +6,7 @@ import useApi from '@/hooks/requests/useApi';
 import { appRouter } from '@/constants/appRouter';
 import { useRouter } from 'next/navigation';
 import NotEnoughCreditsModal from '../modals/NotEnoughCreditsModal';
+import { formatCredits } from '@/utils/prices/formatCredits';
 
 interface Props {
   nude: NudeType;
@@ -45,7 +46,7 @@ const BuyButton = ({ nude, afterBuyAction }: Props) => {
       <Button
         onClick={handleBuy}
         isLoading={isPending}
-      >{`Buy for ${nude.creditPrice} credits`}</Button>
+      >{`Buy for ${formatCredits(nude.creditPrice)} credits`}</Button>
       <NotEnoughCreditsModal
         open={openNotEnoughCreditModal}
         onOpenChange={setOpenNotEnoughCreditModal}
