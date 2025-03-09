@@ -3,22 +3,17 @@ import Text from '../ui/Text';
 import { Tooltip, TooltipTrigger, TooltipContent } from '../ui/Tooltip';
 import { Info } from 'lucide-react';
 import { getPriceWithCredits } from '@/utils/prices/getMediaPrice';
-import { auth } from '@/auth';
-import { getUserSales } from '@/services/sales/getUserSales';
-import { getUserSalesDetails } from '@/services/sales/getUserSalesDetails';
-import SalesList from './SalesList';
+import React, { FC } from 'react';
 
-const RevenueDashboard = async () => {
-  const session = await auth();
+interface RevenueDashboardProps {
+  availableRevenue: number;
+  incomingRevenue: number;
+}
 
-  const { incomingRevenue, availableRevenue } = await getUserSales({
-    userId: session?.user.id!,
-  });
-
-  const sales = await getUserSalesDetails({
-    userId: session?.user.id!,
-  });
-
+const RevenueDashboard: FC<RevenueDashboardProps> = async ({
+  availableRevenue,
+  incomingRevenue,
+}) => {
   const { fiatPrice: incomingRevenueFiat, creditPrice: incomingRevenueCredit } =
     getPriceWithCredits(incomingRevenue);
 
@@ -69,7 +64,6 @@ const RevenueDashboard = async () => {
           </Text>
         </Card>
       </div>
-      <SalesList sales={sales} />
     </div>
   );
 };

@@ -3,48 +3,50 @@ datasource db {
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
+
 generator client {
   provider = "prisma-client-js"
 }
 
 model User {
-  id                         String             @id @default(cuid())
-  pseudo                     String             @unique
-  slug                       String             @unique
-  email                      String             @unique
-  password                   String
-  description                String?
-  profileImageId             String?
-  nudesCount                 Int                @default(0)
-  age                        Int?
-  gender                     String?
-  bodyType                   String?
-  hairColor                  String?
-  country                    String?
-  tags                       String[]           @default([])
-  isArchived                 Boolean            @default(false)
-  isEmailVerified            Boolean            @default(false)
-  identityVerificationStatus VerificationStatus @default(unverified)
-  contentProviderPolicyAccepted Boolean @default(false)
-  preferences                String[]           @default([])
-  userType                   UserType?          @default(member)
-  userToken                  UserToken?
-  medias                     Media[]
-  nudes                      Nude[]
-  creditsAmount              Int                @default(0)
-  frontIdentity              String?
-  backIdentity               String?
-  frontAndFaceIdentity       String?
-  watermarkId                String?
-  lastLogin                  DateTime?
-  createdAt                  DateTime           @default(now())
-  updatedAt                  DateTime           @updatedAt
-  salesAsSeller              Sale[]             @relation("SellerSales")
-  salesAsBuyer               Sale[]             @relation("BuyerSales")
-  verificationCodes          VerificationCode[]
-  conversations              Conversation[]     @relation("UserConversations")
-  messages                   Message[]
-  settings                   UserSettings?
+  id                            String             @id @default(cuid())
+  pseudo                        String             @unique
+  slug                          String             @unique
+  email                         String             @unique
+  password                      String
+  description                   String?
+  profileImageId                String?
+  nudesCount                    Int                @default(0)
+  age                           Int?
+  gender                        String?
+  bodyType                      String?
+  hairColor                     String?
+  country                       String?
+  tags                          String[]           @default([])
+  isArchived                    Boolean            @default(false)
+  isEmailVerified               Boolean            @default(false)
+  identityVerificationStatus    VerificationStatus @default(unverified)
+  contentProviderPolicyAccepted Boolean            @default(false)
+  preferences                   String[]           @default([])
+  userType                      UserType?          @default(member)
+  userToken                     UserToken?
+  medias                        Media[]
+  nudes                         Nude[]
+  invoices                      Invoice[]
+  creditsAmount                 Int                @default(0)
+  frontIdentity                 String?
+  backIdentity                  String?
+  frontAndFaceIdentity          String?
+  watermarkId                   String?
+  lastLogin                     DateTime?
+  createdAt                     DateTime           @default(now())
+  updatedAt                     DateTime           @updatedAt
+  salesAsSeller                 Sale[]             @relation("SellerSales")
+  salesAsBuyer                  Sale[]             @relation("BuyerSales")
+  verificationCodes             VerificationCode[]
+  conversations                 Conversation[]     @relation("UserConversations")
+  messages                      Message[]
+  settings                      UserSettings?
 }
 
 model UserToken {
@@ -57,21 +59,21 @@ model UserToken {
 }
 
 model Nude {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   description String?
   fiatPrice   Int
   creditPrice Int
   currency    String
-  tags        String[] @default([])
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tags        String[]  @default([])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
-  media       Media    @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  media       Media     @relation(fields: [mediaId], references: [id], onDelete: Cascade)
   mediaId     String
-  buyers      String[] @default([])
-  isPrivate   Boolean  @default(false)
-  isArchived  Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  buyers      String[]  @default([])
+  isPrivate   Boolean   @default(false)
+  isArchived  Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   message     Message[]
 }
 
@@ -81,7 +83,7 @@ model Media {
   videoId     String   @unique
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
-  nudes       Nude[]  
+  nudes       Nude[]
   nudeId      String?  @unique
   isReady     Boolean  @default(false)
   isArchived  Boolean  @default(false)
@@ -99,8 +101,21 @@ model Sale {
   sellerId      String
   buyer         User     @relation("BuyerSales", fields: [buyerId], references: [id], onDelete: Cascade)
   buyerId       String
+  invoice       Invoice? @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoiceId     String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+model Invoice {
+  id         String   @id @default(cuid())
+  fiatAmount Int
+  isPaid     Boolean  @default(false)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  sales      Sale[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model VerificationCode {
@@ -136,15 +151,15 @@ model Message {
 }
 
 model UserSettings {
-  id                        String   @id @default(cuid())
-  user                      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId                    String   @unique
-  fiatMessage               Float    @default(0)
-  creditMessage             Float    @default(0)
-  createdAt                 DateTime @default(now())
-  updatedAt                 DateTime @updatedAt
-  bankAccountName           String?
-  iban                      String?
+  id              String   @id @default(cuid())
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String   @unique
+  fiatMessage     Float    @default(0)
+  creditMessage   Float    @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  bankAccountName String?
+  iban            String?
 }
 
 enum UserType {

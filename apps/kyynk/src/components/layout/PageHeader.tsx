@@ -7,13 +7,17 @@ interface Props {
   title: string;
   description?: string;
   className?: string;
+  children?: React.ReactNode;
 }
 
-const PageHeader: FC<Props> = ({ title, description, className }) => {
+const PageHeader: FC<Props> = ({ title, description, children, className }) => {
   return (
-    <div className={cn('mb-8', className)}>
-      <Title Tag="h2">{title}</Title>
-      {description && <Text>{description}</Text>}
+    <div className={cn('flex items-center justify-between mb-8', className)}>
+      <div>
+        <Title Tag="h2">{title}</Title>
+        {description && <Text>{description}</Text>}
+      </div>
+      {children}
     </div>
   );
 };

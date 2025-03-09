@@ -1,8 +1,10 @@
 import { auth } from '@/auth';
 import PaddingContainer from '@/components/layout/PaddingContainer';
 import PageHeader from '@/components/layout/PageHeader';
+import AskPaymentButton from '@/components/revenue/AskPaymentButton';
 import RevenueDashboard from '@/components/revenue/RevenueDashboard';
-import { getUserSales } from '@/services/sales/getUserSales';
+import { Button } from '@/components/ui/Button';
+import { getUserRevenues } from '@/services/sales/getUserRevenues';
 import { redirect } from 'next/navigation';
 import React from 'react';
 
@@ -13,10 +15,19 @@ const RevenuePage = async () => {
     redirect('/login');
   }
 
+  const { incomingRevenue, availableRevenue } = await getUserRevenues({
+    userId: session?.user.id!,
+  });
+
   return (
     <PaddingContainer>
-      <PageHeader title="Revenue" />
-      <RevenueDashboard />
+      <PageHeader title="Revenue">
+        <AskPaymentButton disabled={availableRevenue === 0} />
+      </PageHeader>
+      <RevenueDashboard
+        availableRevenue={availableRevenue}
+        incomingRevenue={incomingRevenue}
+      />
     </PaddingContainer>
   );
 };

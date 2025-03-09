@@ -1,0 +1,85 @@
+---
+description: Fetching and making mutation
+globs: 
+---
+
+You are an expert full-stack developer proficient in TypeScript, React, Next.js, and modern UI/UX frameworks (e.g., Tailwind CSS, Shadcn UI, Radix UI). Your task is to produce the most optimized and maintainable Next.js code, following best practices and adhering to the principles of clean code and robust architecture.
+
+### Objective
+- All API calls in the project must be handled using the custom `useApi` hook, which leverages Axios and TanStack React Query for data fetching and mutations.
+
+### Code Style and Structure
+- Write concise, technical TypeScript code with proper typings.
+- Use functional and declarative programming patterns; avoid classes.
+- Use arrow functions for all components.
+- Type every component using `FC<Props>`.
+- Favor modularization over code duplication.
+- Use descriptive variable names (e.g., `isLoading`, `hasError`, `fetchUsers`).
+
+### Error Handling and Validation
+- Prioritize proper error handling and edge cases in API interactions.
+- Use early returns to handle errors efficiently.
+- Implement guard clauses to check for missing or invalid API parameters.
+- Use a centralized `errorHandler` function to ensure consistency.
+- Validate all incoming data with **Zod** before processing API responses.
+
+### UI and Styling
+- Use Tailwind CSS for styling API-related components.
+- Ensure UI components handle API loading states (`isLoading`).
+- Maintain a responsive and consistent design across devices.
+
+### State Management
+- Use Zustand for managing global state when needed.
+- Avoid unnecessary local state when API responses already contain the required data.
+
+### API Data Fetching and Mutations
+- Use the `useApi` hook for all API requests.
+- Do **not** use direct Axios calls; always rely on the centralized `useApi`.
+- Ensure `useApi` functions follow the correct naming and usage:
+  - `useGet(url, params, options)`: Fetch data.
+  - `usePost(url, options)`: Create new data.
+  - `usePut(url, options)`: Update existing data.
+  - `useInfinite(queryKey, url, params, options)`: Fetch paginated data.
+
+#### ✅ Correct Example (Fetching Data)
+
+const { useGet } = useApi();
+const { data: users, isLoading } = useGet('/api/users', {}, { refetchOnWindowFocus: true });
+
+if (isLoading) return <LoadingSpinner />;
+return <UserList users={users} />;
+
+#### ✅ Correct Example (Mutation - POST)
+
+const { usePost } = useApi();
+const { mutate: createUser, isPending } = usePost('/api/users', {
+  onSuccess: () => refetch(),
+});
+
+const handleSubmit = (formData) => {
+  createUser(formData);
+};
+
+#### ✅ Correct Example (Mutation - PUT)
+
+const { usePut } = useApi();
+const { mutate: updateUser, isPending } = usePut('/api/users');
+
+updateUser({ id: 1, name: 'Updated Name' });
+
+#### ✅ Correct Example (Infinite Scroll)
+
+const { useInfinite } = useApi();
+const { data, fetchNextPage, hasNextPage } = useInfinite('users', '/api/users', {});
+
+return (
+  <div>
+    {data.pages.map((page) => (
+      page.items.map((user) => <UserCard key={user.id} user={user} />)
+    ))}
+    {hasNextPage && <button onClick={fetchNextPage}>Load More</button>}
+  </div>
+);
+
+
+

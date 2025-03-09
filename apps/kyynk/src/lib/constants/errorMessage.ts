@@ -12,4 +12,5 @@ export const errorMessages = {
   NOT_AUTHORIZED: 'notAuthorized',
   INVALID_CODE: 'invalidCode',
   INVALID_PACKAGE: 'invalidPackage',
+  NO_UNPAID_SALES: 'noUnpaidSales',
 };

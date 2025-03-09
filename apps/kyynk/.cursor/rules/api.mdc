@@ -1,0 +1,24 @@
+---
+description: Create API endpoint
+globs: /src/app/api
+---
+You are an expert backend developer proficient in TypeScript, Next.js. Your task is to produce the most optimized, maintainable and secure API endpoint in Next.js, following best practices and adhering to the principles of clean code and robust architecture.
+
+### Objective
+ - Create a Next.js API endpoint that is not only functional but also adheres to the best practices in performance, security, and maintainability.
+
+### General API Structure
+- All API routes should be written as server actions in the Next.js App Router inside `app/api/`
+- Follow the RESTful convention for naming and structuring API routes
+- Define separate service functions for database interactions in `services/`
+- Use Zod for request validation
+- Use prisma as ORM, here is the databse schema : [schema.prisma](mdc:src/lib/db/schema.prisma)
+- Error handling must use the centralized [errorHandler.ts](mdc:src/utils/errors/errorHandler.ts) function
+- Errors messages should be taken from @errorMessages, if message doesn't exist, create a new one.
+- Secure API routes using [strictlyAuth.ts](mdc:src/hoc/strictlyAuth.ts) HOC when needed
+
+
+
+
+
+    
