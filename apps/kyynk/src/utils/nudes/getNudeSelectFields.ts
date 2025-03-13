@@ -7,6 +7,7 @@ export const getNudeSelectFields = () => ({
   userId: true,
   buyers: true,
   tags: true,
+  isArchived: true,
   media: {
     select: {
       id: true,

@@ -18,6 +18,7 @@ import type { Media } from '@prisma/client';
 import CreateNudeForm from '@/components/nudes/CreateNudeForm';
 import { NudeWithPermissions } from '@/types/nudes';
 import NudeCard from '@/components/nudes/NudeCard';
+import { TelegramShareButton, TwitterShareButton } from 'react-share';
 
 const NudeCreationModal = () => {
   const { isOpen, closeModal } = useNudeCreationModalStore();
@@ -145,12 +146,26 @@ const NudeCreationModal = () => {
             {createdNude && <NudeCard nude={createdNude} />}
 
             <div className="flex flex-col items-center justify-center w-full gap-2">
-              <Button onClick={handleCloseModal} className="w-full">
-                Share on twitter
-              </Button>
-              <Button onClick={handleCloseModal} className="w-full">
-                Share on telegram
-              </Button>
+              <TwitterShareButton
+                url={`${process.env.NEXT_PUBLIC_BASE_URL}/nudes/${createdNude?.id}`}
+                title={
+                  createdNude?.description ?? 'Come discover this nude on KYYNK'
+                }
+                style={{ width: '100%' }}
+              >
+                <Button className="w-full">Share on Twitter</Button>
+              </TwitterShareButton>
+
+              <TelegramShareButton
+                url={`${process.env.NEXT_PUBLIC_BASE_URL}/nudes/${createdNude?.id}`}
+                title={
+                  createdNude?.description ?? 'Come discover this nude on KYYNK'
+                }
+                style={{ width: '100%' }}
+              >
+                <Button className="w-full">Share on Telegram</Button>
+              </TelegramShareButton>
+
               <Button
                 variant="secondary"
                 onClick={handleCloseModal}

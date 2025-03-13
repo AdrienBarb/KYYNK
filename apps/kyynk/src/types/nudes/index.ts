@@ -10,6 +10,7 @@ export type NudeFromPrisma = Pick<
   | 'buyers'
   | 'createdAt'
   | 'tags'
+  | 'isArchived'
 > & {
   media: Pick<Media, 'id' | 'thumbnailId'> & { videoId: string | null };
   user: Pick<User, 'id' | 'pseudo' | 'profileImageId' | 'slug'>;

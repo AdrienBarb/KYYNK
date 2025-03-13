@@ -25,7 +25,9 @@ const AppMessage: FC<AppMessageProps> = ({ title, text, children }) => {
           {title}
         </Title>
         <Text className="text-secondary text-center">{text}</Text>
-        {children && <div className="mt-4">{children}</div>}
+        {children && (
+          <div className="mt-4 w-full flex flex-col gap-2">{children}</div>
+        )}
       </div>
     </div>
   );

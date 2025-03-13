@@ -10,7 +10,7 @@ import AppMessage from '@/components/AppMessage';
 import { Button } from '@/components/ui/Button';
 import { apiRouter } from '@/constants/apiRouter';
 import { isUserVerified } from '@/utils/users/isUserVerified';
-import { TwitterShareButton } from 'react-share';
+import { TelegramShareButton, TwitterShareButton } from 'react-share';
 
 const VerificationPage = () => {
   const { user, refetch } = useUser();
@@ -25,7 +25,7 @@ const VerificationPage = () => {
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(URL);
-      toast.success('Link Copied');
+      toast.success('Link copied to clipboard');
     } catch (error) {
       console.error(error);
     }
@@ -45,17 +45,26 @@ const VerificationPage = () => {
       >
         <TwitterShareButton
           url={URL}
-          title="Come discover my last nude"
+          title="Come discover this profile on KYYNK"
           style={{ width: '100%' }}
         >
           <Button variant="secondary" className="w-full">
             Share on Twitter
           </Button>
         </TwitterShareButton>
+        <TelegramShareButton
+          url={URL}
+          title="Come discover this profile on KYYNK"
+          style={{ width: '100%' }}
+        >
+          <Button variant="secondary" className="w-full">
+            Share on Telegram
+          </Button>
+        </TelegramShareButton>
         <Button
           onClick={copyToClipboard}
           variant={'secondary'}
-          className="w-full mt-4"
+          className="w-full"
         >
           Copy my profile link
         </Button>

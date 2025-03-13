@@ -3,7 +3,7 @@ import siteMetadata from '@/data/siteMetadata';
 
 interface PageSEOProps {
   title: string;
-  description: string;
+  description?: string;
   image?: string;
   url?: string;
   [key: string]: any;
