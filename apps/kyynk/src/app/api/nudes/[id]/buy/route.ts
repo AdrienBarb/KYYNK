@@ -5,7 +5,7 @@ import { errorMessages } from '@/lib/constants/errorMessage';
 import { errorHandler } from '@/utils/errors/errorHandler';
 import { getNudeSelectFields } from '@/utils/nudes/getNudeSelectFields';
 import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
-import { NudeType } from '@/types/nudes';
+import { NudeFromPrisma } from '@/types/nudes';
 
 export const POST = strictlyAuth(async (req: NextRequest, { params }) => {
   const { auth } = req;
@@ -80,7 +80,7 @@ export const POST = strictlyAuth(async (req: NextRequest, { params }) => {
     const boughtNude = (await prisma.nude.findUnique({
       where: { id: nudeId },
       select: getNudeSelectFields(),
-    })) as NudeType;
+    })) as NudeFromPrisma;
 
     const formattedNude = formatNudeWithPermissions(boughtNude, auth?.user.id);
 

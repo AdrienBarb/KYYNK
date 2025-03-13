@@ -37,9 +37,11 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '../ui/collapsible';
+import { useNudeCreationModalStore } from '@/stores/NudeCreationModalStore';
 
 export function AppSidebar() {
   const { user, isLoggedIn } = useUser();
+  const { openModal } = useNudeCreationModalStore();
 
   const platforms = [
     {
@@ -95,11 +97,14 @@ export function AppSidebar() {
     <Sidebar>
       {isCreator({ user }) && (
         <SidebarHeader>
-          <Button asChild variant="secondary" size="sm">
-            <Link href={appRouter.addNudes} className="flex items-center gap-2">
-              <CirclePlus size={18} />
-              Add nude
-            </Link>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="flex items-center gap-2"
+            onClick={openModal}
+          >
+            <CirclePlus size={18} />
+            Add nude
           </Button>
         </SidebarHeader>
       )}

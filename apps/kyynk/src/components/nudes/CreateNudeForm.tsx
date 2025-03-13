@@ -1,16 +1,14 @@
 'use client';
 
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Select from 'react-select';
 import { TagsType, tagList } from '@/constants/constants';
 import { getCreditsWithFiat } from '@/utils/prices/getMediaPrice';
 import useApi from '@/hooks/requests/useApi';
-import GalleryModal from '@/components/nudes/GalleryModal';
 import {
   Form,
   FormControl,
@@ -27,46 +25,49 @@ import Text from '@/components/ui/Text';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import { Pencil } from 'lucide-react';
-import type { Media, Nude } from '@prisma/client';
-import { useUser } from '@/hooks/users/useUser';
+import type { Media } from '@prisma/client';
 import { nudeSchema } from '@/schemas/nudeSchema';
 import CustomSlider from '../CustomSlider';
 import imgixLoader from '@/lib/imgix/loader';
+import { NudeWithPermissions } from '@/types/nudes';
+import { useUser } from '@/hooks/users/useUser';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface Props {
-  nude?: Nude;
+  setStep: (step: string) => void;
+  selectedMedia: Media | null;
+  setCreatedNude: (nude: NudeWithPermissions) => void;
 }
 
-const NudeForm: FC<Props> = ({ nude }) => {
-  const [openGalleryModal, setOpenGalleryModal] = useState(false);
-  const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
-
-  const { usePost, usePut } = useApi();
+const CreateNudeForm: FC<Props> = ({
+  setStep,
+  selectedMedia,
+  setCreatedNude,
+}) => {
+  const { usePost } = useApi();
   const { user } = useUser();
-  const router = useRouter();
+
+  const queryClient = useQueryClient();
 
   const { mutate: createNude, isPending } = usePost(`/api/nudes`, {
-    onSuccess: () => {
-      // TODO: If user verified, redirect to success page
-      router.push(`/${user?.slug}`);
+    onSuccess: (createdNude: NudeWithPermissions) => {
+      setCreatedNude(createdNude);
+      setStep('success');
+      queryClient.invalidateQueries({
+        queryKey: [
+          'get',
+          { url: `/api/users/${user?.slug}/nudes`, params: {} },
+        ],
+      });
     },
   });
-
-  const { mutate: editNude, isPending: isEditLoading } = usePut(
-    `/api/nudes/${nude?.id}`,
-    {
-      onSuccess: () => {
-        router.push(`/${user?.slug}`);
-      },
-    },
-  );
 
   const form = useForm<z.infer<typeof nudeSchema>>({
     resolver: zodResolver(nudeSchema),
     defaultValues: {
-      description: nude?.description || '',
-      price: nude?.fiatPrice || 0,
-      tags: nude?.tags.map((tag) => ({ value: tag, label: tag })) || [],
+      description: '',
+      price: 0,
+      tags: [],
     },
   });
 
@@ -75,7 +76,7 @@ const NudeForm: FC<Props> = ({ nude }) => {
   const { creditPrice } = getCreditsWithFiat(form.watch('price') || 0);
 
   const onSubmit = handleSubmit((values) => {
-    if (!nude && !selectedMedia) {
+    if (!selectedMedia) {
       toast.error('You forgot to upload a video');
       return;
     }
@@ -87,11 +88,7 @@ const NudeForm: FC<Props> = ({ nude }) => {
       tags: values.tags,
     };
 
-    if (nude) {
-      editNude(payload);
-    } else {
-      createNude(payload);
-    }
+    createNude(payload);
   });
 
   return (
@@ -100,43 +97,41 @@ const NudeForm: FC<Props> = ({ nude }) => {
         onSubmit={onSubmit}
         className="space-y-8 flex flex-col items-center w-full"
       >
-        {!nude && (
-          <FormItem className="w-full">
-            <FormLabel>Video*</FormLabel>
-            {selectedMedia && selectedMedia.thumbnailId ? (
-              <div className="aspect-[4/5] relative rounded-md overflow-hidden">
-                <Button
-                  size="icon"
-                  onClick={() => setOpenGalleryModal(true)}
-                  className="absolute top-2 right-2 z-10"
-                >
-                  <Pencil color="white" strokeWidth={3} />
-                </Button>
-                <Image
-                  src={imgixLoader({
-                    src: selectedMedia.thumbnailId,
-                    width: 300,
-                    quality: 80,
-                  })}
-                  alt={`media`}
-                  layout="fill"
-                  objectFit="cover"
-                  quality={80}
-                  priority
-                  className="object-cover object-center"
-                />
-              </div>
-            ) : (
-              <div
-                className="rounded-md border-dashed border border-black mt-2 cursor-pointer aspect-[4/5] flex items-center justify-center text-center flex-col gap-2"
-                onClick={() => setOpenGalleryModal(true)}
+        <FormItem className="w-full">
+          <FormLabel>Video*</FormLabel>
+          {selectedMedia && selectedMedia.thumbnailId ? (
+            <div className="aspect-[4/5] relative rounded-md overflow-hidden">
+              <Button
+                size="icon"
+                onClick={() => setStep('gallery')}
+                className="absolute top-2 right-2 z-10"
               >
-                <FontAwesomeIcon icon={faPlus} size="lg" />
-                <Text className="text-custom-black">Add a video</Text>
-              </div>
-            )}
-          </FormItem>
-        )}
+                <Pencil color="white" strokeWidth={3} />
+              </Button>
+              <Image
+                src={imgixLoader({
+                  src: selectedMedia.thumbnailId,
+                  width: 300,
+                  quality: 80,
+                })}
+                alt={`media`}
+                layout="fill"
+                objectFit="cover"
+                quality={80}
+                priority
+                className="object-cover object-center"
+              />
+            </div>
+          ) : (
+            <div
+              className="rounded-md border-dashed border border-black mt-2 cursor-pointer aspect-[4/5] flex items-center justify-center text-center flex-col gap-2"
+              onClick={() => setStep('gallery')}
+            >
+              <FontAwesomeIcon icon={faPlus} size="lg" />
+              <Text className="text-custom-black">Add a video</Text>
+            </div>
+          )}
+        </FormItem>
 
         <FormField
           control={form.control}
@@ -257,23 +252,12 @@ const NudeForm: FC<Props> = ({ nude }) => {
           )}
         />
 
-        <Button
-          type="submit"
-          isLoading={isPending || isEditLoading}
-          className="w-full"
-        >
-          {nude ? 'Edit a nude' : 'Create a nude'}
+        <Button type="submit" isLoading={isPending} className="w-full">
+          Create a nude
         </Button>
-
-        <GalleryModal
-          open={openGalleryModal}
-          setOpen={setOpenGalleryModal}
-          setSelectedMedia={setSelectedMedia}
-          selectedMedia={selectedMedia}
-        />
       </form>
     </Form>
   );
 };
 
-export default NudeForm;
+export default CreateNudeForm;

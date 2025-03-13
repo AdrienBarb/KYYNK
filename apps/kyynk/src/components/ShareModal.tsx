@@ -1,22 +1,11 @@
-import React, { FC, useState } from 'react';
-import {
-  TwitterShareButton,
-  TelegramShareButton,
-  FacebookShareButton,
-} from 'react-share';
+import React, { FC } from 'react';
+import { TwitterShareButton, TelegramShareButton } from 'react-share';
 import LinkIcon from '@mui/icons-material/Link';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import FacebookIcon from '@mui/icons-material/Facebook';
 import TelegramIcon from '@mui/icons-material/Telegram';
-import { useTranslations } from 'next-intl';
-import { useParams, usePathname } from 'next/navigation';
-import {
-  Dialog,
-  DialogContent,
-  DialogOverlay,
-  DialogTrigger,
-  DialogClose,
-} from '@/components/ui/Dialog';
+import { useParams } from 'next/navigation';
+import { Dialog, DialogContent, DialogClose } from '@/components/ui/Dialog';
+import toast from 'react-hot-toast';
 
 interface ShareModalProps {
   open: boolean;
@@ -24,66 +13,44 @@ interface ShareModalProps {
 }
 
 const ShareModal: FC<ShareModalProps> = ({ open, setOpen }) => {
-  const [isLinkCopied, setIsLinkCopier] = useState(false);
-  const pathname = usePathname();
-  const { locale } = useParams();
-
-  const t = useTranslations();
-
-  const urlToShare = `${process.env.NEXT_PUBLIC_BASE_URL}/${locale}${pathname}`;
+  const { slug } = useParams();
+  const urlToShare = `${process.env.NEXT_PUBLIC_BASE_URL}/${slug}`;
 
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(urlToShare);
-      setIsLinkCopier(true);
+      toast.success('Link copied to clipboard');
     } catch (error) {
-      console.error(error);
+      console.error('Failed to copy link:', error);
     }
   };
+
+  const renderShareButton = (
+    ShareButtonComponent: React.ComponentType<any>,
+    IconComponent: React.ComponentType<any>,
+    platformName: string,
+  ) => (
+    <ShareButtonComponent
+      url={urlToShare}
+      title="Come discover this profile on KYYNK"
+    >
+      <div className="flex flex-col items-center gap-2 cursor-pointer">
+        <div className="bg-primary w-10 h-10 flex items-center justify-center rounded-full">
+          <IconComponent sx={{ color: '#FFF0EB' }} />
+        </div>
+        <p className="font-karla font-light text-xs text-custom-black">
+          {platformName}
+        </p>
+      </div>
+    </ShareButtonComponent>
+  );
 
   return (
     <Dialog open={open} onOpenChange={setOpen} modal={true}>
       <DialogContent className="z-[1000] bg-secondary p-16">
         <div className="flex flex-wrap justify-around items-center gap-8">
-          <TwitterShareButton
-            url={urlToShare}
-            title={t('profile.shareTitleSocialMedia')}
-          >
-            <div className="flex flex-col items-center gap-2 cursor-pointer">
-              <div className="bg-primary w-10 h-10 flex items-center justify-center rounded-full">
-                <TwitterIcon sx={{ color: '#FFF0EB' }} />
-              </div>
-              <p className="font-karla font-light text-xs text-custom-black">
-                Twitter
-              </p>
-            </div>
-          </TwitterShareButton>
-          <FacebookShareButton
-            url={urlToShare}
-            title={t('profile.shareTitleSocialMedia')}
-          >
-            <div className="flex flex-col items-center gap-2 cursor-pointer">
-              <div className="bg-primary w-10 h-10 flex items-center justify-center rounded-full">
-                <FacebookIcon sx={{ color: '#FFF0EB' }} />
-              </div>
-              <p className="font-karla font-light text-xs text-custom-black">
-                Facebook
-              </p>
-            </div>
-          </FacebookShareButton>
-          <TelegramShareButton
-            url={urlToShare}
-            title={t('profile.shareTitleSocialMedia')}
-          >
-            <div className="flex flex-col items-center gap-2 cursor-pointer">
-              <div className="bg-primary w-10 h-10 flex items-center justify-center rounded-full">
-                <TelegramIcon sx={{ color: '#FFF0EB' }} />
-              </div>
-              <p className="font-karla font-light text-xs text-custom-black">
-                Telegram
-              </p>
-            </div>
-          </TelegramShareButton>
+          {renderShareButton(TwitterShareButton, TwitterIcon, 'Twitter')}
+          {renderShareButton(TelegramShareButton, TelegramIcon, 'Telegram')}
           <div
             className="flex flex-col items-center gap-2 cursor-pointer"
             onClick={copyToClipboard}
@@ -92,7 +59,7 @@ const ShareModal: FC<ShareModalProps> = ({ open, setOpen }) => {
               <LinkIcon sx={{ color: '#FFF0EB' }} />
             </div>
             <p className="font-karla font-light text-xs text-custom-black">
-              {isLinkCopied ? 'Lien copié' : 'Lien'}
+              Link
             </p>
           </div>
         </div>

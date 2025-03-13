@@ -11,9 +11,10 @@ import Title from '@/components/ui/Title';
 import { Button } from './ui/Button';
 import { useUser } from '@/hooks/users/useUser';
 import { isUserVerified } from '@/utils/users/isUserVerified';
+import { FetchedUserType } from '@/types/users';
 
 interface Props {
-  initialUserDatas: User;
+  initialUserDatas: FetchedUserType;
 }
 
 const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {

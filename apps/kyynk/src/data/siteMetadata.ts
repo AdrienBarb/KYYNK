@@ -5,13 +5,8 @@ export default {
   description:
     'Get closer than ever to the hottest creators. Unlock and enjoy exclusive content, connect directly with creators, and more.',
   language: 'en-us',
-  siteUrl: 'https://www.kyynk.com',
-  siteLogo: '/images/logo-kyynk.jpg',
-  socialBanner: '/images/logo-kyynk.jpg',
+  siteUrl: process.env.NEXT_PUBLIC_BASE_URL,
+  siteLogo: `${process.env.NEXT_PUBLIC_BASE_URL}/images/logo-kyynk.jpg`,
+  socialBanner: `${process.env.NEXT_PUBLIC_BASE_URL}/images/logo-kyynk.jpg`,
   locale: 'en-US',
-  analytics: {
-    googleAnalytics: {
-      googleAnalyticsId: '', // e.g. G-XXXXXXX
-    },
-  },
 };

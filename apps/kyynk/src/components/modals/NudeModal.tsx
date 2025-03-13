@@ -3,14 +3,14 @@ import { Dialog, DialogContent } from '../ui/Dialog';
 import ApiVideoPlayer from '@api.video/react-player';
 import NudeCard from '../nudes/NudeCard';
 import BuyButton from '../nudes/BuyButton';
-import { NudeType } from '@/types/nudes';
+import { NudeWithPermissions } from '@/types/nudes';
 
 interface NudeModalProps {
   isOpen: boolean;
   onClose: () => void;
-  nude?: NudeType | null;
+  nude?: NudeWithPermissions | null;
   refetch: () => void;
-  setSelectedNude: (nude: NudeType | null) => void;
+  setSelectedNude: (nude: NudeWithPermissions | null) => void;
 }
 
 const NudeModal: React.FC<NudeModalProps> = ({
@@ -20,7 +20,7 @@ const NudeModal: React.FC<NudeModalProps> = ({
   refetch,
   setSelectedNude,
 }) => {
-  const handleAfterBuyAction = (newNude: NudeType) => {
+  const handleAfterBuyAction = (newNude: NudeWithPermissions) => {
     setSelectedNude(newNude);
     refetch();
   };
@@ -28,10 +28,10 @@ const NudeModal: React.FC<NudeModalProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="z-[1000] pt-12">
-        {nude && nude.permissions.canView ? (
+        {nude && nude.permissions.canView && nude.media?.videoId ? (
           <div className="rounded-md overflow-hidden">
             <ApiVideoPlayer
-              video={{ id: nude.media?.videoId }}
+              video={{ id: nude.media.videoId }}
               style={{ height: '400px', width: '100%' }}
               hideTitle={true}
               controls={['play', 'progressBar', 'volume', 'fullscreen']}

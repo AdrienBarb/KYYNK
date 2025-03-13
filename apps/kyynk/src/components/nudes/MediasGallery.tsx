@@ -11,14 +11,14 @@ import Text from '@/components/ui/Text';
 import type { Media } from '@prisma/client';
 
 interface MediasGalleryProps {
-  setUploading: (e: boolean) => void;
+  setStep: (e: string) => void;
   setUploadProgress: (e: number | null) => void;
-  setSelectedMedia: (media: Media) => void;
+  setSelectedMedia: (media: Media | null) => void;
   selectedMedia: Media | null;
 }
 
 const MediasGallery: FC<MediasGalleryProps> = ({
-  setUploading,
+  setStep,
   setUploadProgress,
   setSelectedMedia,
   selectedMedia,
@@ -41,7 +41,7 @@ const MediasGallery: FC<MediasGalleryProps> = ({
   );
 
   const handleUpload = async (file: File) => {
-    setUploading(true);
+    setStep('uploading');
     setUploadProgress(0);
 
     try {
@@ -71,10 +71,10 @@ const MediasGallery: FC<MediasGalleryProps> = ({
         videoId: uploadResult.videoId,
       });
 
-      setUploading(false);
+      setStep('gallery');
     } catch (error) {
       console.error('Upload error:', error);
-      setUploading(false);
+      setStep('gallery');
       toast.error('An error occurred during the upload. Please try again.');
     }
   };

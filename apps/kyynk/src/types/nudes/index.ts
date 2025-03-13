@@ -1,11 +1,21 @@
 import { Nude, User, Media } from '@prisma/client';
 
-export type NudeType = Pick<
+export type NudeFromPrisma = Pick<
   Nude,
-  'id' | 'description' | 'creditPrice' | 'userId' | 'buyers' | 'createdAt'
+  | 'id'
+  | 'description'
+  | 'creditPrice'
+  | 'fiatPrice'
+  | 'userId'
+  | 'buyers'
+  | 'createdAt'
+  | 'tags'
 > & {
-  media: Pick<Media, 'id' | 'thumbnailId' | 'videoId'>;
+  media: Pick<Media, 'id' | 'thumbnailId'> & { videoId: string | null };
   user: Pick<User, 'id' | 'pseudo' | 'profileImageId' | 'slug'>;
+};
+
+export type NudeWithPermissions = NudeFromPrisma & {
   permissions: {
     canView: boolean;
     canEdit: boolean;

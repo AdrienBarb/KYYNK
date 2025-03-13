@@ -4,6 +4,9 @@ import { prisma } from '@/lib/db/client';
 import { nudeSchema } from '@/schemas/nudeSchema';
 import { errorHandler } from '@/utils/errors/errorHandler';
 import { errorMessages } from '@/lib/constants/errorMessage';
+import { getNudeSelectFields } from '@/utils/nudes/getNudeSelectFields';
+import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
+import { NudeFromPrisma } from '@/types/nudes';
 
 export const PUT = strictlyAuth(async (req: NextRequest, { params }) => {
   try {
@@ -25,7 +28,7 @@ export const PUT = strictlyAuth(async (req: NextRequest, { params }) => {
       );
     }
 
-    const updatedNude = await prisma.nude.update({
+    const updatedNude = (await prisma.nude.update({
       where: { id: nudeId },
       data: {
         description: payload.description,
@@ -34,9 +37,12 @@ export const PUT = strictlyAuth(async (req: NextRequest, { params }) => {
         tags: payload.tags.map((tag) => tag.value) || [],
         currency: 'USD',
       },
-    });
+      select: getNudeSelectFields(),
+    })) as NudeFromPrisma;
 
-    return NextResponse.json(updatedNude, { status: 200 });
+    const formattedNude = formatNudeWithPermissions(updatedNude, userId);
+
+    return NextResponse.json(formattedNude, { status: 200 });
   } catch (error) {
     return errorHandler(error);
   }

@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import { cn } from '@/utils/tailwind/cn';
 import NudeCard from './NudeCard';
-import { NudeType } from '@/types/nudes';
 import { useQueryState } from 'nuqs';
+import { NudeWithPermissions } from '@/types/nudes';
 
 interface Props {
-  nudes: NudeType[];
+  nudes: NudeWithPermissions[];
 }
 
 const WallView: FC<Props> = ({ nudes }) => {
@@ -24,7 +24,7 @@ const WallView: FC<Props> = ({ nudes }) => {
         'grid-cols-2 lg:grid-cols-3 max-w-screen-lg',
       )}
     >
-      {nudes.map((nude: NudeType) => (
+      {nudes.map((nude: NudeWithPermissions) => (
         <NudeCard
           key={nude.id}
           nude={nude}

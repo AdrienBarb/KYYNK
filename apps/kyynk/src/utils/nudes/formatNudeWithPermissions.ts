@@ -1,18 +1,17 @@
-import { NudeType } from '@/types/nudes';
+import { NudeFromPrisma, NudeWithPermissions } from '@/types/nudes';
 
 export const formatNudeWithPermissions = (
-  nude: NudeType,
+  nude: NudeFromPrisma,
   connectedUserId: string | undefined,
-) => {
-  console.log('🚀 ~ nude:', nude);
+): NudeWithPermissions => {
   const isFree = nude.creditPrice === 0;
   const isConnectedUserBoughtTheNude =
     connectedUserId && nude.buyers.includes(connectedUserId);
   const isOwner = nude.userId === connectedUserId;
 
-  const canView = isFree || isConnectedUserBoughtTheNude;
-  const canEdit = isOwner;
-  const canBuy = !isOwner && !isConnectedUserBoughtTheNude && !isFree;
+  const canView = Boolean(isFree || isConnectedUserBoughtTheNude);
+  const canEdit = Boolean(isOwner);
+  const canBuy = Boolean(!isOwner && !isConnectedUserBoughtTheNude && !isFree);
 
   return {
     ...nude,

@@ -5,6 +5,8 @@ import { prisma } from '@/lib/db/client';
 import { nudeSchema } from '@/schemas/nudeSchema';
 import { errorHandler } from '@/utils/errors/errorHandler';
 import { getCreditsWithFiat } from '@/utils/prices/getMediaPrice';
+import { getNudeSelectFields } from '@/utils/nudes/getNudeSelectFields';
+import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
 
 const formSchema = nudeSchema.extend({
   mediaId: z.string(),
@@ -38,6 +40,7 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
         tags: payload.tags?.map((tag) => tag.value) || [],
         currency: 'EUR',
       },
+      select: getNudeSelectFields(),
     });
 
     const user = await prisma.user.findUnique({
@@ -60,7 +63,9 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
       },
     });
 
-    return NextResponse.json(newNude, { status: 201 });
+    const formattedNude = formatNudeWithPermissions(newNude, userId);
+
+    return NextResponse.json(formattedNude, { status: 201 });
   } catch (error) {
     return errorHandler(error);
   }

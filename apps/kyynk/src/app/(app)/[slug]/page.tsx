@@ -13,9 +13,11 @@ import { getUserBySlug } from '@/services/users/getUserBySlug';
 import { getUserNudesById } from '@/services/nudes/getUserNudesById';
 import UserNudes from '@/components/nudes/UserNudes';
 import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
-import { User } from '@prisma/client';
-import { NudeType } from '@/types/nudes';
 import PaddingContainer from '@/components/layout/PaddingContainer';
+import { NudeFromPrisma, NudeWithPermissions } from '@/types/nudes';
+import { FetchedUserType } from '@/types/users';
+import imgixLoader from '@/lib/imgix/loader';
+
 export async function generateMetadata({
   params: { slug },
 }: {
@@ -23,10 +25,17 @@ export async function generateMetadata({
 }): Promise<Metadata | undefined> {
   const user = await getUserBySlug({ slug });
 
+  const imageUrl = imgixLoader({
+    src: user?.profileImageId ?? '',
+    width: 1200,
+    quality: 80,
+  });
+
   return genPageMetadata({
     title: user?.pseudo ?? '',
     description: user?.description ?? '',
-    image: user?.profileImageId ?? '',
+    image: imageUrl ?? '',
+    url: `/${user?.slug}`,
   });
 }
 
@@ -35,7 +44,7 @@ const UserPage = async ({ params }: { params: { slug: string } }) => {
   const t = await getTranslations();
   const session = await auth();
 
-  const user = (await getUserBySlug({ slug })) as User;
+  const user = (await getUserBySlug({ slug })) as FetchedUserType;
 
   if (!user) {
     redirect('/404');
@@ -45,10 +54,12 @@ const UserPage = async ({ params }: { params: { slug: string } }) => {
     return <ErrorMessage message={t('error.userArchived')} />;
   }
 
-  const nudes = (await getUserNudesById({ userId: user.id })) as NudeType[];
+  const nudes = (await getUserNudesById({
+    userId: user.id,
+  })) as NudeFromPrisma[];
   const nudesWithPermissions = nudes.map((currentNude) =>
     formatNudeWithPermissions(currentNude, session?.user.id),
-  ) as NudeType[];
+  ) as NudeWithPermissions[];
 
   return (
     <PageContainer>

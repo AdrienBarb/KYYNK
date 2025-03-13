@@ -2,9 +2,11 @@ export const getNudeSelectFields = () => ({
   id: true,
   description: true,
   creditPrice: true,
+  fiatPrice: true,
   createdAt: true,
   userId: true,
   buyers: true,
+  tags: true,
   media: {
     select: {
       id: true,

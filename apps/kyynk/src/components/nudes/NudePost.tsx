@@ -10,7 +10,6 @@ import {
 } from '../ui/DropdownMenu';
 import { Button } from '../ui/Button';
 import Text from '../ui/Text';
-import { NudeType } from '@/types/nudes';
 import Link from 'next/link';
 import Avatar from '../ui/Avatar';
 import NudeCard from './NudeCard';
@@ -20,9 +19,11 @@ import { useParams } from 'next/navigation';
 import ApiVideoPlayer from '@api.video/react-player';
 import BuyButton from './BuyButton';
 import DeleteConfirmationModal from '../modals/ConfirmationModal';
+import NudeEditModal from '@/components/modals/NudeEditModal';
+import { NudeWithPermissions } from '@/types/nudes';
 
 interface NudePostProps {
-  nude: NudeType;
+  nude: NudeWithPermissions;
   refCallback: (el: HTMLDivElement | null) => void;
 }
 
@@ -31,6 +32,7 @@ const NudePost: FC<NudePostProps> = ({ nude, refCallback }) => {
   const queryClient = useQueryClient();
   const { usePut } = useApi();
   const [isConfirmationModalOpen, setConfirmationModalOpen] = useState(false);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
 
   const { mutate: archiveNude } = usePut(`/api/nudes/${nude.id}/archive`, {
     onSuccess: () => {
@@ -38,19 +40,19 @@ const NudePost: FC<NudePostProps> = ({ nude, refCallback }) => {
         ['get', { url: `/api/users/${slug}/nudes`, params: {} }],
         (oldData: any) => {
           return oldData
-            ? oldData.filter((item: NudeType) => item.id !== nude.id)
+            ? oldData.filter((item: NudeWithPermissions) => item.id !== nude.id)
             : [];
         },
       );
     },
   });
 
-  const handleAfterBuyAction = (newNude: NudeType) => {
+  const handleAfterBuyAction = (newNude: NudeWithPermissions) => {
     queryClient.setQueryData(
       ['get', { url: `/api/users/${slug}/nudes`, params: {} }],
       (oldData: any) => {
         return oldData
-          ? oldData.map((item: NudeType) =>
+          ? oldData.map((item: NudeWithPermissions) =>
               item.id === newNude.id ? newNude : item,
             )
           : [newNude];
@@ -115,10 +117,10 @@ const NudePost: FC<NudePostProps> = ({ nude, refCallback }) => {
                 {nude.permissions.canEdit && (
                   <>
                     <DropdownMenuItem
-                      asChild
                       className="text-base font-medium font-karla"
+                      onClick={() => setEditModalOpen(true)}
                     >
-                      <Link href={`/account/nudes/${nude.id}`}>Edit</Link>
+                      Edit
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       className="text-red-500 text-base font-medium"
@@ -135,10 +137,10 @@ const NudePost: FC<NudePostProps> = ({ nude, refCallback }) => {
 
         <Text className="whitespace-pre-wrap">{nude.description}</Text>
 
-        {nude.permissions.canView ? (
+        {nude.permissions.canView && nude.media?.videoId ? (
           <div className="rounded-md overflow-hidden">
             <ApiVideoPlayer
-              video={{ id: nude.media?.videoId }}
+              video={{ id: nude.media.videoId }}
               style={{ height: '400px', width: '100%' }}
               hideTitle={true}
               controls={['play', 'progressBar', 'volume', 'fullscreen']}
@@ -157,6 +159,11 @@ const NudePost: FC<NudePostProps> = ({ nude, refCallback }) => {
         setOpen={setConfirmationModalOpen}
         onDeleteConfirm={handleConfirmDelete}
         text="This action cannot be undone. This will permanently delete this nude."
+      />
+      <NudeEditModal
+        open={isEditModalOpen}
+        setOpen={setEditModalOpen}
+        nude={nude}
       />
     </>
   );

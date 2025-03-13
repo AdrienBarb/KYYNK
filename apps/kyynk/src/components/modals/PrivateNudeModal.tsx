@@ -188,12 +188,12 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
           </Form>
         </DialogContent>
       </Dialog>
-      <GalleryModal
+      {/* <GalleryModal
         open={openGalleryModal}
         setOpen={setOpenGalleryModal}
         setSelectedMedia={setSelectedMedia}
         selectedMedia={selectedMedia}
-      />
+      /> */}
     </>
   );
 };

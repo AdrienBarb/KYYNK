@@ -5,14 +5,14 @@ import { useParams } from 'next/navigation';
 import useApi from '@/hooks/requests/useApi';
 import FeedView from './FeedView';
 import WallView from './WallView';
-import { NudeType } from '@/types/nudes';
 import { useUser } from '@/hooks/users/useUser';
 import { isUserVerified } from '@/utils/users/isUserVerified';
 import { FetchedUserType } from '@/types/users';
 import { useQueryState } from 'nuqs';
+import { NudeWithPermissions } from '@/types/nudes';
 
 interface Props {
-  initialNudes: NudeType[];
+  initialNudes: NudeWithPermissions[];
   user: FetchedUserType;
 }
 

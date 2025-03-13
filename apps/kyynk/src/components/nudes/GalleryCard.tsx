@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import useApi from '@/hooks/requests/useApi';
-
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/utils/tailwind/cn';
 import type { Media } from '@prisma/client';
@@ -13,7 +12,7 @@ import imgixLoader from '@/lib/imgix/loader';
 interface GalleryCardProps {
   media: Media;
   refetch: () => void;
-  setSelectedMedia: (media: Media) => void;
+  setSelectedMedia: (media: Media | null) => void;
   selectedMedia: Media | null;
 }
 
@@ -45,7 +44,11 @@ const GalleryCard: FC<GalleryCardProps> = ({
           return;
         }
 
-        setSelectedMedia(media);
+        if (isSelected) {
+          setSelectedMedia(null);
+        } else {
+          setSelectedMedia(media);
+        }
       }}
     >
       {media.isReady && (

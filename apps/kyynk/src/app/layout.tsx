@@ -19,6 +19,7 @@ import { PostHogProvider } from '@/components/provider/PostHogProvider';
 import AgeVerificationModal from '@/components/modals/AgeVerificationModal';
 import PaymentModal from '@/components/modals/PaymentModal';
 import { AxiomWebVitals } from 'next-axiom';
+import NudeCreationModal from '@/components/modals/NudeCreationModal';
 
 config.autoAddCss = false;
 
@@ -111,6 +112,7 @@ const RootLayout: FC<Props> = async ({ children }) => {
               <GlobalErrorProvider />
               <AgeVerificationModal />
               <PaymentModal />
+              <NudeCreationModal />
               <AxiomWebVitals />
             </body>
           </html>

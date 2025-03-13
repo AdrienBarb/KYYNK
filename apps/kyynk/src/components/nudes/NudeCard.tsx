@@ -2,10 +2,10 @@ import React from 'react';
 import Image from 'next/image';
 import { Lock } from 'lucide-react';
 import imgixLoader from '@/lib/imgix/loader';
-import { NudeType } from '@/types/nudes';
+import { NudeWithPermissions } from '@/types/nudes';
 
 interface Props {
-  nude: NudeType;
+  nude: NudeWithPermissions;
   onClick?: () => void;
 }
 
