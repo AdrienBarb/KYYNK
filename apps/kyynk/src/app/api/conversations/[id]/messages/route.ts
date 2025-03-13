@@ -6,7 +6,7 @@ import { errorMessages } from '@/lib/constants/errorMessage';
 import { fetchMessagesByConversationId } from '@/services/conversations/fetchMessagesByConversationId';
 import { messageSchema } from '@/schemas/conversations/messageSchema';
 import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
-import { NudeType } from '@/types/nudes';
+import { NudeFromPrisma } from '@/types/nudes';
 
 export const GET = strictlyAuth(async (req: NextRequest, { params }) => {
   try {
@@ -54,12 +54,14 @@ export const GET = strictlyAuth(async (req: NextRequest, { params }) => {
 
     const messages = await fetchMessagesByConversationId({ conversationId });
 
-    console.log('🚀 ~ GET ~ messages:', messages);
     const messagesWithPermissions = messages.map((message) => {
       if (message.nude) {
         return {
           ...message,
-          nude: formatNudeWithPermissions(message.nude as NudeType, userId),
+          nude: formatNudeWithPermissions(
+            message.nude as NudeFromPrisma,
+            userId,
+          ),
         };
       }
       return message;

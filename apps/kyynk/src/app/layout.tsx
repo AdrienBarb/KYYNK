@@ -24,7 +24,7 @@ import NudeCreationModal from '@/components/modals/NudeCreationModal';
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteMetadata.siteUrl),
+  metadataBase: new URL(siteMetadata.siteUrl!),
   title: {
     default: siteMetadata.title,
     template: `%s | ${siteMetadata.title}`,

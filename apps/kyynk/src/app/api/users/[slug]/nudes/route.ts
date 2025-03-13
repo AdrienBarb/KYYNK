@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db/client';
 import { getUserNudesById } from '@/services/nudes/getUserNudesById';
 import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
 import { auth } from '@/auth';
-import { NudeType } from '@/types/nudes';
+import { NudeFromPrisma } from '@/types/nudes';
 
 export const GET = async (
   req: NextRequest,
@@ -34,7 +34,9 @@ export const GET = async (
       );
     }
 
-    const nudes = (await getUserNudesById({ userId: user.id })) as NudeType[];
+    const nudes = (await getUserNudesById({
+      userId: user.id,
+    })) as NudeFromPrisma[];
 
     const nudesWithPermissions = nudes.map((currentNude) =>
       formatNudeWithPermissions(currentNude, session?.user.id),

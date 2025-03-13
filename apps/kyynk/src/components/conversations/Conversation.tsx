@@ -11,11 +11,11 @@ import { useUser } from '@/hooks/users/useUser';
 import Avatar from '../ui/Avatar';
 import Link from 'next/link';
 import Text from '../ui/Text';
-import { MessageType } from '@/types/messages';
+import { MessageType, MessageWithNudePermissions } from '@/types/messages';
 import NudeCard from '../nudes/NudeCard';
 import { cn } from '@/utils/tailwind/cn';
 import NudeModal from '@/components/modals/NudeModal';
-import { NudeType } from '@/types/nudes';
+import { NudeWithPermissions } from '@/types/nudes';
 
 interface Props {
   initialConversation: ConversationType;
@@ -41,10 +41,10 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
 
   const [isModalOpen, setModalOpen] = React.useState(false);
   const [selectedNude, setSelectedNude] = React.useState<
-    NudeType | undefined | null
+    NudeWithPermissions | undefined | null
   >(null);
 
-  const handleNudeClick = (nude: NudeType | undefined) => {
+  const handleNudeClick = (nude: NudeWithPermissions | undefined) => {
     setSelectedNude(nude);
     setModalOpen(true);
   };
@@ -68,7 +68,7 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
         className="flex flex-col gap-4 px-4 h-[100%] w-full overflow-y-scroll"
         ref={ref}
       >
-        {messages.map((currentMessage: MessageType) => {
+        {messages.map((currentMessage: MessageWithNudePermissions) => {
           const isMyMessage = currentMessage.senderId === user?.id;
 
           return (

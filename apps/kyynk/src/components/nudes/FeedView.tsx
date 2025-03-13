@@ -1,10 +1,10 @@
 import React, { FC, useRef, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { NudeType } from '@/types/nudes';
 import NudePost from './NudePost';
+import { NudeWithPermissions } from '@/types/nudes';
 
 interface Props {
-  nudes: NudeType[];
+  nudes: NudeWithPermissions[];
 }
 
 const FeedView: FC<Props> = ({ nudes }) => {
@@ -23,7 +23,7 @@ const FeedView: FC<Props> = ({ nudes }) => {
 
   return (
     <div className="grid gap-16 mx-auto mt-8 grid-cols-1 max-w-lg">
-      {nudes.map((nude: NudeType) => (
+      {nudes.map((nude: NudeWithPermissions) => (
         <NudePost
           key={nude.id}
           nude={nude}

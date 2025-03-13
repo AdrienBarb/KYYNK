@@ -1,16 +1,17 @@
 import { useUser } from '@/hooks/users/useUser';
 import { Button } from '../ui/Button';
 import { useState } from 'react';
-import { NudeType } from '@/types/nudes';
+
 import useApi from '@/hooks/requests/useApi';
 import { appRouter } from '@/constants/appRouter';
 import { useRouter } from 'next/navigation';
 import NotEnoughCreditsModal from '../modals/NotEnoughCreditsModal';
 import { formatCredits } from '@/utils/prices/formatCredits';
+import { NudeWithPermissions } from '@/types/nudes';
 
 interface Props {
-  nude: NudeType;
-  afterBuyAction: (nude: NudeType) => void;
+  nude: NudeWithPermissions;
+  afterBuyAction: (nude: NudeWithPermissions) => void;
 }
 
 const BuyButton = ({ nude, afterBuyAction }: Props) => {
@@ -21,7 +22,7 @@ const BuyButton = ({ nude, afterBuyAction }: Props) => {
 
   const { usePost } = useApi();
   const { mutate: buyNude, isPending } = usePost(`/api/nudes/${nude.id}/buy`, {
-    onSuccess: (boughtNude: NudeType) => {
+    onSuccess: (boughtNude: NudeWithPermissions) => {
       refetch();
       afterBuyAction(boughtNude);
     },

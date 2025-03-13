@@ -8,7 +8,7 @@ import { redirect } from 'next/navigation';
 import { appRouter } from '@/constants/appRouter';
 import { MessageType } from '@/types/messages';
 import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
-import { NudeType } from '@/types/nudes';
+import { NudeFromPrisma } from '@/types/nudes';
 
 const CurrentConversationPage = async ({
   params,
@@ -40,14 +40,11 @@ const CurrentConversationPage = async ({
     if (message.nude) {
       return {
         ...message,
-        nude: formatNudeWithPermissions(
-          message.nude as NudeType,
-          session.user.id,
-        ),
+        nude: formatNudeWithPermissions(message.nude, session.user.id),
       };
     }
     return message;
-  }) as MessageType[];
+  });
 
   return (
     <Conversation

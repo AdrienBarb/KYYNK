@@ -16,7 +16,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import { Pencil } from 'lucide-react';
-import GalleryModal from '@/components/nudes/GalleryModal';
 import {
   Form,
   FormControl,
