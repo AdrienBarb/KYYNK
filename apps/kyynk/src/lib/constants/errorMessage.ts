@@ -14,4 +14,5 @@ export const errorMessages = {
   INVALID_PACKAGE: 'invalidPackage',
   NO_UNPAID_SALES: 'noUnpaidSales',
   INSUFFICIENT_CREDITS: 'insufficientCredits',
+  MISSING_BANK_ACCOUNT_INFORMATION: 'missingBankAccountInformation',
 };

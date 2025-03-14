@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/Button';
 import useApi from '@/hooks/requests/useApi';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { useUser } from '@/hooks/users/useUser';
 
 interface AskPaymentButtonProps {
   disabled: boolean;
@@ -13,6 +14,7 @@ interface AskPaymentButtonProps {
 const AskPaymentButton: FC<AskPaymentButtonProps> = ({ disabled }) => {
   const { usePost } = useApi();
   const router = useRouter();
+  const { user } = useUser();
 
   const { mutate: askPayment, isPending } = usePost(
     '/api/revenue/ask-payment',
@@ -25,6 +27,11 @@ const AskPaymentButton: FC<AskPaymentButtonProps> = ({ disabled }) => {
   );
 
   const handleAskPayment = () => {
+    if (!user?.settings?.bankAccountName || !user?.settings?.iban) {
+      toast.error('Please add your bank account information in your settings.');
+      return;
+    }
+
     askPayment({});
   };
 

@@ -15,8 +15,18 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
 
     const user = await prisma.user.findUnique({
       where: { id: userId! },
-      select: { feeFreeUntil: true },
+      select: {
+        feeFreeUntil: true,
+        settings: { select: { bankAccountName: true, iban: true } },
+      },
     });
+
+    if (!user?.settings?.bankAccountName || !user?.settings?.iban) {
+      return NextResponse.json(
+        { message: errorMessages.MISSING_BANK_ACCOUNT_INFORMATION },
+        { status: 400 },
+      );
+    }
 
     const sales = await getUserSales({ userId: userId! });
 
