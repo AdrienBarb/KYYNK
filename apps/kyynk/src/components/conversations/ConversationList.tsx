@@ -34,6 +34,7 @@ const ConversationList: FC<Props> = ({ initConversations }) => {
       >
         <Button
           className="w-full"
+          variant="secondary"
           onClick={() => router.push(appRouter.models)}
         >
           Start Chatting

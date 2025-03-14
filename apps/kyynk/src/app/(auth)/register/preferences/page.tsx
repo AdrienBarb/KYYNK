@@ -5,21 +5,20 @@ import { useTranslations } from 'next-intl';
 import useApi from '@/hooks/requests/useApi';
 import { TAGS } from '@/constants/constants';
 import { useRouter } from 'next/navigation';
-import { useUser } from '@/hooks/users/useUser';
 import { apiRouter } from '@/constants/apiRouter';
 import Title from '@/components/ui/Title';
 import { Button } from '@/components/ui/Button';
+import { appRouter } from '@/constants/appRouter';
 
 const SignUpPage = () => {
   const t = useTranslations();
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { usePut } = useApi();
   const router = useRouter();
-  const { user } = useUser();
 
   const { mutate: editUserPreferences, isPending } = usePut(apiRouter.me, {
     onSuccess: () => {
-      router.push(`/${user?.slug}`);
+      router.push(appRouter.models);
     },
   });
 

@@ -14,6 +14,9 @@ import { Separator } from './ui/Separator';
 import { Button } from './ui/Button';
 import { appRouter } from '@/constants/appRouter';
 import axios from 'axios';
+import ContentProviderPolicyModal from './modals/ContentProviderPolicyModal';
+import { Checkbox } from '@/components/ui/Checkbox';
+import { Card } from './ui/Card';
 
 interface Props {}
 
@@ -24,6 +27,9 @@ const IdentityVerificationForm: FC<Props> = () => {
   const [frontAndFaceIdentity, setFrontAndFaceIdentity] = useState<null | File>(
     null,
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPolicyAccepted, setIsPolicyAccepted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { user, refetch } = useUser();
 
@@ -50,6 +56,7 @@ const IdentityVerificationForm: FC<Props> = () => {
   };
 
   const handleFileUpload = async (file: File, folder: string) => {
+    setIsLoading(true);
     try {
       const response = await axios.post('/api/medias/signed-url', {
         fileType: file.type,
@@ -64,17 +71,23 @@ const IdentityVerificationForm: FC<Props> = () => {
         },
       });
 
+      setIsLoading(false);
       return fileKey;
     } catch (err) {
       console.error('Error uploading file:', err);
       toast.error('Something went wrong!');
-      return null;
+      setIsLoading(false);
     }
   };
 
   const handleSubmitForm = async () => {
     if (!frontIdentity || !backIdentity || !frontAndFaceIdentity) {
       toast.error('Missing pictures');
+      return;
+    }
+
+    if (!isPolicyAccepted) {
+      toast.error('You must accept the content provider policy');
       return;
     }
 
@@ -95,6 +108,15 @@ const IdentityVerificationForm: FC<Props> = () => {
       backIdentity: backIdentityKey,
       frontAndFaceIdentity: frontAndFaceIdentityKey,
     });
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleAcceptPolicy = async () => {
+    setIsPolicyAccepted(true);
+    setIsModalOpen(false);
   };
 
   const baseStyle = {
@@ -137,7 +159,7 @@ const IdentityVerificationForm: FC<Props> = () => {
   );
 
   return (
-    <div className="container mx-auto p-4">
+    <Card className="max-w-screen-sm mx-auto">
       {user?.identityVerificationStatus === 'unverified' && (
         <StatusCard
           title="Your identity is not verified."
@@ -356,17 +378,38 @@ const IdentityVerificationForm: FC<Props> = () => {
 
           <Separator className="my-4" />
 
+          <div className="flex items-center">
+            <Checkbox
+              id="accept-policy"
+              checked={isPolicyAccepted}
+              onCheckedChange={(checked) => setIsPolicyAccepted(!!checked)}
+            />
+            <label htmlFor="accept-policy" className="ml-2">
+              I accept the content provider policy
+              <Button variant="link" onClick={handleOpenModal}>
+                Read Policy
+              </Button>
+            </label>
+          </div>
+
           <Button
             className="w-full"
             type="submit"
-            isLoading={isPending}
+            isLoading={isPending || isLoading}
+            disabled={isPending || isLoading}
             onClick={handleSubmitForm}
           >
             Validate
           </Button>
+
+          <ContentProviderPolicyModal
+            open={isModalOpen}
+            setOpen={setIsModalOpen}
+            handleAcceptPolicy={handleAcceptPolicy}
+          />
         </>
       )}
-    </div>
+    </Card>
   );
 };
 

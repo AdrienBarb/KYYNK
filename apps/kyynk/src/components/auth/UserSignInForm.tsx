@@ -12,13 +12,12 @@ import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { authenticate } from '../../server-actions/authenticate';
 import { useQueryState } from 'nuqs';
-import posthog from 'posthog-js';
 
 const UserSignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations();
-  const [previousPath] = useQueryState('previousPath');
+  const [previousUrl] = useQueryState('previousUrl');
 
   const handleClickShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -47,7 +46,7 @@ const UserSignInForm = () => {
         await authenticate({
           email: values.email.toLowerCase(),
           password: values.password,
-          previousPath,
+          previousUrl,
         });
       } catch (error) {
         if (error instanceof Error) {

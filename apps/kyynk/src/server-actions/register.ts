@@ -4,7 +4,6 @@ import { signIn } from '@/auth';
 import { appRouter } from '@/constants/appRouter';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { prisma } from '@/lib/db/client';
-import { postHogClient } from '@/lib/post-hog/postHogClient';
 import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
 import { checkOrCreateSlug } from '@/utils/users/checkOrCreateSlug';
 import bcrypt from 'bcryptjs';
@@ -81,7 +80,6 @@ export async function register({
       redirectTo: appRouter.userType,
     });
   } catch (error: any) {
-    console.log('🚀 ~ error:', error);
     if (isRedirectError(error)) {
       throw error;
     }

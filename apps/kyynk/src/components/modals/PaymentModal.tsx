@@ -56,7 +56,6 @@ const PaymentModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogOverlay className="z-[1000]" />
       <DialogContent className="z-[1000] max-w-screen-sm">
         <DialogHeader className="flex flex-col items-center">
           <DialogTitle>Buy Credits</DialogTitle>

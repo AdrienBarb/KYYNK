@@ -22,8 +22,8 @@ const NotEnoughCreditsModal = ({
   const openPaymentModal = usePaymentModalStore((state) => state.openModal);
 
   const handleBuyMoreCredits = () => {
-    onOpenChange(false); // Close NotEnoughCreditsModal
-    openPaymentModal(); // Open PaymentModal
+    onOpenChange(false);
+    openPaymentModal();
   };
 
   return (

@@ -43,7 +43,7 @@ interface Props {
   refetch: () => void;
 }
 
-export type PrivateNudeStepsType = 'form' | 'gallery' | 'uploading';
+export type PrivateNudeStepsType = 'form' | 'gallery' | 'uploading' | 'success';
 
 const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
   const [step, setStep] = useState<PrivateNudeStepsType>('form');

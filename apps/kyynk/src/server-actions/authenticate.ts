@@ -1,5 +1,6 @@
 'use server';
 import { signIn } from '@/auth';
+import { appRouter } from '@/constants/appRouter';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { prisma } from '@/lib/db/client';
 import { AuthError } from 'next-auth';
@@ -8,16 +9,16 @@ import { isRedirectError } from 'next/dist/client/components/redirect';
 export async function authenticate({
   email,
   password,
-  previousPath,
+  previousUrl,
 }: {
   email: string;
   password: string;
-  previousPath?: string | null;
+  previousUrl?: string | null;
 }) {
   try {
     const user = await prisma.user.findUnique({
       where: { email },
-      select: { slug: true },
+      select: { slug: true, userType: true },
     });
 
     if (!user) {
@@ -28,7 +29,11 @@ export async function authenticate({
       email: email,
       password: password,
       redirect: true,
-      redirectTo: previousPath ? previousPath : `/${user.slug}`,
+      redirectTo: previousUrl
+        ? previousUrl
+        : user?.userType === 'creator'
+        ? `/${user.slug}`
+        : appRouter.models,
     });
   } catch (error) {
     if (isRedirectError(error)) {

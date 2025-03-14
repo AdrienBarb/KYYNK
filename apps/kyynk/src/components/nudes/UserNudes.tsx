@@ -46,18 +46,20 @@ const UserNudes: FC<Props> = ({ initialNudes, user }) => {
 
   return (
     <div className="mt-8">
-      <div className="flex justify-end">
-        <Tabs onValueChange={handleViewChange} value={view ?? 'wall'}>
-          <TabsList>
-            <TabsTrigger value="wall">
-              <Grid size={22} />
-            </TabsTrigger>
-            <TabsTrigger value="feed">
-              <List size={22} />
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </div>
+      {!!nudes.length && (
+        <div className="flex justify-end">
+          <Tabs onValueChange={handleViewChange} value={view ?? 'wall'}>
+            <TabsList>
+              <TabsTrigger value="wall">
+                <Grid size={22} />
+              </TabsTrigger>
+              <TabsTrigger value="feed">
+                <List size={22} />
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
+      )}
       <div className="mt-4">
         {isFeedView ? <FeedView nudes={nudes} /> : <WallView nudes={nudes} />}
       </div>

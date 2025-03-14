@@ -17,7 +17,6 @@ import { register } from '@/server-actions/register';
 const UserSignUpForm = () => {
   //translation
   const t = useTranslations();
-
   //localstate
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =

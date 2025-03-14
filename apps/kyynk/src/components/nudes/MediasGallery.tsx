@@ -10,10 +10,9 @@ import toast from 'react-hot-toast';
 import Text from '@/components/ui/Text';
 import type { Media } from '@prisma/client';
 import { NudeCreationStepsType } from '@/components/modals/NudeCreationModal';
-import { PrivateNudeStepsType } from '@/components/modals/PrivateNudeModal';
 
 interface MediasGalleryProps {
-  setStep: (e: NudeCreationStepsType | PrivateNudeStepsType) => void;
+  setStep: (e: NudeCreationStepsType) => void;
   setUploadProgress: (e: number | null) => void;
   setSelectedMedia: (media: Media | null) => void;
   selectedMedia: Media | null;
