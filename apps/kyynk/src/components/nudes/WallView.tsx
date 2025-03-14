@@ -18,12 +18,7 @@ const WallView: FC<Props> = ({ nudes }) => {
   };
 
   return (
-    <div
-      className={cn(
-        'grid gap-4 mx-auto mt-8',
-        'grid-cols-2 lg:grid-cols-3 max-w-screen-lg',
-      )}
-    >
+    <div className={cn('grid gap-4  mt-8', 'grid-cols-2 lg:grid-cols-3')}>
       {nudes.map((nude: NudeWithPermissions) => (
         <NudeCard
           key={nude.id}

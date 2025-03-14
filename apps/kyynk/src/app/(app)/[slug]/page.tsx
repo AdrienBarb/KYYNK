@@ -62,7 +62,7 @@ const UserPage = async ({ params }: { params: { slug: string } }) => {
   ) as NudeWithPermissions[];
 
   return (
-    <PageContainer>
+    <PageContainer className="max-w-screen-lg mx-auto">
       <PaddingContainer>
         <UserUncompletedProfileBanner />
         <UserProfileTopButtons />
