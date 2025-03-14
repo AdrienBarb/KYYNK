@@ -50,7 +50,7 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
   };
 
   return (
-    <div className="flex flex-col" style={{ height: 'calc(100dvh - 60px)' }}>
+    <div className="flex flex-col" style={{ height: 'calc(100dvh - 68px)' }}>
       <div className="flex justify-between items-center mb-2 p-4">
         <Link href={`/${otherUser?.slug}`}>
           <div className="flex items-center gap-2">

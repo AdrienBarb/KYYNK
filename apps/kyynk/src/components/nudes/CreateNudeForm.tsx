@@ -32,9 +32,10 @@ import imgixLoader from '@/lib/imgix/loader';
 import { NudeWithPermissions } from '@/types/nudes';
 import { useUser } from '@/hooks/users/useUser';
 import { useQueryClient } from '@tanstack/react-query';
+import { NudeCreationStepsType } from '@/components/modals/NudeCreationModal';
 
 interface Props {
-  setStep: (step: string) => void;
+  setStep: (step: NudeCreationStepsType) => void;
   selectedMedia: Media | null;
   setCreatedNude: (nude: NudeWithPermissions) => void;
 }

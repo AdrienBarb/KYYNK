@@ -21,6 +21,7 @@ import BuyButton from './BuyButton';
 import DeleteConfirmationModal from '../modals/ConfirmationModal';
 import NudeEditModal from '@/components/modals/NudeEditModal';
 import { NudeWithPermissions } from '@/types/nudes';
+import ShareModal from '@/components/ShareModal';
 
 interface NudePostProps {
   nude: NudeWithPermissions;
@@ -33,7 +34,7 @@ const NudePost: FC<NudePostProps> = ({ nude, refCallback }) => {
   const { usePut } = useApi();
   const [isConfirmationModalOpen, setConfirmationModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
-
+  const [openShareModal, setOpenShareModal] = useState(false);
   const { mutate: archiveNude } = usePut(`/api/nudes/${nude.id}/archive`, {
     onSuccess: () => {
       queryClient.setQueryData(
@@ -105,7 +106,10 @@ const NudePost: FC<NudePostProps> = ({ nude, refCallback }) => {
               sideOffset={4}
             >
               <DropdownMenuGroup>
-                <DropdownMenuItem className="text-base font-medium">
+                <DropdownMenuItem
+                  className="text-base font-medium"
+                  onClick={() => setOpenShareModal(true)}
+                >
                   Share
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -164,6 +168,12 @@ const NudePost: FC<NudePostProps> = ({ nude, refCallback }) => {
         open={isEditModalOpen}
         setOpen={setEditModalOpen}
         nude={nude}
+      />
+      <ShareModal
+        open={openShareModal}
+        setOpen={setOpenShareModal}
+        urlToShare={`${process.env.NEXT_PUBLIC_BASE_URL}/nudes/${nude.id}`}
+        title={`Come discover this nude on KYYNK`}
       />
     </>
   );

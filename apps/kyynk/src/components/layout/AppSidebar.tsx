@@ -2,10 +2,8 @@
 
 import {
   ChevronRight,
-  CirclePlus,
   Home,
   MessageCircle,
-  Plus,
   Settings,
   UsersRound,
   CreditCard,
@@ -25,11 +23,11 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubItem,
+  SidebarTrigger,
 } from '@/components/ui/Sidebar';
 import { NavUser } from './NavUser';
 import Link from 'next/link';
 import { appRouter } from '@/constants/appRouter';
-import { Button } from '../ui/Button';
 import { useUser } from '@/hooks/users/useUser';
 import { isCreator } from '@/utils/users/isCreator';
 import {
@@ -37,11 +35,10 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '../ui/collapsible';
-import { useNudeCreationModalStore } from '@/stores/NudeCreationModalStore';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export function AppSidebar() {
   const { user, isLoggedIn } = useUser();
-  const { openModal } = useNudeCreationModalStore();
 
   const platforms = [
     {
@@ -93,19 +90,13 @@ export function AppSidebar() {
     },
   ];
 
+  const isMobile = useIsMobile();
+
   return (
     <Sidebar>
-      {isCreator({ user }) && (
+      {isMobile && (
         <SidebarHeader>
-          <Button
-            variant="secondary"
-            size="sm"
-            className="flex items-center gap-2"
-            onClick={openModal}
-          >
-            <CirclePlus size={18} />
-            Add nude
-          </Button>
+          <SidebarTrigger />
         </SidebarHeader>
       )}
       <SidebarContent>

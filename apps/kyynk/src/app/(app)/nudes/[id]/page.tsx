@@ -42,8 +42,6 @@ const NudePage = async ({ params: { id } }: { params: { id: string } }) => {
   }
 
   redirect(`/${nude.user.slug}?view=feed&n=${nude.id}`);
-
-  return null;
 };
 
 export default NudePage;

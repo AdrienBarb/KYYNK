@@ -12,7 +12,6 @@ export const isUserVerified = ({
   return (
     user.isEmailVerified &&
     user.identityVerificationStatus === 'verified' &&
-    user.profileImageId &&
-    user.nudesCount
+    user.profileImageId
   );
 };

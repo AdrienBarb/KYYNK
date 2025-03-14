@@ -38,7 +38,12 @@ const UserProfileTopButtons: FC<Props> = () => {
         </Button>
       </div>
 
-      <ShareModal open={openShareModal} setOpen={setOpenShareModal} />
+      <ShareModal
+        open={openShareModal}
+        setOpen={setOpenShareModal}
+        urlToShare={`${process.env.NEXT_PUBLIC_BASE_URL}/${slug}`}
+        title="Come discover this profile on KYYNK"
+      />
     </>
   );
 };

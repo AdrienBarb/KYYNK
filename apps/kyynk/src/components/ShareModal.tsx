@@ -3,19 +3,22 @@ import { TwitterShareButton, TelegramShareButton } from 'react-share';
 import LinkIcon from '@mui/icons-material/Link';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import TelegramIcon from '@mui/icons-material/Telegram';
-import { useParams } from 'next/navigation';
 import { Dialog, DialogContent, DialogClose } from '@/components/ui/Dialog';
 import toast from 'react-hot-toast';
 
 interface ShareModalProps {
   open: boolean;
   setOpen: (value: boolean) => void;
+  urlToShare: string;
+  title: string;
 }
 
-const ShareModal: FC<ShareModalProps> = ({ open, setOpen }) => {
-  const { slug } = useParams();
-  const urlToShare = `${process.env.NEXT_PUBLIC_BASE_URL}/${slug}`;
-
+const ShareModal: FC<ShareModalProps> = ({
+  open,
+  setOpen,
+  urlToShare,
+  title,
+}) => {
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(urlToShare);
@@ -30,10 +33,7 @@ const ShareModal: FC<ShareModalProps> = ({ open, setOpen }) => {
     IconComponent: React.ComponentType<any>,
     platformName: string,
   ) => (
-    <ShareButtonComponent
-      url={urlToShare}
-      title="Come discover this profile on KYYNK"
-    >
+    <ShareButtonComponent url={urlToShare} title={title}>
       <div className="flex flex-col items-center gap-2 cursor-pointer">
         <div className="bg-primary w-10 h-10 flex items-center justify-center rounded-full">
           <IconComponent sx={{ color: '#FFF0EB' }} />

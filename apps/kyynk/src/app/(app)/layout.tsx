@@ -7,6 +7,7 @@ import Link from 'next/link';
 import React, { FC, ReactNode } from 'react';
 import { getCookie } from 'cookies-next/server';
 import { appRouter } from '@/constants/appRouter';
+import AddButton from '@/components/nudes/AddButton';
 
 interface Props {
   children: ReactNode;
@@ -17,6 +18,7 @@ const AppLayout: FC<Props> = async ({ children }) => {
 
   const defaultOpen =
     (await getCookie('sidebar_state', { cookies })) === 'true';
+  console.log('🚀 ~ constAppLayout:FC<Props>= ~ defaultOpen:', defaultOpen);
 
   const isLoggedIn = !!session?.user;
 
@@ -24,15 +26,16 @@ const AppLayout: FC<Props> = async ({ children }) => {
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
       <main className="w-full">
-        <div className="p-4 flex justify-between align-center bg-secondary-dark border-b border-custom-black/20 h-[60px]">
+        <div className="p-4 flex justify-between align-center bg-secondary-dark border-b border-custom-black/20 h-[68px]">
           <SidebarTrigger />
-          {!isLoggedIn && (
-            <div>
+          <div>
+            {!isLoggedIn && (
               <Button asChild>
                 <Link href={appRouter.login}>Login</Link>
               </Button>
-            </div>
-          )}
+            )}
+            {isLoggedIn && <AddButton />}
+          </div>
         </div>
         <div>{children}</div>
       </main>

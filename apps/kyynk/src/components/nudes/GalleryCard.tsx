@@ -30,7 +30,9 @@ const GalleryCard: FC<GalleryCardProps> = ({
     },
   });
 
-  const handleClickOnTrash = async () => {
+  const handleClickOnTrash = async (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+
     await archiveMedia({});
   };
 
@@ -38,7 +40,7 @@ const GalleryCard: FC<GalleryCardProps> = ({
 
   return (
     <div
-      className="relative aspect-square rounded-lg overflow-hidden flex-shrink-0 bg-primary cursor-pointer"
+      className="relative aspect-square rounded-lg overflow-hidden flex-shrink-0 bg-primary cursor-pointer p-2"
       onClick={() => {
         if (!media.isReady) {
           return;

@@ -20,16 +20,22 @@ import { NudeWithPermissions } from '@/types/nudes';
 import NudeCard from '@/components/nudes/NudeCard';
 import { TelegramShareButton, TwitterShareButton } from 'react-share';
 
+export type NudeCreationStepsType =
+  | 'form'
+  | 'gallery'
+  | 'uploading'
+  | 'success';
+
 const NudeCreationModal = () => {
   const { isOpen, closeModal } = useNudeCreationModalStore();
-  const [step, setStep] = useState('form');
+  const [step, setStep] = useState<NudeCreationStepsType>('form');
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
   const [createdNude, setCreatedNude] = useState<NudeWithPermissions | null>(
     null,
   );
 
-  console.log('🚀 ~ NudeCreationModal ~ createdNude:', createdNude);
+  const URL_TO_SHARE = `${process.env.NEXT_PUBLIC_BASE_URL}/nudes/${createdNude?.id}`;
 
   const handleCloseModal = () => {
     if (step === 'uploading') {
@@ -42,11 +48,10 @@ const NudeCreationModal = () => {
     setStep('form');
     setCreatedNude(null);
     setSelectedMedia(null);
-
     closeModal();
   };
 
-  const renderStep = () => {
+  const renderStepContent = () => {
     switch (step) {
       case 'form':
         return (
@@ -57,7 +62,6 @@ const NudeCreationModal = () => {
                 Here you can create a nude for your feed.
               </DialogDescription>
             </DialogHeader>
-
             <CreateNudeForm
               setStep={setStep}
               selectedMedia={selectedMedia}
@@ -69,14 +73,9 @@ const NudeCreationModal = () => {
         return (
           <DialogContent
             className="h-[100vh] sm:h-[80vh] flex flex-col"
-            onInteractOutside={(e) => {
-              e.preventDefault();
-            }}
-            onEscapeKeyDown={(e) => {
-              e.preventDefault();
-            }}
+            onInteractOutside={(e) => e.preventDefault()}
+            onEscapeKeyDown={(e) => e.preventDefault()}
             isClosable={false}
-            backAction={() => setStep('form')}
           >
             <DialogHeader className="flex flex-col items-center">
               <DialogTitle>Gallery</DialogTitle>
@@ -85,15 +84,13 @@ const NudeCreationModal = () => {
                 delete existing ones, and select a video to use.
               </DialogDescription>
             </DialogHeader>
-
             <MediasGallery
               setStep={setStep}
               setUploadProgress={setUploadProgress}
               setSelectedMedia={setSelectedMedia}
               selectedMedia={selectedMedia}
             />
-
-            <DialogFooter>
+            <DialogFooter className="gap-2">
               <Button
                 onClick={() => setStep('form')}
                 className="w-full"
@@ -115,12 +112,8 @@ const NudeCreationModal = () => {
         return (
           <DialogContent
             className="h-[100vh] sm:h-[80vh] flex flex-col"
-            onInteractOutside={(e) => {
-              e.preventDefault();
-            }}
-            onEscapeKeyDown={(e) => {
-              e.preventDefault();
-            }}
+            onInteractOutside={(e) => e.preventDefault()}
+            onEscapeKeyDown={(e) => e.preventDefault()}
             isClosable={false}
           >
             <div className="flex flex-col items-center justify-center h-full">
@@ -142,12 +135,10 @@ const NudeCreationModal = () => {
                 You can now share your nude with your followers.
               </DialogDescription>
             </DialogHeader>
-
             {createdNude && <NudeCard nude={createdNude} />}
-
             <div className="flex flex-col items-center justify-center w-full gap-2">
               <TwitterShareButton
-                url={`${process.env.NEXT_PUBLIC_BASE_URL}/nudes/${createdNude?.id}`}
+                url={URL_TO_SHARE}
                 title={
                   createdNude?.description ?? 'Come discover this nude on KYYNK'
                 }
@@ -155,9 +146,8 @@ const NudeCreationModal = () => {
               >
                 <Button className="w-full">Share on Twitter</Button>
               </TwitterShareButton>
-
               <TelegramShareButton
-                url={`${process.env.NEXT_PUBLIC_BASE_URL}/nudes/${createdNude?.id}`}
+                url={URL_TO_SHARE}
                 title={
                   createdNude?.description ?? 'Come discover this nude on KYYNK'
                 }
@@ -165,7 +155,6 @@ const NudeCreationModal = () => {
               >
                 <Button className="w-full">Share on Telegram</Button>
               </TelegramShareButton>
-
               <Button
                 variant="secondary"
                 onClick={handleCloseModal}
@@ -181,7 +170,7 @@ const NudeCreationModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleCloseModal}>
-      {renderStep()}
+      {renderStepContent()}
     </Dialog>
   );
 };
