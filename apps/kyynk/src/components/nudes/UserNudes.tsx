@@ -10,6 +10,8 @@ import { isUserVerified } from '@/utils/users/isUserVerified';
 import { FetchedUserType } from '@/types/users';
 import { useQueryState } from 'nuqs';
 import { NudeWithPermissions } from '@/types/nudes';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { List, Grid } from 'lucide-react';
 
 interface Props {
   initialNudes: NudeWithPermissions[];
@@ -20,7 +22,8 @@ const UserNudes: FC<Props> = ({ initialNudes, user }) => {
   const { slug } = useParams<{ slug: string }>();
   const { user: loggedUser } = useUser();
   const { useGet } = useApi();
-  const [view] = useQueryState('view');
+  const [view, setView] = useQueryState('view');
+  const [nudeId, setNudeId] = useQueryState('n');
   const isFeedView = view === 'feed';
 
   const { data: nudes } = useGet(
@@ -36,7 +39,30 @@ const UserNudes: FC<Props> = ({ initialNudes, user }) => {
     return null;
   }
 
-  return isFeedView ? <FeedView nudes={nudes} /> : <WallView nudes={nudes} />;
+  const handleViewChange = (value: string) => {
+    setNudeId(null);
+    setView(value);
+  };
+
+  return (
+    <div className="mt-8">
+      <div className="flex justify-end">
+        <Tabs onValueChange={handleViewChange} value={view ?? 'wall'}>
+          <TabsList>
+            <TabsTrigger value="wall">
+              <Grid size={22} />
+            </TabsTrigger>
+            <TabsTrigger value="feed">
+              <List size={22} />
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+      <div className="mt-4">
+        {isFeedView ? <FeedView nudes={nudes} /> : <WallView nudes={nudes} />}
+      </div>
+    </div>
+  );
 };
 
 export default UserNudes;

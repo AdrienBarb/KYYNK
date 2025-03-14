@@ -22,7 +22,7 @@ const FeedView: FC<Props> = ({ nudes }) => {
   }, [nudeId]);
 
   return (
-    <div className="grid gap-16 mx-auto mt-8 grid-cols-1 max-w-lg">
+    <div className="grid gap-16 mx-auto grid-cols-1 max-w-lg">
       {nudes.map((nude: NudeWithPermissions) => (
         <NudePost
           key={nude.id}
