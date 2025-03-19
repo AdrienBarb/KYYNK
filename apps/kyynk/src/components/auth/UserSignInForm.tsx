@@ -12,12 +12,14 @@ import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { authenticate } from '../../server-actions/authenticate';
 import { useQueryState } from 'nuqs';
-
+import { useRouter } from 'next/navigation';
+import { appRouter } from '@/constants/appRouter';
 const UserSignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations();
   const [previousUrl] = useQueryState('previousUrl');
+  const router = useRouter();
 
   const handleClickShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -43,11 +45,16 @@ const UserSignInForm = () => {
     onSubmit: async (values) => {
       setIsLoading(true);
       try {
-        await authenticate({
+        const result = await authenticate({
           email: values.email.toLowerCase(),
           password: values.password,
-          previousUrl,
         });
+
+        if (!result.success) {
+          throw new Error(result.error);
+        }
+
+        router.push(previousUrl || appRouter.models);
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);

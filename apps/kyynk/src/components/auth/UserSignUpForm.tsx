@@ -13,6 +13,8 @@ import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { register } from '@/server-actions/register';
+import { useRouter } from 'next/navigation';
+import { appRouter } from '@/constants/appRouter';
 
 const UserSignUpForm = () => {
   //translation
@@ -22,7 +24,7 @@ const UserSignUpForm = () => {
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const router = useRouter();
   const handleClickShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
@@ -72,11 +74,17 @@ const UserSignUpForm = () => {
       setIsLoading(true);
 
       try {
-        await register({
+        const result = await register({
           pseudo: values.pseudo,
           email: values.email.toLowerCase(),
           password: values.password,
         });
+
+        if (!result.success) {
+          throw new Error(result.error);
+        }
+
+        router.push(appRouter.userType);
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);

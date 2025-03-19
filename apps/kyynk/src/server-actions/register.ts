@@ -1,14 +1,12 @@
 'use server';
 
 import { signIn } from '@/auth';
-import { appRouter } from '@/constants/appRouter';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { prisma } from '@/lib/db/client';
 import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
 import { checkOrCreateSlug } from '@/utils/users/checkOrCreateSlug';
 import bcrypt from 'bcryptjs';
 import { AuthError } from 'next-auth';
-import { isRedirectError } from 'next/dist/client/components/redirect';
 
 export async function register({
   pseudo,
@@ -21,7 +19,7 @@ export async function register({
 }) {
   try {
     if (!pseudo || !email || !password) {
-      throw new Error(errorMessages.MISSING_FIELDS);
+      return { success: false, error: errorMessages.MISSING_FIELDS };
     }
 
     const lowerCaseEmail = email.toLowerCase();
@@ -32,7 +30,7 @@ export async function register({
     });
 
     if (userExists) {
-      throw new Error(errorMessages.USER_ALREADY_EXIST);
+      return { success: false, error: errorMessages.USER_ALREADY_EXIST };
     }
 
     const pseudoExist = await prisma.user.findFirst({
@@ -40,7 +38,7 @@ export async function register({
     });
 
     if (pseudoExist) {
-      throw new Error(errorMessages.PSEUDO_ALREADY_EXIST);
+      return { success: false, error: errorMessages.PSEUDO_ALREADY_EXIST };
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -77,18 +75,15 @@ export async function register({
     await signIn('credentials', {
       email: lowerCaseEmail,
       password: password,
-      redirect: true,
-      redirectTo: appRouter.userType,
+      redirect: false,
     });
+
+    return { success: true };
   } catch (error: any) {
-    if (isRedirectError(error)) {
-      throw error;
+    if (error instanceof AuthError) {
+      return { success: false, error: error?.cause?.err?.message };
     }
 
-    if (error instanceof AuthError) {
-      throw new Error(error?.cause?.err?.message);
-    } else {
-      throw new Error(errorMessages.FAILED_TO_AUTHENTICATE);
-    }
+    return { success: false, error: errorMessages.FAILED_TO_AUTHENTICATE };
   }
 }
