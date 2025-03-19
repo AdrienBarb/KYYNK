@@ -16,8 +16,8 @@ export async function updateUser({
   const data: Prisma.UserUpdateInput = {};
 
   if (body.pseudo) {
-    const existingUser = await prisma.user.findUnique({
-      where: { pseudo: body.pseudo },
+    const existingUser = await prisma.user.findFirst({
+      where: { pseudo: body.pseudo.toLowerCase() },
     });
 
     if (existingUser && existingUser.id !== userId) {

@@ -23,21 +23,20 @@ export const PUT = strictlyAuth(async (req: NextRequest) => {
 
     const body = await req.json();
     const validatedBody = updateUserSchema.parse(body);
-    console.log('🚀 ~ PUT ~ validatedBody:', validatedBody);
+
     const user = await updateUser({ userId: userId!, body: validatedBody });
 
     const isCreator =
       validatedBody.userType === 'creator' ||
       currentUser.userType === 'creator';
-    const pseudoChanged =
-      validatedBody.pseudo && validatedBody.pseudo !== currentUser.pseudo;
 
-    if (isCreator && pseudoChanged) {
+    if (isCreator) {
       await createWatermark({ userId: userId!, slug: user.slug! });
     }
 
     return NextResponse.json(user, { status: 200 });
   } catch (error) {
+    console.log('🚀 ~ PUT ~ error:', error);
     return errorHandler(error);
   }
 });

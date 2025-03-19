@@ -16,24 +16,24 @@ export async function authenticate({
   previousUrl?: string | null;
 }) {
   try {
-    const user = await prisma.user.findUnique({
-      where: { email },
-      select: { slug: true, userType: true },
-    });
+    // const user = await prisma.user.findUnique({
+    //   where: { email },
+    //   select: { slug: true, userType: true },
+    // });
 
-    if (!user) {
-      throw new Error(errorMessages.FAILED_TO_AUTHENTICATE);
-    }
+    // if (!user) {
+    //   throw new Error(errorMessages.FAILED_TO_AUTHENTICATE);
+    // }
 
     await signIn('credentials', {
       email: email,
       password: password,
       redirect: true,
-      redirectTo: previousUrl
-        ? previousUrl
-        : user?.userType === 'creator'
-        ? `/${user.slug}`
-        : appRouter.models,
+      // redirectTo: previousUrl
+      //   ? previousUrl
+      //   : user?.userType === 'creator'
+      //   ? `/${user.slug}`
+      //   : appRouter.models,
     });
   } catch (error) {
     if (isRedirectError(error)) {

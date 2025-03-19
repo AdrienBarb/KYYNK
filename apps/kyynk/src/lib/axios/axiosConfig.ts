@@ -1,7 +1,5 @@
 import axios from 'axios';
-import { getSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
-import { auth } from '@/auth';
 import { useErrorStore } from '@/stores/ErrorStore';
 
 const isServer = typeof window === 'undefined';

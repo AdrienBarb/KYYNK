@@ -25,6 +25,7 @@ export async function register({
     }
 
     const lowerCaseEmail = email.toLowerCase();
+    const lowerCasePseudo = pseudo.toLowerCase();
 
     const userExists = await prisma.user.findUnique({
       where: { email: lowerCaseEmail },
@@ -35,7 +36,7 @@ export async function register({
     }
 
     const pseudoExist = await prisma.user.findFirst({
-      where: { pseudo: pseudo },
+      where: { pseudo: lowerCasePseudo },
     });
 
     if (pseudoExist) {
@@ -47,10 +48,10 @@ export async function register({
 
     const createdUser = await prisma.user.create({
       data: {
-        pseudo: pseudo,
+        pseudo: lowerCasePseudo,
         email: lowerCaseEmail,
         password: hashedPassword,
-        slug: await checkOrCreateSlug(pseudo),
+        slug: await checkOrCreateSlug(lowerCasePseudo),
         settings: {
           create: {},
         },
@@ -68,7 +69,7 @@ export async function register({
       event: 'user signed up',
       properties: {
         email: lowerCaseEmail,
-        pseudo: pseudo,
+        pseudo: lowerCasePseudo,
         $process_person_profile: false,
       },
     });

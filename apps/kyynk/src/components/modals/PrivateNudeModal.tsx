@@ -92,7 +92,7 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
     switch (step) {
       case 'form':
         return (
-          <DialogContent className="h-[100vh] sm:h-[80vh] overflow-y-scroll">
+          <DialogContent className="h-[100dvh] sm:h-[80dvh] overflow-y-scroll">
             <DialogHeader>
               <DialogTitle>Send a private nude</DialogTitle>
               <DialogDescription>

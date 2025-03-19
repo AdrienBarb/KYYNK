@@ -55,7 +55,7 @@ const NudeCreationModal = () => {
     switch (step) {
       case 'form':
         return (
-          <DialogContent className="h-[100vh] sm:h-[80vh] overflow-y-scroll flex flex-col">
+          <DialogContent className="h-[100dvh] sm:h-[80dvh] overflow-y-scroll flex flex-col">
             <DialogHeader className="flex flex-col items-center">
               <DialogTitle>Create a nude</DialogTitle>
               <DialogDescription>
