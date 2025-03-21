@@ -1,12 +1,14 @@
 'use server';
 
 import { signIn } from '@/auth';
+import { appRouter } from '@/constants/appRouter';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { prisma } from '@/lib/db/client';
 import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
 import { checkOrCreateSlug } from '@/utils/users/checkOrCreateSlug';
 import bcrypt from 'bcryptjs';
 import { AuthError } from 'next-auth';
+import { isRedirectError } from 'next/dist/client/components/redirect';
 
 export async function register({
   pseudo,
@@ -75,11 +77,16 @@ export async function register({
     await signIn('credentials', {
       email: lowerCaseEmail,
       password: password,
-      redirect: false,
+      redirect: true,
+      redirectTo: appRouter.userType,
     });
 
     return { success: true };
   } catch (error: any) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
+
     if (error instanceof AuthError) {
       return { success: false, error: error?.cause?.err?.message };
     }

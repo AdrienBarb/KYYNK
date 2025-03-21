@@ -1,24 +1,33 @@
 'use server';
 import { signIn } from '@/auth';
 import { errorMessages } from '@/lib/constants/errorMessage';
+import { appRouter } from '@/constants/appRouter';
 import { AuthError } from 'next-auth';
+import { isRedirectError } from 'next/dist/client/components/redirect';
 
 export async function authenticate({
   email,
   password,
+  previousUrl,
 }: {
   email: string;
   password: string;
+  previousUrl?: string | null;
 }) {
   try {
     await signIn('credentials', {
       email: email,
       password: password,
-      redirect: false,
+      redirect: true,
+      redirectTo: previousUrl || appRouter.models,
     });
 
     return { success: true };
   } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
+
     if (error instanceof AuthError) {
       return { success: false, error: error?.cause?.err?.message };
     }

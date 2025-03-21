@@ -80,11 +80,9 @@ const UserSignUpForm = () => {
           password: values.password,
         });
 
-        if (!result.success) {
+        if (result && !result.success) {
           throw new Error(result.error);
         }
-
-        router.push(appRouter.userType);
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);
