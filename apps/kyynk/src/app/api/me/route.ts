@@ -36,7 +36,6 @@ export const PUT = strictlyAuth(async (req: NextRequest) => {
 
     return NextResponse.json(user, { status: 200 });
   } catch (error) {
-    console.log('🚀 ~ PUT ~ error:', error);
     return errorHandler(error);
   }
 });

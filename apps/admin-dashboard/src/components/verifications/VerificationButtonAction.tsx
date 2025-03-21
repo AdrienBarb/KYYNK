@@ -1,4 +1,6 @@
-import React, { FC } from 'react';
+'use client';
+
+import React from 'react';
 import { useState } from 'react';
 import { IdentityCarousel } from './IdentityCarousel';
 import {
@@ -18,16 +20,42 @@ import {
 } from '@/components/ui/Dialog';
 import { MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import useApi from '@/hooks/requests/useAdminApi';
+import { useQueryClient } from '@tanstack/react-query';
+import { apiRoutes } from '@/constants/router/apiRoutes';
 
 const VerificationButtonAction = ({ user }) => {
   const [openDialog, setOpenDialog] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { usePut } = useApi();
+  const { mutate: confirmOrReject, isPending } = usePut(
+    apiRoutes.confirmOrReject,
+    {
+      onSuccess: () => {
+        setOpenDialog(false);
+        queryClient.invalidateQueries({
+          queryKey: [
+            'get',
+            { url: apiRoutes.identityVerifications, params: {} },
+          ],
+        });
+      },
+    },
+  );
 
   const handleAccept = () => {
-    console.log('accept');
+    confirmOrReject({
+      userId: user.id,
+      status: 'verified',
+    });
   };
 
   const handleCancel = () => {
-    console.log('cancel');
+    confirmOrReject({
+      userId: user.id,
+      status: 'rejected',
+    });
   };
 
   return (
@@ -58,17 +86,22 @@ const VerificationButtonAction = ({ user }) => {
           <DialogHeader>
             <DialogTitle>{user.pseudo}</DialogTitle>
           </DialogHeader>
-          <IdentityCarousel />
+          <IdentityCarousel user={user} />
           <div className="flex w-full justify-center gap-8">
             <Button
               variant="destructive"
               className="w-full"
               onClick={handleCancel}
+              disabled={isPending}
             >
-              Cancel
+              REJECT
             </Button>
-            <Button className="w-full" onClick={handleAccept}>
-              Accept
+            <Button
+              className="w-full"
+              onClick={handleAccept}
+              disabled={isPending}
+            >
+              ACCEPT
             </Button>
           </div>
         </DialogContent>

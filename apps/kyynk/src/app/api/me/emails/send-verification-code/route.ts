@@ -6,6 +6,7 @@ import { strictlyAuth } from '@/hoc/strictlyAuth';
 import { NextResponse, NextRequest } from 'next/server';
 import { generateRandomCode } from '@/utils/numbers/generateRandomCode';
 import VerificationCodeEmail from '@kyynk/transactional/emails/VerificationCodeEmail';
+import { CONTACT_EMAIL } from '@/constants/constants';
 
 export const POST = strictlyAuth(async (req: NextRequest) => {
   try {
@@ -37,7 +38,7 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
     });
 
     const { error } = await resendClient.emails.send({
-      from: 'contact@kyynk.com',
+      from: CONTACT_EMAIL,
       to: user.email,
       subject: 'Verification Code',
       react: VerificationCodeEmail({ code }),

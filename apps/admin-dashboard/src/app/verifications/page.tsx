@@ -1,38 +1,17 @@
-import {
-  VerificationColumns,
-  Payment,
-} from '@/components/verifications/VerificationColumns';
+'use client';
+
+import { VerificationColumns } from '@/components/verifications/VerificationColumns';
 import { VerificationTable } from '@/components/verifications/VerificationTable';
+import { apiRoutes } from '@/constants/router/apiRoutes';
+import useApi from '@/hooks/requests/useAdminApi';
 
-async function getData(): Promise<Payment[]> {
-  return [
-    {
-      id: '728ed52f',
-      pseudo: 'adrienBarb',
-      email: 'm@example.com',
-      status: 'pending',
-    },
-    {
-      id: '728ed52z',
-      pseudo: 'john doe',
-      email: 'm@example.com',
-      status: 'pending',
-    },
-    {
-      id: '728ed52a',
-      pseudo: 'marco polo',
-      email: 'm@example.com',
-      status: 'pending',
-    },
-  ];
-}
-
-export default async function DemoPage() {
-  const data = await getData();
+export default function DemoPage() {
+  const { useGet } = useApi();
+  const { data } = useGet(apiRoutes.identityVerifications);
 
   return (
     <div className="container mx-auto py-10">
-      <VerificationTable columns={VerificationColumns} data={data} />
+      <VerificationTable columns={VerificationColumns} data={data ?? []} />
     </div>
   );
 }

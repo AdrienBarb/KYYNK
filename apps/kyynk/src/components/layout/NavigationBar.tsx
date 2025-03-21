@@ -21,6 +21,11 @@ const NavigationBar = async ({ type }: { type: 'auth' | 'app' }) => {
               <Link href="/login">{t('common.signIn')}</Link>
             </Button>
           )}
+          {type === 'app' && isUserConnected && (
+            <Button asChild size="sm">
+              <Link href="/models">Launch App</Link>
+            </Button>
+          )}
         </div>
       </div>
     </header>
