@@ -5,8 +5,6 @@ const config: Pick<Config, 'content' | 'presets'> = {
   content: [
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/shared/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app-features/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   presets: [sharedConfig],
 };
