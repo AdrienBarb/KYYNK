@@ -36,6 +36,7 @@ import {
   CollapsibleTrigger,
 } from '../ui/collapsible';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { isUserVerified } from '@/utils/users/isUserVerified';
 
 export function AppSidebar() {
   const { user, isLoggedIn } = useUser();
@@ -74,13 +75,15 @@ export function AppSidebar() {
       title: 'Conversations',
       url: appRouter.settingsConversations,
       icon: MessageCircle,
-      isVisible: isLoggedIn() && isCreator({ user }),
+      isVisible:
+        isLoggedIn() && isCreator({ user }) && isUserVerified({ user }),
     },
     {
       title: 'Payment',
       url: appRouter.settingsPayment,
       icon: CreditCard,
-      isVisible: isLoggedIn() && isCreator({ user }),
+      isVisible:
+        isLoggedIn() && isCreator({ user }) && isUserVerified({ user }),
     },
     {
       title: 'Preferences',
@@ -150,7 +153,7 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        {isCreator({ user }) && (
+        {isCreator({ user }) && isUserVerified({ user }) && (
           <SidebarGroup>
             <SidebarGroupLabel>Creators</SidebarGroupLabel>
             <SidebarGroupContent>
