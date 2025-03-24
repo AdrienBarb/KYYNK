@@ -9,15 +9,15 @@ const __dirname = dirname(__filename);
 
 // Initialize S3 Client
 const s3Client = new S3Client({
-  region: process.env.NEXT_PUBLIC_AWS_REGION || 'eu-west-3',
+  region: process.env.AWS_REGION || 'eu-west-3',
   credentials: {
-    accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   },
 });
 
 async function uploadToS3Direct(buffer, contentType) {
-  const bucketName = process.env.NEXT_PUBLIC_S3_BUCKET;
+  const bucketName = process.env.S3_BUCKET;
   if (!bucketName) throw new Error('S3 Bucket name is missing');
 
   const uniqueId = uuidv4();

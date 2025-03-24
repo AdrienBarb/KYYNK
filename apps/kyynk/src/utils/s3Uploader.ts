@@ -11,7 +11,7 @@ export const uploadToS3 = async ({
   folder: 'medias' | 'thumbnails' | 'identity';
   fileType: string;
 }) => {
-  const bucketName = process.env.NEXT_PUBLIC_S3_BUCKET;
+  const bucketName = process.env.S3_BUCKET;
   if (!bucketName) throw new Error('S3 Bucket name is missing');
 
   const fileKey = generateFileKey(fileType, folder);
