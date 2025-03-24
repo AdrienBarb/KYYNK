@@ -325,7 +325,12 @@ const UserForm = () => {
           />
         </div>
 
-        <Button className="w-full" type="submit" isLoading={isPending}>
+        <Button
+          className="w-full"
+          type="submit"
+          isLoading={isPending}
+          disabled={isPending}
+        >
           {t('common.validate')}
         </Button>
       </form>

@@ -144,7 +144,7 @@ const UserResetPasswordForm = () => {
           }}
         />
 
-        <Button type="submit" isLoading={isPending}>
+        <Button type="submit" isLoading={isPending} disabled={isPending}>
           {t('common.validate')}
         </Button>
       </form>

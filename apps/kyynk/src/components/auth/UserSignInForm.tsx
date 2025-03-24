@@ -103,7 +103,7 @@ const UserSignInForm = () => {
           }}
         />
 
-        <Button type="submit" isLoading={isLoading}>
+        <Button type="submit" isLoading={isLoading} disabled={isLoading}>
           {t('common.signIn')}
         </Button>
       </form>

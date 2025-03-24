@@ -49,6 +49,7 @@ const BuyButton = ({ nude, afterBuyAction }: Props) => {
       <Button
         onClick={handleBuy}
         isLoading={isPending}
+        disabled={isPending}
       >{`Buy for ${formatCredits(nude.creditPrice)} credits`}</Button>
       <NotEnoughCreditsModal
         open={openNotEnoughCreditModal}

@@ -69,7 +69,11 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
       </div>
       <div className="flex gap-2">
         {loggedUser?.slug !== slug && isUserVerified({ user }) && (
-          <Button onClick={handleClickOnDiscussButton} isLoading={isPending}>
+          <Button
+            onClick={handleClickOnDiscussButton}
+            isLoading={isPending}
+            disabled={isPending}
+          >
             Discuss
           </Button>
         )}
