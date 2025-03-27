@@ -28,8 +28,6 @@ const ShareModal: FC<ShareModalProps> = ({
     }
   };
 
-  console.log('hello');
-
   const renderShareButton = (
     ShareButtonComponent: React.ComponentType<any>,
     IconComponent: React.ComponentType<any>,
