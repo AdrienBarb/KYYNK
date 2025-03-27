@@ -6,6 +6,9 @@ import { updateUser } from '@/services/users/updateUser';
 import { NextResponse, NextRequest } from 'next/server';
 import { createWatermark } from '@/utils/users/createWatermark';
 import { updateUserSchema } from '@/schemas/users/updateUserSchema';
+import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
+import { CREATOR_AUDIENCE_ID } from '@/constants/resend/audiences';
+import { createMarketingContact } from '@/utils/emailing/createMarketingContact';
 
 export const PUT = strictlyAuth(async (req: NextRequest) => {
   try {
@@ -26,11 +29,25 @@ export const PUT = strictlyAuth(async (req: NextRequest) => {
 
     const user = await updateUser({ userId: userId!, body: validatedBody });
 
-    const isCreator =
-      validatedBody.userType === 'creator' ||
-      currentUser.userType === 'creator';
+    if (validatedBody.userType === 'creator') {
+      // Send POSTHOG event
+      sendPostHogEvent({
+        distinctId: userId!,
+        event: 'user_become_creator',
+        properties: {
+          $process_person_profile: false,
+        },
+      });
 
-    if (isCreator) {
+      // Add to RESEND creators audience
+      await createMarketingContact(user.email!, CREATOR_AUDIENCE_ID);
+    }
+
+    if (
+      validatedBody.userType === 'creator' ||
+      currentUser.userType === 'creator'
+    ) {
+      // Create watermark only for creator
       await createWatermark({ userId: userId!, slug: user.slug! });
     }
 
