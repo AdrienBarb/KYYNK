@@ -1,4 +1,5 @@
 import { postHogClient } from '@/lib/post-hog/postHogClient';
+import { isProduction } from '../environments';
 
 interface SendPostHogEventParams {
   distinctId: string;
@@ -12,7 +13,7 @@ export const sendPostHogEvent = ({
   properties,
 }: SendPostHogEventParams) => {
   try {
-    if (process.env.NODE_ENV === 'production') {
+    if (isProduction) {
       postHogClient.capture({
         distinctId,
         event,

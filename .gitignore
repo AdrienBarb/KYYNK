@@ -41,4 +41,7 @@ jspm_packages
 .turbo*
 
 .env.local*
+.env.development*
+.env.staging*
+.env.production*
 
