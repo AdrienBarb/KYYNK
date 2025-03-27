@@ -64,7 +64,7 @@ export async function register({
 
     sendPostHogEvent({
       distinctId: createdUser.id,
-      event: 'user signed up',
+      event: 'user_signed_up',
       properties: {
         email: lowerCaseEmail,
         pseudo: lowerCasePseudo,
