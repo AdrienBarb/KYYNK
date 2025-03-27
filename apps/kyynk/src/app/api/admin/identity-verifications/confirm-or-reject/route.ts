@@ -8,29 +8,41 @@ import IdentityVerifiedEmail from '@kyynk/transactional/emails/IdentityVerifiedE
 import IdentityRejectedEmail from '@kyynk/transactional/emails/IdentityRejectedEmail';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { CONTACT_EMAIL } from '@/constants/constants';
+import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
+import { VerificationStatus } from '@prisma/client';
 
 const confirmOrReject = z.object({
   userId: z.string(),
-  status: z.enum(['verified', 'rejected']),
+  status: z.enum([VerificationStatus.verified, VerificationStatus.rejected]),
 });
 
 export const PUT = withAdminSecret(async (req: Request) => {
   try {
     const body = await req.json();
     const validatedBody = confirmOrReject.parse(body);
-    console.log('🚀 ~ PUT ~ body:', body);
 
     const user = await prisma.user.update({
       where: { id: validatedBody.userId },
       data: { identityVerificationStatus: validatedBody.status },
     });
 
+    if (validatedBody.status === VerificationStatus.verified) {
+      // Send POSTHOG event
+      sendPostHogEvent({
+        distinctId: validatedBody.userId!,
+        event: 'user_become_creator',
+        properties: {
+          $process_person_profile: false,
+        },
+      });
+    }
+
     const emailTemplate =
-      validatedBody.status === 'verified'
+      validatedBody.status === VerificationStatus.verified
         ? IdentityVerifiedEmail
         : IdentityRejectedEmail;
     const subject =
-      validatedBody.status === 'verified'
+      validatedBody.status === VerificationStatus.verified
         ? 'Your account has been verified'
         : 'Your account verification was rejected';
 
