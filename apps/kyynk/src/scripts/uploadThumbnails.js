@@ -1,5 +1,5 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-import { readFile, writeFile } from 'fs/promises';
+import { readFile, writeFile, readdir } from 'fs/promises';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
@@ -40,52 +40,71 @@ async function uploadToS3Direct(buffer, contentType) {
   }
 }
 
-async function fetchAndUploadProfileImage(url) {
+async function processProfileImage(imagePath) {
   try {
-    const response = await fetch(url);
-    const arrayBuffer = await response.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-
-    // Get the content type from the response
-    const contentType = response.headers.get('content-type') || 'image/jpeg';
+    const buffer = await readFile(imagePath);
+    const contentType = 'image/jpeg'; // You might want to detect this dynamically
 
     // Upload to S3
     const s3Key = await uploadToS3Direct(buffer, contentType);
-
     return s3Key;
   } catch (error) {
-    console.error(`Error processing profile image: ${url}`, error);
+    console.error(`Error processing profile image: ${imagePath}`, error);
     throw error;
   }
 }
 
-async function processAndUpdateSeedData() {
-  // Read the seed data file
-  const seedDataPath = join(__dirname, '../../seed2-updated.json');
-  const seedData = JSON.parse(await readFile(seedDataPath, 'utf8'));
+async function generateCreatorsSeedData() {
+  const fakeFolderPath = join(__dirname, 'fake');
 
-  const updatedData = await Promise.all(
-    seedData.map(async (user) => {
-      // Upload profile image
-      const newProfileImageUrl = await fetchAndUploadProfileImage(
-        user.profilImageUrl,
-      );
+  try {
+    const creators = await readdir(fakeFolderPath);
 
-      return {
-        ...user,
-        profilImageUrl: newProfileImageUrl,
-      };
-    }),
-  );
+    const creatorsData = await Promise.all(
+      creators.map(async (creatorFolder) => {
+        const profileImagePath = join(
+          fakeFolderPath,
+          creatorFolder,
+          'profile_image',
+          'profile.jpg',
+        );
 
-  // Write the updated data back to a new JSON file
-  await writeFile(
-    join(process.cwd(), 'seed2-updated2.json'),
-    JSON.stringify(updatedData, null, 2),
-  );
+        try {
+          const profileImageUrl = await processProfileImage(profileImagePath);
 
-  console.log('All profile images processed and data updated successfully!');
+          return {
+            pseudo: creatorFolder,
+            profileImageUrl: profileImageUrl,
+            description: '',
+            nudes: [
+              {
+                description: '',
+                thumbnail: '',
+                videoKey: '',
+              },
+            ],
+          };
+        } catch (error) {
+          console.error(`Error processing creator ${creatorFolder}:`, error);
+          return null;
+        }
+      }),
+    );
+
+    console.log('🚀 ~ generateCreatorsSeedData ~ creatorsData:', creatorsData);
+
+    // Write the data to a JSON file
+    await writeFile(
+      join(process.cwd(), 'creators-seed.json'),
+      JSON.stringify(creatorsData, null, 2),
+    );
+
+    console.log('Creators seed data generated successfully!');
+  } catch (error) {
+    console.error('Error generating creators seed data:', error);
+    throw error;
+  }
 }
 
 // Run the script
-processAndUpdateSeedData().catch(console.error);
+generateCreatorsSeedData().catch(console.error);
