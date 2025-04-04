@@ -46,7 +46,7 @@ export const generateWatermark = async (slug: string): Promise<string> => {
   ctx.clearRect(0, 0, width, height);
 
   // Add text with bold style
-  ctx.font = '65pt Arial';
+  ctx.font = '42pt Arial';
   ctx.fillStyle = '#A9A9A9'; // Dark gray text color
   ctx.textAlign = 'right';
   ctx.fillText(`kyynk.com/${slug}`, width, height / 2 + 60); // Move text down by 20 pixels

@@ -37,10 +37,8 @@ export const GET = strictlyAuth(async (req: NextRequest) => {
         title: `${user.pseudo} - video`,
         watermark: {
           id: user.watermarkId,
-          bottom: '50px',
-          right: '50px',
-          width: '1200px',
-          height: '200px',
+          bottom: '10px',
+          right: '20px',
         },
       });
 

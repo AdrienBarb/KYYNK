@@ -12,6 +12,8 @@ import { Button } from './ui/Button';
 import { useUser } from '@/hooks/users/useUser';
 import { isUserVerified } from '@/utils/users/isUserVerified';
 import { FetchedUserType } from '@/types/users';
+import { getEncodedFullUrl } from '@/utils/links/getEncodedFullUrl';
+import { appRouter } from '@/constants/appRouter';
 
 interface Props {
   initialUserDatas: FetchedUserType;
@@ -41,6 +43,16 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
     },
   );
 
+  const handleClickOnDiscussButton = () => {
+    if (!loggedUser) {
+      const encodedUrl = getEncodedFullUrl();
+      router.push(`${appRouter.login}?previousUrl=${encodedUrl}`);
+      return;
+    }
+
+    createConversation({ slug });
+  };
+
   return (
     <div className="flex flex-col items-center relative w-full box-border text-black gap-4">
       <Avatar size={164} imageId={user?.profileImageId} pseudo={user?.pseudo} />
@@ -56,16 +68,15 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
         </div>
       </div>
       <div className="flex gap-2">
-        {loggedUser &&
-          loggedUser?.slug !== slug &&
-          isUserVerified({ user }) && (
-            <Button
-              onClick={() => createConversation({ slug })}
-              isLoading={isPending}
-            >
-              Discuss
-            </Button>
-          )}
+        {loggedUser?.slug !== slug && isUserVerified({ user }) && (
+          <Button
+            onClick={handleClickOnDiscussButton}
+            isLoading={isPending}
+            disabled={isPending}
+          >
+            Discuss
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 interface SeedUser {
   pseudo: string;
-  profilImageUrl: string;
+  profileImageUrl: string;
   description: string;
   nudes: {
     description: string;
@@ -27,6 +27,7 @@ async function main() {
     console.log('Starting database seeding...');
 
     for (const userData of seedData) {
+      console.log('🚀 ~ main ~ userData:', userData);
       const user = await prisma.user.create({
         data: {
           pseudo: userData.pseudo,
@@ -36,7 +37,7 @@ async function main() {
             .replace(/\s+/g, '.')}@example.com`,
           password: await bcrypt.hash('password123', 10),
           description: userData.description,
-          profileImageId: userData.profilImageUrl,
+          profileImageId: userData.profileImageUrl,
           userType: UserType.creator,
           isEmailVerified: true,
           nudesCount: 2,
@@ -61,11 +62,15 @@ async function main() {
         });
 
         // Create the nude
+        const possiblePrices = [0, 10, 20];
+        const randomFiatPrice =
+          possiblePrices[Math.floor(Math.random() * possiblePrices.length)];
+
         const nude = await prisma.nude.create({
           data: {
             description: nudeData.description,
-            fiatPrice: nudeData.fiatPrice,
-            creditPrice: nudeData.fiatPrice * 2,
+            fiatPrice: randomFiatPrice,
+            creditPrice: randomFiatPrice * 2,
             currency: 'USD',
             userId: user.id,
             mediaId: media.id,

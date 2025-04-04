@@ -186,6 +186,7 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
                   onClick={onSubmit}
                   className="w-full"
                   isLoading={isPending}
+                  disabled={isPending}
                 >
                   Send
                 </Button>
@@ -196,7 +197,7 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
       case 'gallery':
         return (
           <DialogContent
-            className="h-[100vh] sm:h-[80vh] flex flex-col"
+            className="h-[100dvh] sm:h-[80dvh] flex flex-col"
             onInteractOutside={(e) => e.preventDefault()}
             onEscapeKeyDown={(e) => e.preventDefault()}
             isClosable={false}
@@ -235,7 +236,7 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
       case 'uploading':
         return (
           <DialogContent
-            className="h-[100vh] sm:h-[80vh] flex flex-col"
+            className="h-[100dvh] sm:h-[80dvh] flex flex-col"
             onInteractOutside={(e) => e.preventDefault()}
             onEscapeKeyDown={(e) => e.preventDefault()}
             isClosable={false}

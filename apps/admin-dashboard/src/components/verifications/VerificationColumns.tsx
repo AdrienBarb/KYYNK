@@ -32,7 +32,7 @@ export const VerificationColumns: ColumnDef<Payment>[] = [
     },
   },
   {
-    accessorKey: 'status',
+    accessorKey: 'identityVerificationStatus',
     header: 'Status',
   },
   {

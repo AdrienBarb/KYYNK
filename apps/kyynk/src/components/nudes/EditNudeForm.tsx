@@ -204,7 +204,12 @@ const EditNudeForm: FC<Props> = ({ nude, setOpen }) => {
           )}
         />
 
-        <Button type="submit" isLoading={isEditLoading} className="w-full">
+        <Button
+          type="submit"
+          isLoading={isEditLoading}
+          disabled={isEditLoading}
+          className="w-full"
+        >
           Edit a nude
         </Button>
       </form>

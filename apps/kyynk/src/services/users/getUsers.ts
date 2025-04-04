@@ -11,9 +11,6 @@ export const getUsers = async () => {
         profileImageId: {
           not: null,
         },
-        nudesCount: {
-          gt: 0,
-        },
       },
       orderBy: {
         createdAt: 'desc',

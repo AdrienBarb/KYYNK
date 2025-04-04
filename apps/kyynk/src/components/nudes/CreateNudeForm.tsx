@@ -253,7 +253,12 @@ const CreateNudeForm: FC<Props> = ({
           )}
         />
 
-        <Button type="submit" isLoading={isPending} className="w-full">
+        <Button
+          type="submit"
+          isLoading={isPending}
+          disabled={isPending}
+          className="w-full"
+        >
           Create a nude
         </Button>
       </form>

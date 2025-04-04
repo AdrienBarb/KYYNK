@@ -3,6 +3,8 @@ import { prisma } from '@/lib/db/client';
 import { errorHandler } from '@/utils/errors/errorHandler';
 import { strictlyAuth } from '@/hoc/strictlyAuth';
 import { NextResponse, NextRequest } from 'next/server';
+import { createMarketingContact } from '@/utils/emailing/createMarketingContact';
+import { CREATOR_AUDIENCE_ID } from '@/constants/resend/audiences';
 
 export const POST = strictlyAuth(async (req: NextRequest) => {
   try {
@@ -52,6 +54,8 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
         where: { id: verificationCode.id },
       });
     });
+
+    await createMarketingContact(user.email!, CREATOR_AUDIENCE_ID);
 
     return NextResponse.json({ emailVerified: true }, { status: 200 });
   } catch (error) {
