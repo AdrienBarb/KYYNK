@@ -10,9 +10,11 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (isProduction) {
       posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
-        api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
+        api_host: '/ingest',
+        ui_host: 'https://eu.posthog.com',
         person_profiles: 'identified_only',
         capture_pageview: true,
+        capture_pageleave: true,
       });
     }
   }, []);

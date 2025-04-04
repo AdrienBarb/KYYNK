@@ -24,6 +24,7 @@ const nextConfig = {
       },
     ],
   },
+  skipTrailingSlashRedirect: true,
 };
 
 export default withAxiom(withNextIntl(nextConfig));
