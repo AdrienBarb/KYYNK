@@ -67,12 +67,13 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
           <OnlineStatus currentUser={user} />
         </div>
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 max-w-56 w-full">
         {loggedUser?.slug !== slug && isUserVerified({ user }) && (
           <Button
             onClick={handleClickOnDiscussButton}
             isLoading={isPending}
             disabled={isPending}
+            className="w-full"
           >
             Discuss
           </Button>
