@@ -1,6 +1,10 @@
 import { Card } from '../ui/Card';
 import Text from '../ui/Text';
-import { Tooltip, TooltipTrigger, TooltipContent } from '../ui/Tooltip';
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from '@/components/ui/Popover';
 import { Info } from 'lucide-react';
 import { getFiatWithCredits } from '@/utils/prices/getMediaPrice';
 import React, { FC } from 'react';
@@ -30,20 +34,20 @@ const RevenueDashboard: FC<RevenueDashboardProps> = async ({
         <Card>
           <div className="flex items-center justify-between">
             <Text className="text-lg font-light mb-2">Incoming revenue</Text>
-            <Tooltip>
-              <TooltipTrigger asChild>
+            <Popover>
+              <PopoverTrigger asChild>
                 <span className="ml-2 cursor-pointer">
                   <Info size={20} strokeWidth={1} />
                 </span>
-              </TooltipTrigger>
-              <TooltipContent>
+              </PopoverTrigger>
+              <PopoverContent>
                 <Text>
                   The incoming revenue is from your sales that are currently
                   being validated. It takes 7 days to validate, so this revenue
                   will be available in 7 days.
                 </Text>
-              </TooltipContent>
-            </Tooltip>
+              </PopoverContent>
+            </Popover>
           </div>
           <Text className="text-2xl font-bold">
             {formatFiat(incomingRevenueFiat)} €
@@ -55,19 +59,19 @@ const RevenueDashboard: FC<RevenueDashboardProps> = async ({
         <Card>
           <div className="flex items-center justify-between">
             <Text className="text-lg font-light mb-2">Available revenue</Text>
-            <Tooltip>
-              <TooltipTrigger asChild>
+            <Popover>
+              <PopoverTrigger asChild>
                 <span className="ml-2 cursor-pointer">
                   <Info size={20} strokeWidth={1} />
                 </span>
-              </TooltipTrigger>
-              <TooltipContent>
+              </PopoverTrigger>
+              <PopoverContent>
                 <Text>
                   The available revenue is the amount you can withdraw. It needs
                   to be higher than 50 euros to be eligible for withdrawal.
                 </Text>
-              </TooltipContent>
-            </Tooltip>
+              </PopoverContent>
+            </Popover>
           </div>
           <Text className="text-2xl font-bold">
             {formatFiat(availableRevenueFiat)} €

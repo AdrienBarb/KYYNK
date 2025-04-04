@@ -1,5 +1,6 @@
-import * as React from 'react';
+'use client';
 
+import * as React from 'react';
 import { Card, CardContent } from '@/components/ui/Card';
 import {
   Carousel,
@@ -7,47 +8,74 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-  type CarouselApi,
 } from '@/components/ui/Carousel';
+import imgixLoader from '@/lib/imgix/loader';
+import Image from 'next/image';
 
-export function IdentityCarousel() {
-  const [api, setApi] = React.useState<CarouselApi>();
-  const [current, setCurrent] = React.useState(0);
-  const [count, setCount] = React.useState(0);
-
-  React.useEffect(() => {
-    if (!api) {
-      return;
-    }
-
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap() + 1);
-
-    api.on('select', () => {
-      setCurrent(api.selectedScrollSnap() + 1);
-    });
-  }, [api]);
+export const IdentityCarousel = ({ user }) => {
+  const imageUrl = imgixLoader({
+    src: user.frontIdentity || '',
+    width: 400,
+    quality: 80,
+  });
+  const imageUrl2 = imgixLoader({
+    src: user.backIdentity || '',
+    width: 400,
+    quality: 80,
+  });
+  const imageUrl3 = imgixLoader({
+    src: user.frontAndFaceIdentity || '',
+    width: 400,
+    quality: 80,
+  });
 
   return (
     <div className="mx-auto max-w-xs">
-      <Carousel setApi={setApi} className="w-full max-w-xs">
+      <Carousel className="w-full max-w-xs">
         <CarouselContent>
-          {Array.from({ length: 5 }).map((_, index) => (
-            <CarouselItem key={index}>
-              <Card>
-                <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <span className="text-4xl font-semibold">{index + 1}</span>
-                </CardContent>
-              </Card>
-            </CarouselItem>
-          ))}
+          <CarouselItem key={0}>
+            <Card>
+              <CardContent>
+                <Image
+                  src={imageUrl}
+                  alt="Identity Image"
+                  width={400}
+                  height={400}
+                  layout="responsive"
+                />
+              </CardContent>
+            </Card>
+          </CarouselItem>
+          <CarouselItem key={1}>
+            <Card>
+              <CardContent>
+                <Image
+                  src={imageUrl2}
+                  alt="Identity Image"
+                  width={400}
+                  height={400}
+                  layout="responsive"
+                />
+              </CardContent>
+            </Card>
+          </CarouselItem>
+          <CarouselItem key={2}>
+            <Card>
+              <CardContent>
+                <Image
+                  src={imageUrl3}
+                  alt="Identity Image"
+                  width={400}
+                  height={400}
+                  layout="responsive"
+                />
+              </CardContent>
+            </Card>
+          </CarouselItem>
         </CarouselContent>
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
-      <div className="py-2 text-center text-sm text-muted-foreground">
-        Slide {current} of {count}
-      </div>
     </div>
   );
-}
+};

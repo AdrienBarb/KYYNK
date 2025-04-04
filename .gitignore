@@ -45,3 +45,5 @@ jspm_packages
 .env.staging*
 .env.production*
 
+scripts
+

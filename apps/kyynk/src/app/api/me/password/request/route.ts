@@ -5,13 +5,14 @@ import { errorHandler } from '@/utils/errors/errorHandler';
 import { randomBytes } from 'crypto';
 import { NextResponse, NextRequest } from 'next/server';
 import ResetPasswordEmail from '@kyynk/transactional/emails/ResetPasswordEmail';
+import { CONTACT_EMAIL } from '@/constants/constants';
 
 export const POST = async (req: NextRequest) => {
   try {
     const { email } = await req.json();
 
     const user = await prisma.user.findUnique({
-      where: { email: email },
+      where: { email: email.toLowerCase() },
     });
 
     if (!user) {
@@ -37,7 +38,7 @@ export const POST = async (req: NextRequest) => {
     const link = `${process.env.CLIENT_URL}/login/password-reset/${user.id}/${userToken.token}`;
 
     const { data, error } = await resendClient.emails.send({
-      from: 'contact@kyynk.com',
+      from: CONTACT_EMAIL,
       to: user.email,
       subject: 'Password reset',
       react: ResetPasswordEmail({ link: link }),

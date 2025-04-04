@@ -95,7 +95,12 @@ const PaymentSettings = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="mt-4" isLoading={isPending}>
+          <Button
+            type="submit"
+            className="mt-4"
+            isLoading={isPending}
+            disabled={isPending}
+          >
             Save
           </Button>
         </form>

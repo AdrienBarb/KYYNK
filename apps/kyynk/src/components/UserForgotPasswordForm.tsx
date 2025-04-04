@@ -66,7 +66,7 @@ const UserForgotPasswordForm = () => {
           error={formik.touched.email && Boolean(formik.errors.email)}
           helperText={formik.touched.email && formik.errors.email}
         />
-        <Button type="submit" isLoading={isPending}>
+        <Button type="submit" isLoading={isPending} disabled={isPending}>
           {t('common.send')}
         </Button>
       </form>

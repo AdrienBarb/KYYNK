@@ -48,13 +48,12 @@ const UserSignInForm = () => {
         const result = await authenticate({
           email: values.email.toLowerCase(),
           password: values.password,
+          previousUrl,
         });
 
-        if (!result.success) {
+        if (result && !result.success) {
           throw new Error(result.error);
         }
-
-        router.push(previousUrl || appRouter.models);
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);
@@ -104,7 +103,7 @@ const UserSignInForm = () => {
           }}
         />
 
-        <Button type="submit" isLoading={isLoading}>
+        <Button type="submit" isLoading={isLoading} disabled={isLoading}>
           {t('common.signIn')}
         </Button>
       </form>
