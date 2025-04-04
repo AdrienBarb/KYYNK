@@ -8,6 +8,8 @@ import { isProduction } from '@/utils/environments';
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    console.log('🚀 ~ isProduction:', isProduction);
+
     if (isProduction) {
       posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY as string, {
         api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST,
@@ -15,6 +17,8 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
         capture_pageview: true,
         capture_pageleave: true,
       });
+
+      console.log('🚀 ~ posthog initialized');
     }
   }, []);
 
