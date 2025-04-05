@@ -17,6 +17,7 @@ export const getUserBySlug = async ({ slug }: { slug: string }) => {
         isEmailVerified: true,
         identityVerificationStatus: true,
         nudesCount: true,
+        lastSeenAt: true,
       },
     });
 

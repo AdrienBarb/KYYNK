@@ -57,6 +57,7 @@ const UserPage = async ({ params }: { params: { slug: string } }) => {
   const nudes = (await getUserNudesById({
     userId: user.id,
   })) as NudeFromPrisma[];
+
   const nudesWithPermissions = nudes.map((currentNude) =>
     formatNudeWithPermissions(currentNude, session?.user.id),
   ) as NudeWithPermissions[];

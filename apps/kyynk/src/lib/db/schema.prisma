@@ -38,7 +38,7 @@ model User {
   backIdentity                  String?
   frontAndFaceIdentity          String?
   watermarkId                   String?
-  lastLogin                     DateTime?
+  lastSeenAt                    DateTime?
   createdAt                     DateTime           @default(now())
   updatedAt                     DateTime           @updatedAt
   salesAsSeller                 Sale[]             @relation("SellerSales")

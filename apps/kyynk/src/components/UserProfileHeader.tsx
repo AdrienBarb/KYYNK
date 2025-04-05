@@ -53,6 +53,8 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
     createConversation({ slug });
   };
 
+  const isLoggedUserProfile = loggedUser?.slug === slug;
+
   return (
     <div className="flex flex-col items-center relative w-full box-border text-black gap-4">
       <Avatar size={164} imageId={user?.profileImageId} pseudo={user?.pseudo} />
@@ -64,11 +66,11 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
           <Text className="mt-2 text-center whitespace-pre-wrap">
             {user.description}
           </Text>
-          <OnlineStatus currentUser={user} />
+          {!isLoggedUserProfile && <OnlineStatus currentUser={user} />}
         </div>
       </div>
       <div className="flex gap-2 max-w-56 w-full">
-        {loggedUser?.slug !== slug && isUserVerified({ user }) && (
+        {!isLoggedUserProfile && isUserVerified({ user }) && (
           <Button
             onClick={handleClickOnDiscussButton}
             isLoading={isPending}

@@ -21,6 +21,7 @@ export type LoggedUserType = Pick<
   | 'identityVerificationStatus'
   | 'nudesCount'
   | 'contentProviderPolicyAccepted'
+  | 'lastSeenAt'
 > & {
   settings: Pick<
     UserSettings,
@@ -40,6 +41,7 @@ export type FetchedUserType = Pick<
   | 'isEmailVerified'
   | 'identityVerificationStatus'
   | 'nudesCount'
+  | 'lastSeenAt'
 >;
 
 export type ConversationUser = Pick<

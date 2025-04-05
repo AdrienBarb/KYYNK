@@ -20,7 +20,7 @@ import AgeVerificationModal from '@/components/modals/AgeVerificationModal';
 import PaymentModal from '@/components/modals/PaymentModal';
 import { AxiomWebVitals } from 'next-axiom';
 import NudeCreationModal from '@/components/modals/NudeCreationModal';
-
+import LoggedUserProvider from '@/components/provider/LoggedUserProvider';
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
@@ -105,9 +105,11 @@ const RootLayout: FC<Props> = async ({ children }) => {
             <body>
               <Toaster position="bottom-center" />
               <GlobalConfig>
-                <NuqsAdapter>
-                  <PostHogProvider>{children}</PostHogProvider>
-                </NuqsAdapter>
+                <LoggedUserProvider>
+                  <NuqsAdapter>
+                    <PostHogProvider>{children}</PostHogProvider>
+                  </NuqsAdapter>
+                </LoggedUserProvider>
               </GlobalConfig>
               <GlobalErrorProvider />
               <AgeVerificationModal />
