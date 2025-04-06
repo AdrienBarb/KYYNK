@@ -34,7 +34,7 @@ const dmcaPolicyPage = () => {
         <Text>
           If you believe your copyrighted work has been infringed on our
           platform, please send a DMCA takedown request to{' '}
-          <strong>dmca@kyynk.com</strong> with the following details:
+          <strong>legal@kyynk.com</strong> with the following details:
         </Text>
         <ul>
           <li>Your full name and contact information.</li>
@@ -58,7 +58,7 @@ const dmcaPolicyPage = () => {
         <Title Tag="h2">4. Counter-Notice Process</Title>
         <Text>
           If you believe your content was removed by mistake, you may file a
-          counter-notice to <strong>dmca@kyynk.com</strong> including:
+          counter-notice to <strong>legal@kyynk.com</strong> including:
         </Text>
         <ul>
           <li>Your full name and contact information.</li>
