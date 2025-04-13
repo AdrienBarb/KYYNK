@@ -1,30 +1,22 @@
 import React from 'react';
-import { useTranslations } from 'next-intl';
 import FeatureCard from '@/components/home/FeatureCard';
 import LandingHeader from '@/components/home/LandingHeader';
 
 const LandingFeatures = () => {
-  const t = useTranslations();
-
   return (
     <section className="max-w-3xl mx-auto py-16 px-4">
-      <LandingHeader title={t('home.earnWhile')} />
+      <LandingHeader title="EARN BY CREATING INTIMATE EXPERIENCES" />
       <div className="flex flex-col lg:flex-row justify-between items-center lg:items-start gap-8">
         <FeatureCard
-          icon="💸"
-          title={t('home.payToView')}
-          description={t('home.payToViewText')}
+          icon="💬"
+          title="Private Messaging"
+          description="Have real conversations with your fans. Every message is paid — every word counts."
         />
         <FeatureCard
-          icon="💬"
-          title={t('home.messaging')}
-          description={t('home.messagingText')}
+          icon="📸"
+          title="Custom Nudes"
+          description="Send unique, private nudes directly in the chat. Intimate, personal, and paid."
         />
-        {/* <FeatureCard
-          icon="💰"
-          title={t('home.tips')}
-          description={t('home.tipsText')}
-        /> */}
       </div>
     </section>
   );

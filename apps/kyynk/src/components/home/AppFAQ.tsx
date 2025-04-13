@@ -9,17 +9,27 @@ const AppFAQ: FC<Props> = ({}) => {
       {
         title: 'What is KYYNK?',
         content:
-          'KYYNK is a platform designed specifically for adult content creators to sell and monetize their content.',
+          'KYYNK is a platform where adult creators and fans connect through private conversations. No subscriptions, no spam — just real chats, custom nudes, and personal interactions.',
       },
       {
-        title: 'Who can create an account on KYYNK?',
+        title: 'How do I talk to a creator?',
         content:
-          'Anyone can create an account, as long as they are producing adult content.',
+          'You buy credits, choose a creator you like, and start chatting. Every message is personal. You can even request custom pictures in your conversation.',
       },
       {
-        title: 'What is the commission structure?',
+        title: 'How do creators earn money?',
         content:
-          'For the first three months, we don’t take any commission. After that period, a 10% commission is applied to cover our operational costs.',
+          'Creators earn credits for each message they send or nude they share. They can withdraw their earnings anytime. During the first 3 months, they keep 100% of what they earn.',
+      },
+      {
+        title: 'Is this anonymous and secure?',
+        content:
+          'Yes. Your data is encrypted and never shared. Billing is discreet. We verify all creators to ensure a safe and respectful environment.',
+      },
+      {
+        title: 'Who can become a creator on KYYNK?',
+        content:
+          'Anyone over 18 with verified ID can apply to join. We’re looking for confident, respectful people ready to build real connections with fans.',
       },
     ],
   };
