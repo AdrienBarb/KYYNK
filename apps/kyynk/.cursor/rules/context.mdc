@@ -1,15 +1,18 @@
 ---
-description: Giving context about the app I build.
+description: 
 globs: 
+alwaysApply: true
 ---
 # Kyynk - Cursor Rules
 
 ## Project Context
-**Kyynk** is an adult content social media platform where creators sell videos and photos using a virtual credit system.
+**Kyynk** is an adult content social media platform centered around private, personalized conversations between creators and members. The platform monetizes intimate interactions through a credit-based economy.
 
 ### Key Features:
 - Users can **buy and sell** videos using an internal credit system.
-- Payments are handled via **SEGPAY** for fiat transactions.
+- Users can chat in realtime with creators, exchange videos, voices notes
+- Creators can receive tips from users
+- Payments are handled via **COMMERCE GATE** for fiat transactions.
 - Videos are hosted on **api.video**; thumbnails on **S3 (imgx)**.
 - Authentication is managed with **NextAuth.js** (Credentials provider).
 - The backend is built using **Next.js App Router**, **Prisma**, and **Supabase**.
@@ -20,7 +23,7 @@ globs:
 - **Frontend:** Next.js 14 (App Router), React.js, Tailwind CSS
 - **Backend:** Node.js, Prisma ORM, Supabase
 - **Authentication:** NextAuth.js (Credentials provider)
-- **Payments:** Stripe for fiat transactions, internal credit system
+- **Payments:** Commerce Gate for fiat transactions, internal credit system
 - **Storage:** api.video (videos), S3 (imgx) for thumbnails
 - **State Management:** Zustand (where needed)
 - **Monorepo:** Turborepo (Kyynk)
