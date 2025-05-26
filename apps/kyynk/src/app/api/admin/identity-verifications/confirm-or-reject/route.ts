@@ -9,7 +9,7 @@ import IdentityRejectedEmail from '@kyynk/transactional/emails/IdentityRejectedE
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { CONTACT_EMAIL } from '@/constants/constants';
 import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
-import { VerificationStatus } from '@prisma/client';
+import { VerificationStatus } from '@/generated/prisma';
 
 const confirmOrReject = z.object({
   userId: z.string(),

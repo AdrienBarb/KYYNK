@@ -6,7 +6,7 @@ import { updateUser } from '@/services/users/updateUser';
 import { NextResponse, NextRequest } from 'next/server';
 import { createWatermark } from '@/utils/users/createWatermark';
 import { updateUserSchema } from '@/schemas/users/updateUserSchema';
-import { UserType } from '@prisma/client';
+import { UserType } from '@/generated/prisma';
 import { isBefore, subMinutes } from 'date-fns';
 import { prisma } from '@/lib/db/client';
 

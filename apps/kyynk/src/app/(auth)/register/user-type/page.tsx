@@ -8,7 +8,7 @@ import { useUser } from '@/hooks/users/useUser';
 import { appRouter } from '@/constants/appRouter';
 import { apiRouter } from '@/constants/apiRouter';
 import Title from '@/components/ui/Title';
-import { User } from '@prisma/client';
+import { User } from '@/generated/prisma';
 
 const SignUpPage = () => {
   const [userType, setUserType] = useState('');

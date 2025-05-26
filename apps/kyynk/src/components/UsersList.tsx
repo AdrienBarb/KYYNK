@@ -2,7 +2,7 @@
 
 import React, { FC } from 'react';
 import useApi from '@/hooks/requests/useApi';
-import { User } from '@prisma/client';
+import { User } from '@/generated/prisma';
 import { cn } from '@/utils/tailwind/cn';
 import UserCard from './users/UserCard';
 

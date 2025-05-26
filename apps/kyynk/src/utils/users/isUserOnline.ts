@@ -1,5 +1,5 @@
 import { differenceInMinutes } from 'date-fns';
-import { User } from '@prisma/client';
+import { User } from '@/generated/prisma';
 
 export const isUserOnline = (user: User): boolean => {
   if (!user?.lastSeenAt) return false;

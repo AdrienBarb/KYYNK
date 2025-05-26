@@ -18,8 +18,8 @@ const Landing = async () => {
             REAL CONVERSATIONS. PRIVATE MOMENTS.
           </h1>
           <h2 className="text-xl font-light font-karla text-secondary mt-4">
-            Chat one-on-one with the hottest creators. Voice notes, nudes, and
-            personal replies — just for you.
+            Chat one-on-one with the hottest creators. Nudes, and personal
+            replies — just for you.
           </h2>
 
           <div className="mt-4">

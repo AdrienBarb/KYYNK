@@ -37,7 +37,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select';
-import { User } from '@prisma/client';
+import { User } from '@/generated/prisma';
 import axios from 'axios';
 import { Pencil } from 'lucide-react';
 

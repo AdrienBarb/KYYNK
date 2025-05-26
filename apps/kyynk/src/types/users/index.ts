@@ -1,4 +1,4 @@
-import { User, UserSettings } from '@prisma/client';
+import { User, UserSettings } from '@/generated/prisma';
 
 export type LoggedUserType = Pick<
   User,

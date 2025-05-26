@@ -1,7 +1,7 @@
 import UsersList from '@/components/UsersList';
 import React from 'react';
 import { getUsers } from '@/services/users/getUsers';
-import { User } from '@prisma/client';
+import { User } from '@/generated/prisma';
 import PaddingContainer from '@/components/layout/PaddingContainer';
 const UsersPage = async () => {
   const initialUsersDatas = (await getUsers()) as User[];
