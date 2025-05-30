@@ -83,10 +83,8 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
           paymentMethod: 'credit-card',
         },
         Callbacks: {
-          onSuccessUrl:
-            'https://b02a-2001-861-43c1-e8e0-b88d-4372-d5ab-37bc.ngrok-free.app/api/payment/success',
-          onFailUrl:
-            'https://b02a-2001-861-43c1-e8e0-b88d-4372-d5ab-37bc.ngrok-free.app/api/payment/fail',
+          onSuccessUrl: process.env.CLIENT_URL + '/api/payment/success',
+          onFailUrl: process.env.CLIENT_URL + '/api/payment/fail',
         },
       },
       {
