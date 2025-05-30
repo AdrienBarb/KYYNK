@@ -14,8 +14,7 @@
     "cypress:run:staging": "CYPRESS_ENV=staging npx cypress run",
     "type-check": "tsc --noEmit",
     "prisma:generate": "prisma generate --schema=src/lib/db/schema.prisma",
-    "prisma:migrate:deploy": "prisma migrate deploy --schema=src/lib/db/schema.prisma",
-    "postinstall": "prisma generate"
+    "prisma:migrate:deploy": "prisma migrate deploy --schema=src/lib/db/schema.prisma"
   },
   "prisma": {
     "schema": "src/lib/db/schema.prisma",
