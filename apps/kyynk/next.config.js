@@ -1,6 +1,5 @@
 import createNextIntlPlugin from 'next-intl/plugin';
 import { withAxiom } from 'next-axiom';
-import { PrismaPlugin } from '@prisma/nextjs-monorepo-workaround-plugin';
 
 const withNextIntl = createNextIntlPlugin('./src/lib/i18n/request.ts');
 
@@ -14,10 +13,6 @@ const nextConfig = {
   webpack: (config, { dev, isServer }) => {
     if (!dev && !isServer) {
       config.devtool = false;
-    }
-
-    if (isServer) {
-      config.plugins = [...config.plugins, new PrismaPlugin()];
     }
 
     return config;
