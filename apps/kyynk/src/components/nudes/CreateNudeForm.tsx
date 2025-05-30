@@ -25,7 +25,7 @@ import Text from '@/components/ui/Text';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import { Pencil } from 'lucide-react';
-import type { Media } from '@prisma/client';
+import type { Media } from '@/generated/prisma';
 import { nudeSchema } from '@/schemas/nudeSchema';
 import CustomSlider from '../CustomSlider';
 import imgixLoader from '@/lib/imgix/loader';
@@ -214,10 +214,10 @@ const CreateNudeForm: FC<Props> = ({
                       backgroundColor: isDisabled
                         ? undefined
                         : isSelected
-                        ? '#d9d7f6'
-                        : isFocused
-                        ? '#d9d7f6'
-                        : undefined,
+                          ? '#d9d7f6'
+                          : isFocused
+                            ? '#d9d7f6'
+                            : undefined,
                     }),
                     menuList: (styles) => ({
                       ...styles,

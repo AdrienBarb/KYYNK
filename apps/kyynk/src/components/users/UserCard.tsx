@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import imgixLoader from '@/lib/imgix/loader';
-import { User } from '@prisma/client';
+import { User } from '@/generated/prisma';
 import Link from 'next/link';
 
 interface Props {

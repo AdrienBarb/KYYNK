@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/db/client';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { checkOrCreateSlug } from '@/utils/users/checkOrCreateSlug';
-import { Prisma, User } from '@prisma/client';
+import { Prisma, User } from '@/generated/prisma';
 import { z } from 'zod';
 import { updateUserSchema } from '@/schemas/users/updateUserSchema';
 

@@ -33,9 +33,9 @@ const PaymentModal = () => {
   const { refetch } = useUser();
 
   const { mutate: buyCredit, isPending } = usePost('/api/payment', {
-    onSuccess: () => {
+    onSuccess: (data: { forwardUrl: string }) => {
+      window.location.href = data.forwardUrl;
       closeModal();
-      refetch();
     },
   });
 
@@ -50,7 +50,10 @@ const PaymentModal = () => {
 
   const handleBuy = () => {
     if (selectedPackageId !== null) {
-      buyCredit({ packageId: selectedPackageId });
+      buyCredit({
+        packageId: selectedPackageId,
+        currentUrl: window.location.href,
+      });
     }
   };
 
@@ -83,8 +86,8 @@ const PaymentModal = () => {
                   onClick={() => setSelectedPackageId(pkg.id)}
                 >
                   <h3 className="text-lg font-bold">{pkg.name}</h3>
-                  <p>Price: ${pkg.price / 100}</p>
-                  <p>Coins: {pkg.coinsAmount}</p>
+                  <p>Price: {pkg.price / 100} €</p>
+                  <p>Coins: {pkg.coinsAmount / 100}</p>
                 </div>
               </CarouselItem>
             ))}

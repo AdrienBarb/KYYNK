@@ -1,85 +1,123 @@
 ---
-description: Fetching and making mutation
+description: 
 globs: 
+alwaysApply: false
 ---
+# API Integration Rules with useApi Hook
 
-You are an expert full-stack developer proficient in TypeScript, React, Next.js, and modern UI/UX frameworks (e.g., Tailwind CSS, Shadcn UI, Radix UI). Your task is to produce the most optimized and maintainable Next.js code, following best practices and adhering to the principles of clean code and robust architecture.
+## Overview
 
-### Objective
-- All API calls in the project must be handled using the custom `useApi` hook, which leverages Axios and TanStack React Query for data fetching and mutations.
+The `useApi` hook is our centralized solution for handling all API interactions, built on top of Axios and TanStack React Query. This hook provides a consistent, type-safe approach to data fetching and state management.
 
-### Code Style and Structure
-- Write concise, technical TypeScript code with proper typings.
-- Use functional and declarative programming patterns; avoid classes.
-- Use arrow functions for all components.
-- Type every component using `FC<Props>`.
-- Favor modularization over code duplication.
-- Use descriptive variable names (e.g., `isLoading`, `hasError`, `fetchUsers`).
+## Core Features
 
-### Error Handling and Validation
-- Prioritize proper error handling and edge cases in API interactions.
-- Use early returns to handle errors efficiently.
-- Implement guard clauses to check for missing or invalid API parameters.
-- Use a centralized `errorHandler` function to ensure consistency.
-- Validate all incoming data with **Zod** before processing API responses.
+- **Type-safe API calls** with built-in error handling
+- **Automatic caching and revalidation** via React Query
+- **Loading and error states** management
+- **Infinite scroll** support
+- **Optimistic updates** capabilities
 
-### UI and Styling
-- Use Tailwind CSS for styling API-related components.
-- Ensure UI components handle API loading states (`isLoading`).
-- Maintain a responsive and consistent design across devices.
+## Available Methods
 
-### State Management
-- Use Zustand for managing global state when needed.
-- Avoid unnecessary local state when API responses already contain the required data.
+### 1. Data Fetching (useGet)
 
-### API Data Fetching and Mutations
-- Use the `useApi` hook for all API requests.
-- Do **not** use direct Axios calls; always rely on the centralized `useApi`.
-- Ensure `useApi` functions follow the correct naming and usage:
-  - `useGet(url, params, options)`: Fetch data.
-  - `usePost(url, options)`: Create new data.
-  - `usePut(url, options)`: Update existing data.
-  - `useInfinite(queryKey, url, params, options)`: Fetch paginated data.
-
-#### ✅ Correct Example (Fetching Data)
-
+```typescript
 const { useGet } = useApi();
-const { data: users, isLoading } = useGet('/api/users', {}, { refetchOnWindowFocus: true });
+const { data, isLoading, error } = useGet(
+  '/api/endpoint',
+  { queryParam: 'value' }, // Optional query parameters
+  {
+    // ... other React Query options
+  },
+);
+```
 
-if (isLoading) return <LoadingSpinner />;
-return <UserList users={users} />;
+### 2. Data Creation (usePost)
 
-#### ✅ Correct Example (Mutation - POST)
-
+```typescript
 const { usePost } = useApi();
-const { mutate: createUser, isPending } = usePost('/api/users', {
-  onSuccess: () => refetch(),
+const { mutate: createData, isPending } = usePost('/api/endpoint', {
+  onSuccess: (data) => {
+    // Handle success
+  },
+  onError: (error) => {
+    // Handle error
+  },
 });
 
-const handleSubmit = (formData) => {
-  createUser(formData);
-};
+// Usage
+createData(payload);
+```
 
-#### ✅ Correct Example (Mutation - PUT)
+### 3. Data Updates (usePut)
 
+```typescript
 const { usePut } = useApi();
-const { mutate: updateUser, isPending } = usePut('/api/users');
+const { mutate: updateData } = usePut('/api/endpoint', {
+  onSuccess: (data) => {
+    // Handle success
+  },
+});
 
-updateUser({ id: 1, name: 'Updated Name' });
+// Usage
+updateData({ id: 1, ...updatePayload });
+```
 
-#### ✅ Correct Example (Infinite Scroll)
+### 4. Infinite Scrolling (useInfinite)
 
+```typescript
 const { useInfinite } = useApi();
-const { data, fetchNextPage, hasNextPage } = useInfinite('users', '/api/users', {});
-
-return (
-  <div>
-    {data.pages.map((page) => (
-      page.items.map((user) => <UserCard key={user.id} user={user} />)
-    ))}
-    {hasNextPage && <button onClick={fetchNextPage}>Load More</button>}
-  </div>
+const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfinite(
+  'uniqueQueryKey',
+  '/api/endpoint',
+  { limit: 10 }, // Pagination parameters
+  {
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+  },
 );
+```
 
+## Best Practices
 
+1. **Optimistic Updates**
 
+```typescript
+const { usePut } = useApi();
+const { mutate } = usePut('/api/endpoint', {
+  onMutate: async (newData) => {
+    // Cancel outgoing refetches
+    await queryClient.cancelQueries({ queryKey: ['your-query'] });
+
+    // Snapshot previous value
+    const previousData = queryClient.getQueryData(['your-query']);
+
+    // Optimistically update
+    queryClient.setQueryData(['your-query'], newData);
+
+    return { previousData };
+  },
+  onError: (err, newData, context) => {
+    // Rollback on error
+    queryClient.setQueryData(['your-query'], context.previousData);
+  },
+});
+```
+
+2. **Dependent Queries**
+
+```typescript
+const { data: user } = useGet('/api/user');
+const { data: userPosts } = useGet(
+  `/api/posts/${user?.id}`,
+  {},
+  { enabled: !!user },
+);
+```
+
+## Common Gotchas
+
+1. Avoid direct axios calls - always use the `useApi` hook methods
+2. Don't forget to handle loading and error states
+3. Use proper query keys for caching and invalidation
+4. Consider implementing retry logic for failed requests
+5. Be mindful of unnecessary refetches

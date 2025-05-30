@@ -15,17 +15,17 @@ const Landing = async () => {
             data-id="homepage-title"
             className="text-4xl lg:text-5xl font-bold font-rubik text-secondary"
           >
-            GET CLOSER THAN EVER TO THE HOTTEST CREATORS
+            REAL CONVERSATIONS. PRIVATE MOMENTS.
           </h1>
-          <h2 className="text-xl font-light font-karla text-secondary">
-            Unlock and enjoy exclusive content, connect directly with creators,
-            and more.
+          <h2 className="text-xl font-light font-karla text-secondary mt-4">
+            Chat one-on-one with the hottest creators. Nudes, and personal
+            replies — just for you.
           </h2>
 
           <div className="mt-4">
             <Button variant="secondary" asChild>
               <Link href={session ? appRouter.models : appRouter.login}>
-                Let&apos;s get nasty
+                Start Chatting
               </Link>
             </Button>
           </div>

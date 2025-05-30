@@ -6,7 +6,9 @@ import { updateUser } from '@/services/users/updateUser';
 import { NextResponse, NextRequest } from 'next/server';
 import { createWatermark } from '@/utils/users/createWatermark';
 import { updateUserSchema } from '@/schemas/users/updateUserSchema';
-import { UserType } from '@prisma/client';
+import { UserType } from '@/generated/prisma';
+import { isBefore, subMinutes } from 'date-fns';
+import { prisma } from '@/lib/db/client';
 
 export const PUT = strictlyAuth(async (req: NextRequest) => {
   try {
@@ -54,6 +56,25 @@ export const GET = strictlyAuth(async (req: NextRequest) => {
     }
 
     const user = await getCurrentUser({ userId });
+
+    if (!user) {
+      return NextResponse.json(
+        { error: errorMessages.USER_NOT_FOUND },
+        { status: 404 },
+      );
+    }
+
+    const now = new Date();
+    const threshold = subMinutes(now, 2);
+
+    if (!user.lastSeenAt || isBefore(user.lastSeenAt, threshold)) {
+      await prisma.user.update({
+        where: { id: userId },
+        data: { lastSeenAt: now },
+      });
+
+      user.lastSeenAt = now;
+    }
 
     return NextResponse.json(user, { status: 200 });
   } catch (error) {

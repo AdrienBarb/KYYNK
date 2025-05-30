@@ -27,7 +27,7 @@ import {
   FormSubLabel,
 } from '@/components/ui/Form';
 import Text from '@/components/ui/Text';
-import type { Media } from '@prisma/client';
+import type { Media } from '@/generated/prisma';
 import { Textarea } from '../ui/TextArea';
 import CustomSlider from '../CustomSlider';
 import { z } from 'zod';

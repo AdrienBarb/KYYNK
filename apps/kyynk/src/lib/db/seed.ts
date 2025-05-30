@@ -1,4 +1,4 @@
-import { PrismaClient, UserType, VerificationStatus } from '@prisma/client';
+import { PrismaClient, UserType, VerificationStatus } from '@/generated/prisma';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import bcrypt from 'bcryptjs';

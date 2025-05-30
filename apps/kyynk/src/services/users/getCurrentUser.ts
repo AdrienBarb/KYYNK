@@ -9,6 +9,7 @@ export const getCurrentUser = async ({ userId }: { userId: string }) => {
       select: {
         id: true,
         pseudo: true,
+        email: true,
         slug: true,
         userType: true,
         description: true,
@@ -27,6 +28,7 @@ export const getCurrentUser = async ({ userId }: { userId: string }) => {
         nudesCount: true,
         watermarkId: true,
         contentProviderPolicyAccepted: true,
+        lastSeenAt: true,
         settings: {
           select: {
             fiatMessage: true,

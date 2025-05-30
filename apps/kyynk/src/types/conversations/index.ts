@@ -1,4 +1,4 @@
-import { Conversation, User } from '@prisma/client';
+import { Conversation, User } from '@/generated/prisma';
 import { ConversationUser } from '../users';
 
 export type ConversationType = Pick<
