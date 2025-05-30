@@ -12,9 +12,7 @@
     "cypress:run": "CYPRESS_ENV=development npx cypress run",
     "cypress:open:staging": "CYPRESS_ENV=staging npx cypress open",
     "cypress:run:staging": "CYPRESS_ENV=staging npx cypress run",
-    "type-check": "tsc --noEmit",
-    "prisma:generate": "prisma generate --schema=apps/kyynk/src/lib/db/schema.prisma",
-    "prisma:migrate:deploy": "prisma migrate deploy --schema=apps/kyynk/src/lib/db/schema.prisma"
+    "type-check": "tsc --noEmit"
   },
   "prisma": {
     "schema": "src/lib/db/schema.prisma",

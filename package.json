@@ -20,7 +20,9 @@
     "build": "turbo run build",
     "start": "turbo run start",
     "lint": "turbo run lint",
-    "clean": "pnpm -r exec rm -rf dist node_modules .turbo .next"
+    "clean": "pnpm -r exec rm -rf dist node_modules .turbo .next",
+    "prisma:generate": "prisma generate --schema=apps/kyynk/src/lib/db/schema.prisma",
+    "prisma:migrate:deploy": "prisma migrate deploy --schema=apps/kyynk/src/lib/db/schema.prisma"
   },
   "dependencies": {
     "@types/react": "^18",
