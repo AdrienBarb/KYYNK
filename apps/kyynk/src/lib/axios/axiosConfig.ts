@@ -56,8 +56,6 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(message);
     }
 
-    console.log('🚀 ~ errorStatus:', errorStatus);
-
     if (errorStatus === 401) {
       let message = error.response?.data?.message || 'Need to login';
       if (isServer) {

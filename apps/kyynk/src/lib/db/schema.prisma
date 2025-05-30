@@ -50,6 +50,7 @@ model User {
   messages                      Message[]
   settings                      UserSettings?
   feeFreeUntil                  DateTime           @default(dbgenerated("now() + interval '3 months'"))
+  transactions                  Transaction[]
 }
 
 model UserToken {
@@ -163,6 +164,25 @@ model UserSettings {
   updatedAt       DateTime @updatedAt
   bankAccountName String?
   iban            String?
+}
+
+model Transaction {
+  id           String            @id @default(cuid())
+  userId       String
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  creditAmount Int
+  fiatAmount   Int
+  currency     String
+  status       TransactionStatus @default(pending)
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+}
+
+enum TransactionStatus {
+  pending
+  success
+  failed
+  refunded
 }
 
 enum UserType {
