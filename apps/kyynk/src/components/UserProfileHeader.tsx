@@ -2,7 +2,7 @@
 
 import React, { FC } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Conversation, User } from '@/generated/prisma';
+import { Conversation, User } from '@prisma/client';
 import useApi from '@/hooks/requests/useApi';
 import Avatar from './ui/Avatar';
 import Text from '@/components/ui/Text';

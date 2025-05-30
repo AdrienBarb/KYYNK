@@ -5,7 +5,7 @@ import Image from 'next/image';
 import useApi from '@/hooks/requests/useApi';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/utils/tailwind/cn';
-import type { Media } from '@/generated/prisma';
+import type { Media } from '@prisma/client';
 import Text from '@/components/ui/Text';
 import imgixLoader from '@/lib/imgix/loader';
 

@@ -1,4 +1,4 @@
-import { Nude, User, Media } from '@/generated/prisma';
+import { Nude, User, Media } from '@prisma/client';
 
 export type NudeFromPrisma = Pick<
   Nude,

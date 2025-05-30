@@ -1,4 +1,4 @@
-import { Message } from '@/generated/prisma';
+import { Message } from '@prisma/client';
 import { NudeFromPrisma, NudeWithPermissions } from '../nudes';
 
 export type MessageType = Pick<

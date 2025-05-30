@@ -14,7 +14,7 @@ import { Button } from '../ui/Button';
 import MediasGallery from '../nudes/MediasGallery';
 import Text from '../ui/Text';
 import toast from 'react-hot-toast';
-import type { Media } from '@/generated/prisma';
+import type { Media } from '@prisma/client';
 import CreateNudeForm from '@/components/nudes/CreateNudeForm';
 import { NudeWithPermissions } from '@/types/nudes';
 import NudeCard from '@/components/nudes/NudeCard';
