@@ -8,7 +8,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { VideoUploader } from '@api.video/video-uploader';
 import toast from 'react-hot-toast';
 import Text from '@/components/ui/Text';
-import type { Media } from '@/generated/prisma';
+import type { Media } from '@prisma/client';
 import { NudeCreationStepsType } from '@/components/modals/NudeCreationModal';
 
 interface MediasGalleryProps {

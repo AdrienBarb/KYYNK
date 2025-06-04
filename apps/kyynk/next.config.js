@@ -14,6 +14,7 @@ const nextConfig = {
     if (!dev && !isServer) {
       config.devtool = false;
     }
+
     return config;
   },
   images: {

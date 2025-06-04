@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { enUS } from 'date-fns/locale';
-import { User } from '@/generated/prisma';
+import { User } from '@prisma/client';
 import Text from '@/components/ui/Text';
 import { isUserOnline } from '@/utils/users/isUserOnline';
 

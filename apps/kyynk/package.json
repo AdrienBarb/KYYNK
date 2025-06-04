@@ -12,7 +12,9 @@
     "cypress:run": "CYPRESS_ENV=development npx cypress run",
     "cypress:open:staging": "CYPRESS_ENV=staging npx cypress open",
     "cypress:run:staging": "CYPRESS_ENV=staging npx cypress run",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "prisma:generate": "prisma generate --schema=src/lib/db/schema.prisma",
+    "prisma:migrate:deploy": "prisma migrate deploy --schema=src/lib/db/schema.prisma"
   },
   "prisma": {
     "schema": "src/lib/db/schema.prisma",
@@ -36,6 +38,7 @@
     "@mui/lab": "^5.0.0-alpha.160",
     "@mui/material": "^5.15.4",
     "@prisma/client": "6.8.2",
+    "@prisma/nextjs-monorepo-workaround-plugin": "^6.8.2",
     "@radix-ui/react-alert-dialog": "^1.1.4",
     "@radix-ui/react-aspect-ratio": "^1.1.0",
     "@radix-ui/react-avatar": "^1.1.1",

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { errorHandler } from '@/utils/errors/errorHandler';
 import { prisma } from '@/lib/db/client';
 import { errorMessages } from '@/lib/constants/errorMessage';
-import { TransactionStatus } from '@/generated/prisma';
+import { TransactionStatus } from '@prisma/client';
 
 export const POST = async (req: NextRequest) => {
   try {

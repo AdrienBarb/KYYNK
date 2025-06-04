@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/db/client';
 import { calculateNetRevenue } from '@/utils/revenues/calculateNetRevenue';
-import { Sale } from '@/generated/prisma';
+import { Sale } from '@prisma/client';
 import { isBefore } from 'date-fns';
 
 export const getUserRevenues = async ({
