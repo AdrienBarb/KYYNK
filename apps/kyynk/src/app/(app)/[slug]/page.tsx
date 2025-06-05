@@ -18,11 +18,15 @@ import { NudeFromPrisma, NudeWithPermissions } from '@/types/nudes';
 import { FetchedUserType } from '@/types/users';
 import imgixLoader from '@/lib/imgix/loader';
 
+export type PageProps = {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
 export async function generateMetadata({
-  params: { slug },
-}: {
-  params: { slug: string };
-}): Promise<Metadata | undefined> {
+  params,
+}: PageProps): Promise<Metadata | undefined> {
+  const { slug } = await params;
   const user = await getUserBySlug({ slug });
 
   const imageUrl = imgixLoader({
@@ -39,13 +43,8 @@ export async function generateMetadata({
   });
 }
 
-interface PageProps {
-  params: Record<string, string>;
-  searchParams?: Record<string, string | string[]>;
-}
-
 const UserPage = async ({ params }: PageProps) => {
-  const { slug } = params;
+  const { slug } = await params;
   const t = await getTranslations();
   const session = await auth();
 
