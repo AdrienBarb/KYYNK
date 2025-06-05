@@ -39,7 +39,12 @@ export async function generateMetadata({
   });
 }
 
-const UserPage = async ({ params }: { params: { slug: string } }) => {
+interface PageProps {
+  params: Record<string, string>;
+  searchParams?: Record<string, string | string[]>;
+}
+
+const UserPage = async ({ params }: PageProps) => {
   const { slug } = params;
   const t = await getTranslations();
   const session = await auth();
