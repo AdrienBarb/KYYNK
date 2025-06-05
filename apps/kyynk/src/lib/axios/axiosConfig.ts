@@ -4,13 +4,7 @@ import { useErrorStore } from '@/stores/ErrorStore';
 
 const isServer = typeof window === 'undefined';
 
-const axiosInstance = axios.create({
-  headers: {
-    'Cache-Control': 'no-cache',
-    Pragma: 'no-cache',
-    Expires: '0',
-  },
-});
+const axiosInstance = axios.create();
 
 axiosInstance.interceptors.response.use(
   (response) => {
