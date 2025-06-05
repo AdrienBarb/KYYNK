@@ -22,6 +22,8 @@ const UsersList: FC<Props> = ({ initialUsers }) => {
     },
   );
 
+  console.log('🚀 ~ users:', users);
+
   return (
     <div
       className={cn(
