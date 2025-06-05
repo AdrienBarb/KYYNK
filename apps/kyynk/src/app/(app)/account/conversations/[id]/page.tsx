@@ -10,12 +10,13 @@ import { MessageType } from '@/types/messages';
 import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
 import { NudeFromPrisma } from '@/types/nudes';
 
-const CurrentConversationPage = async ({
-  params,
-}: {
-  params: { id: string };
-}) => {
-  const { id } = params;
+export type PageProps = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+const CurrentConversationPage = async ({ params }: PageProps) => {
+  const { id } = await params;
   const session = await auth();
   const conversation = (await getConversationById({
     conversationId: id,

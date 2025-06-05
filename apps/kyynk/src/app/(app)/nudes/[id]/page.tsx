@@ -4,11 +4,15 @@ import { redirect } from 'next/navigation';
 import imgixLoader from '@/lib/imgix/loader';
 import { getNudeById } from '@/services/nudes/getNudesById';
 
+export type PageProps = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
 export async function generateMetadata({
-  params: { id },
-}: {
-  params: { id: string };
-}): Promise<Metadata | undefined> {
+  params,
+}: PageProps): Promise<Metadata | undefined> {
+  const { id } = await params;
   const nude = await getNudeById({ nudeId: id });
 
   if (!nude) {
@@ -30,7 +34,8 @@ export async function generateMetadata({
   });
 }
 
-const NudePage = async ({ params: { id } }: { params: { id: string } }) => {
+const NudePage = async ({ params }: PageProps) => {
+  const { id } = await params;
   const nude = await getNudeById({ nudeId: id });
 
   if (!nude) {

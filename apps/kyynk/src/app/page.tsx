@@ -8,11 +8,15 @@ import ModelOffer from '@/components/home/ModelOffer';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
+export type PageProps = {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
 export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: string };
-}): Promise<Metadata | undefined> {
+  params,
+}: PageProps): Promise<Metadata | undefined> {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'metadata' });
 
   return genPageMetadata({
