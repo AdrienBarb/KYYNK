@@ -31,6 +31,7 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
     {
       initialData: initialUserDatas,
       refetchOnWindowFocus: true,
+      staleTime: 0,
     },
   );
 

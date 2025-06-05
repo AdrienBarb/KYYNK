@@ -32,6 +32,7 @@ const UserNudes: FC<Props> = ({ initialNudes, user }) => {
     {
       initialData: initialNudes,
       refetchOnWindowFocus: true,
+      staleTime: 0,
     },
   );
 
