@@ -12,61 +12,63 @@ const formSchema = nudeSchema.extend({
   mediaId: z.string(),
 });
 
-export const POST = strictlyAuth(async (req: NextRequest) => {
-  try {
-    const { auth } = req;
-    const userId = auth?.user.id;
+export const POST = strictlyAuth(
+  async (req: NextRequest, context: { params: { id: string } }) => {
+    try {
+      const { auth } = req;
+      const userId = auth?.user.id;
 
-    const body = await req.json();
-    const payload = formSchema.parse(body);
+      const body = await req.json();
+      const payload = formSchema.parse(body);
 
-    const { creditPrice, fiatPrice } = getCreditsWithFiat(payload.price);
+      const { creditPrice, fiatPrice } = getCreditsWithFiat(payload.price);
 
-    const newNude = await prisma.nude.create({
-      data: {
-        media: {
-          connect: {
-            id: payload.mediaId,
+      const newNude = await prisma.nude.create({
+        data: {
+          media: {
+            connect: {
+              id: payload.mediaId,
+            },
           },
-        },
-        user: {
-          connect: {
-            id: userId,
+          user: {
+            connect: {
+              id: userId,
+            },
           },
+          description: payload.description,
+          fiatPrice: fiatPrice,
+          creditPrice: creditPrice,
+          tags: payload.tags?.map((tag) => tag.value) || [],
+          currency: 'EUR',
         },
-        description: payload.description,
-        fiatPrice: fiatPrice,
-        creditPrice: creditPrice,
-        tags: payload.tags?.map((tag) => tag.value) || [],
-        currency: 'EUR',
-      },
-      select: getNudeSelectFields(),
-    });
+        select: getNudeSelectFields(),
+      });
 
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { tags: true },
-    });
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { tags: true },
+      });
 
-    const updatedTags = Array.from(
-      new Set([
-        ...(user?.tags || []),
-        ...(payload.tags?.map((tag) => tag.value) || []),
-      ]),
-    );
+      const updatedTags = Array.from(
+        new Set([
+          ...(user?.tags || []),
+          ...(payload.tags?.map((tag) => tag.value) || []),
+        ]),
+      );
 
-    await prisma.user.update({
-      where: { id: userId },
-      data: {
-        nudesCount: { increment: 1 },
-        tags: updatedTags,
-      },
-    });
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          nudesCount: { increment: 1 },
+          tags: updatedTags,
+        },
+      });
 
-    const formattedNude = formatNudeWithPermissions(newNude, userId);
+      const formattedNude = formatNudeWithPermissions(newNude, userId);
 
-    return NextResponse.json(formattedNude, { status: 201 });
-  } catch (error) {
-    return errorHandler(error);
-  }
-});
+      return NextResponse.json(formattedNude, { status: 201 });
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
+);
