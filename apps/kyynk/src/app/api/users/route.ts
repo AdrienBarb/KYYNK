@@ -1,6 +1,6 @@
 import { errorHandler } from '@/utils/errors/errorHandler';
 import { getUsers } from '@/services/users/getUsers';
-import { noCacheJson } from '@/utils/api/noCacheJson';
+import { NextResponse } from 'next/server';
 
 export const GET = async (req: Request) => {
   try {
@@ -8,7 +8,7 @@ export const GET = async (req: Request) => {
 
     console.log('🚀 ~ GET ~ users:', users);
 
-    return noCacheJson(users, 200);
+    return NextResponse.json(users, { status: 200 });
   } catch (error) {
     return errorHandler(error);
   }
