@@ -3,7 +3,7 @@ import { headers } from 'next/headers';
 import { parse } from 'cookie';
 
 export default getRequestConfig(async () => {
-  const headersList = headers();
+  const headersList = await headers();
   const cookieHeader = headersList.get('cookie');
   const cookies = cookieHeader ? parse(cookieHeader) : {};
 
