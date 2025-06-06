@@ -9,11 +9,14 @@ import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissio
 import { NudeFromPrisma } from '@/types/nudes';
 
 export const GET = strictlyAuth(
-  async (req: NextRequest, { params }): Promise<NextResponse> => {
+  async (
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> },
+  ): Promise<NextResponse> => {
     try {
       const { auth } = req;
       const userId = auth?.user.id;
-      const { id: conversationId } = params;
+      const { id: conversationId } = await params;
 
       if (!conversationId) {
         return NextResponse.json(

@@ -5,11 +5,14 @@ import { strictlyAuth } from '@/hoc/strictlyAuth';
 import { prisma } from '@/lib/db/client';
 
 export const PUT = strictlyAuth(
-  async (req: NextRequest, { params }): Promise<NextResponse> => {
+  async (
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> },
+  ): Promise<NextResponse> => {
     try {
       const { auth } = req;
       const userId = auth?.user.id;
-      const nudeId = params.id;
+      const { id: nudeId } = await params;
 
       const nude = await prisma.nude.findUnique({
         where: {

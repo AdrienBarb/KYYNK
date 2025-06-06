@@ -5,10 +5,10 @@ import { NextResponse } from 'next/server';
 
 export const GET = async (
   req: Request,
-  context: { params: { slug: string } },
+  { params }: { params: Promise<{ slug: string }> },
 ) => {
   try {
-    const { slug } = context.params;
+    const { slug } = await params;
 
     if (!slug || Array.isArray(slug)) {
       return NextResponse.json(
