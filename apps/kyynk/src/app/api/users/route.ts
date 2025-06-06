@@ -6,8 +6,6 @@ export const GET = async (req: Request) => {
   try {
     const users = await getUsers();
 
-    console.log('🚀 ~ GET ~ users:', users);
-
     return NextResponse.json(users, { status: 200 });
   } catch (error) {
     return errorHandler(error);

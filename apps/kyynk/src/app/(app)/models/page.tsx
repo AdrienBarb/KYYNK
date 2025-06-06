@@ -7,8 +7,6 @@ import PaddingContainer from '@/components/layout/PaddingContainer';
 const UsersPage = async () => {
   const initialUsersDatas = (await getUsers()) as User[];
 
-  console.log('🚀 ~ UsersPage ~ initialUsersDatas:', initialUsersDatas);
-
   return (
     <PaddingContainer>
       <UsersList initialUsers={initialUsersDatas} />

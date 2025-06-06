@@ -19,11 +19,8 @@ const UsersList: FC<Props> = ({ initialUsers }) => {
     {
       initialData: initialUsers,
       refetchOnWindowFocus: true,
-      staleTime: 0,
     },
   );
-
-  console.log('🚀 ~ users:', users);
 
   return (
     <div
