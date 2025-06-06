@@ -31,10 +31,10 @@ const ConversationList: FC<Props> = ({ initConversations }) => {
       <AppMessage
         title="No Conversations"
         text="No conversation has been found."
+        emoji="😢"
       >
         <Button
           className="w-full"
-          variant="secondary"
           onClick={() => router.push(appRouter.models)}
         >
           Start Chatting

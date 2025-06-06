@@ -18,7 +18,6 @@ const AppLayout: FC<Props> = async ({ children }) => {
 
   const defaultOpen =
     (await getCookie('sidebar_state', { cookies })) === 'true';
-  console.log('🚀 ~ constAppLayout:FC<Props>= ~ defaultOpen:', defaultOpen);
 
   const isLoggedIn = !!session?.user;
 
