@@ -47,7 +47,7 @@ const ResetPasswordEmail = ({ link }: ResetPasswordEmailProps) => {
                 email.
               </Text>
               <Text className="mt-4">Best regards,</Text>
-              <Text>Your Company Team</Text>
+              <Text>KYYNK Team</Text>
             </Section>
           </Container>
         </Body>
