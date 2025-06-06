@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { withAdminSecret } from '@/hoc/api/withAdminSecret';
 import { errorHandler } from '@/utils/errors/errorHandler';
 
-export const GET = withAdminSecret(async (request: Request) => {
+export const GET = withAdminSecret(async (request: Request): Promise<any> => {
   try {
     const users = await prisma.user.findMany({
       where: {

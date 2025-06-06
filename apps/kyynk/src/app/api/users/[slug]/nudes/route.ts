@@ -10,7 +10,7 @@ import { NudeFromPrisma } from '@/types/nudes';
 export const GET = async (
   req: NextRequest,
   context: { params: { slug: string } },
-) => {
+): Promise<NextResponse> => {
   try {
     const session = await auth();
     const { slug } = context.params;
