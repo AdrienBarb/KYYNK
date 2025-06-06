@@ -8,7 +8,7 @@ import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
 import { checkOrCreateSlug } from '@/utils/users/checkOrCreateSlug';
 import bcrypt from 'bcryptjs';
 import { AuthError } from 'next-auth';
-import { isRedirectError } from 'next/dist/client/components/redirect';
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
 
 export async function register({
   pseudo,

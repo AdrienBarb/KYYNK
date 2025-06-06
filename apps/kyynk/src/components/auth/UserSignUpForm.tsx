@@ -85,6 +85,10 @@ const UserSignUpForm = () => {
         }
       } catch (error) {
         if (error instanceof Error) {
+          if (error.message === 'NEXT_REDIRECT') {
+            return;
+          }
+
           toast.error(error.message);
         }
       } finally {

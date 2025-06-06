@@ -3,7 +3,7 @@ import { signIn } from '@/auth';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { appRouter } from '@/constants/appRouter';
 import { AuthError } from 'next-auth';
-import { isRedirectError } from 'next/dist/client/components/redirect';
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
 
 export async function authenticate({
   email,
