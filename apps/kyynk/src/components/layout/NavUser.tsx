@@ -1,6 +1,13 @@
 'use client';
 
-import { BadgeCheck, ChevronsUpDown, Coins, LogOut, User } from 'lucide-react';
+import {
+  BadgeCheck,
+  ChevronsUpDown,
+  Coins,
+  HelpCircle,
+  LogOut,
+  User,
+} from 'lucide-react';
 
 import Avatar from '@/components/ui/Avatar';
 
@@ -95,6 +102,18 @@ export function NavUser() {
                 <Link href={appRouter.becomeCreator} className="font-karla">
                   <BadgeCheck />
                   Become a creator
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link
+                  href={
+                    process.env.NEXT_PUBLIC_CREATOR_TOOLKIT_NOTION_URL || ''
+                  }
+                  target="_blank"
+                  className="font-karla"
+                >
+                  <HelpCircle />
+                  Need help?
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
