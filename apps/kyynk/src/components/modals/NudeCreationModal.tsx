@@ -19,6 +19,7 @@ import CreateNudeForm from '@/components/nudes/CreateNudeForm';
 import { NudeWithPermissions } from '@/types/nudes';
 import NudeCard from '@/components/nudes/NudeCard';
 import { TelegramShareButton, TwitterShareButton } from 'react-share';
+import { useUser } from '@/hooks/users/useUser';
 
 export type NudeCreationStepsType =
   | 'form'
@@ -34,8 +35,9 @@ const NudeCreationModal = () => {
   const [createdNude, setCreatedNude] = useState<NudeWithPermissions | null>(
     null,
   );
+  const { user } = useUser();
 
-  const URL_TO_SHARE = `${process.env.NEXT_PUBLIC_BASE_URL}/nudes/${createdNude?.id}`;
+  const URL_TO_SHARE = `${process.env.NEXT_PUBLIC_BASE_URL}/${user?.slug}`;
 
   const handleCloseModal = () => {
     if (step === 'uploading') {
@@ -132,25 +134,21 @@ const NudeCreationModal = () => {
             <DialogHeader className="flex flex-col items-center">
               <DialogTitle>Success</DialogTitle>
               <DialogDescription>
-                You can now share your nude with your followers.
+                Share your profile to show your last nude to your followers.
               </DialogDescription>
             </DialogHeader>
             {createdNude && <NudeCard nude={createdNude} />}
             <div className="flex flex-col items-center justify-center w-full gap-2">
               <TwitterShareButton
                 url={URL_TO_SHARE}
-                title={
-                  createdNude?.description ?? 'Come discover this nude on KYYNK'
-                }
+                title="Come discover this profile on KYYNK"
                 style={{ width: '100%' }}
               >
                 <Button className="w-full">Share on Twitter</Button>
               </TwitterShareButton>
               <TelegramShareButton
                 url={URL_TO_SHARE}
-                title={
-                  createdNude?.description ?? 'Come discover this nude on KYYNK'
-                }
+                title="Come discover this profile on KYYNK"
                 style={{ width: '100%' }}
               >
                 <Button className="w-full">Share on Telegram</Button>

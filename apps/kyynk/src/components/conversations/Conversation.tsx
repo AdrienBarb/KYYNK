@@ -16,7 +16,6 @@ import NudeCard from '../nudes/NudeCard';
 import { cn } from '@/utils/tailwind/cn';
 import NudeModal from '@/components/modals/NudeModal';
 import { NudeWithPermissions } from '@/types/nudes';
-import { isCreator } from '@/utils/users/isCreator';
 import { UserType } from '@prisma/client';
 
 interface Props {

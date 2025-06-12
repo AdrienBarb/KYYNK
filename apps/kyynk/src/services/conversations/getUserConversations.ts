@@ -18,6 +18,7 @@ export const getUserConversations = async ({ userId }: { userId: string }) => {
             pseudo: true,
             slug: true,
             profileImageId: true,
+            userType: true,
           },
         },
         messages: {

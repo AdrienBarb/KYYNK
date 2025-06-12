@@ -41,7 +41,7 @@ const AvatarImage = React.forwardRef<
     alt?: string;
     size?: number;
   }
->(({ alt, imageId, size = 64 }) => {
+>(({ alt, imageId, size = 64 }, ref) => {
   const imageUrl = imgixLoader({
     src: imageId,
     width: size,
@@ -50,6 +50,7 @@ const AvatarImage = React.forwardRef<
 
   return (
     <Image
+      ref={ref}
       src={imageUrl}
       alt={alt ?? 'Image'}
       width={size}

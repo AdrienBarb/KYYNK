@@ -10,6 +10,7 @@ import {
   Sliders,
   BadgeEuro,
   User,
+  Dot,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -20,6 +21,7 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
@@ -38,9 +40,17 @@ import {
 } from '../ui/collapsible';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { isUserVerified } from '@/utils/users/isUserVerified';
+import useApi from '@/hooks/requests/useApi';
+import { ConversationType } from '@/types/conversations';
 
 export function AppSidebar() {
   const { user, isLoggedIn } = useUser();
+
+  const { useGet } = useApi();
+
+  const { data: conversations } = useGet('/api/conversations');
+
+  console.log('🚀 ~ AppSidebar ~ conversations:', conversations);
 
   const platforms = [
     {
@@ -54,12 +64,6 @@ export function AppSidebar() {
       url: appRouter.models,
       icon: UsersRound,
       isVisible: true,
-    },
-    {
-      title: 'Conversations',
-      url: appRouter.conversations,
-      icon: MessageCircle,
-      isVisible: !!user,
     },
   ];
 
@@ -173,6 +177,29 @@ export function AppSidebar() {
                         <span>{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+        {conversations && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Chats</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {conversations.map((conversation: ConversationType) => (
+                  <SidebarMenuItem key={conversation.id}>
+                    <SidebarMenuButton asChild>
+                      <Link href={`/account/conversations/${conversation.id}`}>
+                        <span>{conversation.participants[0].pseudo}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                    {conversation.hasUnreadMessages && (
+                      <SidebarMenuBadge>
+                        <Dot />
+                      </SidebarMenuBadge>
+                    )}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
