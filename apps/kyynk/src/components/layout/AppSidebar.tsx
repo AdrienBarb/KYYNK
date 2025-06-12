@@ -9,6 +9,7 @@ import {
   CreditCard,
   Sliders,
   BadgeEuro,
+  User,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -71,6 +72,12 @@ export function AppSidebar() {
   ];
 
   const settings = [
+    {
+      title: 'My Profile',
+      url: appRouter.myProfile,
+      icon: User,
+      isVisible: isLoggedIn(),
+    },
     {
       title: 'Conversations',
       url: appRouter.settingsConversations,

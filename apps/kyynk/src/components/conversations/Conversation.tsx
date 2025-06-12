@@ -16,6 +16,8 @@ import NudeCard from '../nudes/NudeCard';
 import { cn } from '@/utils/tailwind/cn';
 import NudeModal from '@/components/modals/NudeModal';
 import { NudeWithPermissions } from '@/types/nudes';
+import { isCreator } from '@/utils/users/isCreator';
+import { UserType } from '@prisma/client';
 
 interface Props {
   initialConversation: ConversationType;
@@ -52,7 +54,18 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
   return (
     <div className="flex flex-col" style={{ height: 'calc(100dvh - 68px)' }}>
       <div className="flex justify-between items-center mb-2 p-4">
-        <Link href={`/${otherUser?.slug}`}>
+        {otherUser?.userType === UserType.creator ? (
+          <Link href={`/${otherUser?.slug}`}>
+            <div className="flex items-center gap-2">
+              <Avatar
+                imageId={otherUser?.profileImageId}
+                pseudo={otherUser?.pseudo}
+                size={40}
+              />
+              <Text className="text-lg font-bold">{otherUser?.pseudo}</Text>
+            </div>
+          </Link>
+        ) : (
           <div className="flex items-center gap-2">
             <Avatar
               imageId={otherUser?.profileImageId}
@@ -61,7 +74,7 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
             />
             <Text className="text-lg font-bold">{otherUser?.pseudo}</Text>
           </div>
-        </Link>
+        )}
       </div>
 
       <div

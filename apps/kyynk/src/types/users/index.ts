@@ -46,7 +46,7 @@ export type FetchedUserType = Pick<
 
 export type ConversationUser = Pick<
   User,
-  'id' | 'pseudo' | 'profileImageId' | 'slug'
+  'id' | 'pseudo' | 'profileImageId' | 'slug' | 'userType'
 > & {
   settings?: Pick<UserSettings, 'creditMessage'>;
 };

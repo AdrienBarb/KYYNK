@@ -17,6 +17,7 @@ import PaddingContainer from '@/components/layout/PaddingContainer';
 import { NudeFromPrisma, NudeWithPermissions } from '@/types/nudes';
 import { FetchedUserType } from '@/types/users';
 import imgixLoader from '@/lib/imgix/loader';
+import { UserType } from '@prisma/client';
 
 export type PageProps = {
   params: Promise<{ slug: string }>;
@@ -51,6 +52,10 @@ const UserPage = async ({ params }: PageProps) => {
   const user = (await getUserBySlug({ slug })) as FetchedUserType;
 
   if (!user) {
+    redirect('/404');
+  }
+
+  if (user.userType === UserType.member) {
     redirect('/404');
   }
 

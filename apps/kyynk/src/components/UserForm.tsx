@@ -40,6 +40,7 @@ import {
 import { User } from '@prisma/client';
 import axios from 'axios';
 import { Pencil } from 'lucide-react';
+import { isCreator } from '@/utils/users/isCreator';
 
 const UserForm = () => {
   //router
@@ -57,10 +58,9 @@ const UserForm = () => {
   const [isUploading, setIsUploading] = useState(false);
 
   const { mutate: doPost, isPending } = usePut('/api/me', {
-    onSuccess: async (user: User) => {
+    onSuccess: async () => {
       refetch();
-
-      router.push(`/${user?.slug}`);
+      toast.success('Profile updated successfully!');
     },
   });
 
@@ -79,7 +79,6 @@ const UserForm = () => {
         /^[a-zA-Z0-9](?!.*[_.-]{2})[a-zA-Z0-9._-]*[a-zA-Z0-9]$/,
         'Pseudo can only contain letters, numbers, "_", "-", ".", and must not start or end with special characters.',
       ),
-    description: z.string().optional(),
     gender: z.string().optional(),
     bodyType: z.string().optional(),
     hairColor: z.string().optional(),
@@ -96,7 +95,6 @@ const UserForm = () => {
     if (user) {
       reset({
         pseudo: user.pseudo ?? '',
-        description: user.description ?? '',
       });
     }
   }, [user, reset]);
@@ -187,143 +185,133 @@ const UserForm = () => {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>{t('db.description')}</FormLabel>
-              <FormControl>
-                <Textarea {...field} className="text-base" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {isCreator({ user }) && (
+          <>
+            <div className="flex gap-8 w-full">
+              <FormField
+                control={form.control}
+                name="country"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="w-full">
+                      <FormLabel>{t('db.country')}</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value! ?? user?.country}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder={t('db.nothing')} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {countries.map((el) => {
+                              return (
+                                <SelectItem value={el.value} key={el.value}>
+                                  {t(`db.${el.label}`)}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>{t('db.gender')}</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value! ?? user?.gender}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('db.nothing')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {GENDER.map((el) => {
+                            return (
+                              <SelectItem value={el} key={el}>
+                                {t(`db.${el}`)}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex gap-8 w-full">
+              <FormField
+                control={form.control}
+                name="bodyType"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>{t('db.body_type')}</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value! ?? user?.bodyType}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('db.nothing')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {BODY_TYPE.map((el) => {
+                            return (
+                              <SelectItem value={el} key={el}>
+                                {t(`db.${el}`)}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        <div className="flex gap-8 w-full">
-          <FormField
-            control={form.control}
-            name="country"
-            render={({ field }) => {
-              return (
-                <FormItem className="w-full">
-                  <FormLabel>{t('db.country')}</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value! ?? user?.country}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('db.nothing')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {countries.map((el) => {
-                          return (
-                            <SelectItem value={el.value} key={el.value}>
-                              {t(`db.${el.label}`)}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-          <FormField
-            control={form.control}
-            name="gender"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>{t('db.gender')}</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value! ?? user?.gender}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={t('db.nothing')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {GENDER.map((el) => {
-                        return (
-                          <SelectItem value={el} key={el}>
-                            {t(`db.${el}`)}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="flex gap-8 w-full">
-          <FormField
-            control={form.control}
-            name="bodyType"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>{t('db.body_type')}</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value! ?? user?.bodyType}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={t('db.nothing')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {BODY_TYPE.map((el) => {
-                        return (
-                          <SelectItem value={el} key={el}>
-                            {t(`db.${el}`)}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="hairColor"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>{t('db.hair_color')}</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value! ?? user?.hairColor}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={t('db.nothing')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {HAIR_COLOR.map((el) => {
-                        return (
-                          <SelectItem value={el} key={el}>
-                            {t(`db.${el}`)}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+              <FormField
+                control={form.control}
+                name="hairColor"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>{t('db.hair_color')}</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value! ?? user?.hairColor}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('db.nothing')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {HAIR_COLOR.map((el) => {
+                            return (
+                              <SelectItem value={el} key={el}>
+                                {t(`db.${el}`)}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </>
+        )}
 
         <Button
           className="w-full"
