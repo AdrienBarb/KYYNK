@@ -1,4 +1,4 @@
-@import "library.scss";
+@use 'library.scss' as *;
 
 .container {
   width: 100%;

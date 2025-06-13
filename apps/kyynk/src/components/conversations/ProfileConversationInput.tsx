@@ -15,17 +15,18 @@ import { useCreateMessage } from '@/hooks/conversations/useCreateMessage';
 const ProfileConversationInput = ({ user }: { user: FetchedUserType }) => {
   const { slug } = useParams<{ slug: string }>();
   const router = useRouter();
-  const { user: loggedUser } = useUser();
+  const { user: loggedUser, refetch: refetchUser } = useUser();
   const [openNotEnoughCreditModal, setOpenNotEnoughCreditModal] =
     useState(false);
-  const { refetch } = useConversations();
+  const { refetch: refetchConversations } = useConversations();
 
   const { handleSendMessage, isPending } = useCreateMessage({
     user: loggedUser,
     otherUser: user,
     onNotEnoughCredits: () => setOpenNotEnoughCreditModal(true),
     onSuccess: (newConversation) => {
-      refetch();
+      refetchConversations();
+      refetchUser();
       router.push(`/account/conversations/${newConversation.id}`);
     },
     isNewConversation: true,

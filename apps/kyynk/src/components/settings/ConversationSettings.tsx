@@ -12,6 +12,8 @@ import {
 import { useUser } from '@/hooks/users/useUser';
 import useApi from '@/hooks/requests/useApi';
 import { Card } from '../ui/Card';
+import toast from 'react-hot-toast';
+
 const priceOptions = [
   { label: 'Free', value: '0' },
   { label: '0.25 €', value: '25' },
@@ -45,6 +47,7 @@ const ConversationSettings = () => {
     {
       onSuccess: () => {
         refetch();
+        toast.success('Price updated');
       },
     },
   );
