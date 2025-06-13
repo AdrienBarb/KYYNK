@@ -11,28 +11,32 @@ import { useRouter } from 'next/navigation';
 import { Conversation } from '@prisma/client';
 import { getEncodedFullUrl } from '@/utils/links/getEncodedFullUrl';
 import { appRouter } from '@/constants/appRouter';
+import { useConversations } from '@/hooks/conversations/useConversations';
+import { hasEnoughCredits } from '@/utils/conversations/hasEnoughCredits';
+import { useState } from 'react';
+import NotEnoughCreditsModal from '../modals/NotEnoughCreditsModal';
 
 const ProfileConversationInput = ({ user }: { user: FetchedUserType }) => {
   const { slug } = useParams<{ slug: string }>();
   const { usePost } = useApi();
   const router = useRouter();
   const { user: loggedUser } = useUser();
+  const [openNotEnoughCreditModal, setOpenNotEnoughCreditModal] =
+    useState(false);
+
+  const { refetch } = useConversations();
 
   const { mutate: createConversation, isPending } = usePost(
     `/api/conversations`,
     {
       onSuccess: (newConversation: Conversation) => {
-        console.log(
-          '🚀 ~ ProfileConversationInput ~ newConversation:',
-          newConversation,
-        );
+        refetch();
         router.push(`/account/conversations/${newConversation.id}`);
       },
     },
   );
 
   const handleSendMessage = ({ message }: { message: string }) => {
-    console.log('🚀 ~ handleSendMessage ~ message:', message);
     if (!loggedUser) {
       const encodedUrl = getEncodedFullUrl();
       router.push(`${appRouter.login}?previousUrl=${encodedUrl}`);
@@ -40,6 +44,16 @@ const ProfileConversationInput = ({ user }: { user: FetchedUserType }) => {
     }
 
     if (!message.trim()) {
+      return;
+    }
+
+    if (
+      !hasEnoughCredits({
+        user: loggedUser,
+        requiredCredits: user.settings.creditMessage,
+      })
+    ) {
+      setOpenNotEnoughCreditModal(true);
       return;
     }
 
@@ -64,6 +78,12 @@ const ProfileConversationInput = ({ user }: { user: FetchedUserType }) => {
         isDisabled={loggedUser?.slug === slug}
         creditMessage={user.settings.creditMessage}
         onSendMessage={handleSendMessage}
+        isCreationMessageLoading={isPending}
+      />
+
+      <NotEnoughCreditsModal
+        open={openNotEnoughCreditModal}
+        onOpenChange={setOpenNotEnoughCreditModal}
       />
     </div>
   );

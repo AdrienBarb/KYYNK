@@ -9,9 +9,9 @@ export const isUserVerified = ({
     return false;
   }
 
-  return (
+  return Boolean(
     user.isEmailVerified &&
-    user.identityVerificationStatus === 'verified' &&
-    user.profileImageId
+      user.identityVerificationStatus === 'verified' &&
+      user.profileImageId,
   );
 };

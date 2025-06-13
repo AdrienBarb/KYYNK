@@ -40,15 +40,12 @@ import {
 } from '../ui/collapsible';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { isUserVerified } from '@/utils/users/isUserVerified';
-import useApi from '@/hooks/requests/useApi';
-import { ConversationType } from '@/types/conversations';
+import { useConversations } from '@/hooks/conversations/useConversations';
 
 export function AppSidebar() {
   const { user, isLoggedIn } = useUser();
-
-  const { useGet } = useApi();
-
-  const { data: conversations } = useGet('/api/conversations');
+  const { conversations } = useConversations();
+  const isMobile = useIsMobile();
 
   const platforms = [
     {
@@ -101,8 +98,6 @@ export function AppSidebar() {
       isVisible: isLoggedIn(),
     },
   ];
-
-  const isMobile = useIsMobile();
 
   return (
     <Sidebar>
@@ -186,7 +181,7 @@ export function AppSidebar() {
             <SidebarGroupLabel>Chats</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {conversations.map((conversation: ConversationType) => (
+                {conversations.map((conversation) => (
                   <SidebarMenuItem key={conversation.id}>
                     <SidebarMenuButton asChild>
                       <Link href={`/account/conversations/${conversation.id}`}>

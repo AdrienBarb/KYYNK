@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Camera, Video } from 'lucide-react';
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { Textarea } from '@/components/ui/TextArea';
 import { cn } from '@/utils/tailwind/cn';
@@ -17,6 +17,9 @@ interface ConversationInputProps {
   isDisabled?: boolean;
   creditMessage?: number;
   onSendMessage: ({ message }: { message: string }) => void;
+  isCreationMessageLoading?: boolean;
+  canSendPrivateNude?: boolean;
+  openPrivateNudeModal?: () => void;
 }
 
 function useAutoResizeTextarea({
@@ -67,6 +70,9 @@ const ConversationInput: React.FC<ConversationInputProps> = ({
   isDisabled = false,
   creditMessage,
   onSendMessage,
+  isCreationMessageLoading,
+  canSendPrivateNude,
+  openPrivateNudeModal,
 }) => {
   const [value, setValue] = useState('');
   const { textareaRef, adjustHeight } = useAutoResizeTextarea({
@@ -121,12 +127,25 @@ const ConversationInput: React.FC<ConversationInputProps> = ({
 
             <div className="h-14 rounded-b-xl flex items-center">
               <div className="absolute left-3 right-3 bottom-3 flex items-center justify-between w-[calc(100%-24px)]">
-                <div className="flex items-center gap-2"></div>
+                <div className="flex items-center gap-2">
+                  {canSendPrivateNude && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={openPrivateNudeModal}
+                    >
+                      <Video strokeWidth={1} />
+                    </Button>
+                  )}
+                </div>
                 <Button
                   aria-label="Send message"
                   variant="default"
                   size={creditMessage && creditMessage > 0 ? 'sm' : 'icon'}
-                  disabled={!value.trim() || isDisabled}
+                  disabled={
+                    !value.trim() || isDisabled || isCreationMessageLoading
+                  }
+                  isLoading={isCreationMessageLoading}
                   onClick={handleSendMessage}
                 >
                   {creditMessage && creditMessage > 0 ? (
@@ -134,7 +153,7 @@ const ConversationInput: React.FC<ConversationInputProps> = ({
                       Send for {formatCredits(creditMessage)} credits
                     </Text>
                   ) : (
-                    <ArrowRight className={cn('w-4 h-4 dark:text-secondary')} />
+                    <ArrowRight className={cn('w-4 h-4 text-secondary')} />
                   )}
                 </Button>
               </div>

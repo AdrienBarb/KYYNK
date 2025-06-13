@@ -1,12 +1,11 @@
 'use client';
 
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useChatScroll } from '@/lib/hooks/useChatScroll';
 import { useParams } from 'next/navigation';
 import useApi from '@/hooks/requests/useApi';
 import { ConversationType } from '@/types/conversations';
 import useConversationUsers from '@/hooks/conversations/useConversationUsers';
-import ConversationInput from './ConversationInput';
 import { useUser } from '@/hooks/users/useUser';
 import Avatar from '../ui/Avatar';
 import Link from 'next/link';
@@ -17,6 +16,14 @@ import { cn } from '@/utils/tailwind/cn';
 import NudeModal from '@/components/modals/NudeModal';
 import { NudeWithPermissions } from '@/types/nudes';
 import { UserType } from '@prisma/client';
+import { messageSchema } from '@/schemas/conversations/messageSchema';
+import toast from 'react-hot-toast';
+import ConversationInput from './ConversationInput';
+import NotEnoughCreditsModal from '../modals/NotEnoughCreditsModal';
+import { hasEnoughCredits } from '@/utils/conversations/hasEnoughCredits';
+import { isCreator } from '@/utils/users/isCreator';
+import { isUserVerified } from '@/utils/users/isUserVerified';
+import PrivateNudeModal from '../modals/PrivateNudeModal';
 
 interface Props {
   initialConversation: ConversationType;
@@ -27,8 +34,16 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
   const { id: conversationId } = useParams();
   const { otherUser } = useConversationUsers(initialConversation.participants);
 
-  const { useGet } = useApi();
-  const { user } = useUser();
+  const { useGet, usePost } = useApi();
+  const { user, refetch: refetchUser } = useUser();
+
+  const [openNotEnoughCreditModal, setOpenNotEnoughCreditModal] =
+    useState(false);
+  const [openPrivateNudeModal, setOpenPrivateNudeModal] = useState(false);
+  const [isModalOpen, setModalOpen] = React.useState(false);
+  const [selectedNude, setSelectedNude] = React.useState<
+    NudeWithPermissions | undefined | null
+  >(null);
 
   const { data: messages, refetch } = useGet(
     `/api/conversations/${conversationId}/messages`,
@@ -38,16 +53,45 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
     },
   );
 
-  const ref = useChatScroll(messages);
+  const { mutate: sendMessage, isPending } = usePost(
+    `/api/conversations/${conversationId}/messages`,
+    {
+      onSuccess: () => {
+        refetch();
+        refetchUser();
+      },
+    },
+  );
 
-  const [isModalOpen, setModalOpen] = React.useState(false);
-  const [selectedNude, setSelectedNude] = React.useState<
-    NudeWithPermissions | undefined | null
-  >(null);
+  const ref = useChatScroll(messages);
 
   const handleNudeClick = (nude: NudeWithPermissions | undefined) => {
     setSelectedNude(nude);
     setModalOpen(true);
+  };
+
+  const handleSendMessage = ({ message }: { message: string }) => {
+    try {
+      messageSchema.parse(message);
+
+      if (
+        !hasEnoughCredits({
+          user,
+          requiredCredits: otherUser?.settings?.creditMessage ?? null,
+        })
+      ) {
+        setOpenNotEnoughCreditModal(true);
+        return;
+      }
+
+      sendMessage({ content: message });
+    } catch (e) {
+      toast.error('Something went wrong');
+    }
+  };
+
+  const handleOpenPrivateNudeModal = () => {
+    setOpenPrivateNudeModal(true);
   };
 
   return (
@@ -117,8 +161,20 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
       </div>
 
       <div className="sticky bottom-0 mt-8 p-4">
-        <ConversationInput refetch={refetch} otherUser={otherUser!} />
+        <ConversationInput
+          isDisabled={false}
+          creditMessage={otherUser?.settings?.creditMessage}
+          onSendMessage={handleSendMessage}
+          isCreationMessageLoading={isPending}
+          canSendPrivateNude={isCreator({ user }) && isUserVerified({ user })}
+          openPrivateNudeModal={handleOpenPrivateNudeModal}
+        />
       </div>
+
+      <NotEnoughCreditsModal
+        open={openNotEnoughCreditModal}
+        onOpenChange={setOpenNotEnoughCreditModal}
+      />
 
       <NudeModal
         isOpen={isModalOpen}
@@ -126,6 +182,12 @@ const Conversation: FC<Props> = ({ initialConversation, initialMessages }) => {
         nude={selectedNude}
         refetch={refetch}
         setSelectedNude={setSelectedNude}
+      />
+
+      <PrivateNudeModal
+        open={openPrivateNudeModal}
+        setOpen={setOpenPrivateNudeModal}
+        refetch={refetch}
       />
     </div>
   );
