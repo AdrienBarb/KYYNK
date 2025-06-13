@@ -143,7 +143,7 @@ export const POST = strictlyAuth(
       }
 
       // Validate message content
-      const content = messageSchema.parse(requestBody.content);
+      const content = messageSchema.parse(requestBody.message);
 
       // Create message using the helper
       const message = await prisma.$transaction(async (tx) => {

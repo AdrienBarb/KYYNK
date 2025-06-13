@@ -6,59 +6,30 @@ import { FetchedUserType } from '@/types/users';
 import { useUser } from '@/hooks/users/useUser';
 import { isUserVerified } from '@/utils/users/isUserVerified';
 import { useParams } from 'next/navigation';
-import useApi from '@/hooks/requests/useApi';
 import { useRouter } from 'next/navigation';
-import { Conversation } from '@prisma/client';
-import { getEncodedFullUrl } from '@/utils/links/getEncodedFullUrl';
-import { appRouter } from '@/constants/appRouter';
 import { useConversations } from '@/hooks/conversations/useConversations';
-import { hasEnoughCredits } from '@/utils/conversations/hasEnoughCredits';
 import { useState } from 'react';
 import NotEnoughCreditsModal from '../modals/NotEnoughCreditsModal';
+import { useCreateMessage } from '@/hooks/conversations/useCreateMessage';
 
 const ProfileConversationInput = ({ user }: { user: FetchedUserType }) => {
   const { slug } = useParams<{ slug: string }>();
-  const { usePost } = useApi();
   const router = useRouter();
   const { user: loggedUser } = useUser();
   const [openNotEnoughCreditModal, setOpenNotEnoughCreditModal] =
     useState(false);
-
   const { refetch } = useConversations();
 
-  const { mutate: createConversation, isPending } = usePost(
-    `/api/conversations`,
-    {
-      onSuccess: (newConversation: Conversation) => {
-        refetch();
-        router.push(`/account/conversations/${newConversation.id}`);
-      },
+  const { handleSendMessage, isPending } = useCreateMessage({
+    user: loggedUser,
+    otherUser: user,
+    onNotEnoughCredits: () => setOpenNotEnoughCreditModal(true),
+    onSuccess: (newConversation) => {
+      refetch();
+      router.push(`/account/conversations/${newConversation.id}`);
     },
-  );
-
-  const handleSendMessage = ({ message }: { message: string }) => {
-    if (!loggedUser) {
-      const encodedUrl = getEncodedFullUrl();
-      router.push(`${appRouter.login}?previousUrl=${encodedUrl}`);
-      return;
-    }
-
-    if (!message.trim()) {
-      return;
-    }
-
-    if (
-      !hasEnoughCredits({
-        user: loggedUser,
-        requiredCredits: user.settings.creditMessage,
-      })
-    ) {
-      setOpenNotEnoughCreditModal(true);
-      return;
-    }
-
-    createConversation({ slug, message });
-  };
+    isNewConversation: true,
+  });
 
   if (loggedUser?.slug !== slug && !isUserVerified({ user })) {
     return null;
