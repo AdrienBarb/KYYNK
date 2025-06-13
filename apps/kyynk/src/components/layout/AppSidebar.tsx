@@ -50,8 +50,6 @@ export function AppSidebar() {
 
   const { data: conversations } = useGet('/api/conversations');
 
-  console.log('🚀 ~ AppSidebar ~ conversations:', conversations);
-
   const platforms = [
     {
       title: 'Home',

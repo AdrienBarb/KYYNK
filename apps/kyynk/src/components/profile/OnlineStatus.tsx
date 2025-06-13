@@ -30,7 +30,7 @@ const OnlineStatus: FC<Props> = ({ currentUser }) => {
     : '';
 
   return (
-    <div className="font-karla w-full text-center">
+    <div className="font-karla w-full">
       {isOnline ? (
         <div className="flex items-center justify-center gap-1">
           <div className="w-3 flex justify-center items-center">

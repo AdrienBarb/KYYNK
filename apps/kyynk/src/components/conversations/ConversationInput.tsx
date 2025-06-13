@@ -5,10 +5,18 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { Textarea } from '@/components/ui/TextArea';
 import { cn } from '@/utils/tailwind/cn';
 import { Button } from '@/components/ui/Button';
+import { formatCredits } from '@/utils/prices/formatCredits';
+import Text from '../ui/Text';
 
 interface UseAutoResizeTextareaProps {
   minHeight: number;
   maxHeight?: number;
+}
+
+interface ConversationInputProps {
+  isDisabled?: boolean;
+  creditMessage?: number;
+  onSendMessage: ({ message }: { message: string }) => void;
 }
 
 function useAutoResizeTextarea({
@@ -55,25 +63,39 @@ function useAutoResizeTextarea({
   return { textareaRef, adjustHeight };
 }
 
-const ConversationInput = () => {
+const ConversationInput: React.FC<ConversationInputProps> = ({
+  isDisabled = false,
+  creditMessage,
+  onSendMessage,
+}) => {
   const [value, setValue] = useState('');
   const { textareaRef, adjustHeight } = useAutoResizeTextarea({
     minHeight: 72,
     maxHeight: 300,
   });
 
+  const handleSendMessage = () => {
+    if (!value.trim() || isDisabled) return;
+    setValue('');
+    adjustHeight(true);
+    onSendMessage({ message: value });
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey && value.trim()) {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      setValue('');
-      adjustHeight(true);
-      // Here you can add message sending
+      handleSendMessage();
     }
   };
 
   return (
     <>
-      <div className="max-w-xl w-full mx-auto">
+      <div
+        className={cn(
+          'max-w-xl w-full mx-auto',
+          isDisabled && 'opacity-60 cursor-not-allowed',
+        )}
+      >
         <div className="relative border border-custom-black/20 rounded-xl">
           <div className="relative flex flex-col">
             <div className="overflow-y-auto" style={{ maxHeight: '400px' }}>
@@ -81,33 +103,39 @@ const ConversationInput = () => {
                 value={value}
                 placeholder={'Type your message...'}
                 className={cn(
-                  'w-full rounded-xl rounded-b-none px-4 py-3  border-none placeholder:text-black/70 resize-none focus-visible:ring-0 focus-visible:ring-offset-0',
+                  'w-full rounded-xl rounded-b-none px-4 py-3 border-none placeholder:text-black/70 resize-none focus-visible:ring-0 focus-visible:ring-offset-0',
                   'min-h-[72px]',
+                  isDisabled && 'cursor-not-allowed bg-zinc-100/50',
                 )}
                 ref={textareaRef}
                 onKeyDown={handleKeyDown}
                 onChange={(e) => {
-                  setValue(e.target.value);
-                  adjustHeight();
+                  if (!isDisabled) {
+                    setValue(e.target.value);
+                    adjustHeight();
+                  }
                 }}
+                disabled={isDisabled}
               />
             </div>
 
-            <div className="h-14  rounded-b-xl flex items-center">
+            <div className="h-14 rounded-b-xl flex items-center">
               <div className="absolute left-3 right-3 bottom-3 flex items-center justify-between w-[calc(100%-24px)]">
                 <div className="flex items-center gap-2"></div>
                 <Button
                   aria-label="Send message"
                   variant="default"
-                  size="icon"
-                  disabled={!value.trim()}
-                  onClick={() => {
-                    if (!value.trim()) return;
-                    setValue('');
-                    adjustHeight(true);
-                  }}
+                  size={creditMessage && creditMessage > 0 ? 'sm' : 'icon'}
+                  disabled={!value.trim() || isDisabled}
+                  onClick={handleSendMessage}
                 >
-                  <ArrowRight className={cn('w-4 h-4 dark:text-secondary')} />
+                  {creditMessage && creditMessage > 0 ? (
+                    <Text className="text-sm font-medium text-secondary">
+                      Send for {formatCredits(creditMessage)} credits
+                    </Text>
+                  ) : (
+                    <ArrowRight className={cn('w-4 h-4 dark:text-secondary')} />
+                  )}
                 </Button>
               </div>
             </div>

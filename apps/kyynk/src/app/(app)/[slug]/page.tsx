@@ -76,7 +76,7 @@ const UserPage = async ({ params }: PageProps) => {
       <PaddingContainer>
         <UserUncompletedProfileBanner />
         <UserProfileHeader initialUserDatas={user} />
-        <ProfileConversationInput />
+        <ProfileConversationInput user={user} />
         <UserNudes initialNudes={nudesWithPermissions} user={user} />
       </PaddingContainer>
     </PageContainer>
