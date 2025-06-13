@@ -8,6 +8,7 @@ import { messageSchema } from '@/schemas/conversations/messageSchema';
 import { validateMessageCreation } from '@/utils/conversations/validateMessageCreation';
 import { findOrCreateConversation } from '@/utils/conversations/findOrCreateConversation';
 import { createMessage } from '@/utils/conversations/createMessage';
+import { auth } from '@/auth';
 
 const conversationSchema = z.object({
   slug: z.string(),
@@ -67,15 +68,20 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
   }
 });
 
-export const GET = strictlyAuth(async (req: NextRequest) => {
+export const GET = async (req: NextRequest) => {
   try {
-    const { auth } = req;
-    const userId = auth?.user.id;
+    const session = await auth();
 
-    const conversations = await getUserConversations({ userId: userId! });
+    if (!session?.user?.id) {
+      return NextResponse.json([], { status: 200 });
+    }
+
+    const conversations = await getUserConversations({
+      userId: session.user.id,
+    });
 
     return NextResponse.json(conversations, { status: 200 });
   } catch (error) {
     return errorHandler(error);
   }
-});
+};
