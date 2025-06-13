@@ -17,7 +17,7 @@ import { NudeFromPrisma, NudeWithPermissions } from '@/types/nudes';
 import { FetchedUserType } from '@/types/users';
 import imgixLoader from '@/lib/imgix/loader';
 import { UserType } from '@prisma/client';
-import { getConversationByParticipants } from '@/services/conversations/getConversationByParticipants';
+import ProfileConversationInput from '@/components/conversations/ProfileConversationInput';
 
 export type PageProps = {
   params: Promise<{ slug: string }>;
@@ -76,7 +76,7 @@ const UserPage = async ({ params }: PageProps) => {
       <PaddingContainer>
         <UserUncompletedProfileBanner />
         <UserProfileHeader initialUserDatas={user} />
-
+        <ProfileConversationInput />
         <UserNudes initialNudes={nudesWithPermissions} user={user} />
       </PaddingContainer>
     </PageContainer>
