@@ -12,7 +12,7 @@ const AccountVerification = () => {
     <div className="flex flex-col gap-4">
       <VerificationCard
         isValid={!!user?.profileImageId}
-        path={appRouter.editProfile}
+        path={appRouter.myProfile}
         label={'Add a profile image'}
       />
       <VerificationCard
