@@ -4,6 +4,7 @@ import ApiVideoPlayer from '@api.video/react-player';
 import NudeCard from '../nudes/NudeCard';
 import BuyButton from '../nudes/BuyButton';
 import { NudeWithPermissions } from '@/types/nudes';
+import HeaderNudeModal from '../nudes/HeaderNudeModal';
 
 interface NudeModalProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ interface NudeModalProps {
   nude?: NudeWithPermissions | null;
   refetch: () => void;
   setSelectedNude: (nude: NudeWithPermissions | null) => void;
+  showHeader?: boolean;
 }
 
 const NudeModal: React.FC<NudeModalProps> = ({
@@ -19,6 +21,7 @@ const NudeModal: React.FC<NudeModalProps> = ({
   nude,
   refetch,
   setSelectedNude,
+  showHeader = false,
 }) => {
   const handleAfterBuyAction = (newNude: NudeWithPermissions) => {
     setSelectedNude(newNude);
@@ -28,6 +31,8 @@ const NudeModal: React.FC<NudeModalProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="z-[1000] pt-12">
+        {showHeader && nude && <HeaderNudeModal nude={nude} />}
+
         {nude && nude.permissions.canView && nude.media?.videoId ? (
           <div className="rounded-md overflow-hidden">
             <ApiVideoPlayer

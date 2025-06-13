@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@/utils/tailwind/cn';
 import * as React from 'react';
 

@@ -7,7 +7,7 @@ export const appRouter = {
   userType: '/register/user-type',
   models: '/models',
   addNudes: '/account/nudes',
-  editProfile: '/account/profile/edit',
+  myProfile: '/account/settings/my-profile',
   becomeCreator: '/account/become-creator',
   becomeCreatorEmail: '/account/become-creator/email',
   becomeCreatorIdentity: '/account/become-creator/identity',

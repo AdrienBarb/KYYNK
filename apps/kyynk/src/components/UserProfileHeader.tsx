@@ -2,18 +2,13 @@
 
 import React, { FC } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Conversation, User } from '@prisma/client';
 import useApi from '@/hooks/requests/useApi';
 import Avatar from './ui/Avatar';
-import Text from '@/components/ui/Text';
 import OnlineStatus from '@/components/profile/OnlineStatus';
 import Title from '@/components/ui/Title';
-import { Button } from './ui/Button';
 import { useUser } from '@/hooks/users/useUser';
-import { isUserVerified } from '@/utils/users/isUserVerified';
 import { FetchedUserType } from '@/types/users';
-import { getEncodedFullUrl } from '@/utils/links/getEncodedFullUrl';
-import { appRouter } from '@/constants/appRouter';
+import UserProfileMenu from './UserProfileMenu';
 
 interface Props {
   initialUserDatas: FetchedUserType;
@@ -22,8 +17,7 @@ interface Props {
 const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
   const { slug } = useParams<{ slug: string }>();
   const { user: loggedUser } = useUser();
-  const { useGet, usePost } = useApi();
-  const router = useRouter();
+  const { useGet } = useApi();
 
   const { data: user } = useGet(
     `/api/users/${slug}`,
@@ -35,53 +29,26 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
     },
   );
 
-  const { mutate: createConversation, isPending } = usePost(
-    `/api/conversations`,
-    {
-      onSuccess: (newConversation: Conversation) => {
-        router.push(`/account/conversations/${newConversation.id}`);
-      },
-    },
-  );
-
-  const handleClickOnDiscussButton = () => {
-    if (!loggedUser) {
-      const encodedUrl = getEncodedFullUrl();
-      router.push(`${appRouter.login}?previousUrl=${encodedUrl}`);
-      return;
-    }
-
-    createConversation({ slug });
-  };
-
   const isLoggedUserProfile = loggedUser?.slug === slug;
 
   return (
-    <div className="flex flex-col items-center relative w-full box-border text-black gap-4">
-      <Avatar size={164} imageId={user?.profileImageId} pseudo={user?.pseudo} />
-      <div className="flex flex-col items-center gap-2 w-full">
-        <Title Tag="h2" dataId="user-pseudo">
-          {user.pseudo}
-        </Title>
-        <div>
-          <Text className="mt-2 text-center whitespace-pre-wrap">
-            {user.description}
-          </Text>
+    <div className="flex justify-between items-center w-full">
+      <div className="flex relative w-full box-border items-center text-black gap-4">
+        <Avatar
+          size={72}
+          imageId={user?.profileImageId}
+          pseudo={user?.pseudo}
+        />
+
+        <div className="flex-col gap-2">
+          <Title Tag="h2" dataId="user-pseudo">
+            {user.pseudo}
+          </Title>
           {!isLoggedUserProfile && <OnlineStatus currentUser={user} />}
         </div>
       </div>
-      <div className="flex gap-2 max-w-56 w-full">
-        {!isLoggedUserProfile && isUserVerified({ user }) && (
-          <Button
-            onClick={handleClickOnDiscussButton}
-            isLoading={isPending}
-            disabled={isPending}
-            className="w-full"
-          >
-            Discuss
-          </Button>
-        )}
-      </div>
+
+      <UserProfileMenu />
     </div>
   );
 };

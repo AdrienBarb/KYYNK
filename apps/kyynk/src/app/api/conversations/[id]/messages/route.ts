@@ -7,6 +7,8 @@ import { fetchMessagesByConversationId } from '@/services/conversations/fetchMes
 import { messageSchema } from '@/schemas/conversations/messageSchema';
 import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
 import { NudeFromPrisma } from '@/types/nudes';
+import { validateMessageCreation } from '@/utils/conversations/validateMessageCreation';
+import { createMessage } from '@/utils/conversations/createMessage';
 
 export const GET = strictlyAuth(
   async (
@@ -93,18 +95,6 @@ export const POST = strictlyAuth(
         );
       }
 
-      const currentUser = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { creditsAmount: true },
-      });
-
-      if (!currentUser) {
-        return NextResponse.json(
-          { error: errorMessages.USER_NOT_FOUND },
-          { status: 404 },
-        );
-      }
-
       const conversation = await prisma.conversation.findFirst({
         where: {
           id: conversationId,
@@ -115,6 +105,7 @@ export const POST = strictlyAuth(
             select: {
               id: true,
               settings: { select: { creditMessage: true } },
+              slug: true,
             },
           },
         },
@@ -138,40 +129,33 @@ export const POST = strictlyAuth(
         );
       }
 
-      const requiredCredits = recipient?.settings?.creditMessage || 0;
-      if (requiredCredits > 0 && currentUser.creditsAmount < requiredCredits) {
+      // Validate the message creation
+      const validation = await validateMessageCreation({
+        userId: userId!,
+        recipientSlug: recipient.slug,
+      });
+
+      if (!validation.isValid || !validation.data) {
         return NextResponse.json(
-          { error: errorMessages.NOT_AUTHORIZED },
-          { status: 400 },
+          { error: validation.error?.message },
+          { status: validation.error?.status || 400 },
         );
       }
 
-      const content = messageSchema.parse(requestBody.content);
+      // Validate message content
+      const content = messageSchema.parse(requestBody.message);
 
-      const message = await prisma.message.create({
-        data: {
+      // Create message using the helper
+      const message = await prisma.$transaction(async (tx) => {
+        return createMessage({
           content,
           conversationId,
           senderId: userId!,
-        },
+          recipientId: recipient.id,
+          requiredCredits: recipient.settings?.creditMessage || 0,
+          tx,
+        });
       });
-
-      if (requiredCredits > 0) {
-        await prisma.$transaction([
-          prisma.sale.create({
-            data: {
-              creditAmount: requiredCredits,
-              type: 'message',
-              seller: { connect: { id: recipient.id } },
-              buyer: { connect: { id: userId } },
-            },
-          }),
-          prisma.user.update({
-            where: { id: userId },
-            data: { creditsAmount: { decrement: requiredCredits } },
-          }),
-        ]);
-      }
 
       return NextResponse.json(message, { status: 201 });
     } catch (error) {

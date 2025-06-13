@@ -4,7 +4,6 @@ import { genPageMetadata } from '@/app/seo';
 import { redirect } from 'next/navigation';
 import ErrorMessage from '@/components/ErrorMessage';
 import { getTranslations } from 'next-intl/server';
-import UserProfileTopButtons from '@/components/UserProfileTopButtons';
 import { auth } from '@/auth';
 import UserUncompletedProfileBanner from '@/components/profile/UserUncompletedProfileBanner';
 import UserProfileHeader from '@/components/UserProfileHeader';
@@ -17,6 +16,8 @@ import PaddingContainer from '@/components/layout/PaddingContainer';
 import { NudeFromPrisma, NudeWithPermissions } from '@/types/nudes';
 import { FetchedUserType } from '@/types/users';
 import imgixLoader from '@/lib/imgix/loader';
+import { UserType } from '@prisma/client';
+import ProfileConversationInput from '@/components/conversations/ProfileConversationInput';
 
 export type PageProps = {
   params: Promise<{ slug: string }>;
@@ -54,6 +55,10 @@ const UserPage = async ({ params }: PageProps) => {
     redirect('/404');
   }
 
+  if (user.userType === UserType.member) {
+    redirect('/404');
+  }
+
   if (user.isArchived) {
     return <ErrorMessage message={t('error.userArchived')} />;
   }
@@ -67,11 +72,11 @@ const UserPage = async ({ params }: PageProps) => {
   ) as NudeWithPermissions[];
 
   return (
-    <PageContainer className="max-w-screen-lg mx-auto">
+    <PageContainer>
       <PaddingContainer>
         <UserUncompletedProfileBanner />
-        <UserProfileTopButtons />
         <UserProfileHeader initialUserDatas={user} />
+        <ProfileConversationInput user={user} />
         <UserNudes initialNudes={nudesWithPermissions} user={user} />
       </PaddingContainer>
     </PageContainer>

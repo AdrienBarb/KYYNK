@@ -15,6 +15,7 @@ export const getConversationById = async ({
           select: {
             id: true,
             pseudo: true,
+            userType: true,
             slug: true,
             profileImageId: true,
             settings: {

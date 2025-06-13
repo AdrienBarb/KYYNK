@@ -1,103 +1,167 @@
-import React, { useState } from 'react';
+'use client';
+
+import { ArrowRight, Camera, Video } from 'lucide-react';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { Textarea } from '@/components/ui/TextArea';
+import { cn } from '@/utils/tailwind/cn';
 import { Button } from '@/components/ui/Button';
-import { Textarea } from '../ui/TextArea';
-import toast from 'react-hot-toast';
-import { messageSchema } from '@/schemas/conversations/messageSchema';
-import useApi from '@/hooks/requests/useApi';
-import { useParams } from 'next/navigation';
-import { useUser } from '@/hooks/users/useUser';
-import NotEnoughCreditsModal from '../modals/NotEnoughCreditsModal';
-import { ConversationUser } from '@/types/users';
-import { isCreator } from '@/utils/users/isCreator';
-import { isUserVerified } from '@/utils/users/isUserVerified';
-import { Camera } from 'lucide-react';
-import PrivateNudeModal from '../modals/PrivateNudeModal';
 import { formatCredits } from '@/utils/prices/formatCredits';
+import Text from '../ui/Text';
 
-const ConversationInput = ({
-  refetch,
-  otherUser,
-}: {
-  refetch: () => void;
-  otherUser: ConversationUser;
-}) => {
-  const [message, setMessage] = useState('');
-  const { usePost } = useApi();
-  const { id: conversationId } = useParams();
-  const { user, refetch: refetchUser } = useUser();
-  const [openNotEnoughCreditModal, setOpenNotEnoughCreditModal] =
-    useState(false);
-  const [openPrivateNudeModal, setOpenPrivateNudeModal] = useState(false);
-  const { mutate: sendMessage, isPending } = usePost(
-    `/api/conversations/${conversationId}/messages`,
-    {
-      onSuccess: () => {
-        setMessage('');
-        refetch();
-        refetchUser();
-      },
-    },
-  );
+interface UseAutoResizeTextareaProps {
+  minHeight: number;
+  maxHeight?: number;
+}
 
-  const handleSendMessage = () => {
-    try {
-      messageSchema.parse(message);
+interface ConversationInputProps {
+  isDisabled?: boolean;
+  creditMessage?: number;
+  onSendMessage: ({ message }: { message: string }) => void;
+  isCreationMessageLoading?: boolean;
+  canSendPrivateNude?: boolean;
+  openPrivateNudeModal?: () => void;
+}
 
-      if (
-        otherUser?.settings &&
-        otherUser.settings.creditMessage > 0 &&
-        user?.creditsAmount! < otherUser.settings.creditMessage
-      ) {
-        setOpenNotEnoughCreditModal(true);
+function useAutoResizeTextarea({
+  minHeight,
+  maxHeight,
+}: UseAutoResizeTextareaProps) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const adjustHeight = useCallback(
+    (reset?: boolean) => {
+      const textarea = textareaRef.current;
+      if (!textarea) return;
+
+      if (reset) {
+        textarea.style.height = `${minHeight}px`;
         return;
       }
 
-      sendMessage({ content: message });
-    } catch (e) {
-      toast.error('Something went wrong');
+      textarea.style.height = `${minHeight}px`;
+
+      const newHeight = Math.max(
+        minHeight,
+        Math.min(textarea.scrollHeight, maxHeight ?? Number.POSITIVE_INFINITY),
+      );
+
+      textarea.style.height = `${newHeight}px`;
+    },
+    [minHeight, maxHeight],
+  );
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = `${minHeight}px`;
+    }
+  }, [minHeight]);
+
+  useEffect(() => {
+    const handleResize = () => adjustHeight();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [adjustHeight]);
+
+  return { textareaRef, adjustHeight };
+}
+
+const ConversationInput: React.FC<ConversationInputProps> = ({
+  isDisabled = false,
+  creditMessage,
+  onSendMessage,
+  isCreationMessageLoading,
+  canSendPrivateNude,
+  openPrivateNudeModal,
+}) => {
+  const [value, setValue] = useState('');
+  const { textareaRef, adjustHeight } = useAutoResizeTextarea({
+    minHeight: 72,
+    maxHeight: 300,
+  });
+
+  const handleSendMessage = () => {
+    if (!value.trim() || isDisabled) return;
+    setValue('');
+    adjustHeight(true);
+    onSendMessage({ message: value });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
     }
   };
 
   return (
-    <div className="flex flex-col gap-1 items-center">
-      <Textarea
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="Type your message..."
-        className="w-full text-base"
-        rows={3}
-      />
-      <div className="flex justify-between w-full">
-        <div>
-          {isCreator({ user }) && isUserVerified({ user }) && (
-            <Button size="icon" onClick={() => setOpenPrivateNudeModal(true)}>
-              <Camera />
-            </Button>
-          )}
+    <>
+      <div
+        className={cn(
+          'max-w-xl w-full mx-auto',
+          isDisabled && 'opacity-60 cursor-not-allowed',
+        )}
+      >
+        <div className="relative border border-custom-black/20 rounded-xl">
+          <div className="relative flex flex-col">
+            <div className="overflow-y-auto" style={{ maxHeight: '400px' }}>
+              <Textarea
+                value={value}
+                placeholder={'Type your message...'}
+                className={cn(
+                  'w-full rounded-xl rounded-b-none px-4 py-3 border-none placeholder:text-black/70 resize-none focus-visible:ring-0 focus-visible:ring-offset-0',
+                  'min-h-[72px]',
+                  isDisabled && 'cursor-not-allowed bg-zinc-100/50',
+                )}
+                ref={textareaRef}
+                onKeyDown={handleKeyDown}
+                onChange={(e) => {
+                  if (!isDisabled) {
+                    setValue(e.target.value);
+                    adjustHeight();
+                  }
+                }}
+                disabled={isDisabled}
+              />
+            </div>
+
+            <div className="h-14 rounded-b-xl flex items-center">
+              <div className="absolute left-3 right-3 bottom-3 flex items-center justify-between w-[calc(100%-24px)]">
+                <div className="flex items-center gap-2">
+                  {canSendPrivateNude && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={openPrivateNudeModal}
+                    >
+                      <Video strokeWidth={1} />
+                    </Button>
+                  )}
+                </div>
+                <Button
+                  aria-label="Send message"
+                  variant="default"
+                  size={creditMessage && creditMessage > 0 ? 'sm' : 'icon'}
+                  disabled={
+                    !value.trim() || isDisabled || isCreationMessageLoading
+                  }
+                  isLoading={isCreationMessageLoading}
+                  onClick={handleSendMessage}
+                >
+                  {creditMessage && creditMessage > 0 ? (
+                    <Text className="text-sm font-medium text-secondary">
+                      Send for {formatCredits(creditMessage)} credits
+                    </Text>
+                  ) : (
+                    <ArrowRight className={cn('w-4 h-4 text-secondary')} />
+                  )}
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
-        <Button
-          onClick={handleSendMessage}
-          isLoading={isPending}
-          disabled={!message}
-          className="flex items-center"
-        >
-          {otherUser?.settings && otherUser.settings.creditMessage > 0
-            ? `Send for ${formatCredits(
-                otherUser.settings.creditMessage,
-              )} credits`
-            : 'Send'}
-        </Button>
       </div>
-      <NotEnoughCreditsModal
-        open={openNotEnoughCreditModal}
-        onOpenChange={setOpenNotEnoughCreditModal}
-      />
-      <PrivateNudeModal
-        open={openPrivateNudeModal}
-        setOpen={setOpenPrivateNudeModal}
-        refetch={refetch}
-      />
-    </div>
+    </>
   );
 };
 

@@ -9,6 +9,8 @@ import {
   CreditCard,
   Sliders,
   BadgeEuro,
+  User,
+  Dot,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -19,6 +21,7 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
@@ -37,9 +40,12 @@ import {
 } from '../ui/collapsible';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { isUserVerified } from '@/utils/users/isUserVerified';
+import { useConversations } from '@/hooks/conversations/useConversations';
 
 export function AppSidebar() {
   const { user, isLoggedIn } = useUser();
+  const { conversations } = useConversations();
+  const isMobile = useIsMobile();
 
   const platforms = [
     {
@@ -54,12 +60,6 @@ export function AppSidebar() {
       icon: UsersRound,
       isVisible: true,
     },
-    {
-      title: 'Conversations',
-      url: appRouter.conversations,
-      icon: MessageCircle,
-      isVisible: !!user,
-    },
   ];
 
   const creators = [
@@ -71,6 +71,12 @@ export function AppSidebar() {
   ];
 
   const settings = [
+    {
+      title: 'My Profile',
+      url: appRouter.myProfile,
+      icon: User,
+      isVisible: isLoggedIn(),
+    },
     {
       title: 'Conversations',
       url: appRouter.settingsConversations,
@@ -92,8 +98,6 @@ export function AppSidebar() {
       isVisible: isLoggedIn(),
     },
   ];
-
-  const isMobile = useIsMobile();
 
   return (
     <Sidebar>
@@ -166,6 +170,29 @@ export function AppSidebar() {
                         <span>{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+        {conversations && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Chats</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {conversations.map((conversation) => (
+                  <SidebarMenuItem key={conversation.id}>
+                    <SidebarMenuButton asChild>
+                      <Link href={`/account/conversations/${conversation.id}`}>
+                        <span>{conversation.participants[0].pseudo}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                    {conversation.hasUnreadMessages && (
+                      <SidebarMenuBadge>
+                        <Dot />
+                      </SidebarMenuBadge>
+                    )}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>

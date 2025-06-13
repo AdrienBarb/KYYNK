@@ -33,6 +33,7 @@ import { useUser } from '@/hooks/users/useUser';
 import { appRouter } from '@/constants/appRouter';
 import { usePaymentModalStore } from '@/stores/PaymentModalStore';
 import { formatCredits } from '@/utils/prices/formatCredits';
+import { isCreator } from '@/utils/users/isCreator';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -84,15 +85,19 @@ export function NavUser() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link href={`/${user?.slug}`}>
-                  <User />
-                  My Profile
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
+            {isCreator({ user }) && (
+              <>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem asChild>
+                    <Link href={`/${user?.slug}`}>
+                      <User />
+                      My Profile
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+              </>
+            )}
             <DropdownMenuGroup>
               <DropdownMenuItem onClick={openModal}>
                 <Coins />

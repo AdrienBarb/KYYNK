@@ -18,6 +18,11 @@ export const getUserBySlug = async ({ slug }: { slug: string }) => {
         identityVerificationStatus: true,
         nudesCount: true,
         lastSeenAt: true,
+        settings: {
+          select: {
+            creditMessage: true,
+          },
+        },
       },
     });
 
