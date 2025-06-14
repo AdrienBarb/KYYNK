@@ -4,9 +4,7 @@ import { strictlyAuth } from '@/hoc/strictlyAuth';
 import { getCurrentUser } from '@/services/users/getCurrentUser';
 import { updateUser } from '@/services/users/updateUser';
 import { NextResponse, NextRequest } from 'next/server';
-import { createWatermark } from '@/utils/users/createWatermark';
 import { updateUserSchema } from '@/schemas/users/updateUserSchema';
-import { UserType } from '@prisma/client';
 import { isBefore, subMinutes } from 'date-fns';
 import { prisma } from '@/lib/db/client';
 
@@ -29,14 +27,6 @@ export const PUT = strictlyAuth(
       const validatedBody = updateUserSchema.parse(body);
 
       const user = await updateUser({ userId: userId!, body: validatedBody });
-
-      if (
-        validatedBody.userType === UserType.creator ||
-        currentUser.userType === UserType.creator
-      ) {
-        // Create watermark only for creator
-        await createWatermark({ userId: userId!, slug: user.slug! });
-      }
 
       return NextResponse.json(user, { status: 200 });
     } catch (error) {

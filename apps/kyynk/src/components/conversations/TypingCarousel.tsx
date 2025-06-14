@@ -63,7 +63,7 @@ const TypingCarousel = ({
     <div className="flex items-center justify-center mb-4 min-h-[2.5rem]">
       <Text
         className={cn(
-          'text-2xl text-custom-black font-rubik font-extrabold text-center',
+          'text-xl lg:text-2xl text-custom-black font-rubik font-extrabold text-center',
           className,
         )}
       >

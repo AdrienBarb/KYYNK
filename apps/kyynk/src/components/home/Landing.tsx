@@ -13,11 +13,11 @@ const Landing = async () => {
         <div className="flex flex-col text-center items-center justify-center lg:max-w-lg">
           <h1
             data-id="homepage-title"
-            className="text-4xl lg:text-5xl font-bold font-rubik text-secondary"
+            className="text-3xl lg:text-5xl font-bold font-rubik text-secondary"
           >
             REAL CONVERSATIONS. PRIVATE MOMENTS.
           </h1>
-          <h2 className="text-xl font-light font-karla text-secondary mt-4">
+          <h2 className="text-l lg:text-xl font-light font-karla text-secondary mt-4">
             Chat one-on-one with the hottest creators. Nudes, and personal
             replies — just for you.
           </h2>

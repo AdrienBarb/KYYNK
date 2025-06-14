@@ -36,8 +36,12 @@ const ProfileConversationInput = ({ user }: { user: FetchedUserType }) => {
     return null;
   }
 
+  if (loggedUser?.slug === slug) {
+    return null;
+  }
+
   return (
-    <div className="w-full h-[80dvh] flex flex-col items-center justify-center">
+    <div className="w-full h-[70dvh] flex flex-col items-center justify-center">
       <TypingCarousel
         texts={[
           "Let's talk... just you and me...",
@@ -47,7 +51,6 @@ const ProfileConversationInput = ({ user }: { user: FetchedUserType }) => {
       />
 
       <ConversationInput
-        isDisabled={loggedUser?.slug === slug}
         creditMessage={user.settings.creditMessage}
         onSendMessage={handleSendMessage}
         isCreationMessageLoading={isPending}

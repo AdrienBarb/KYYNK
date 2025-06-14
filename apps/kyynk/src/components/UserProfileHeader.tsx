@@ -33,15 +33,15 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
 
   return (
     <div className="flex justify-between items-center w-full">
-      <div className="flex relative w-full box-border items-center text-black gap-4">
+      <div className="flex relative w-full box-border items-center text-black gap-2">
         <Avatar
-          size={72}
+          size={48}
           imageId={user?.profileImageId}
           pseudo={user?.pseudo}
         />
 
         <div className="flex-col gap-2">
-          <Title Tag="h2" dataId="user-pseudo">
+          <Title Tag="h2" className="text-lg lg:text-xl" dataId="user-pseudo">
             {user.pseudo}
           </Title>
           {!isLoggedUserProfile && <OnlineStatus currentUser={user} />}

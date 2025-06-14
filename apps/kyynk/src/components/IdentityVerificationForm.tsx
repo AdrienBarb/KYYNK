@@ -14,8 +14,6 @@ import { Separator } from './ui/Separator';
 import { Button } from './ui/Button';
 import { appRouter } from '@/constants/appRouter';
 import axios from 'axios';
-import ContentProviderPolicyModal from './modals/ContentProviderPolicyModal';
-import { Checkbox } from '@/components/ui/Checkbox';
 import { Card } from './ui/Card';
 
 interface Props {}
@@ -27,8 +25,6 @@ const IdentityVerificationForm: FC<Props> = () => {
   const [frontAndFaceIdentity, setFrontAndFaceIdentity] = useState<null | File>(
     null,
   );
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPolicyAccepted, setIsPolicyAccepted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const { user, refetch } = useUser();
@@ -86,11 +82,6 @@ const IdentityVerificationForm: FC<Props> = () => {
       return;
     }
 
-    if (!isPolicyAccepted) {
-      toast.error('You must accept the content provider policy');
-      return;
-    }
-
     const frontIdentityKey = await handleFileUpload(frontIdentity, 'identity');
     const backIdentityKey = await handleFileUpload(backIdentity, 'identity');
     const frontAndFaceIdentityKey = await handleFileUpload(
@@ -108,15 +99,6 @@ const IdentityVerificationForm: FC<Props> = () => {
       backIdentity: backIdentityKey,
       frontAndFaceIdentity: frontAndFaceIdentityKey,
     });
-  };
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleAcceptPolicy = async () => {
-    setIsPolicyAccepted(true);
-    setIsModalOpen(false);
   };
 
   const baseStyle = {
@@ -378,20 +360,6 @@ const IdentityVerificationForm: FC<Props> = () => {
 
           <Separator className="my-4" />
 
-          <div className="flex items-center">
-            <Checkbox
-              id="accept-policy"
-              checked={isPolicyAccepted}
-              onCheckedChange={(checked) => setIsPolicyAccepted(!!checked)}
-            />
-            <label htmlFor="accept-policy" className="ml-2">
-              I accept the content provider policy
-              <Button variant="link" onClick={handleOpenModal}>
-                Read Policy
-              </Button>
-            </label>
-          </div>
-
           <Button
             className="w-full"
             type="submit"
@@ -401,12 +369,6 @@ const IdentityVerificationForm: FC<Props> = () => {
           >
             Validate
           </Button>
-
-          <ContentProviderPolicyModal
-            open={isModalOpen}
-            setOpen={setIsModalOpen}
-            handleAcceptPolicy={handleAcceptPolicy}
-          />
         </>
       )}
     </Card>

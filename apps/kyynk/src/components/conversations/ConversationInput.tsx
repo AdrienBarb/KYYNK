@@ -109,7 +109,7 @@ const ConversationInput: React.FC<ConversationInputProps> = ({
                 value={value}
                 placeholder={'Type your message...'}
                 className={cn(
-                  'w-full rounded-xl rounded-b-none px-4 py-3 border-none placeholder:text-black/70 resize-none focus-visible:ring-0 focus-visible:ring-offset-0',
+                  'w-full rounded-xl rounded-b-none px-4 py-3 border-none placeholder:text-black/70 resize-none focus-visible:ring-0 focus-visible:ring-offset-0 text-base',
                   'min-h-[72px]',
                   isDisabled && 'cursor-not-allowed bg-zinc-100/50',
                 )}
