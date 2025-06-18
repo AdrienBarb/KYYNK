@@ -111,6 +111,24 @@ const privacyPage = () => {
             as required by law.
           </li>
         </ul>
+        <Text>
+          https://kyynk.com uses SSL encryption that ensures the confidentiality
+          of your information in the transmission of data.
+        </Text>
+        <Title Tag="h3">Payment Data Security</Title>
+        <Text>
+          In no case, we do collect, store, or transfer data from your card.
+        </Text>
+        <Text>
+          The payment operations are carried out entirely through the secure
+          server of the payment gateway(s) and/or payment processor(s).
+        </Text>
+        <Text>
+          ALLY CORPORATION will not sell, purchase, provide, exchange or in any
+          other manner disclose Account or Transaction data, or personal
+          information of or about a Cardholder to anyone, except its Acquirer,
+          Card networks/associations or in response to valid government demands.
+        </Text>
         <Title Tag="h2">7. Cookies & Tracking Technologies</Title>
         <Text>
           We use cookies and similar tracking technologies to enhance user
