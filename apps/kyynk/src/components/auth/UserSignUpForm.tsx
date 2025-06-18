@@ -13,18 +13,17 @@ import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { register } from '@/server-actions/register';
-import { useRouter } from 'next/navigation';
-import { appRouter } from '@/constants/appRouter';
+import { getUTMFromLocalStorage } from '@/utils/tracking/getUTMFromLocalStorage';
 
 const UserSignUpForm = () => {
   //translation
   const t = useTranslations();
+
   //localstate
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
   const handleClickShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
@@ -78,6 +77,7 @@ const UserSignUpForm = () => {
           pseudo: values.pseudo,
           email: values.email.toLowerCase(),
           password: values.password,
+          utmTracking: getUTMFromLocalStorage(),
         });
 
         if (result && !result.success) {

@@ -4,6 +4,7 @@ import { signIn } from '@/auth';
 import { appRouter } from '@/constants/appRouter';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { prisma } from '@/lib/db/client';
+import { UTMValues } from '@/utils/tracking/getUTMFromLocalStorage';
 import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
 import { checkOrCreateSlug } from '@/utils/users/checkOrCreateSlug';
 import bcrypt from 'bcryptjs';
@@ -14,10 +15,12 @@ export async function register({
   pseudo,
   email,
   password,
+  utmTracking,
 }: {
   pseudo: string;
   email: string;
   password: string;
+  utmTracking: UTMValues | null;
 }) {
   try {
     if (!pseudo || !email || !password) {
@@ -52,6 +55,7 @@ export async function register({
         email: lowerCaseEmail,
         password: hashedPassword,
         slug: await checkOrCreateSlug(lowerCasePseudo),
+        ...(utmTracking && { utmTracking }),
         settings: {
           create: {},
         },
@@ -70,6 +74,7 @@ export async function register({
       properties: {
         email: lowerCaseEmail,
         pseudo: lowerCasePseudo,
+        ...(utmTracking && { ...utmTracking }),
         $process_person_profile: false,
       },
     });

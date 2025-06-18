@@ -7,6 +7,9 @@ import { NextResponse, NextRequest } from 'next/server';
 import { updateUserSchema } from '@/schemas/users/updateUserSchema';
 import { isBefore, subMinutes } from 'date-fns';
 import { prisma } from '@/lib/db/client';
+import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
+import { UserType } from '@prisma/client';
+import { UTMValues } from '@/utils/tracking/getUTMFromLocalStorage';
 
 export const PUT = strictlyAuth(
   async (req: NextRequest): Promise<NextResponse> => {
@@ -27,6 +30,23 @@ export const PUT = strictlyAuth(
       const validatedBody = updateUserSchema.parse(body);
 
       const user = await updateUser({ userId: userId!, body: validatedBody });
+
+      // Send event to posthog when user choose his type
+      if (validatedBody.userType) {
+        const utmTracking = currentUser.utmTracking as UTMValues | null;
+
+        sendPostHogEvent({
+          distinctId: userId!,
+          event:
+            validatedBody.userType === UserType.creator
+              ? 'user_become_creator'
+              : 'user_become_buyer',
+          properties: {
+            ...(utmTracking && utmTracking),
+            $process_person_profile: false,
+          },
+        });
+      }
 
       return NextResponse.json(user, { status: 200 });
     } catch (error) {

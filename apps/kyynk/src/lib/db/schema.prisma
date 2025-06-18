@@ -49,6 +49,7 @@ model User {
   settings                      UserSettings?
   feeFreeUntil                  DateTime           @default(dbgenerated("now() + interval '3 months'"))
   transactions                  Transaction[]
+  utmTracking                   Json?
 }
 
 model UserToken {

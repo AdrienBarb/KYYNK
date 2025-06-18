@@ -5,6 +5,9 @@ import { strictlyAuth } from '@/hoc/strictlyAuth';
 import { NextResponse, NextRequest } from 'next/server';
 import { createMarketingContact } from '@/utils/emailing/createMarketingContact';
 import { CREATOR_AUDIENCE_ID } from '@/constants/resend/audiences';
+import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
+import { getCurrentUser } from '@/services/users/getCurrentUser';
+import { UTMValues } from '@/utils/tracking/getUTMFromLocalStorage';
 
 export const POST = strictlyAuth(
   async (req: NextRequest): Promise<NextResponse> => {
@@ -20,9 +23,7 @@ export const POST = strictlyAuth(
         );
       }
 
-      const user = await prisma.user.findUnique({
-        where: { id: userId },
-      });
+      const user = await getCurrentUser({ userId: userId! });
 
       if (!user) {
         return NextResponse.json(
@@ -33,7 +34,7 @@ export const POST = strictlyAuth(
 
       const verificationCode = await prisma.verificationCode.findFirst({
         where: {
-          userId: userId,
+          userId: user.id,
           code: code,
         },
       });
@@ -47,7 +48,7 @@ export const POST = strictlyAuth(
 
       await prisma.$transaction(async (prisma) => {
         await prisma.user.update({
-          where: { id: userId },
+          where: { id: user.id },
           data: { isEmailVerified: true },
         });
 
@@ -56,6 +57,18 @@ export const POST = strictlyAuth(
         });
       });
 
+      // Send event to posthog when user verify his email
+      const utmTracking = user.utmTracking as UTMValues | null;
+      sendPostHogEvent({
+        distinctId: user.id,
+        event: 'creator_email_verified',
+        properties: {
+          ...(utmTracking && utmTracking),
+          $process_person_profile: false,
+        },
+      });
+
+      // Create marketing contact
       await createMarketingContact(user.email!, CREATOR_AUDIENCE_ID);
 
       return NextResponse.json({ emailVerified: true }, { status: 200 });

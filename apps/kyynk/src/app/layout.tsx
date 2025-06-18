@@ -21,6 +21,7 @@ import PaymentModal from '@/components/modals/PaymentModal';
 import { AxiomWebVitals } from 'next-axiom';
 import NudeCreationModal from '@/components/modals/NudeCreationModal';
 import LoggedUserProvider from '@/components/provider/LoggedUserProvider';
+import UTMTracking from '@/components/tracking/UTMTracking';
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
@@ -111,6 +112,7 @@ const RootLayout: FC<Props> = async ({ children }) => {
                   </NuqsAdapter>
                 </LoggedUserProvider>
               </GlobalConfig>
+              <UTMTracking />
               <GlobalErrorProvider />
               <AgeVerificationModal />
               <PaymentModal />

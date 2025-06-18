@@ -29,6 +29,7 @@ export const getCurrentUser = async ({ userId }: { userId: string }) => {
         watermarkId: true,
         contentProviderPolicyAccepted: true,
         lastSeenAt: true,
+        utmTracking: true,
         settings: {
           select: {
             fiatMessage: true,

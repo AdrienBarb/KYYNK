@@ -10,6 +10,8 @@ import { errorMessages } from '@/lib/constants/errorMessage';
 import { CONTACT_EMAIL } from '@/constants/constants';
 import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
 import { VerificationStatus } from '@prisma/client';
+import { getCurrentUser } from '@/services/users/getCurrentUser';
+import { UTMValues } from '@/utils/tracking/getUTMFromLocalStorage';
 
 const confirmOrReject = z.object({
   userId: z.string(),
@@ -21,17 +23,29 @@ export const PUT = withAdminSecret(async (req: Request) => {
     const body = await req.json();
     const validatedBody = confirmOrReject.parse(body);
 
+    const currentUser = await getCurrentUser({ userId: validatedBody.userId });
+
+    if (!currentUser) {
+      return NextResponse.json(
+        { message: errorMessages.USER_NOT_FOUND },
+        { status: 400 },
+      );
+    }
+
     const user = await prisma.user.update({
-      where: { id: validatedBody.userId },
+      where: { id: currentUser?.id },
       data: { identityVerificationStatus: validatedBody.status },
     });
 
     if (validatedBody.status === VerificationStatus.verified) {
+      const utmTracking = currentUser.utmTracking as UTMValues | null;
+
       // Send POSTHOG event
       sendPostHogEvent({
-        distinctId: validatedBody.userId!,
-        event: 'user_become_creator',
+        distinctId: currentUser?.id!,
+        event: 'creator_identity_verified',
         properties: {
+          ...(utmTracking && utmTracking),
           $process_person_profile: false,
         },
       });
