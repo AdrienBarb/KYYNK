@@ -41,15 +41,7 @@ const ProfileConversationInput = ({ user }: { user: FetchedUserType }) => {
   }
 
   return (
-    <div className="w-full h-[70dvh] flex flex-col items-center justify-center">
-      <TypingCarousel
-        texts={[
-          "Let's talk... just you and me...",
-          "Don't be shy, I'm all yours now...",
-          'I have something naughty to tell you...',
-        ]}
-      />
-
+    <div className="w-full mx-auto mt-8 mb-16">
       <ConversationInput
         creditMessage={user.settings.creditMessage}
         onSendMessage={handleSendMessage}

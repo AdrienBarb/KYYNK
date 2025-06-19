@@ -79,6 +79,10 @@ const UserForm = () => {
         /^[a-zA-Z0-9](?!.*[_.-]{2})[a-zA-Z0-9._-]*[a-zA-Z0-9]$/,
         'Pseudo can only contain letters, numbers, "_", "-", ".", and must not start or end with special characters.',
       ),
+    description: z
+      .string()
+      .max(200, { message: 'Description must be at most 200 characters long.' })
+      .optional(),
     gender: z.string().optional(),
     bodyType: z.string().optional(),
     hairColor: z.string().optional(),
@@ -95,6 +99,7 @@ const UserForm = () => {
     if (user) {
       reset({
         pseudo: user.pseudo ?? '',
+        description: user.description ?? '',
       });
     }
   }, [user, reset]);
@@ -187,6 +192,24 @@ const UserForm = () => {
 
         {isCreator({ user }) && (
           <>
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>{t('db.description')}</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Textarea {...field} className="text-base pr-16" />
+                      <div className="absolute bottom-2 right-2 text-xs text-gray-500">
+                        {field.value?.length || 0}/200
+                      </div>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div className="flex gap-8 w-full">
               <FormField
                 control={form.control}

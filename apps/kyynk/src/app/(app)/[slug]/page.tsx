@@ -18,6 +18,7 @@ import { FetchedUserType } from '@/types/users';
 import imgixLoader from '@/lib/imgix/loader';
 import { UserType } from '@prisma/client';
 import ProfileConversationInput from '@/components/conversations/ProfileConversationInput';
+import UserProfileMenu from '@/components/UserProfileMenu';
 
 export type PageProps = {
   params: Promise<{ slug: string }>;
@@ -75,6 +76,7 @@ const UserPage = async ({ params }: PageProps) => {
     <PageContainer>
       <PaddingContainer>
         <UserUncompletedProfileBanner />
+        <UserProfileMenu />
         <UserProfileHeader initialUserDatas={user} />
         <ProfileConversationInput user={user} />
         <UserNudes initialNudes={nudesWithPermissions} user={user} />
