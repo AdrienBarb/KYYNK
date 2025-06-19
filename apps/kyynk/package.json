@@ -92,7 +92,7 @@
     "pica": "^9.0.1",
     "postcss": "^8.4.41",
     "posthog-js": "^1.217.4",
-    "posthog-node": "^4.6.0",
+    "posthog-node": "^4.18.0",
     "prisma": "^6.8.2",
     "pureimage": "^0.4.18",
     "react": "^18.2.0",
