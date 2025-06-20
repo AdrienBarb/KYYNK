@@ -22,6 +22,7 @@ model User {
   bodyType                      String?
   hairColor                     String?
   country                       String?
+  languages                     String[]           @default([])
   tags                          String[]           @default([])
   isArchived                    Boolean            @default(false)
   isEmailVerified               Boolean            @default(false)

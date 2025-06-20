@@ -63,6 +63,10 @@ export async function updateUser({
     data.country = body.country;
   }
 
+  if (body.languages) {
+    data.languages = body.languages;
+  }
+
   if (body.tags) {
     data.tags = body.tags;
   }
@@ -92,6 +96,7 @@ export async function updateUser({
       bodyType: true,
       hairColor: true,
       country: true,
+      languages: true,
       tags: true,
       contentProviderPolicyAccepted: true,
     },

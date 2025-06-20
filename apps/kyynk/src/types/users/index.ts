@@ -14,6 +14,7 @@ export type LoggedUserType = Pick<
   | 'bodyType'
   | 'hairColor'
   | 'country'
+  | 'languages'
   | 'tags'
   | 'preferences'
   | 'creditsAmount'

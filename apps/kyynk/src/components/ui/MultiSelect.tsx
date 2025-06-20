@@ -9,7 +9,7 @@ import {
   CommandGroup,
   CommandItem,
   CommandList,
-} from '@/components/ui/command';
+} from '@/components/ui/Command';
 import { Cross2Icon } from '@radix-ui/react-icons';
 
 export interface Option {
@@ -455,7 +455,7 @@ const MultipleSelector = React.forwardRef<
       >
         <div
           className={cn(
-            'relative min-h-[38px] rounded-lg border border-input text-sm transition-shadow focus-within:border-ring focus-within:outline-none focus-within:ring-[3px] focus-within:ring-ring/20 has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50',
+            'relative min-h-[38px] rounded-lg border border-input border-custom-black/20 bg-secondary text-sm transition-shadow focus-within:outline-none focus-within:ring-1 focus-within:ring-black has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50',
             {
               'p-1': selected.length !== 0,
               'cursor-text': !disabled && selected.length !== 0,
@@ -474,7 +474,7 @@ const MultipleSelector = React.forwardRef<
                 <div
                   key={option.value}
                   className={cn(
-                    'animate-fadeIn relative inline-flex h-7 cursor-default items-center rounded-md border border-solid bg-background pe-7 pl-2 ps-2 text-xs font-medium text-secondary-foreground transition-all hover:bg-background disabled:cursor-not-allowed disabled:opacity-50 data-[fixed]:pe-2',
+                    'animate-fadeIn relative inline-flex h-7 cursor-default items-center rounded-md border border-solid bg-primary/90 pe-7 pl-2 ps-2 text-xs font-medium text-secondary-foreground transition-all hover:bg-background disabled:cursor-not-allowed disabled:opacity-50 data-[fixed]:pe-2',
                     badgeClassName,
                   )}
                   data-fixed={option.fixed}
@@ -482,7 +482,7 @@ const MultipleSelector = React.forwardRef<
                 >
                   {option.label}
                   <button
-                    className="absolute -inset-y-px -end-px flex size-7 items-center justify-center rounded-e-lg border border-transparent p-0 text-muted-foreground/80 outline-0 transition-colors hover:text-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70"
+                    className="absolute -inset-y-px -end-px flex size-7 items-center justify-center rounded-e-lg border border-transparent p-0 text-muted-foreground/80 outline-0 transition-colors hover:text-foreground  focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         handleUnselect(option);
@@ -579,7 +579,7 @@ const MultipleSelector = React.forwardRef<
           >
             {open && (
               <CommandList
-                className="bg-popover text-popover-foreground shadow-lg shadow-black/5 outline-none"
+                className="bg-secondary text-popover-foreground shadow-md outline-none"
                 onMouseLeave={() => {
                   setOnScrollbar(false);
                 }}
@@ -627,7 +627,7 @@ const MultipleSelector = React.forwardRef<
                                   onChange?.(newOptions);
                                 }}
                                 className={cn(
-                                  'cursor-pointer',
+                                  'cursor-pointer hover:!bg-primary/90 hover:!text-accent-foreground data-[selected=true]:!bg-primary/90 data-[selected=true]:!text-accent-foreground',
                                   option.disable &&
                                     'cursor-not-allowed opacity-50',
                                 )}

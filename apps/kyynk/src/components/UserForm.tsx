@@ -7,14 +7,10 @@ import {
   HAIR_COLOR,
   countries,
 } from '@/constants/formValue';
-import EditIcon from '@mui/icons-material/Edit';
-import clsx from 'clsx';
-import { useTranslations } from 'next-intl';
+import { LANGUAGES } from '@/constants/languages';
 import useApi from '@/hooks/requests/useApi';
-import { useRouter } from 'next/navigation';
 import { useUser } from '@/hooks/users/useUser';
 import '@uploadcare/react-uploader/core.css';
-import Avatar from './ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
@@ -44,14 +40,9 @@ import { isCreator } from '@/utils/users/isCreator';
 import Image from 'next/image';
 import imgixLoader from '@/lib/imgix/loader';
 import Loader from './Loader';
+import MultipleSelector from './ui/MultiSelect';
 
 const UserForm = () => {
-  //router
-  const router = useRouter();
-
-  //traduction
-  const t = useTranslations();
-
   const { user, refetch } = useUser();
 
   const profilInput = useRef<HTMLInputElement>(null);
@@ -90,6 +81,7 @@ const UserForm = () => {
     bodyType: z.string().optional(),
     hairColor: z.string().optional(),
     country: z.string().optional(),
+    languages: z.array(z.string()).optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -103,6 +95,7 @@ const UserForm = () => {
       reset({
         pseudo: user.pseudo ?? '',
         description: user.description ?? '',
+        languages: user.languages ?? [],
       });
     }
   }, [user, reset]);
@@ -167,7 +160,6 @@ const UserForm = () => {
               }}
             />
 
-            {/* Edit overlay */}
             <div
               className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center"
               onClick={(e) => {
@@ -178,7 +170,6 @@ const UserForm = () => {
               <Pencil className="text-white" size={24} />
             </div>
 
-            {/* Loading overlay */}
             {isUploading && (
               <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                 <Loader size={32} style={{ color: 'white' }} />
@@ -201,7 +192,7 @@ const UserForm = () => {
           name="pseudo"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>{t('db.pseudo')}</FormLabel>
+              <FormLabel>Pseudo</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -217,7 +208,7 @@ const UserForm = () => {
               name="description"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>{t('db.description')}</FormLabel>
+                  <FormLabel>Description</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Textarea {...field} className="text-base pr-16" />
@@ -230,6 +221,33 @@ const UserForm = () => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="languages"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Languages</FormLabel>
+                  <FormControl>
+                    <MultipleSelector
+                      value={
+                        field.value?.map((lang) => ({
+                          value: lang,
+                          label:
+                            LANGUAGES.find((l) => l.value === lang)?.label ||
+                            lang,
+                        })) || []
+                      }
+                      onChange={(options) =>
+                        field.onChange(options.map((opt) => opt.value))
+                      }
+                      options={LANGUAGES}
+                      placeholder="Select languages"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <div className="flex gap-8 w-full">
               <FormField
                 control={form.control}
@@ -237,20 +255,20 @@ const UserForm = () => {
                 render={({ field }) => {
                   return (
                     <FormItem className="w-full">
-                      <FormLabel>{t('db.country')}</FormLabel>
+                      <FormLabel>Country</FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
                           value={field.value! ?? user?.country}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder={t('db.nothing')} />
+                            <SelectValue placeholder="Select a country" />
                           </SelectTrigger>
                           <SelectContent>
                             {countries.map((el) => {
                               return (
                                 <SelectItem value={el.value} key={el.value}>
-                                  {t(`db.${el.label}`)}
+                                  {el.label}
                                 </SelectItem>
                               );
                             })}
@@ -267,20 +285,20 @@ const UserForm = () => {
                 name="gender"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>{t('db.gender')}</FormLabel>
+                    <FormLabel>Gender</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value! ?? user?.gender}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder={t('db.nothing')} />
+                          <SelectValue placeholder="Select a gender" />
                         </SelectTrigger>
                         <SelectContent>
                           {GENDER.map((el) => {
                             return (
-                              <SelectItem value={el} key={el}>
-                                {t(`db.${el}`)}
+                              <SelectItem value={el.value} key={el.value}>
+                                {el.label}
                               </SelectItem>
                             );
                           })}
@@ -298,20 +316,20 @@ const UserForm = () => {
                 name="bodyType"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>{t('db.body_type')}</FormLabel>
+                    <FormLabel>Body Type</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value! ?? user?.bodyType}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder={t('db.nothing')} />
+                          <SelectValue placeholder="Select a body type" />
                         </SelectTrigger>
                         <SelectContent>
                           {BODY_TYPE.map((el) => {
                             return (
-                              <SelectItem value={el} key={el}>
-                                {t(`db.${el}`)}
+                              <SelectItem value={el.value} key={el.value}>
+                                {el.label}
                               </SelectItem>
                             );
                           })}
@@ -328,20 +346,20 @@ const UserForm = () => {
                 name="hairColor"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>{t('db.hair_color')}</FormLabel>
+                    <FormLabel>Hair Color</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value! ?? user?.hairColor}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder={t('db.nothing')} />
+                          <SelectValue placeholder="Select a hair color" />
                         </SelectTrigger>
                         <SelectContent>
                           {HAIR_COLOR.map((el) => {
                             return (
-                              <SelectItem value={el} key={el}>
-                                {t(`db.${el}`)}
+                              <SelectItem value={el.value} key={el.value}>
+                                {el.label}
                               </SelectItem>
                             );
                           })}
@@ -362,7 +380,7 @@ const UserForm = () => {
           isLoading={isPending}
           disabled={isPending}
         >
-          {t('common.validate')}
+          Validate
         </Button>
       </form>
     </Form>
