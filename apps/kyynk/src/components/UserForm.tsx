@@ -241,14 +241,13 @@ const UserForm = () => {
                         field.onChange(options.map((opt) => opt.value))
                       }
                       options={LANGUAGES}
-                      placeholder="Select languages"
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <div className="flex gap-8 w-full">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full">
               <FormField
                 control={form.control}
                 name="country"
@@ -310,7 +309,7 @@ const UserForm = () => {
                 )}
               />
             </div>
-            <div className="flex gap-8 w-full">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full">
               <FormField
                 control={form.control}
                 name="bodyType"
