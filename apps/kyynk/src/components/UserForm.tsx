@@ -41,6 +41,9 @@ import { User } from '@prisma/client';
 import axios from 'axios';
 import { Pencil } from 'lucide-react';
 import { isCreator } from '@/utils/users/isCreator';
+import Image from 'next/image';
+import imgixLoader from '@/lib/imgix/loader';
+import Loader from './Loader';
 
 const UserForm = () => {
   //router
@@ -139,6 +142,12 @@ const UserForm = () => {
     }
   };
 
+  const imageUrl = imgixLoader({
+    src: user?.profileImageId || '',
+    width: 400,
+    quality: 80,
+  });
+
   return (
     <Form {...form}>
       <form
@@ -146,11 +155,36 @@ const UserForm = () => {
         className="space-y-8 flex flex-col items-center w-full"
       >
         <div className="relative self-center">
-          <Avatar
-            size={164}
-            imageId={user?.profileImageId}
-            pseudo={user?.pseudo}
-          />
+          <div className="relative aspect-square w-40 h-40 overflow-hidden rounded-md cursor-pointer group">
+            <Image
+              src={imageUrl}
+              alt={user?.pseudo || ''}
+              layout="fill"
+              objectFit="cover"
+              onClick={(e) => {
+                e.preventDefault();
+                profilInput.current?.click();
+              }}
+            />
+
+            {/* Edit overlay */}
+            <div
+              className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center"
+              onClick={(e) => {
+                e.preventDefault();
+                profilInput.current?.click();
+              }}
+            >
+              <Pencil className="text-white" size={24} />
+            </div>
+
+            {/* Loading overlay */}
+            {isUploading && (
+              <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                <Loader size={32} style={{ color: 'white' }} />
+              </div>
+            )}
+          </div>
 
           <input
             ref={profilInput}
@@ -160,20 +194,6 @@ const UserForm = () => {
             multiple={false}
             accept="image/png, image/jpeg"
           />
-
-          <div className="absolute right-2.5 bottom-2.5 w-8 h-8">
-            <Button
-              size="icon"
-              className="rounded-full"
-              onClick={(e) => {
-                e.preventDefault();
-                profilInput.current?.click();
-              }}
-              isLoading={isUploading}
-            >
-              <Pencil color="#fff0eb" />
-            </Button>
-          </div>
         </div>
 
         <FormField
