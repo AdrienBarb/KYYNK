@@ -241,6 +241,9 @@ const UserForm = () => {
                         field.onChange(options.map((opt) => opt.value))
                       }
                       options={LANGUAGES}
+                      inputProps={{
+                        style: { fontSize: '16px' },
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
