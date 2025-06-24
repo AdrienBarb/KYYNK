@@ -6,7 +6,7 @@ import { errorMessages } from '@/lib/constants/errorMessage';
 import { prisma } from '@/lib/db/client';
 import { UTMValues } from '@/utils/tracking/getUTMFromLocalStorage';
 import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
-import { sendTrafficJunkyCreatorConversion } from '@/utils/tracking/traffic-junky/sendTrafficJunkyPostback';
+import { sendTrafficJunkyCreatorConversion } from '@/utils/tracking/traffic-junky/sendTrafficJunkyCreatorConversion';
 import { checkOrCreateSlug } from '@/utils/users/checkOrCreateSlug';
 import bcrypt from 'bcryptjs';
 import { AuthError } from 'next-auth';
