@@ -6,6 +6,7 @@ export const UTM_PARAMS = [
   'utm_campaign',
   'utm_content',
   'utm_term',
+  'aclid',
 ] as const;
 
 export type UTMParam = (typeof UTM_PARAMS)[number];

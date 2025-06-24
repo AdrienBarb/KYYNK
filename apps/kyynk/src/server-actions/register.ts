@@ -6,6 +6,7 @@ import { errorMessages } from '@/lib/constants/errorMessage';
 import { prisma } from '@/lib/db/client';
 import { UTMValues } from '@/utils/tracking/getUTMFromLocalStorage';
 import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
+import { sendTrafficJunkyCreatorConversion } from '@/utils/tracking/traffic-junky/sendTrafficJunkyPostback';
 import { checkOrCreateSlug } from '@/utils/users/checkOrCreateSlug';
 import bcrypt from 'bcryptjs';
 import { AuthError } from 'next-auth';
@@ -68,6 +69,7 @@ export async function register({
       },
     });
 
+    // Send event to posthog when user sign up
     sendPostHogEvent({
       distinctId: createdUser.id,
       event: 'user_signed_up',
@@ -78,6 +80,18 @@ export async function register({
         $process_person_profile: false,
       },
     });
+
+    // Send event to traffic junky when user sign up
+    if (
+      utmTracking?.aclid &&
+      utmTracking?.utm_source === 'trafficjunky' &&
+      utmTracking?.utm_campaign?.includes('CREATOR')
+    ) {
+      sendTrafficJunkyCreatorConversion({
+        userId: createdUser.id,
+        aclid: utmTracking?.aclid,
+      });
+    }
 
     await signIn('credentials', {
       email: lowerCaseEmail,
