@@ -86,9 +86,18 @@ const TermsOfUsePage = () => {
             rel="noopener noreferrer"
             className="underline"
           >
-            CommerceGate
+            CGBilling Support
           </a>{' '}
-          at https://www.cgbilling.com/secure
+          (powered by{' '}
+          <a
+            href="https://www.commercegate.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            CommerceGate
+          </a>
+          )
         </Text>
         <Text>
           Kyynk Credit prices may change at any time, and we do not provide
