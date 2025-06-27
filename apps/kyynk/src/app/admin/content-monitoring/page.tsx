@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -8,9 +9,48 @@ import {
   CardTitle,
 } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/Button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/Select';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
+import useApi from '@/hooks/requests/useApi';
+import { apiRouter } from '@/constants/apiRouter';
+import { ContentMonitoringTable } from '@/components/admin/ContentMonitoringTable';
 
 export default function ContentMonitoringPage() {
+  const { useGet } = useApi();
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading, refetch } = useGet(
+    `${apiRouter.contentMonitoring}?status=${statusFilter}&page=${page}&limit=20`,
+  );
+
+  const nudes = data?.nudes || [];
+  const pagination = data?.pagination || { total: 0, totalPages: 0 };
+
+  const getStatusCounts = () => {
+    const counts = {
+      pending: 0,
+      approved: 0,
+      rejected: 0,
+      total: pagination.total,
+    };
+
+    nudes.forEach((nude: any) => {
+      counts[nude.moderationStatus as keyof typeof counts]++;
+    });
+
+    return counts;
+  };
+
+  const statusCounts = getStatusCounts();
+
   return (
     <div className="space-y-6">
       <AdminPageHeader
@@ -24,9 +64,9 @@ export default function ContentMonitoringPage() {
             <CardTitle className="text-sm font-medium">Total Content</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">1,234</div>
+            <div className="text-2xl font-bold">{statusCounts.total}</div>
             <p className="text-xs text-muted-foreground">
-              +20.1% from last month
+              All uploaded content
             </p>
           </CardContent>
         </Card>
@@ -38,7 +78,7 @@ export default function ContentMonitoringPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">23</div>
+            <div className="text-2xl font-bold">{statusCounts.pending}</div>
             <p className="text-xs text-muted-foreground">Requires attention</p>
           </CardContent>
         </Card>
@@ -46,76 +86,66 @@ export default function ContentMonitoringPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Flagged Content
+              Approved Content
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">5</div>
-            <p className="text-xs text-muted-foreground">Reported by users</p>
+            <div className="text-2xl font-bold">{statusCounts.approved}</div>
+            <p className="text-xs text-muted-foreground">Passed moderation</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Active Creators
+              Rejected Content
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">89</div>
-            <p className="text-xs text-muted-foreground">This month</p>
+            <div className="text-2xl font-bold">{statusCounts.rejected}</div>
+            <p className="text-xs text-muted-foreground">
+              Flagged as inappropriate
+            </p>
           </CardContent>
         </Card>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-          <CardDescription>
-            Latest content uploads and moderation actions
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 border rounded-lg">
-              <div className="flex items-center space-x-4">
-                <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
-                <div>
-                  <p className="font-medium">New video uploaded</p>
-                  <p className="text-sm text-muted-foreground">
-                    by user@example.com
-                  </p>
-                </div>
-              </div>
-              <Badge variant="secondary">Pending</Badge>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Content Review Queue</CardTitle>
+              <CardDescription>
+                Review and moderate user-generated content
+              </CardDescription>
             </div>
-
-            <div className="flex items-center justify-between p-4 border rounded-lg">
-              <div className="flex items-center space-x-4">
-                <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
-                <div>
-                  <p className="font-medium">Content flagged</p>
-                  <p className="text-sm text-muted-foreground">
-                    Reported by community
-                  </p>
-                </div>
-              </div>
-              <Badge variant="destructive">Flagged</Badge>
-            </div>
-
-            <div className="flex items-center justify-between p-4 border rounded-lg">
-              <div className="flex items-center space-x-4">
-                <div className="w-10 h-10 bg-gray-200 rounded-full"></div>
-                <div>
-                  <p className="font-medium">Content approved</p>
-                  <p className="text-sm text-muted-foreground">
-                    by admin@example.com
-                  </p>
-                </div>
-              </div>
-              <Badge variant="default">Approved</Badge>
+            <div className="flex items-center space-x-2">
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Filter by status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Content</SelectItem>
+                  <SelectItem value="pending">Pending Review</SelectItem>
+                  <SelectItem value="approved">Approved</SelectItem>
+                  <SelectItem value="rejected">Rejected</SelectItem>
+                </SelectContent>
+              </Select>
+              <Button onClick={() => refetch()} variant="secondary">
+                Refresh
+              </Button>
             </div>
           </div>
+        </CardHeader>
+        <CardContent>
+          <ContentMonitoringTable
+            nudes={nudes}
+            isLoading={isLoading}
+            onModerationComplete={refetch}
+            pagination={pagination}
+            currentPage={page}
+            onPageChange={setPage}
+          />
         </CardContent>
       </Card>
     </div>

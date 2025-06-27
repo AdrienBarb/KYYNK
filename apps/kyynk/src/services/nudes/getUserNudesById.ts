@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/db/client';
 import { getNudeSelectFields } from '@/utils/nudes/getNudeSelectFields';
+import { ModerationStatus } from '@prisma/client';
 
 export const getUserNudesById = async ({ userId }: { userId: string }) => {
   try {
@@ -8,6 +9,9 @@ export const getUserNudesById = async ({ userId }: { userId: string }) => {
         userId,
         isArchived: false,
         isPrivate: false,
+        moderationStatus: {
+          not: ModerationStatus.rejected,
+        },
       },
       orderBy: {
         createdAt: 'desc',
