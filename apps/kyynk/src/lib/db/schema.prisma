@@ -51,6 +51,7 @@ model User {
   feeFreeUntil                  DateTime           @default(dbgenerated("now() + interval '3 months'"))
   transactions                  Transaction[]
   utmTracking                   Json?
+  roles                         UserRole[]         @default([user])
 }
 
 model UserToken {
@@ -207,4 +208,9 @@ enum MessageStatus {
   sent
   delivered
   read
+}
+
+enum UserRole {
+  user
+  admin
 }

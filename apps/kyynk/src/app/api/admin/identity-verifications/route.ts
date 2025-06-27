@@ -16,13 +16,3 @@ export const GET = withAdminSecret(async (request: Request): Promise<any> => {
     return errorHandler(error);
   }
 });
-
-export const OPTIONS = () => {
-  return NextResponse.json(null, {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'X-ADMIN-SECRET-KEY, Content-Type',
-    },
-  });
-};

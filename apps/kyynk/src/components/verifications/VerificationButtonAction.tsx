@@ -20,9 +20,9 @@ import {
 } from '@/components/ui/Dialog';
 import { MoreHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import useApi from '@/hooks/requests/useAdminApi';
+import useApi from '@/hooks/requests/useApi';
 import { useQueryClient } from '@tanstack/react-query';
-import { apiRoutes } from '@/constants/router/apiRoutes';
+import { apiRouter } from '@/constants/apiRouter';
 
 const VerificationButtonAction = ({ user }) => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -30,14 +30,14 @@ const VerificationButtonAction = ({ user }) => {
 
   const { usePut } = useApi();
   const { mutate: confirmOrReject, isPending } = usePut(
-    apiRoutes.confirmOrReject,
+    apiRouter.confirmOrReject,
     {
       onSuccess: () => {
         setOpenDialog(false);
         queryClient.invalidateQueries({
           queryKey: [
             'get',
-            { url: apiRoutes.identityVerifications, params: {} },
+            { url: apiRouter.identityVerifications, params: {} },
           ],
         });
       },

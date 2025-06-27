@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/Table';
-import { Button } from '../ui/Button';
+import { Button } from '@/components/ui/Button';
 import { useState } from 'react';
 import { Input } from '@/components/ui/Input';
 
@@ -75,9 +75,7 @@ export function VerificationTable<TData, TValue>({
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns
-            </Button>
+            <Button className="ml-auto">Columns</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             {table

@@ -79,13 +79,3 @@ export const PUT = withAdminSecret(async (req: Request) => {
     return errorHandler(error);
   }
 });
-
-export const OPTIONS = () => {
-  return NextResponse.json(null, {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT',
-      'Access-Control-Allow-Headers': 'X-ADMIN-SECRET-KEY, Content-Type',
-    },
-  });
-};
