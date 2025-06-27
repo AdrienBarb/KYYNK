@@ -3,6 +3,7 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import AdminNavigation from '@/components/admin/AdminNavigation';
 
 export default function AdminLayout({
   children,
@@ -53,6 +54,9 @@ export default function AdminLayout({
           </div>
         </div>
       </div>
+
+      <AdminNavigation />
+
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">{children}</main>
     </div>
   );
