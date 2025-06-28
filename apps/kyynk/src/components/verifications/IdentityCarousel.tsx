@@ -11,8 +11,9 @@ import {
 } from '@/components/ui/Carousel';
 import imgixLoader from '@/lib/imgix/loader';
 import Image from 'next/image';
+import { User } from '@prisma/client';
 
-export const IdentityCarousel = ({ user }) => {
+export const IdentityCarousel = ({ user }: { user: User }) => {
   const imageUrl = imgixLoader({
     src: user.frontIdentity || '',
     width: 400,

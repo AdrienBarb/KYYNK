@@ -23,8 +23,9 @@ import { Button } from '@/components/ui/Button';
 import useApi from '@/hooks/requests/useApi';
 import { useQueryClient } from '@tanstack/react-query';
 import { apiRouter } from '@/constants/apiRouter';
+import { User } from '@prisma/client';
 
-const VerificationButtonAction = ({ user }) => {
+const VerificationButtonAction = ({ user }: { user: User }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const queryClient = useQueryClient();
 

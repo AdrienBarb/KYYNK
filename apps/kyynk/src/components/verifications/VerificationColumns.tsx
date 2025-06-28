@@ -4,15 +4,9 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/Button';
 import { ArrowUpDown } from 'lucide-react';
 import VerificationButtonAction from './VerificationButtonAction';
+import { User } from '@prisma/client';
 
-export type Payment = {
-  id: string;
-  pseudo: string;
-  status: 'pending' | 'processing' | 'success' | 'failed';
-  email: string;
-};
-
-export const VerificationColumns: ColumnDef<Payment>[] = [
+export const VerificationColumns: ColumnDef<User>[] = [
   {
     accessorKey: 'pseudo',
     header: 'Pseudo',
@@ -40,7 +34,7 @@ export const VerificationColumns: ColumnDef<Payment>[] = [
     cell: ({ row }) => {
       const user = row.original;
 
-      return <VerificationButtonAction user={user} />;
+      return <VerificationButtonAction user={user as User} />;
     },
   },
 ];
