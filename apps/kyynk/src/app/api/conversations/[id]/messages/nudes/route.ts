@@ -6,6 +6,7 @@ import { errorMessages } from '@/lib/constants/errorMessage';
 import { z } from 'zod';
 import { getCreditsWithFiat } from '@/utils/prices/getMediaPrice';
 import { privateNudeSchema } from '@/schemas/nudeSchema';
+import { MessageAttachmentType } from '@prisma/client';
 
 const formSchema = privateNudeSchema.extend({
   mediaId: z.string(),
@@ -71,7 +72,12 @@ export const POST = strictlyAuth(
           content: payload.description,
           conversationId,
           senderId: userId!,
-          nudeId: newNude.id,
+          attachment: {
+            create: {
+              type: MessageAttachmentType.nude,
+              nudeId: newNude.id,
+            },
+          },
         },
       });
 

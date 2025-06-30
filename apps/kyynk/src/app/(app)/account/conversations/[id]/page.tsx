@@ -38,10 +38,16 @@ const CurrentConversationPage = async ({ params }: PageProps) => {
   })) as MessageType[];
 
   const messagesWithPermissions = messages.map((message) => {
-    if (message.nude) {
+    if (message.attachment?.nude) {
       return {
         ...message,
-        nude: formatNudeWithPermissions(message.nude, session.user.id),
+        attachment: {
+          ...message.attachment,
+          nude: formatNudeWithPermissions(
+            message.attachment.nude,
+            session.user.id,
+          ),
+        },
       };
     }
     return message;

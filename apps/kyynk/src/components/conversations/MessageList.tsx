@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { MessageWithNudePermissions } from '@/types/messages';
 import { NudeWithPermissions } from '@/types/nudes';
-import NudeCard from '../nudes/NudeCard';
+import MessageAttachment from './MessageAttachment';
 import { cn } from '@/utils/tailwind/cn';
 
 interface Props {
@@ -34,14 +34,11 @@ const MessageList: FC<Props> = ({
               isMyMessage ? 'items-end' : 'items-start',
             )}
           >
-            {currentMessage.nude && (
-              <div className="w-32 mb-2">
-                <NudeCard
-                  key={currentMessage.nude.id}
-                  nude={currentMessage.nude}
-                  onClick={() => onNudeClick(currentMessage.nude)}
-                />
-              </div>
+            {currentMessage.attachment && (
+              <MessageAttachment
+                attachment={currentMessage.attachment}
+                onNudeClick={onNudeClick}
+              />
             )}
             <p
               className={cn(

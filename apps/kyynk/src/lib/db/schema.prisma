@@ -64,26 +64,26 @@ model UserToken {
 }
 
 model Nude {
-  id               String           @id @default(cuid())
-  description      String?
-  fiatPrice        Int
-  creditPrice      Int
-  currency         String
-  tags             String[]         @default([])
-  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId           String
-  media            Media            @relation(fields: [mediaId], references: [id], onDelete: Cascade)
-  mediaId          String
-  buyers           String[]         @default([])
-  isPrivate        Boolean          @default(false)
-  isArchived       Boolean          @default(false)
-  moderationStatus ModerationStatus @default(pending)
-  moderatedBy      String?
-  moderatedAt      DateTime?
-  moderationReason String?
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  message          Message[]
+  id                 String              @id @default(cuid())
+  description        String?
+  fiatPrice          Int
+  creditPrice        Int
+  currency           String
+  tags               String[]            @default([])
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId             String
+  media              Media               @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  mediaId            String
+  buyers             String[]            @default([])
+  isPrivate          Boolean             @default(false)
+  isArchived         Boolean             @default(false)
+  moderationStatus   ModerationStatus    @default(pending)
+  moderatedBy        String?
+  moderatedAt        DateTime?
+  moderationReason   String?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  messageAttachments MessageAttachment[]
 }
 
 model Media {
@@ -147,16 +147,25 @@ model Conversation {
 }
 
 model Message {
-  id             String        @id @default(cuid())
-  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  id             String             @id @default(cuid())
+  conversation   Conversation       @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   conversationId String
-  sender         User          @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  sender         User               @relation(fields: [senderId], references: [id], onDelete: Cascade)
   senderId       String
   content        String
-  nude           Nude?         @relation(fields: [nudeId], references: [id], onDelete: SetNull)
-  nudeId         String?
-  createdAt      DateTime      @default(now())
-  status         MessageStatus @default(sent)
+  attachment     MessageAttachment?
+  createdAt      DateTime           @default(now())
+  status         MessageStatus      @default(sent)
+}
+
+model MessageAttachment {
+  id        String                @id @default(cuid())
+  message   Message               @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  messageId String                @unique
+  type      MessageAttachmentType
+  nude      Nude?                 @relation(fields: [nudeId], references: [id], onDelete: SetNull)
+  nudeId    String?
+  createdAt DateTime              @default(now())
 }
 
 model UserSettings {
@@ -223,4 +232,10 @@ enum ModerationStatus {
   pending
   approved
   rejected
+}
+
+enum MessageAttachmentType {
+  nude
+  voice
+  tip
 }

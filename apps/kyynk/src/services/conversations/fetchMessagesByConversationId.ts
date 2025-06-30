@@ -19,8 +19,14 @@ export const fetchMessagesByConversationId = async ({
       senderId: true,
       createdAt: true,
       status: true,
-      nude: {
-        select: getNudeSelectFields(),
+      attachment: {
+        select: {
+          id: true,
+          type: true,
+          nude: {
+            select: getNudeSelectFields(),
+          },
+        },
       },
     },
   });

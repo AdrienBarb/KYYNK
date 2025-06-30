@@ -61,13 +61,16 @@ export const GET = strictlyAuth(
       const messages = await fetchMessagesByConversationId({ conversationId });
 
       const messagesWithPermissions = messages.map((message) => {
-        if (message.nude) {
+        if (message.attachment?.nude) {
           return {
             ...message,
-            nude: formatNudeWithPermissions(
-              message.nude as NudeFromPrisma,
-              userId,
-            ),
+            attachment: {
+              ...message.attachment,
+              nude: formatNudeWithPermissions(
+                message.attachment.nude as NudeFromPrisma,
+                userId,
+              ),
+            },
           };
         }
         return message;
