@@ -1,4 +1,3 @@
-import { fetchMessagesByConversationId } from '@/services/conversations/fetchMessagesByConversationId';
 import { getConversationById } from '@/services/conversations/getConversationById';
 import React from 'react';
 import Conversation from '@/components/conversations/Conversation';
@@ -6,9 +5,6 @@ import { ConversationType } from '@/types/conversations';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { appRouter } from '@/constants/appRouter';
-import { MessageType } from '@/types/messages';
-import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
-import { NudeFromPrisma } from '@/types/nudes';
 
 export type PageProps = {
   params: Promise<{ id: string }>;
@@ -33,32 +29,7 @@ const CurrentConversationPage = async ({ params }: PageProps) => {
     redirect(appRouter.home);
   }
 
-  const messages = (await fetchMessagesByConversationId({
-    conversationId: id,
-  })) as MessageType[];
-
-  const messagesWithPermissions = messages.map((message) => {
-    if (message.attachment?.nude) {
-      return {
-        ...message,
-        attachment: {
-          ...message.attachment,
-          nude: formatNudeWithPermissions(
-            message.attachment.nude,
-            session.user.id,
-          ),
-        },
-      };
-    }
-    return message;
-  });
-
-  return (
-    <Conversation
-      initialConversation={conversation}
-      initialMessages={messagesWithPermissions}
-    />
-  );
+  return <Conversation initialConversation={conversation} />;
 };
 
 export default CurrentConversationPage;

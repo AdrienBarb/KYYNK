@@ -36,20 +36,21 @@ import imgixLoader from '@/lib/imgix/loader';
 import useApi from '@/hooks/requests/useApi';
 import { useParams } from 'next/navigation';
 import MediasGallery from '../nudes/MediasGallery';
+import { useFetchMessages } from '@/hooks/conversations/useFetchMessages';
 
 interface Props {
   setOpen: (e: boolean) => void;
   open: boolean;
-  refetch: () => void;
 }
 
 export type PrivateNudeStepsType = 'form' | 'gallery' | 'uploading' | 'success';
 
-const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
+const PrivateNudeModal: FC<Props> = ({ setOpen, open }) => {
   const [step, setStep] = useState<PrivateNudeStepsType>('form');
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
   const { id: conversationId } = useParams();
+  const { refetch } = useFetchMessages();
 
   const form = useForm<z.infer<typeof privateNudeSchema>>({
     resolver: zodResolver(privateNudeSchema),

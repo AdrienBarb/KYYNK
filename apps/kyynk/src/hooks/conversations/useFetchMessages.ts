@@ -6,18 +6,12 @@ interface UseFetchMessagesProps {
   initialMessages: MessageType[];
 }
 
-export const useFetchMessages = ({
-  initialMessages,
-}: UseFetchMessagesProps) => {
+export const useFetchMessages = () => {
   const { id: conversationId } = useParams();
   const { useGet } = useApi();
 
   const { data: messages, refetch } = useGet(
     `/api/conversations/${conversationId}/messages`,
-    {},
-    {
-      initialData: initialMessages,
-    },
   );
 
   return {

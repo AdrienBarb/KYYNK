@@ -5,8 +5,6 @@ import { useChatScroll } from '@/lib/hooks/useChatScroll';
 import { ConversationType } from '@/types/conversations';
 import useConversationUsers from '@/hooks/conversations/useConversationUsers';
 import { useUser } from '@/hooks/users/useUser';
-import { MessageType } from '@/types/messages';
-import { NudeWithPermissions } from '@/types/nudes';
 import { isCreator } from '@/utils/users/isCreator';
 import { isUserVerified } from '@/utils/users/isUserVerified';
 import {
@@ -24,13 +22,9 @@ import { useCreateMessage } from '@/hooks/conversations/useCreateMessage';
 
 interface Props {
   initialConversation: ConversationType;
-  initialMessages: MessageType[];
 }
 
-const ConversationContent: FC<Props> = ({
-  initialConversation,
-  initialMessages,
-}) => {
+const ConversationContent: FC<Props> = ({ initialConversation }) => {
   const { otherUser } = useConversationUsers(initialConversation.participants);
   const { user, refetch: refetchUser } = useUser();
   const {
@@ -44,7 +38,7 @@ const ConversationContent: FC<Props> = ({
     setSelectedNude,
   } = useConversationModals();
 
-  const { messages, refetch } = useFetchMessages({ initialMessages });
+  const { messages, refetch } = useFetchMessages();
   const { handleSendMessage, isPending } = useCreateMessage({
     user,
     otherUser,
@@ -57,11 +51,6 @@ const ConversationContent: FC<Props> = ({
 
   const ref = useChatScroll(messages);
 
-  const handleNudeClick = (nude: NudeWithPermissions | undefined) => {
-    setSelectedNude(nude);
-    setNudeModalOpen(true);
-  };
-
   const handleOpenPrivateNudeModal = () => {
     setOpenPrivateNudeModal(true);
   };
@@ -73,7 +62,6 @@ const ConversationContent: FC<Props> = ({
       <MessageList
         messages={messages}
         currentUserId={user?.id}
-        onNudeClick={handleNudeClick}
         scrollRef={ref}
       />
 
@@ -104,7 +92,6 @@ const ConversationContent: FC<Props> = ({
       <PrivateNudeModal
         open={openPrivateNudeModal}
         setOpen={setOpenPrivateNudeModal}
-        refetch={refetch}
       />
     </div>
   );

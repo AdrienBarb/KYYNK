@@ -1,28 +1,21 @@
 import { FC } from 'react';
 import { MessageWithNudePermissions } from '@/types/messages';
-import { NudeWithPermissions } from '@/types/nudes';
 import MessageAttachment from './MessageAttachment';
 import { cn } from '@/utils/tailwind/cn';
 
 interface Props {
   messages: MessageWithNudePermissions[];
   currentUserId: string | undefined;
-  onNudeClick: (nude: NudeWithPermissions | undefined) => void;
   scrollRef: React.RefObject<HTMLDivElement>;
 }
 
-const MessageList: FC<Props> = ({
-  messages,
-  currentUserId,
-  onNudeClick,
-  scrollRef,
-}) => {
+const MessageList: FC<Props> = ({ messages, currentUserId, scrollRef }) => {
   return (
     <div
       className="flex flex-col gap-4 px-4 h-[100%] w-full overflow-y-scroll"
       ref={scrollRef}
     >
-      {messages.map((currentMessage) => {
+      {messages?.map((currentMessage) => {
         const isMyMessage = currentMessage.senderId === currentUserId;
 
         return (
@@ -35,10 +28,7 @@ const MessageList: FC<Props> = ({
             )}
           >
             {currentMessage.attachment && (
-              <MessageAttachment
-                attachment={currentMessage.attachment}
-                onNudeClick={onNudeClick}
-              />
+              <MessageAttachment attachment={currentMessage.attachment} />
             )}
             <p
               className={cn(

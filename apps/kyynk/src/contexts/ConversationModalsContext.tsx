@@ -1,3 +1,5 @@
+'use client';
+
 import React, {
   createContext,
   useContext,
@@ -14,8 +16,8 @@ interface ConversationModalsContextType {
   setOpenPrivateNudeModal: (open: boolean) => void;
   isNudeModalOpen: boolean;
   setNudeModalOpen: (open: boolean) => void;
-  selectedNude: NudeWithPermissions | undefined | null;
-  setSelectedNude: (nude: NudeWithPermissions | undefined | null) => void;
+  selectedNude: NudeWithPermissions | null;
+  setSelectedNude: (nude: NudeWithPermissions | null) => void;
 }
 
 const ConversationModalsContext = createContext<
@@ -31,9 +33,9 @@ export const ConversationModalsProvider: FC<Props> = ({ children }) => {
     useState(false);
   const [openPrivateNudeModal, setOpenPrivateNudeModal] = useState(false);
   const [isNudeModalOpen, setNudeModalOpen] = useState(false);
-  const [selectedNude, setSelectedNude] = useState<
-    NudeWithPermissions | undefined | null
-  >(null);
+  const [selectedNude, setSelectedNude] = useState<NudeWithPermissions | null>(
+    null,
+  );
 
   return (
     <ConversationModalsContext.Provider
