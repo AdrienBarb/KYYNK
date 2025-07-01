@@ -34,11 +34,13 @@ import { appRouter } from '@/constants/appRouter';
 import { usePaymentModalStore } from '@/stores/PaymentModalStore';
 import { formatCredits } from '@/utils/prices/formatCredits';
 import { isCreator } from '@/utils/users/isCreator';
+import { useCloseSideBarOnMobile } from '@/hooks/useCloseSideBarOnMobile';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { user } = useUser();
   const { openModal } = usePaymentModalStore();
+  const { closeSidebarOnMobile } = useCloseSideBarOnMobile();
 
   const logout = () => {
     toast.success('You are logged out');
@@ -89,7 +91,10 @@ export function NavUser() {
               <>
                 <DropdownMenuGroup>
                   <DropdownMenuItem asChild>
-                    <Link href={`/${user?.slug}`}>
+                    <Link
+                      href={`/${user?.slug}`}
+                      onClick={closeSidebarOnMobile}
+                    >
                       <User />
                       My Profile
                     </Link>
@@ -99,12 +104,21 @@ export function NavUser() {
               </>
             )}
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={openModal}>
+              <DropdownMenuItem
+                onClick={() => {
+                  openModal();
+                  closeSidebarOnMobile();
+                }}
+              >
                 <Coins />
                 Buy credits
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href={appRouter.becomeCreator} className="font-karla">
+                <Link
+                  href={appRouter.becomeCreator}
+                  className="font-karla"
+                  onClick={closeSidebarOnMobile}
+                >
                   <BadgeCheck />
                   Become a creator
                 </Link>
@@ -116,6 +130,7 @@ export function NavUser() {
                   }
                   target="_blank"
                   className="font-karla"
+                  onClick={closeSidebarOnMobile}
                 >
                   <HelpCircle />
                   Need help?

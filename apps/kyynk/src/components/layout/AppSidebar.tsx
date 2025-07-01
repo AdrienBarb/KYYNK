@@ -41,11 +41,13 @@ import {
 import { useIsMobile } from '@/hooks/use-mobile';
 import { isUserVerified } from '@/utils/users/isUserVerified';
 import { useConversations } from '@/hooks/conversations/useConversations';
+import { useCloseSideBarOnMobile } from '@/hooks/useCloseSideBarOnMobile';
 
 export function AppSidebar() {
   const { user, isLoggedIn } = useUser();
   const { conversations } = useConversations();
   const isMobile = useIsMobile();
+  const { closeSidebarOnMobile } = useCloseSideBarOnMobile();
 
   const platforms = [
     {
@@ -110,7 +112,7 @@ export function AppSidebar() {
                   item.isVisible && (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
-                        <Link href={item.url}>
+                        <Link href={item.url} onClick={closeSidebarOnMobile}>
                           <item.icon />
                           <span>{item.title}</span>
                         </Link>
@@ -135,7 +137,10 @@ export function AppSidebar() {
                             item.isVisible && (
                               <SidebarMenuSubItem key={item.title}>
                                 <SidebarMenuButton asChild>
-                                  <Link href={item.url}>
+                                  <Link
+                                    href={item.url}
+                                    onClick={closeSidebarOnMobile}
+                                  >
                                     <item.icon />
                                     <span>{item.title}</span>
                                   </Link>
@@ -159,7 +164,7 @@ export function AppSidebar() {
                 {creators.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <Link href={item.url}>
+                      <Link href={item.url} onClick={closeSidebarOnMobile}>
                         <item.icon />
                         <span>{item.title}</span>
                       </Link>
@@ -178,7 +183,10 @@ export function AppSidebar() {
                 {conversations.map((conversation) => (
                   <SidebarMenuItem key={conversation.id}>
                     <SidebarMenuButton asChild>
-                      <Link href={`/account/conversations/${conversation.id}`}>
+                      <Link
+                        href={`/account/conversations/${conversation.id}`}
+                        onClick={closeSidebarOnMobile}
+                      >
                         <span>{conversation.participants[0].pseudo}</span>
                       </Link>
                     </SidebarMenuButton>
