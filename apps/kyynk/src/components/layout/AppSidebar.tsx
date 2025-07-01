@@ -49,12 +49,6 @@ export function AppSidebar() {
 
   const platforms = [
     {
-      title: 'Home',
-      url: appRouter.home,
-      icon: Home,
-      isVisible: true,
-    },
-    {
       title: 'Models',
       url: appRouter.models,
       icon: UsersRound,
