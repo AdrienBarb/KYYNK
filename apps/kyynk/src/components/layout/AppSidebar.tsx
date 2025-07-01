@@ -41,7 +41,7 @@ import {
 import { useIsMobile } from '@/hooks/use-mobile';
 import { isUserVerified } from '@/utils/users/isUserVerified';
 import { useConversations } from '@/hooks/conversations/useConversations';
-import { useCloseSideBarOnMobile } from '@/hooks/useCloseSideBarOnMobile';
+import { useCloseSideBarOnMobile } from '@/hooks/others/useCloseSideBarOnMobile';
 
 export function AppSidebar() {
   const { user, isLoggedIn } = useUser();

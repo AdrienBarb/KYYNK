@@ -34,7 +34,7 @@ import { appRouter } from '@/constants/appRouter';
 import { usePaymentModalStore } from '@/stores/PaymentModalStore';
 import { formatCredits } from '@/utils/prices/formatCredits';
 import { isCreator } from '@/utils/users/isCreator';
-import { useCloseSideBarOnMobile } from '@/hooks/useCloseSideBarOnMobile';
+import { useCloseSideBarOnMobile } from '@/hooks/others/useCloseSideBarOnMobile';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
