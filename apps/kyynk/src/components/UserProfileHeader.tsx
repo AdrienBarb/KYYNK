@@ -12,6 +12,7 @@ import { FetchedUserType } from '@/types/users';
 import UserProfileMenu from './UserProfileMenu';
 import imgixLoader from '@/lib/imgix/loader';
 import Text from './ui/Text';
+import ProfileImage from './ProfileImage';
 
 interface Props {
   initialUserDatas: FetchedUserType;
@@ -34,23 +35,15 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
 
   const isLoggedUserProfile = loggedUser?.slug === slug;
 
-  const imageUrl = imgixLoader({
-    src: user?.profileImageId || '',
-    width: 400,
-    quality: 80,
-  });
-
   return (
     <div className="flex justify-center items-center w-full">
       <div className="flex flex-col items-center text-black gap-4">
-        <div className="relative aspect-square w-40 h-w-40 overflow-hidden rounded-md">
-          <Image
-            src={imageUrl}
-            alt={user?.pseudo || ''}
-            layout="fill"
-            objectFit="cover"
-          />
-        </div>
+        <ProfileImage
+          profileImageId={user?.profileImageId}
+          pseudo={user?.pseudo}
+          size={160}
+          className="w-40 h-40"
+        />
 
         <div className="flex flex-col items-center">
           <Title Tag="h2" className="text-lg lg:text-xl" dataId="user-pseudo">

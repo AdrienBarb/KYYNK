@@ -41,6 +41,7 @@ import Image from 'next/image';
 import imgixLoader from '@/lib/imgix/loader';
 import Loader from './Loader';
 import MultipleSelector from './ui/MultiSelect';
+import ProfileImage from './ProfileImage';
 
 const UserForm = () => {
   const { user, refetch } = useUser();
@@ -135,12 +136,6 @@ const UserForm = () => {
     }
   };
 
-  const imageUrl = imgixLoader({
-    src: user?.profileImageId || '',
-    width: 400,
-    quality: 80,
-  });
-
   return (
     <Form {...form}>
       <form
@@ -148,34 +143,22 @@ const UserForm = () => {
         className="space-y-8 flex flex-col items-center w-full"
       >
         <div className="relative self-center">
-          <div className="relative aspect-square w-40 h-40 overflow-hidden rounded-md cursor-pointer group">
-            <Image
-              src={imageUrl}
-              alt={user?.pseudo || ''}
-              layout="fill"
-              objectFit="cover"
-              onClick={(e) => {
-                e.preventDefault();
-                profilInput.current?.click();
-              }}
-            />
+          <ProfileImage
+            profileImageId={user?.profileImageId}
+            pseudo={user?.pseudo}
+            size={160}
+            className="w-40 h-40 cursor-pointer"
+            onClick={() => profilInput.current?.click()}
+            showOverlay={true}
+          >
+            <Pencil className="text-white" size={24} />
+          </ProfileImage>
 
-            <div
-              className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center"
-              onClick={(e) => {
-                e.preventDefault();
-                profilInput.current?.click();
-              }}
-            >
-              <Pencil className="text-white" size={24} />
+          {isUploading && (
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-md">
+              <Loader size={32} style={{ color: 'white' }} />
             </div>
-
-            {isUploading && (
-              <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                <Loader size={32} style={{ color: 'white' }} />
-              </div>
-            )}
-          </div>
+          )}
 
           <input
             ref={profilInput}
