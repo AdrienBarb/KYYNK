@@ -123,19 +123,21 @@ export function NavUser() {
                   Become a creator
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link
-                  href={
-                    process.env.NEXT_PUBLIC_CREATOR_TOOLKIT_NOTION_URL || ''
-                  }
-                  target="_blank"
-                  className="font-karla"
-                  onClick={closeSidebarOnMobile}
-                >
-                  <HelpCircle />
-                  Need help?
-                </Link>
-              </DropdownMenuItem>
+              {isCreator({ user }) && (
+                <DropdownMenuItem asChild>
+                  <Link
+                    href={
+                      process.env.NEXT_PUBLIC_CREATOR_TOOLKIT_NOTION_URL || ''
+                    }
+                    target="_blank"
+                    className="font-karla"
+                    onClick={closeSidebarOnMobile}
+                  >
+                    <HelpCircle />
+                    Need help?
+                  </Link>
+                </DropdownMenuItem>
+              )}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout}>

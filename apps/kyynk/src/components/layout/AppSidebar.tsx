@@ -175,7 +175,7 @@ export function AppSidebar() {
             </SidebarGroupContent>
           </SidebarGroup>
         )}
-        {conversations && (
+        {conversations && conversations.length > 0 && (
           <SidebarGroup>
             <SidebarGroupLabel>Chats</SidebarGroupLabel>
             <SidebarGroupContent>
