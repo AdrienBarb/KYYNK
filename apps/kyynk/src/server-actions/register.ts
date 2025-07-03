@@ -97,7 +97,7 @@ export async function register({
       email: lowerCaseEmail,
       password: password,
       redirect: true,
-      redirectTo: appRouter.userType,
+      redirectTo: appRouter.onboarding,
     });
 
     return { success: true };
