@@ -1,11 +1,24 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import UserSignUpForm from '@/components/auth/UserSignUpForm';
 import Title from '@/components/ui/Title';
 import { appRouter } from '@/constants/appRouter';
+import { useUser } from '@/hooks/users/useUser';
+import { useRouter } from 'next/navigation';
 
-const SignUpPage = async () => {
+const SignUpPage = () => {
+  const { isLoggedIn } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoggedIn()) {
+      router.push(appRouter.models);
+    }
+  }, [isLoggedIn]);
+
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="mb-12">
