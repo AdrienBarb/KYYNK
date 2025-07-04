@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
@@ -7,7 +5,7 @@ import UserSignUpForm from '@/components/auth/UserSignUpForm';
 import Title from '@/components/ui/Title';
 import { appRouter } from '@/constants/appRouter';
 
-const SignUpPage = () => {
+const SignUpPage = async () => {
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="mb-12">

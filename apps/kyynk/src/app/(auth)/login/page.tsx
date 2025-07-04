@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import PageContainer from '@/components/PageContainer';
 import Link from 'next/link';
@@ -8,7 +6,7 @@ import UserSignInForm from '@/components/auth/UserSignInForm';
 import Title from '@/components/ui/Title';
 import { appRouter } from '@/constants/appRouter';
 
-const LoginPage = () => {
+const LoginPage = async () => {
   return (
     <PageContainer>
       <div className="flex flex-col items-center justify-center">
