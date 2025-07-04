@@ -65,16 +65,16 @@ const OnboardingPage = () => {
   };
 
   return (
-    <Card className="flex items-center justify-center w-full flex-col max-w-2xl p-8 bg-primary">
+    <Card className="flex items-center justify-center w-full flex-col max-w-2xl p-8">
       <div className="mb-8">{renderStepContent()}</div>
 
-      <div className="flex flex-col items-center gap-2">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col items-center gap-2 w-full">
+        <div className="flex items-center gap-4 w-full">
           {hasPreviousStep && (
             <Button
               variant="secondary"
               onClick={goToPreviousStep}
-              className="flex items-center gap-2 bg-white text-primary border-white hover:bg-gray-100 w-24"
+              className="w-full"
             >
               Back
             </Button>
@@ -84,18 +84,14 @@ const OnboardingPage = () => {
             onClick={handleContinue}
             disabled={!canContinue || isPending}
             isLoading={isPending}
-            className="flex items-center gap-2 bg-white text-primary border-white hover:bg-gray-100 w-24"
+            className="w-full"
           >
             {hasNextStep ? 'Continue' : 'Finish'}
           </Button>
         </div>
 
         {hasNextStep && currentStep !== 'user-type' && (
-          <Button
-            variant="link"
-            onClick={handleSkip}
-            className="text-sm text-secondary"
-          >
+          <Button variant="link" onClick={handleSkip} className="text-sm">
             Skip
           </Button>
         )}

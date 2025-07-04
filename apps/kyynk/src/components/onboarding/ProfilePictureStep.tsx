@@ -56,17 +56,17 @@ const ProfilePictureStep: React.FC<ProfilePictureStepProps> = ({
   return (
     <div className="space-y-8">
       <div className="text-center">
-        <Title Tag="h2" className="mb-4 text-secondary font-semibold">
+        <Title Tag="h2" className="mb-4 text-custom-black font-semibold">
           Show yourself!
         </Title>
-        <p className="text-secondary font-medium">
+        <p className="text-custom-black font-medium">
           Upload a profile picture to make your profile stand out
         </p>
       </div>
 
       <div className="flex justify-center">
         <div className="relative">
-          <div className="relative w-40 h-40 rounded-full overflow-hidden cursor-pointer group border-4 border-secondary/30">
+          <div className="relative w-40 h-40 rounded-full overflow-hidden cursor-pointer group border-4 border-custom-black/30">
             {profileImageId ? (
               <Image
                 src={imgixLoader({
@@ -80,7 +80,7 @@ const ProfilePictureStep: React.FC<ProfilePictureStepProps> = ({
               />
             ) : (
               <div className="w-full h-full bg-background/10 flex items-center justify-center">
-                <Upload className="w-12 h-12 text-secondary/60" />
+                <Upload className="w-12 h-12 text-custom-black/60" />
               </div>
             )}
 

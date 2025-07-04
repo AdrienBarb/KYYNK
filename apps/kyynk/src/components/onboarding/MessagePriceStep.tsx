@@ -23,17 +23,17 @@ const MessagePriceStep: React.FC<MessagePriceStepProps> = ({
   return (
     <div className="space-y-8">
       <div className="text-center">
-        <Title Tag="h2" className="mb-4 text-secondary font-semibold">
+        <Title Tag="h2" className="mb-4 text-custom-black font-semibold">
           Set your message price!
         </Title>
-        <p className="text-secondary font-medium">
+        <p className="text-custom-black font-medium">
           Choose how much you want to charge for private messages
         </p>
       </div>
 
       <div className="flex justify-center">
         <Select value={selectedPrice} onValueChange={onPriceChange}>
-          <SelectTrigger className="w-48 bg-background/10 border-secondary/30 text-secondary placeholder:text-secondary/60">
+          <SelectTrigger className="w-48 bg-background/10 border-custom-black/30 text-custom-black placeholder:text-custom-black/60">
             <SelectValue placeholder="Select price" />
           </SelectTrigger>
           <SelectContent>

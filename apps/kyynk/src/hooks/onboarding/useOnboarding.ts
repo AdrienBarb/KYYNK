@@ -190,7 +190,7 @@ export const useOnboarding = (
       case 'user-type':
         return !!onboardingData.userType;
       case 'preferences':
-        return onboardingData.preferences.length > 0;
+        return true;
       case 'profile-picture':
         return !!onboardingData.profileImageId;
       case 'message-price':
