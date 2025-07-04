@@ -77,15 +77,13 @@ export function AppSidebar() {
       title: 'Conversations',
       url: appRouter.settingsConversations,
       icon: MessageCircle,
-      isVisible:
-        isLoggedIn() && isCreator({ user }) && isUserVerified({ user }),
+      isVisible: isLoggedIn() && isCreator({ user }),
     },
     {
       title: 'Payment',
       url: appRouter.settingsPayment,
       icon: CreditCard,
-      isVisible:
-        isLoggedIn() && isCreator({ user }) && isUserVerified({ user }),
+      isVisible: isLoggedIn() && isCreator({ user }),
     },
     {
       title: 'Preferences',

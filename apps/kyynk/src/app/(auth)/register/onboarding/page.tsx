@@ -8,11 +8,8 @@ import UserTypeStep from '@/components/onboarding/UserTypeStep';
 import PreferencesStep from '@/components/onboarding/PreferencesStep';
 import ProfilePictureStep from '@/components/onboarding/ProfilePictureStep';
 import MessagePriceStep from '@/components/onboarding/MessagePriceStep';
-import { useQueryState } from 'nuqs';
 
 const OnboardingPage = () => {
-  const [step, setStep] = useQueryState('step');
-
   const {
     currentStep,
     onboardingData,
@@ -27,7 +24,7 @@ const OnboardingPage = () => {
     canContinue,
     hasNextStep,
     hasPreviousStep,
-  } = useOnboarding(step, setStep);
+  } = useOnboarding();
 
   const renderStepContent = () => {
     switch (currentStep) {

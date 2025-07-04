@@ -5,6 +5,7 @@ import { appRouter } from '@/constants/appRouter';
 import { apiRouter } from '@/constants/apiRouter';
 import useApi from '@/hooks/requests/useApi';
 import { User } from '@prisma/client';
+import { useQueryState } from 'nuqs';
 
 export type OnboardingStep =
   | 'user-type'
@@ -19,15 +20,12 @@ export interface OnboardingData {
   fiatMessage?: string;
 }
 
-export const useOnboarding = (
-  urlStep?: string | null,
-  setUrlStep?: (step: string | null) => void,
-) => {
+export const useOnboarding = () => {
   const { user, refetch } = useUser();
   const { usePut } = useApi();
   const router = useRouter();
+  const [step, setStep] = useQueryState('step');
 
-  const [currentStep, setCurrentStep] = useState<OnboardingStep>('user-type');
   const [onboardingData, setOnboardingData] = useState<OnboardingData>({
     userType: '',
     preferences: [],
@@ -35,28 +33,20 @@ export const useOnboarding = (
     fiatMessage: '0',
   });
 
-  // Sync URL state with internal state
   useEffect(() => {
-    if (
-      urlStep &&
-      ['user-type', 'preferences', 'profile-picture', 'message-price'].includes(
-        urlStep,
-      )
-    ) {
-      setCurrentStep(urlStep as OnboardingStep);
+    if (user) {
+      setOnboardingData((prev) => ({
+        ...prev,
+        userType: user.userType || '',
+        preferences: user.preferences || [],
+        profileImageId: user.profileImageId || '',
+        fiatMessage: String(user.settings?.fiatMessage || '0'),
+      }));
     }
-  }, [urlStep]);
+  }, [user]);
 
-  // Update URL when step changes
-  const updateStep = useCallback(
-    (step: OnboardingStep) => {
-      setCurrentStep(step);
-      if (setUrlStep) {
-        setUrlStep(step);
-      }
-    },
-    [setUrlStep],
-  );
+  // Get current step from URL or default to 'user-type'
+  const currentStep: OnboardingStep = (step as OnboardingStep) || 'user-type';
 
   // Define step order based on user type
   const getStepOrder = useCallback((userType: string): OnboardingStep[] => {
@@ -75,7 +65,7 @@ export const useOnboarding = (
         // Navigate to next step or complete onboarding
         const nextStep = getNextStep();
         if (nextStep) {
-          updateStep(nextStep);
+          setStep(nextStep);
         } else {
           // Complete onboarding
           if (onboardingData.userType === 'member') {
@@ -97,7 +87,7 @@ export const useOnboarding = (
         // Navigate to next step or complete onboarding
         const nextStep = getNextStep();
         if (nextStep) {
-          updateStep(nextStep);
+          setStep(nextStep);
         } else {
           // Complete onboarding
           if (onboardingData.userType === 'member') {
@@ -159,7 +149,7 @@ export const useOnboarding = (
   const handleSkip = useCallback(() => {
     const nextStep = getNextStep();
     if (nextStep) {
-      updateStep(nextStep);
+      setStep(nextStep);
     } else {
       // Complete onboarding
       if (onboardingData.userType === 'member') {
@@ -168,7 +158,7 @@ export const useOnboarding = (
         router.push(`/${user?.slug}`);
       }
     }
-  }, [getNextStep, onboardingData.userType, router, user?.slug, updateStep]);
+  }, [getNextStep, onboardingData.userType, router, user?.slug, setStep]);
 
   const getStepData = useCallback(() => {
     switch (currentStep) {
@@ -203,9 +193,9 @@ export const useOnboarding = (
   const goToPreviousStep = useCallback(() => {
     const previousStep = getPreviousStep();
     if (previousStep) {
-      updateStep(previousStep);
+      setStep(previousStep);
     }
-  }, [getPreviousStep, updateStep]);
+  }, [getPreviousStep, setStep]);
 
   const isPending = isUpdatingUser || isUpdatingPrice;
 
