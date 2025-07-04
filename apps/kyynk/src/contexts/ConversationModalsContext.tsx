@@ -10,8 +10,6 @@ import React, {
 import { NudeWithPermissions } from '@/types/nudes';
 
 interface ConversationModalsContextType {
-  openNotEnoughCreditModal: boolean;
-  setOpenNotEnoughCreditModal: (open: boolean) => void;
   openPrivateNudeModal: boolean;
   setOpenPrivateNudeModal: (open: boolean) => void;
   isNudeModalOpen: boolean;
@@ -29,8 +27,6 @@ interface Props {
 }
 
 export const ConversationModalsProvider: FC<Props> = ({ children }) => {
-  const [openNotEnoughCreditModal, setOpenNotEnoughCreditModal] =
-    useState(false);
   const [openPrivateNudeModal, setOpenPrivateNudeModal] = useState(false);
   const [isNudeModalOpen, setNudeModalOpen] = useState(false);
   const [selectedNude, setSelectedNude] = useState<NudeWithPermissions | null>(
@@ -40,8 +36,6 @@ export const ConversationModalsProvider: FC<Props> = ({ children }) => {
   return (
     <ConversationModalsContext.Provider
       value={{
-        openNotEnoughCreditModal,
-        setOpenNotEnoughCreditModal,
         openPrivateNudeModal,
         setOpenPrivateNudeModal,
         isNudeModalOpen,

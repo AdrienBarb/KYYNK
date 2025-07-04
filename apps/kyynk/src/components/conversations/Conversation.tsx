@@ -14,11 +14,13 @@ import {
 import ConversationHeader from './ConversationHeader';
 import MessageList from './MessageList';
 import ConversationInput from './ConversationInput';
-import NotEnoughCreditsModal from '../modals/NotEnoughCreditsModal';
 import NudeModal from '../modals/NudeModal';
 import PrivateNudeModal from '../modals/PrivateNudeModal';
-import { useFetchMessages } from '@/hooks/conversations/useFetchMessages';
-import { useCreateMessage } from '@/hooks/conversations/useCreateMessage';
+import { useFetchMessages } from '@/hooks/messages/useFetchMessages';
+import { useSendMessage } from '@/hooks/messages/useSendMessage';
+import { useRealtimeMessages } from '@/hooks/messages/useRealtimeMessages';
+import { useParams } from 'next/navigation';
+import useApi from '@/hooks/requests/useApi';
 
 interface Props {
   initialConversation: ConversationType;
@@ -27,9 +29,19 @@ interface Props {
 const ConversationContent: FC<Props> = ({ initialConversation }) => {
   const { otherUser } = useConversationUsers(initialConversation.participants);
   const { user, refetch: refetchUser } = useUser();
+  const { id: conversationId } = useParams();
+  const { fetchData } = useApi();
+
+  useRealtimeMessages(conversationId as string, async (newMessage) => {
+    if (newMessage.senderId === user?.id) {
+      return;
+    }
+
+    const message = await fetchData(`/api/messages/${newMessage.id}`);
+    addMessageToCache(message);
+  });
+
   const {
-    openNotEnoughCreditModal,
-    setOpenNotEnoughCreditModal,
     openPrivateNudeModal,
     setOpenPrivateNudeModal,
     isNudeModalOpen,
@@ -38,13 +50,12 @@ const ConversationContent: FC<Props> = ({ initialConversation }) => {
     setSelectedNude,
   } = useConversationModals();
 
-  const { messages, refetch } = useFetchMessages();
-  const { handleSendMessage, isPending } = useCreateMessage({
+  const { messages, refetch, addMessageToCache } = useFetchMessages();
+  const { handleSendMessage, isPending } = useSendMessage({
     user,
     otherUser,
-    onNotEnoughCredits: () => setOpenNotEnoughCreditModal(true),
-    onSuccess: () => {
-      refetch();
+    onSuccess: (createdMessage) => {
+      addMessageToCache(createdMessage);
       refetchUser();
     },
   });
@@ -75,11 +86,6 @@ const ConversationContent: FC<Props> = ({ initialConversation }) => {
           openPrivateNudeModal={handleOpenPrivateNudeModal}
         />
       </div>
-
-      <NotEnoughCreditsModal
-        open={openNotEnoughCreditModal}
-        onOpenChange={setOpenNotEnoughCreditModal}
-      />
 
       <NudeModal
         isOpen={isNudeModalOpen}

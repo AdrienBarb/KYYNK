@@ -7,6 +7,9 @@ import { z } from 'zod';
 import { getCreditsWithFiat } from '@/utils/prices/getMediaPrice';
 import { privateNudeSchema } from '@/schemas/nudeSchema';
 import { MessageAttachmentType } from '@prisma/client';
+import { getMessageSelectFields } from '@/utils/messages/getMessageSelectFields';
+import { formatNudeWithPermissions } from '@/utils/nudes/formatNudeWithPermissions';
+import { NudeFromPrisma } from '@/types/nudes';
 
 const formSchema = privateNudeSchema.extend({
   mediaId: z.string(),
@@ -79,9 +82,21 @@ export const POST = strictlyAuth(
             },
           },
         },
+        select: getMessageSelectFields(),
       });
 
-      return NextResponse.json(message, { status: 201 });
+      const messageWithPermissions = {
+        ...message,
+        attachment: {
+          ...message.attachment!,
+          nude: formatNudeWithPermissions(
+            message.attachment!.nude as NudeFromPrisma,
+            userId,
+          ),
+        },
+      };
+
+      return NextResponse.json(messageWithPermissions, { status: 201 });
     } catch (error) {
       return errorHandler(error);
     }
