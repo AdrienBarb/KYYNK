@@ -45,7 +45,7 @@ import { useCloseSideBarOnMobile } from '@/hooks/others/useCloseSideBarOnMobile'
 
 export function AppSidebar() {
   const { user, isLoggedIn } = useUser();
-  const { conversations } = useConversations();
+  const { conversations, markConversationAsRead } = useConversations();
   const isMobile = useIsMobile();
   const { closeSidebarOnMobile } = useCloseSideBarOnMobile();
 
@@ -183,7 +183,12 @@ export function AppSidebar() {
                     <SidebarMenuButton asChild>
                       <Link
                         href={`/account/conversations/${conversation.id}`}
-                        onClick={closeSidebarOnMobile}
+                        onClick={() => {
+                          closeSidebarOnMobile();
+                          if (conversation.hasUnreadMessages) {
+                            markConversationAsRead(conversation.id);
+                          }
+                        }}
                       >
                         <span>{conversation.participants[0].pseudo}</span>
                       </Link>
