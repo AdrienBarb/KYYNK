@@ -9,7 +9,14 @@ export const useConversations = () => {
     isLoading,
     error,
     refetch,
-  } = useGet('/api/conversations');
+  } = useGet(
+    '/api/conversations',
+    {},
+    {
+      refetchInterval: 20000,
+      staleTime: 0,
+    },
+  );
 
   return {
     conversations: conversations as ConversationType[] | undefined,
