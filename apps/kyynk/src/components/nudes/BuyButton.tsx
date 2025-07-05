@@ -1,13 +1,12 @@
 import { useUser } from '@/hooks/users/useUser';
 import { Button } from '../ui/Button';
-import { useState } from 'react';
 import useApi from '@/hooks/requests/useApi';
 import { appRouter } from '@/constants/appRouter';
-import { useRouter, usePathname } from 'next/navigation';
-import NotEnoughCreditsModal from '../modals/NotEnoughCreditsModal';
+import { useRouter } from 'next/navigation';
 import { formatCredits } from '@/utils/prices/formatCredits';
 import { NudeWithPermissions } from '@/types/nudes';
 import { getEncodedFullUrl } from '@/utils/links/getEncodedFullUrl';
+import { useGlobalModalStore } from '@/stores/GlobalModalStore';
 
 interface Props {
   nude: NudeWithPermissions;
@@ -16,10 +15,8 @@ interface Props {
 
 const BuyButton = ({ nude, afterBuyAction }: Props) => {
   const { user, refetch } = useUser();
-  const [openNotEnoughCreditModal, setOpenNotEnoughCreditModal] =
-    useState(false);
+  const { setOpenNotEnoughCreditModal } = useGlobalModalStore((state) => state);
   const router = useRouter();
-  const pathname = usePathname();
 
   const { usePost } = useApi();
   const { mutate: buyNude, isPending } = usePost(`/api/nudes/${nude.id}/buy`, {
@@ -45,17 +42,11 @@ const BuyButton = ({ nude, afterBuyAction }: Props) => {
   };
 
   return (
-    <>
-      <Button
-        onClick={handleBuy}
-        isLoading={isPending}
-        disabled={isPending}
-      >{`Buy for ${formatCredits(nude.creditPrice)} credits`}</Button>
-      <NotEnoughCreditsModal
-        open={openNotEnoughCreditModal}
-        onOpenChange={setOpenNotEnoughCreditModal}
-      />
-    </>
+    <Button
+      onClick={handleBuy}
+      isLoading={isPending}
+      disabled={isPending}
+    >{`Buy for ${formatCredits(nude.creditPrice)} credits`}</Button>
   );
 };
 
