@@ -26,8 +26,6 @@ export function useRealtimeMessages(
       )
       .subscribe();
 
-    console.log('🚀 ~ useEffect ~ channel:', channel);
-
     return () => {
       supabase.removeChannel(channel);
     };
