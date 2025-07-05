@@ -42,6 +42,45 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { isUserVerified } from '@/utils/users/isUserVerified';
 import { useConversations } from '@/hooks/conversations/useConversations';
 import { useCloseSideBarOnMobile } from '@/hooks/others/useCloseSideBarOnMobile';
+import useConversationUsers from '@/hooks/conversations/useConversationUsers';
+import { ConversationType } from '@/types/conversations';
+
+interface ConversationItemProps {
+  conversation: ConversationType;
+  onCloseSidebar: () => void;
+  onMarkAsRead: (conversationId: string) => void;
+}
+
+const ConversationItem: React.FC<ConversationItemProps> = ({
+  conversation,
+  onCloseSidebar,
+  onMarkAsRead,
+}) => {
+  const { otherUser } = useConversationUsers(conversation.participants);
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton asChild>
+        <Link
+          href={`/account/conversations/${conversation.id}`}
+          onClick={() => {
+            onCloseSidebar();
+            if (conversation.hasUnreadMessages) {
+              onMarkAsRead(conversation.id);
+            }
+          }}
+        >
+          <span>{otherUser?.pseudo || 'Unknown User'}</span>
+        </Link>
+      </SidebarMenuButton>
+      {conversation.hasUnreadMessages && (
+        <SidebarMenuBadge>
+          <Dot />
+        </SidebarMenuBadge>
+      )}
+    </SidebarMenuItem>
+  );
+};
 
 export function AppSidebar() {
   const { user, isLoggedIn } = useUser();
@@ -179,26 +218,12 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 {conversations.map((conversation) => (
-                  <SidebarMenuItem key={conversation.id}>
-                    <SidebarMenuButton asChild>
-                      <Link
-                        href={`/account/conversations/${conversation.id}`}
-                        onClick={() => {
-                          closeSidebarOnMobile();
-                          if (conversation.hasUnreadMessages) {
-                            markConversationAsRead(conversation.id);
-                          }
-                        }}
-                      >
-                        <span>{conversation.participants[0].pseudo}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                    {conversation.hasUnreadMessages && (
-                      <SidebarMenuBadge>
-                        <Dot />
-                      </SidebarMenuBadge>
-                    )}
-                  </SidebarMenuItem>
+                  <ConversationItem
+                    key={conversation.id}
+                    conversation={conversation}
+                    onCloseSidebar={closeSidebarOnMobile}
+                    onMarkAsRead={markConversationAsRead}
+                  />
                 ))}
               </SidebarMenu>
             </SidebarGroupContent>
