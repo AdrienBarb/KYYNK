@@ -15,4 +15,5 @@ export const errorMessages = {
   NO_UNPAID_SALES: 'noUnpaidSales',
   INSUFFICIENT_CREDITS: 'insufficientCredits',
   MISSING_BANK_ACCOUNT_INFORMATION: 'missingBankAccountInformation',
+  NOT_FOUND: 'notFound',
 };

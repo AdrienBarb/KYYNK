@@ -1,3 +1,6 @@
+'use client';
+
+import { useGlobalModalStore } from '@/stores/GlobalModalStore';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,24 +13,21 @@ import {
 } from '../ui/AlertDialog';
 import { usePaymentModalStore } from '@/stores/PaymentModalStore';
 
-interface NotEnoughCreditsModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}
-
-const NotEnoughCreditsModal = ({
-  open,
-  onOpenChange,
-}: NotEnoughCreditsModalProps) => {
+const NotEnoughCreditsModal = () => {
   const openPaymentModal = usePaymentModalStore((state) => state.openModal);
+  const { openNotEnoughCreditModal, setOpenNotEnoughCreditModal } =
+    useGlobalModalStore((state) => state);
 
   const handleBuyMoreCredits = () => {
-    onOpenChange(false);
+    setOpenNotEnoughCreditModal(false);
     openPaymentModal();
   };
 
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
+    <AlertDialog
+      open={openNotEnoughCreditModal}
+      onOpenChange={setOpenNotEnoughCreditModal}
+    >
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Not Enough Credits</AlertDialogTitle>

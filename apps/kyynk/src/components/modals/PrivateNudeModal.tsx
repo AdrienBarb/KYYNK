@@ -36,7 +36,8 @@ import imgixLoader from '@/lib/imgix/loader';
 import useApi from '@/hooks/requests/useApi';
 import { useParams } from 'next/navigation';
 import MediasGallery from '../nudes/MediasGallery';
-import { useFetchMessages } from '@/hooks/conversations/useFetchMessages';
+import { useFetchMessages } from '@/hooks/messages/useFetchMessages';
+import { MessageWithNudePermissions } from '@/types/messages';
 
 interface Props {
   setOpen: (e: boolean) => void;
@@ -50,7 +51,7 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open }) => {
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
   const { id: conversationId } = useParams();
-  const { refetch } = useFetchMessages();
+  const { addMessageToCache } = useFetchMessages();
 
   const form = useForm<z.infer<typeof privateNudeSchema>>({
     resolver: zodResolver(privateNudeSchema),
@@ -66,12 +67,12 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open }) => {
   const { mutate: createPrivateNudeMessage, isPending } = usePost(
     `/api/conversations/${conversationId}/messages/nudes`,
     {
-      onSuccess: () => {
+      onSuccess: (createdMessage: MessageWithNudePermissions) => {
         setOpen(false);
         setSelectedMedia(null);
         setStep('form');
         reset();
-        refetch();
+        addMessageToCache(createdMessage);
       },
     },
   );

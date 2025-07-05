@@ -16,12 +16,10 @@ import CustomQueryClientProvider from '@/components/provider/CustomQueryClientPr
 import CustomSessionProvider from '@/components/provider/CustomSessionProvider';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { PostHogProvider } from '@/components/provider/PostHogProvider';
-import AgeVerificationModal from '@/components/modals/AgeVerificationModal';
-import PaymentModal from '@/components/modals/PaymentModal';
 import { AxiomWebVitals } from 'next-axiom';
-import NudeCreationModal from '@/components/modals/NudeCreationModal';
 import LoggedUserProvider from '@/components/provider/LoggedUserProvider';
 import UTMTracking from '@/components/tracking/UTMTracking';
+import ModalWrapper from '@/components/layout/ModalWrapper';
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
@@ -114,9 +112,9 @@ const RootLayout: FC<Props> = async ({ children }) => {
               </GlobalConfig>
               <UTMTracking />
               <GlobalErrorProvider />
-              <AgeVerificationModal />
-              <PaymentModal />
-              <NudeCreationModal />
+
+              {/* Modals */}
+              <ModalWrapper />
               <AxiomWebVitals />
             </body>
           </html>

@@ -8,7 +8,6 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogOverlay,
 } from '../ui/Dialog';
 import {
   Carousel,
@@ -21,7 +20,6 @@ import { creditPackages } from '@/constants/creditPackages';
 import { usePaymentModalStore } from '@/stores/PaymentModalStore';
 import { Button } from '../ui/Button';
 import useApi from '@/hooks/requests/useApi';
-import { useUser } from '@/hooks/users/useUser';
 import { cn } from '@/utils/tailwind/cn';
 
 const PaymentModal = () => {
@@ -30,7 +28,6 @@ const PaymentModal = () => {
   const [selectedPackageId, setSelectedPackageId] = useState<number | null>(
     null,
   );
-  const { refetch } = useUser();
 
   const { mutate: buyCredit, isPending } = usePost('/api/payment', {
     onSuccess: (data: { forwardUrl: string }) => {
