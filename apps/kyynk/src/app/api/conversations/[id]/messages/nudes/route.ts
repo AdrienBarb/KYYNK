@@ -50,47 +50,56 @@ export const POST = strictlyAuth(
       const payload = formSchema.parse(requestBody);
       const { creditPrice, fiatPrice } = getCreditsWithFiat(payload.price);
 
-      const newNude = await prisma.nude.create({
-        data: {
-          media: {
-            connect: {
-              id: payload.mediaId,
+      const result = await prisma.$transaction(async (tx) => {
+        const newNude = await tx.nude.create({
+          data: {
+            media: {
+              connect: {
+                id: payload.mediaId,
+              },
             },
-          },
-          user: {
-            connect: {
-              id: userId,
+            user: {
+              connect: {
+                id: userId,
+              },
             },
+            description: payload.description,
+            fiatPrice: fiatPrice,
+            creditPrice: creditPrice,
+            currency: 'EUR',
+            isPrivate: true,
           },
-          description: payload.description,
-          fiatPrice: fiatPrice,
-          creditPrice: creditPrice,
-          currency: 'EUR',
-          isPrivate: true,
-        },
-      });
+        });
 
-      const message = await prisma.message.create({
-        data: {
-          content: payload.description,
-          conversationId,
-          senderId: userId!,
-          attachment: {
-            create: {
-              type: MessageAttachmentType.nude,
-              nudeId: newNude.id,
+        const message = await tx.message.create({
+          data: {
+            content: payload.description,
+            conversationId,
+            senderId: userId!,
+            attachment: {
+              create: {
+                type: MessageAttachmentType.nude,
+                nudeId: newNude.id,
+              },
             },
           },
-        },
-        select: getMessageSelectFields(),
+          select: getMessageSelectFields(),
+        });
+
+        await tx.conversation.update({
+          where: { id: conversationId },
+          data: { updatedAt: new Date() },
+        });
+
+        return message;
       });
 
       const messageWithPermissions = {
-        ...message,
+        ...result,
         attachment: {
-          ...message.attachment!,
+          ...result.attachment!,
           nude: formatNudeWithPermissions(
-            message.attachment!.nude as NudeFromPrisma,
+            result.attachment!.nude as NudeFromPrisma,
             userId,
           ),
         },

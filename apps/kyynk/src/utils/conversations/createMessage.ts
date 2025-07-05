@@ -30,6 +30,11 @@ export const createMessage = async ({
     },
   });
 
+  await tx.conversation.update({
+    where: { id: conversationId },
+    data: { updatedAt: new Date() },
+  });
+
   if (requiredCredits > 0) {
     await tx.sale.create({
       data: {
