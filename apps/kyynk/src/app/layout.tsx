@@ -102,20 +102,20 @@ const RootLayout: FC<Props> = async ({ children }) => {
               href="/images/favicon-16x16.png"
             />
             <body>
-              <Toaster position="bottom-center" />
-              <GlobalConfig>
-                <LoggedUserProvider>
-                  <NuqsAdapter>
+              <NuqsAdapter>
+                <Toaster position="bottom-center" />
+                <GlobalConfig>
+                  <LoggedUserProvider>
                     <PostHogProvider>{children}</PostHogProvider>
-                  </NuqsAdapter>
-                </LoggedUserProvider>
-              </GlobalConfig>
-              <UTMTracking />
-              <GlobalErrorProvider />
+                  </LoggedUserProvider>
+                </GlobalConfig>
+                <UTMTracking />
+                <GlobalErrorProvider />
 
-              {/* Modals */}
-              <ModalWrapper />
-              <AxiomWebVitals />
+                {/* Modals */}
+                <ModalWrapper />
+                <AxiomWebVitals />
+              </NuqsAdapter>
             </body>
           </html>
         </NextIntlClientProvider>

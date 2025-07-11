@@ -12,14 +12,12 @@ import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { authenticate } from '../../server-actions/authenticate';
 import { useQueryState } from 'nuqs';
-import { useRouter } from 'next/navigation';
-import { appRouter } from '@/constants/appRouter';
+
 const UserSignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations();
   const [previousUrl] = useQueryState('previousUrl');
-  const router = useRouter();
 
   const handleClickShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);

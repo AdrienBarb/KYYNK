@@ -19,7 +19,7 @@ export const useUser = () => {
     {},
     {
       enabled: !!session?.user?.id,
-      staleTime: 1000 * 60 * 5,
+      staleTime: 0,
       refetchOnWindowFocus: true,
     },
   );
