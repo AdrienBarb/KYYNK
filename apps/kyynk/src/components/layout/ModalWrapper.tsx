@@ -6,7 +6,7 @@ import NotEnoughCreditsModal from '@/components/modals/NotEnoughCreditsModal';
 const ModalWrapper = () => {
   return (
     <>
-      <AgeVerificationModal />
+      {/* <AgeVerificationModal /> */}
       <PaymentModal />
       <NudeCreationModal />
 
