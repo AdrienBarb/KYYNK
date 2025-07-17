@@ -20,6 +20,8 @@ import { AxiomWebVitals } from 'next-axiom';
 import LoggedUserProvider from '@/components/provider/LoggedUserProvider';
 import UTMTracking from '@/components/tracking/UTMTracking';
 import ModalWrapper from '@/components/layout/ModalWrapper';
+import { GoogleTagManager } from '@next/third-parties/google';
+
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
@@ -79,8 +81,6 @@ const RootLayout: FC<Props> = async ({ children }) => {
   const locale = await getLocale();
   const messages = await getMessages();
 
-  console.log(process.env.NEXTAUTH_URL);
-
   return (
     <CustomQueryClientProvider>
       <CustomSessionProvider>
@@ -101,6 +101,7 @@ const RootLayout: FC<Props> = async ({ children }) => {
               sizes="16x16"
               href="/images/favicon-16x16.png"
             />
+            <GoogleTagManager gtmId="GTM-KHBKVG2G" />
             <body>
               <NuqsAdapter>
                 <Toaster position="bottom-center" />
