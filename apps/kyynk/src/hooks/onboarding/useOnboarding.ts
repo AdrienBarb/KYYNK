@@ -63,12 +63,6 @@ export const useOnboarding = () => {
       onSuccess: async (data: Partial<User>) => {
         refetch();
 
-        if (data?.userType === UserType.creator) {
-          sendGTMEventToGTM({
-            event: 'creator_signup',
-          });
-        }
-
         // Navigate to next step or complete onboarding
         const nextStep = getNextStep();
         if (nextStep) {
