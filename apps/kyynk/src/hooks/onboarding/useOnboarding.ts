@@ -4,8 +4,9 @@ import { useUser } from '@/hooks/users/useUser';
 import { appRouter } from '@/constants/appRouter';
 import { apiRouter } from '@/constants/apiRouter';
 import useApi from '@/hooks/requests/useApi';
-import { User } from '@prisma/client';
+import { User, UserType } from '@prisma/client';
 import { useQueryState } from 'nuqs';
+import { sendGTMEventToGTM } from '@/utils/tracking/sendGTMEvent';
 
 export type OnboardingStep =
   | 'user-type'
@@ -61,6 +62,12 @@ export const useOnboarding = () => {
     {
       onSuccess: async (data: Partial<User>) => {
         refetch();
+
+        if (data?.userType === UserType.creator) {
+          sendGTMEventToGTM({
+            event: 'creator_signup',
+          });
+        }
 
         // Navigate to next step or complete onboarding
         const nextStep = getNextStep();
