@@ -1,12 +1,13 @@
-import { genPageMetadata } from '@/app/seo';
-import AppFAQ from '@/components/home/AppFAQ';
+import UsersList from '@/components/UsersList';
+import React from 'react';
+import { getUsers } from '@/services/users/getUsers';
+import { User } from '@prisma/client';
+import PaddingContainer from '@/components/layout/PaddingContainer';
 import Landing from '@/components/home/Landing';
-import LandingFeatures from '@/components/home/LandingFeatures';
-import Footer from '@/components/layout/Footer';
-import NavigationBar from '@/components/layout/NavigationBar';
-import ModelOffer from '@/components/home/ModelOffer';
+import AppFAQ from '@/components/home/AppFAQ';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import { genPageMetadata } from '@/app/seo';
 
 export type PageProps = {
   params: Promise<{ locale: string }>;
@@ -25,17 +26,16 @@ export async function generateMetadata({
   });
 }
 
-const Home = async () => {
+const HomePage = async () => {
+  const initialUsersDatas = (await getUsers()) as User[];
+
   return (
-    <>
-      <NavigationBar type="app" />
+    <PaddingContainer>
       <Landing />
-      <ModelOffer />
-      <LandingFeatures />
+      <UsersList initialUsers={initialUsersDatas} />
       <AppFAQ />
-      <Footer />
-    </>
+    </PaddingContainer>
   );
 };
 
-export default Home;
+export default HomePage;

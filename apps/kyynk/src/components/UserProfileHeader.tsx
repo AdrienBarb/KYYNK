@@ -41,7 +41,7 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
         <ProfileImage
           profileImageId={user?.profileImageId}
           pseudo={user?.pseudo}
-          size={160}
+          size={320}
           className="w-40 h-40"
         />
 

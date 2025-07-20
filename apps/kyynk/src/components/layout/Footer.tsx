@@ -11,10 +11,18 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row gap-8 justify-between items-center">
           <p className="font-extralight">© Copyright 2025 - KYYNK</p>
           <div className="flex flex-col md:flex-row gap-4 text-center">
-            <Link href="/terms-of-service">Terms of Service</Link>
-            <Link href="/privacy-policy">Privacy Policy</Link>
-            <Link href="/dmca-policy">DMCA Policy</Link>
-            <Link href="/contact-us">Contact Us</Link>
+            <Link className="text-sm font-light" href="/terms-of-service">
+              Terms of Service
+            </Link>
+            <Link className="text-sm font-light" href="/privacy-policy">
+              Privacy Policy
+            </Link>
+            <Link className="text-sm font-light" href="/dmca-policy">
+              DMCA Policy
+            </Link>
+            <Link className="text-sm font-light" href="/contact-us">
+              Contact Us
+            </Link>
           </div>
         </div>
         <p className="text-sm text-center font-light max-w-2xl mx-auto">

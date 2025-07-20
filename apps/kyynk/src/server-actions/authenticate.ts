@@ -19,7 +19,7 @@ export async function authenticate({
       email: email,
       password: password,
       redirect: true,
-      redirectTo: previousUrl || appRouter.models,
+      redirectTo: previousUrl || appRouter.home,
     });
 
     return { success: true };

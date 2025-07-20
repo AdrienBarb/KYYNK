@@ -8,6 +8,7 @@ import React, { FC, ReactNode } from 'react';
 import { getCookie } from 'cookies-next/server';
 import { appRouter } from '@/constants/appRouter';
 import AddButton from '@/components/nudes/AddButton';
+import Footer from '@/components/layout/Footer';
 
 interface Props {
   children: ReactNode;
@@ -24,8 +25,8 @@ const AppLayout: FC<Props> = async ({ children }) => {
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar />
-      <main className="w-full">
-        <div className="sticky top-0 z-10 p-4 flex justify-between align-center bg-secondary-dark border-b border-custom-black/20 h-[68px]">
+      <div className="w-full">
+        <header className="sticky top-0 z-10 p-4 flex justify-between align-center bg-secondary-dark border-b border-custom-black/20 h-[68px]">
           <SidebarTrigger />
           <div>
             {!isLoggedIn && (
@@ -35,9 +36,10 @@ const AppLayout: FC<Props> = async ({ children }) => {
             )}
             {isLoggedIn && <AddButton />}
           </div>
-        </div>
-        <div>{children}</div>
-      </main>
+        </header>
+        <main className="min-h-screen">{children}</main>
+        <Footer />
+      </div>
     </SidebarProvider>
   );
 };

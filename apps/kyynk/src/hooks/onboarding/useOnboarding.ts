@@ -70,7 +70,7 @@ export const useOnboarding = () => {
         } else {
           // Complete onboarding
           if (onboardingData.userType === 'member') {
-            router.push(appRouter.models);
+            router.push(appRouter.home);
           } else {
             router.push(`/${user?.slug}`);
           }
@@ -92,7 +92,7 @@ export const useOnboarding = () => {
         } else {
           // Complete onboarding
           if (onboardingData.userType === 'member') {
-            router.push(appRouter.models);
+            router.push(appRouter.home);
           } else {
             router.push(`/${user?.slug}`);
           }
@@ -154,7 +154,7 @@ export const useOnboarding = () => {
     } else {
       // Complete onboarding
       if (onboardingData.userType === 'member') {
-        router.push(appRouter.models);
+        router.push(appRouter.home);
       } else {
         router.push(`/${user?.slug}`);
       }

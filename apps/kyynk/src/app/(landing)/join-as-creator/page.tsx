@@ -44,7 +44,7 @@ const Home = async () => {
 
             <div className="mt-4">
               <Button variant="secondary" asChild>
-                <Link href={session ? appRouter.models : appRouter.register}>
+                <Link href={session ? appRouter.home : appRouter.register}>
                   Start Earning Now
                 </Link>
               </Button>

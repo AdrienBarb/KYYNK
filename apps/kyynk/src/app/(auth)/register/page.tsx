@@ -15,7 +15,7 @@ const SignUpPage = () => {
 
   useEffect(() => {
     if (isLoggedIn()) {
-      router.push(appRouter.models);
+      router.push(appRouter.home);
     }
   }, [isLoggedIn]);
 

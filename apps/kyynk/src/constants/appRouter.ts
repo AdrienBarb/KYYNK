@@ -4,7 +4,6 @@ export const appRouter = {
   register: '/register',
   forgotPassword: '/login/forgot-password',
   onboarding: '/register/onboarding',
-  models: '/models',
   addNudes: '/account/nudes',
   myProfile: '/account/settings/my-profile',
   becomeCreator: '/account/become-creator',
