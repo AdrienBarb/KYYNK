@@ -1,16 +1,12 @@
 'use client';
 
 import React, { FC } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import Image from 'next/image';
+import { useParams } from 'next/navigation';
 import useApi from '@/hooks/requests/useApi';
-import Avatar from './ui/Avatar';
 import OnlineStatus from '@/components/profile/OnlineStatus';
 import Title from '@/components/ui/Title';
 import { useUser } from '@/hooks/users/useUser';
 import { FetchedUserType } from '@/types/users';
-import UserProfileMenu from './UserProfileMenu';
-import imgixLoader from '@/lib/imgix/loader';
 import Text from './ui/Text';
 import UserImage from './UserImage';
 import ProfilePlaceholder from './ProfilePlaceholder';
@@ -40,15 +36,11 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
     <div className="flex justify-center items-center w-full">
       <div className="flex flex-col items-center text-black gap-4">
         <div className="relative aspect-square w-72 h-72 overflow-hidden rounded-md">
-          {user?.profileImageId ? (
-            <UserImage
-              imageId={user?.profileImageId}
-              alt={user?.pseudo}
-              size={320}
-            />
-          ) : (
-            <ProfilePlaceholder pseudo={user?.pseudo} />
-          )}
+          <UserImage
+            imageId={user?.profileImageId}
+            alt={user?.pseudo}
+            size={320}
+          />
         </div>
 
         <div className="flex flex-col items-center">
