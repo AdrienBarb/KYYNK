@@ -1,4 +1,5 @@
 import { User, UserSettings } from '@prisma/client';
+import { ProfileImageType } from '../profile-images';
 
 export type LoggedUserType = Pick<
   User,
@@ -24,6 +25,7 @@ export type LoggedUserType = Pick<
   | 'contentProviderPolicyAccepted'
   | 'lastSeenAt'
 > & {
+  profileImages: ProfileImageType[];
   settings: Pick<
     UserSettings,
     'fiatMessage' | 'creditMessage' | 'bankAccountName' | 'iban'

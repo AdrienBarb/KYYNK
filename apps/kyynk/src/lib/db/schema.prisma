@@ -16,6 +16,7 @@ model User {
   password                      String
   description                   String?
   profileImageId                String?
+  profileImages                 ProfileImage[]
   nudesCount                    Int                @default(0)
   age                           Int?
   gender                        String?
@@ -198,6 +199,17 @@ model Transaction {
   status       TransactionStatus @default(pending)
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
+}
+
+model ProfileImage {
+  id        String   @id @default(cuid())
+  imageId   String   // S3 file key
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 enum TransactionStatus {

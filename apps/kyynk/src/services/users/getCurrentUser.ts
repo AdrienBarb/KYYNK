@@ -31,6 +31,16 @@ export const getCurrentUser = async ({ userId }: { userId: string }) => {
         contentProviderPolicyAccepted: true,
         lastSeenAt: true,
         utmTracking: true,
+        profileImages: {
+          select: {
+            id: true,
+            imageId: true,
+            createdAt: true,
+          },
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
         settings: {
           select: {
             fiatMessage: true,

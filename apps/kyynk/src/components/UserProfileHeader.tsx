@@ -12,7 +12,8 @@ import { FetchedUserType } from '@/types/users';
 import UserProfileMenu from './UserProfileMenu';
 import imgixLoader from '@/lib/imgix/loader';
 import Text from './ui/Text';
-import ProfileImage from './ProfileImage';
+import UserImage from './UserImage';
+import ProfilePlaceholder from './ProfilePlaceholder';
 
 interface Props {
   initialUserDatas: FetchedUserType;
@@ -38,12 +39,17 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
   return (
     <div className="flex justify-center items-center w-full">
       <div className="flex flex-col items-center text-black gap-4">
-        <ProfileImage
-          profileImageId={user?.profileImageId}
-          pseudo={user?.pseudo}
-          size={320}
-          className="w-40 h-40"
-        />
+        <div className="relative aspect-square w-72 h-72 overflow-hidden rounded-md">
+          {user?.profileImageId ? (
+            <UserImage
+              imageId={user?.profileImageId}
+              alt={user?.pseudo}
+              size={320}
+            />
+          ) : (
+            <ProfilePlaceholder pseudo={user?.pseudo} />
+          )}
+        </div>
 
         <div className="flex flex-col items-center">
           <Title Tag="h2" className="text-lg lg:text-xl" dataId="user-pseudo">

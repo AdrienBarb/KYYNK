@@ -39,7 +39,9 @@ import { Pencil } from 'lucide-react';
 import { isCreator } from '@/utils/users/isCreator';
 import Loader from './Loader';
 import MultipleSelector from './ui/MultiSelect';
-import ProfileImage from './ProfileImage';
+import SecondaryProfileImagesGallery from './profile/SecondaryProfileImagesGallery';
+import UserImage from './UserImage';
+import ProfilePlaceholder from './ProfilePlaceholder';
 
 const UserForm = () => {
   const { user, refetch } = useUser();
@@ -138,19 +140,22 @@ const UserForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 flex flex-col items-center w-full"
+        className="space-y-8 flex flex-col items-center w-full mb-6"
       >
-        <div className="relative self-center">
-          <ProfileImage
-            profileImageId={user?.profileImageId}
-            pseudo={user?.pseudo}
-            size={160}
-            className="w-40 h-40 cursor-pointer"
-          />
+        <div className="relative self-center aspect-square w-56 h-56 overflow-hidden rounded-md">
+          {user?.profileImageId ? (
+            <UserImage
+              imageId={user?.profileImageId}
+              alt={user?.pseudo}
+              size={160}
+            />
+          ) : (
+            <ProfilePlaceholder pseudo={user?.pseudo} />
+          )}
 
           <div
             onClick={() => profilInput.current?.click()}
-            className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-md cursor-pointer"
+            className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center rounded-md cursor-pointer"
           >
             {isUploading ? (
               <Loader size={32} style={{ color: 'white' }} />
@@ -167,6 +172,8 @@ const UserForm = () => {
             accept="image/png, image/jpeg"
           />
         </div>
+
+        <SecondaryProfileImagesGallery />
 
         <FormField
           control={form.control}
