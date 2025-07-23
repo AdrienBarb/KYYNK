@@ -41,7 +41,6 @@ import Loader from './Loader';
 import MultipleSelector from './ui/MultiSelect';
 import SecondaryProfileImagesGallery from './profile/SecondaryProfileImagesGallery';
 import UserImage from './UserImage';
-import ProfilePlaceholder from './ProfilePlaceholder';
 
 const UserForm = () => {
   const { user, refetch } = useUser();
@@ -142,16 +141,16 @@ const UserForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8 flex flex-col items-center w-full mb-6"
       >
-        <div className="relative self-center aspect-square w-56 h-56 overflow-hidden rounded-md">
-          {user?.profileImageId ? (
-            <UserImage
-              imageId={user?.profileImageId}
-              alt={user?.pseudo}
-              size={160}
-            />
-          ) : (
-            <ProfilePlaceholder pseudo={user?.pseudo} />
-          )}
+        <div className="relative self-center">
+          <UserImage
+            imageId={user?.profileImageId}
+            alt={user?.pseudo}
+            size={224}
+            priority
+            fallbackPseudo={user?.pseudo}
+            className="w-56 h-56"
+            rounded="md"
+          />
 
           <div
             onClick={() => profilInput.current?.click()}

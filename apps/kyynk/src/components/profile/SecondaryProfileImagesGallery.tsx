@@ -106,11 +106,15 @@ const SecondaryProfileImagesGallery: FC = () => {
           </div>
 
           {profileImages.map((profileImage: ProfileImageType) => (
-            <div
-              key={profileImage.id}
-              className="flex-shrink-0 w-24 h-24 relative group overflow-hidden rounded-md"
-            >
-              <UserImage imageId={profileImage.imageId} size={96} />
+            <div key={profileImage.id} className="flex-shrink-0 relative group">
+              <UserImage
+                imageId={profileImage.imageId}
+                size={96}
+                quality={85}
+                className="w-24 h-24"
+                rounded="md"
+                alt={`Profile image ${profileImage.id}`}
+              />
 
               {/* Delete button overlay */}
               <div className="absolute inset-0 bg-black/20 flex items-center justify-center rounded-lg">
