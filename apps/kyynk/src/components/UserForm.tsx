@@ -37,8 +37,6 @@ import { User } from '@prisma/client';
 import axios from 'axios';
 import { Pencil } from 'lucide-react';
 import { isCreator } from '@/utils/users/isCreator';
-import Image from 'next/image';
-import imgixLoader from '@/lib/imgix/loader';
 import Loader from './Loader';
 import MultipleSelector from './ui/MultiSelect';
 import ProfileImage from './ProfileImage';
@@ -148,18 +146,18 @@ const UserForm = () => {
             pseudo={user?.pseudo}
             size={160}
             className="w-40 h-40 cursor-pointer"
+          />
+
+          <div
             onClick={() => profilInput.current?.click()}
-            showOverlay={true}
+            className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-md cursor-pointer"
           >
-            <Pencil className="text-white" size={24} />
-          </ProfileImage>
-
-          {isUploading && (
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-md">
+            {isUploading ? (
               <Loader size={32} style={{ color: 'white' }} />
-            </div>
-          )}
-
+            ) : (
+              <Pencil className="text-white" size={24} />
+            )}
+          </div>
           <input
             ref={profilInput}
             onChange={(e) => handleFileUpload(e)}

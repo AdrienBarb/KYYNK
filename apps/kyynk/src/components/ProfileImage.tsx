@@ -3,6 +3,7 @@
 import React, { FC } from 'react';
 import Image from 'next/image';
 import imgixLoader from '@/lib/imgix/loader';
+import ProfilePlaceholder from './ProfilePlaceholder';
 
 interface ProfileImageProps {
   profileImageId?: string | null;
@@ -10,8 +11,6 @@ interface ProfileImageProps {
   size?: number;
   className?: string;
   onClick?: () => void;
-  showOverlay?: boolean;
-  children?: React.ReactNode;
 }
 
 const ProfileImage: FC<ProfileImageProps> = ({
@@ -20,8 +19,6 @@ const ProfileImage: FC<ProfileImageProps> = ({
   size = 160,
   className = '',
   onClick,
-  showOverlay = false,
-  children,
 }) => {
   const hasProfileImage = profileImageId && profileImageId.trim() !== '';
 
@@ -46,15 +43,7 @@ const ProfileImage: FC<ProfileImageProps> = ({
           objectFit="cover"
         />
       ) : (
-        <div className="w-full h-full bg-primary flex items-center justify-center text-white font-bold text-2xl">
-          {pseudo?.charAt(0)?.toUpperCase() || 'U'}
-        </div>
-      )}
-
-      {showOverlay && (
-        <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-          {children}
-        </div>
+        <ProfilePlaceholder pseudo={pseudo} />
       )}
     </div>
   );
