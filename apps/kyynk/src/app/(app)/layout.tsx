@@ -9,6 +9,7 @@ import { getCookie } from 'cookies-next/server';
 import { appRouter } from '@/constants/appRouter';
 import AddButton from '@/components/nudes/AddButton';
 import Footer from '@/components/layout/Footer';
+import LanguageSwitcher from '@/components/layout/LanguageSwitcher';
 
 interface Props {
   children: ReactNode;
@@ -28,7 +29,8 @@ const AppLayout: FC<Props> = async ({ children }) => {
       <div className="w-full">
         <header className="sticky top-0 z-10 p-4 flex justify-between align-center bg-secondary-dark border-b border-custom-black/20 h-[68px]">
           <SidebarTrigger />
-          <div>
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher />
             {!isLoggedIn && (
               <Button asChild>
                 <Link href={appRouter.login}>Login</Link>
