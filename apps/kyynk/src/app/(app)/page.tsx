@@ -18,7 +18,7 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata | undefined> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'metadata' });
+  const t = await getTranslations({ locale });
 
   return genPageMetadata({
     title: t('homeTitle'),
