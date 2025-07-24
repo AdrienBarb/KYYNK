@@ -5,7 +5,7 @@ const Landing = async () => {
   const t = await getTranslations();
 
   return (
-    <div className="bg-primary flex justify-center items-center rounded-md px-8 py-8">
+    <div className="bg-primary flex justify-center items-center rounded-md px-8 py-8 max-w-screen-lg mx-auto">
       <div className="flex flex-col justify-between items-center gap-16 max-w-5xl w-full">
         <div className="flex flex-col text-center items-center justify-center lg:max-w-lg">
           <h1

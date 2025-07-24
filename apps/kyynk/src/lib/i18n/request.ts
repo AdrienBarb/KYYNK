@@ -7,7 +7,7 @@ export default getRequestConfig(async () => {
   const cookieHeader = headersList.get('cookie');
   const cookies = cookieHeader ? parse(cookieHeader) : {};
 
-  const locale = cookies['NEXT_LOCALE'] || 'en';
+  const locale = cookies['NEXT_LOCALE'] || 'fr';
 
   return {
     locale,
