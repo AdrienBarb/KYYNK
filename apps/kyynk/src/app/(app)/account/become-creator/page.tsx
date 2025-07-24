@@ -16,10 +16,12 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import Text from '@/components/ui/Text';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 const VerificationPage = () => {
   const { user, refetch } = useUser();
   const { usePut } = useApi();
+  const t = useTranslations();
 
   const URL = `${process.env.NEXT_PUBLIC_BASE_URL}/${user?.slug}`;
 
@@ -30,7 +32,7 @@ const VerificationPage = () => {
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(URL);
-      toast.success('Link copied to clipboard');
+      toast.success(t('linkCopiedClipboard'));
     } catch (error) {
       console.error(error);
     }
@@ -44,51 +46,39 @@ const VerificationPage = () => {
 
   if (isUserVerified({ user })) {
     return (
-      <AppMessage
-        title="Your profile is verified!"
-        text="Here is the next step"
-        emoji="🎉"
-      >
+      <AppMessage title={t('profileVerified')} text={t('nextStep')} emoji="🎉">
         <div className="mb-8 flex flex-col items-center gap-4">
           <Text className="text-center text-lg font-bold max-w-md">
-            Join our private Telegram group to connect with other creators, get
-            tips, and chat directly with the KYYNK team.
+            {t('joinTelegramGroup')}
           </Text>
           <Button asChild>
             <Link target="_blank" href="https://t.me/+ApoqYZr0s0E2ZjI0">
-              Join us now!
+              {t('joinUsNow')}
             </Link>
           </Button>
         </div>
         <div>
           <Text className="text-center text-lg mb-4 font-bold max-w-md">
-            Share your profile now on your social medias and start building your
-            community.
+            {t('shareProfileSocial')}
           </Text>
           <div className="flex justify-center items-center gap-8">
-            <TwitterShareButton
-              url={URL}
-              title="Come discover this profile on KYYNK"
-            >
+            <TwitterShareButton url={URL} title={t('shareProfileTitle')}>
               <div className="flex flex-col items-center gap-2 cursor-pointer">
                 <div className="bg-primary w-10 h-10 flex items-center justify-center rounded-full">
                   <TwitterIcon sx={{ color: '#FFF0EB' }} />
                 </div>
                 <p className="font-karla font-light text-xs text-custom-black">
-                  Twitter
+                  {t('twitter')}
                 </p>
               </div>
             </TwitterShareButton>
-            <TelegramShareButton
-              url={URL}
-              title="Come discover this profile on KYYNK"
-            >
+            <TelegramShareButton url={URL} title={t('shareProfileTitle')}>
               <div className="flex flex-col items-center gap-2 cursor-pointer">
                 <div className="bg-primary w-10 h-10 flex items-center justify-center rounded-full">
                   <TelegramIcon sx={{ color: '#FFF0EB' }} />
                 </div>
                 <p className="font-karla font-light text-xs text-custom-black">
-                  Telegram
+                  {t('telegram')}
                 </p>
               </div>
             </TelegramShareButton>
@@ -100,7 +90,7 @@ const VerificationPage = () => {
                 <LinkIcon sx={{ color: '#FFF0EB' }} />
               </div>
               <p className="font-karla font-light text-xs text-custom-black">
-                Link
+                {t('link')}
               </p>
             </div>
           </div>
@@ -112,15 +102,15 @@ const VerificationPage = () => {
   if (!isCreator({ user })) {
     return (
       <AppMessage
-        title="Want to become a creator?"
-        text="Then click on the button below."
+        title={t('wantBecomeCreator')}
+        text={t('clickButtonBelow')}
         emoji="🔥"
       >
         <Button
           onClick={() => editUserType({ userType: 'creator' })}
           isLoading={isPending}
         >
-          Become a Creator
+          {t('becomeCreator')}
         </Button>
       </AppMessage>
     );

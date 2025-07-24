@@ -5,9 +5,11 @@ import { redirect } from 'next/navigation';
 import React from 'react';
 import { appRouter } from '@/constants/appRouter';
 import UserForm from '@/components/UserForm';
+import { getTranslations } from 'next-intl/server';
 
 const PreferencesPage = async () => {
   const session = await auth();
+  const t = await getTranslations();
 
   if (!session) {
     redirect(appRouter.login);
@@ -15,7 +17,7 @@ const PreferencesPage = async () => {
 
   return (
     <PaddingContainer>
-      <PageHeader title="My Profile" />
+      <PageHeader title={t('myProfile')} />
       <UserForm />
     </PaddingContainer>
   );

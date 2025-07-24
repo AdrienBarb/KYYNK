@@ -9,6 +9,7 @@ import Select from 'react-select';
 import { TagsType, tagList } from '@/constants/constants';
 import { getCreditsWithFiat } from '@/utils/prices/getMediaPrice';
 import useApi from '@/hooks/requests/useApi';
+import { useTranslations } from 'next-intl';
 import {
   Form,
   FormControl,
@@ -47,6 +48,7 @@ const CreateNudeForm: FC<Props> = ({
 }) => {
   const { usePost } = useApi();
   const { user } = useUser();
+  const t = useTranslations();
 
   const queryClient = useQueryClient();
 
@@ -99,7 +101,7 @@ const CreateNudeForm: FC<Props> = ({
         className="space-y-8 flex flex-col items-center w-full"
       >
         <FormItem className="w-full">
-          <FormLabel>Video*</FormLabel>
+          <FormLabel>{t('video')}*</FormLabel>
           {selectedMedia && selectedMedia.thumbnailId ? (
             <div className="aspect-[4/5] relative rounded-md overflow-hidden">
               <Button
@@ -129,7 +131,7 @@ const CreateNudeForm: FC<Props> = ({
               onClick={() => setStep('gallery')}
             >
               <FontAwesomeIcon icon={faPlus} size="lg" />
-              <Text className="text-custom-black">Add a video</Text>
+              <Text className="text-custom-black">{t('addVideo')}</Text>
             </div>
           )}
         </FormItem>
@@ -139,7 +141,7 @@ const CreateNudeForm: FC<Props> = ({
           name="description"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Description*</FormLabel>
+              <FormLabel>{t('description')}*</FormLabel>
               <FormControl>
                 <Textarea rows={4} {...field} className="mt-2 text-base" />
               </FormControl>
@@ -153,10 +155,9 @@ const CreateNudeForm: FC<Props> = ({
           name="price"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Price</FormLabel>
+              <FormLabel>{t('price')}</FormLabel>
               <FormSubLabel>
-                Either {creditPrice} credits. Credits are the currency of our
-                platform.
+                {t('credits')}: {creditPrice}
               </FormSubLabel>
               <FormControl>
                 <div className="mt-14 px-4">
@@ -176,7 +177,7 @@ const CreateNudeForm: FC<Props> = ({
           name="tags"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Tags</FormLabel>
+              <FormLabel>{t('tags')}</FormLabel>
               <FormControl>
                 <Select
                   {...field}
@@ -186,15 +187,17 @@ const CreateNudeForm: FC<Props> = ({
                   }
                   options={tagList.map((currentTag) => ({
                     value: currentTag,
-                    label: currentTag,
+                    label: t('nudeCategories.' + currentTag),
                   }))}
                   value={field.value}
                   classNamePrefix="react-select"
-                  getOptionLabel={(el: TagsType) => el.label}
+                  getOptionLabel={(el: TagsType) =>
+                    t('nudeCategories.' + el.value)
+                  }
                   getOptionValue={(el: TagsType) => el.value}
                   closeMenuOnSelect={false}
-                  placeholder="Select tags"
-                  noOptionsMessage={() => <span>No Options</span>}
+                  placeholder={t('selectTags')}
+                  noOptionsMessage={() => <span>{t('noOptions')}</span>}
                   styles={{
                     control: (styles) => ({
                       ...styles,
@@ -259,7 +262,7 @@ const CreateNudeForm: FC<Props> = ({
           disabled={isPending}
           className="w-full"
         >
-          Create a nude
+          {t('createNude')}
         </Button>
       </form>
     </Form>

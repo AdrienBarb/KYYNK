@@ -21,10 +21,12 @@ import { Separator } from '../ui/Separator';
 import { bankDetailsSchema } from '@/schemas/settings/payment/bankDetails';
 import { toast } from 'react-hot-toast';
 import { Card } from '../ui/Card';
+import { useTranslations } from 'next-intl';
 
 const PaymentSettings = () => {
   const { user, refetch } = useUser();
   const { usePut } = useApi();
+  const t = useTranslations();
 
   const form = useForm<z.infer<typeof bankDetailsSchema>>({
     resolver: zodResolver(bankDetailsSchema),
@@ -50,7 +52,7 @@ const PaymentSettings = () => {
     {
       onSuccess: () => {
         refetch();
-        toast.success('Bank details updated successfully!');
+        toast.success(t('bankDetailsUpdateSuccess'));
       },
     },
   );
@@ -62,10 +64,8 @@ const PaymentSettings = () => {
   return (
     <Card>
       <div className="w-full mb-4">
-        <Text className="font-bold">Bank Details</Text>
-        <Text className="text-sm">
-          Please provide your bank account name and IBAN to receive payments.
-        </Text>
+        <Text className="font-bold">{t('paymentSettingsTitle')}</Text>
+        <Text className="text-sm">{t('paymentSettingsDescription')}</Text>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
@@ -74,7 +74,7 @@ const PaymentSettings = () => {
             name="bankAccountName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Bank Account Name</FormLabel>
+                <FormLabel>{t('bankAccountName')}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -87,7 +87,7 @@ const PaymentSettings = () => {
             name="iban"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>IBAN</FormLabel>
+                <FormLabel>{t('iban')}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -101,7 +101,7 @@ const PaymentSettings = () => {
             isLoading={isPending}
             disabled={isPending}
           >
-            Save
+            {t('save')}
           </Button>
         </form>
       </Form>

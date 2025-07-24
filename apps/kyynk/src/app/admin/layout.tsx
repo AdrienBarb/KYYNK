@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import AdminNavigation from '@/components/admin/AdminNavigation';
+import { useTranslations } from 'next-intl';
 
 export default function AdminLayout({
   children,
@@ -12,6 +13,7 @@ export default function AdminLayout({
 }) {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const t = useTranslations();
 
   useEffect(() => {
     if (status === 'loading') return;
@@ -46,10 +48,10 @@ export default function AdminLayout({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <h1 className="text-2xl font-bold text-gray-900">
-              Admin Dashboard
+              {t('adminDashboard')}
             </h1>
             <div className="text-sm text-gray-500">
-              Logged in as: {session.user.email}
+              {t('loggedInAs')} {session.user.email}
             </div>
           </div>
         </div>

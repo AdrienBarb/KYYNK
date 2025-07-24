@@ -1,18 +1,21 @@
 import React from 'react';
 import PageCenterMessage from '@/components/PageCenterMessage';
 import { genPageMetadata } from '@/app/seo';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata = genPageMetadata({
-  title: '404',
-  description:
-    "La page que vous cherchez n'a pas été trouvée. Veuillez vérifier l'URL ou retourner à la page d'accueil.",
-});
+export async function generateMetadata() {
+  const t = await getTranslations();
 
-const ErrorNotFoundPage = () => {
-  const errorMessage =
-    "Sorry, but the page you requested could not be found. You may have followed an outdated link or typed the page address incorrectly. Please check the address and try again or use the search bar to find what you're looking for.";
+  return genPageMetadata({
+    title: t('error404Title'),
+    description: t('error404Description'),
+  });
+}
 
-  return <PageCenterMessage text={errorMessage} />;
+const ErrorNotFoundPage = async () => {
+  const t = await getTranslations();
+
+  return <PageCenterMessage text={t('error404Message')} />;
 };
 
 export default ErrorNotFoundPage;

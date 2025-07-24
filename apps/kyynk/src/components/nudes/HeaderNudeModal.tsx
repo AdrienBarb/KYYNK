@@ -19,6 +19,7 @@ import DeleteConfirmationModal from '../modals/ConfirmationModal';
 import NudeEditModal from '@/components/modals/NudeEditModal';
 import { NudeWithPermissions } from '@/types/nudes';
 import ShareModal from '@/components/ShareModal';
+import { useTranslations } from 'next-intl';
 
 interface NudePostProps {
   nude: NudeWithPermissions;
@@ -28,6 +29,7 @@ const HeaderNudeModal: FC<NudePostProps> = ({ nude }) => {
   const { slug } = useParams<{ slug: string }>();
   const queryClient = useQueryClient();
   const { usePut } = useApi();
+  const t = useTranslations();
   const [isConfirmationModalOpen, setConfirmationModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
 
@@ -92,7 +94,7 @@ const HeaderNudeModal: FC<NudePostProps> = ({ nude }) => {
                 asChild
                 className="text-base font-medium font-karla"
               >
-                <Link href={`/contact-us`}>Report</Link>
+                <Link href={`/contact-us`}>{t('report')}</Link>
               </DropdownMenuItem>
               {nude.permissions.canEdit && (
                 <>
@@ -100,13 +102,13 @@ const HeaderNudeModal: FC<NudePostProps> = ({ nude }) => {
                     className="text-base font-medium font-karla"
                     onClick={() => setEditModalOpen(true)}
                   >
-                    Edit
+                    {t('edit')}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="text-red-500 text-base font-medium"
                     onClick={handleDeleteNude}
                   >
-                    Delete
+                    {t('delete')}
                   </DropdownMenuItem>
                 </>
               )}
@@ -121,7 +123,7 @@ const HeaderNudeModal: FC<NudePostProps> = ({ nude }) => {
         open={isConfirmationModalOpen}
         setOpen={setConfirmationModalOpen}
         onDeleteConfirm={handleConfirmDelete}
-        text="This action cannot be undone. This will permanently delete this nude."
+        text={t('deleteNudeConfirm')}
       />
       <NudeEditModal
         open={isEditModalOpen}

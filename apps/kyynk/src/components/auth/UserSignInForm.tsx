@@ -74,7 +74,7 @@ const UserSignInForm = () => {
           fullWidth
           id="email"
           name="email"
-          label="Email"
+          label={t('email')}
           value={formik.values.email}
           onChange={formik.handleChange}
           error={formik.touched.email && Boolean(formik.errors.email)}
@@ -86,7 +86,7 @@ const UserSignInForm = () => {
           type={showPassword ? 'text' : 'password'}
           id="password"
           name="password"
-          label={t('common.password')}
+          label={t('password')}
           value={formik.values.password}
           onChange={formik.handleChange}
           error={formik.touched.password && Boolean(formik.errors.password)}
@@ -106,7 +106,7 @@ const UserSignInForm = () => {
         />
 
         <Button type="submit" isLoading={isLoading} disabled={isLoading}>
-          {t('common.signIn')}
+          {t('signIn')}
         </Button>
       </form>
     </div>

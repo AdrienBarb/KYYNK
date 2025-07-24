@@ -35,15 +35,17 @@ import { usePaymentModalStore } from '@/stores/PaymentModalStore';
 import { formatCredits } from '@/utils/prices/formatCredits';
 import { isCreator } from '@/utils/users/isCreator';
 import { useCloseSideBarOnMobile } from '@/hooks/others/useCloseSideBarOnMobile';
+import { useTranslations } from 'next-intl';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { user } = useUser();
   const { openModal } = usePaymentModalStore();
   const { closeSidebarOnMobile } = useCloseSideBarOnMobile();
+  const t = useTranslations();
 
   const logout = () => {
-    toast.success('You are logged out');
+    toast.success(t('navUserLoggedOut'));
     signOut({ redirectTo: '/' });
   };
 
@@ -96,7 +98,7 @@ export function NavUser() {
                       onClick={closeSidebarOnMobile}
                     >
                       <User />
-                      My Profile
+                      {t('navUserMyProfile')}
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
@@ -111,7 +113,7 @@ export function NavUser() {
                 }}
               >
                 <Coins />
-                Buy credits
+                {t('navUserBuyCredits')}
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link
@@ -120,7 +122,7 @@ export function NavUser() {
                   onClick={closeSidebarOnMobile}
                 >
                   <BadgeCheck />
-                  Become a creator
+                  {t('navUserBecomeCreator')}
                 </Link>
               </DropdownMenuItem>
               {isCreator({ user }) && (
@@ -134,7 +136,7 @@ export function NavUser() {
                     onClick={closeSidebarOnMobile}
                   >
                     <HelpCircle />
-                    Need help?
+                    {t('navUserNeedHelp')}
                   </Link>
                 </DropdownMenuItem>
               )}
@@ -142,7 +144,7 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout}>
               <LogOut />
-              Log out
+              {t('navUserLogout')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

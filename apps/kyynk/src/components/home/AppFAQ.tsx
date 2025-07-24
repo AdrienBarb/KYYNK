@@ -1,42 +1,40 @@
 import React, { FC } from 'react';
 import LandingHeader from '@/components/home/LandingHeader';
+import { getTranslations } from 'next-intl/server';
 
 interface Props {}
 
-const AppFAQ: FC<Props> = ({}) => {
+const AppFAQ: FC<Props> = async ({}) => {
+  const t = await getTranslations();
+
   const data = {
     rows: [
       {
-        title: 'What is KYYNK?',
-        content:
-          'KYYNK is a platform where adult creators and fans connect through private conversations. No subscriptions, no spam — just real chats, custom nudes, and personal interactions.',
+        title: t('faqQuestion1'),
+        content: t('faqAnswer1'),
       },
       {
-        title: 'How do I talk to a creator?',
-        content:
-          'You buy credits, choose a creator you like, and start chatting. Every message is personal. You can even request custom pictures in your conversation.',
+        title: t('faqQuestion2'),
+        content: t('faqAnswer2'),
       },
       {
-        title: 'How do creators earn money?',
-        content:
-          'Creators earn credits for each message they send or nude they share. They can withdraw their earnings anytime. During the first month, they keep 100% of what they earn.',
+        title: t('faqQuestion3'),
+        content: t('faqAnswer3'),
       },
       {
-        title: 'Is this anonymous and secure?',
-        content:
-          'Yes. Your data is encrypted and never shared. Billing is discreet. We verify all creators to ensure a safe and respectful environment.',
+        title: t('faqQuestion4'),
+        content: t('faqAnswer4'),
       },
       {
-        title: 'Who can become a creator on KYYNK?',
-        content:
-          'Anyone over 18 with verified ID can apply to join. We’re looking for confident, respectful people ready to build real connections with fans.',
+        title: t('faqQuestion5'),
+        content: t('faqAnswer5'),
       },
     ],
   };
 
   return (
     <section className="max-w-4xl mx-auto py-16">
-      <LandingHeader title="FREQUENTLY ASKED QUESTIONS" />
+      <LandingHeader title={t('faqTitle')} />
       <div className="flex flex-col gap-4">
         {data.rows.map((item, index) => (
           <div key={index} className="bg-primary rounded-md p-4">

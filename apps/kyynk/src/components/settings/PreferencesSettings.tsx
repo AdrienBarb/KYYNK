@@ -9,11 +9,13 @@ import { Button } from '@/components/ui/Button';
 import { toast } from 'react-hot-toast';
 import Text from '../ui/Text';
 import { Card } from '../ui/Card';
+import { useTranslations } from 'next-intl';
 
 const PreferencesSettings = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { usePut } = useApi();
   const { user, refetch } = useUser();
+  const t = useTranslations();
 
   useEffect(() => {
     if (user?.preferences) {
@@ -24,7 +26,7 @@ const PreferencesSettings = () => {
   const { mutate: editUserPreferences, isPending } = usePut(apiRouter.me, {
     onSuccess: () => {
       refetch();
-      toast.success('Preferences updated successfully!');
+      toast.success(t('preferencesUpdateSuccess'));
     },
   });
 
@@ -43,10 +45,8 @@ const PreferencesSettings = () => {
   return (
     <Card>
       <div className="w-full mb-4">
-        <Text className="font-bold">User Preferences</Text>
-        <Text className="text-sm">
-          Select your preferences from the options below.
-        </Text>
+        <Text className="font-bold">{t('preferencesSettingsTitle')}</Text>
+        <Text className="text-sm">{t('preferencesSettingsDescription')}</Text>
       </div>
       <div className="flex flex-wrap gap-4 mb-4 w-full">
         {TAGS.map((currentTag, index) => {
@@ -60,7 +60,7 @@ const PreferencesSettings = () => {
                   : ''
               }`}
             >
-              {currentTag.label}
+              {t(`nudeCategories.${currentTag.value}`)}
             </div>
           );
         })}
@@ -72,7 +72,7 @@ const PreferencesSettings = () => {
           editUserPreferences({ preferences: selectedTags });
         }}
       >
-        Save
+        {t('save')}
       </Button>
     </Card>
   );

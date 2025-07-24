@@ -8,6 +8,7 @@ import imgixLoader from '@/lib/imgix/loader';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import Loader from '@/components/Loader';
+import { useTranslations } from 'next-intl';
 
 interface ProfilePictureStepProps {
   profileImageId?: string;
@@ -18,6 +19,7 @@ const ProfilePictureStep: React.FC<ProfilePictureStepProps> = ({
   profileImageId,
   onProfilePictureUpdate,
 }) => {
+  const t = useTranslations();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -44,10 +46,10 @@ const ProfilePictureStep: React.FC<ProfilePictureStepProps> = ({
       });
 
       onProfilePictureUpdate(fileKey);
-      toast.success('Profile picture uploaded successfully!');
+      toast.success(t('profilePictureUploadSuccess'));
     } catch (err) {
       console.error('Error uploading file:', err);
-      toast.error('Failed to upload profile picture');
+      toast.error(t('profilePictureUploadError'));
     } finally {
       setIsUploading(false);
     }
@@ -57,10 +59,10 @@ const ProfilePictureStep: React.FC<ProfilePictureStepProps> = ({
     <div className="space-y-8">
       <div className="text-center">
         <Title Tag="h2" className="mb-4 text-custom-black font-semibold">
-          Show yourself!
+          {t('profilePictureStepTitle')}
         </Title>
         <p className="text-custom-black font-medium">
-          Upload a profile picture to make your profile stand out
+          {t('profilePictureStepDescription')}
         </p>
       </div>
 

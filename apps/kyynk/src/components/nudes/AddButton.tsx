@@ -7,10 +7,12 @@ import { useNudeCreationModalStore } from '@/stores/NudeCreationModalStore';
 import { useUser } from '@/hooks/users/useUser';
 import { isCreator } from '@/utils/users/isCreator';
 import { isUserVerified } from '@/utils/users/isUserVerified';
+import { useTranslations } from 'next-intl';
 
 const AddButton = () => {
   const { openModal } = useNudeCreationModalStore();
   const { user } = useUser();
+  const t = useTranslations();
 
   if (!isCreator({ user }) || !isUserVerified({ user })) {
     return null;
@@ -24,7 +26,7 @@ const AddButton = () => {
       onClick={openModal}
     >
       <CirclePlus size={18} />
-      Add nude
+      {t('addNude')}
     </Button>
   );
 };

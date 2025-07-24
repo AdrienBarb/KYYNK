@@ -10,16 +10,18 @@ import { getFiatWithCredits } from '@/utils/prices/getMediaPrice';
 import React, { FC } from 'react';
 import { formatCredits } from '@/utils/prices/formatCredits';
 import { formatFiat } from '@/utils/prices/formatFiat';
+import { useTranslations } from 'next-intl';
 
 interface RevenueDashboardProps {
   availableRevenue: number;
   incomingRevenue: number;
 }
 
-const RevenueDashboard: FC<RevenueDashboardProps> = async ({
+const RevenueDashboard: FC<RevenueDashboardProps> = ({
   availableRevenue,
   incomingRevenue,
 }) => {
+  const t = useTranslations();
   const { fiatPrice: incomingRevenueFiat, creditPrice: incomingRevenueCredit } =
     getFiatWithCredits(incomingRevenue);
 
@@ -33,7 +35,9 @@ const RevenueDashboard: FC<RevenueDashboardProps> = async ({
       <div className="grid grid-cols-2 gap-4 mb-4">
         <Card>
           <div className="flex items-center justify-between">
-            <Text className="text-lg font-light mb-2">Incoming revenue</Text>
+            <Text className="text-lg font-light mb-2">
+              {t('revenueDashboardIncoming')}
+            </Text>
             <Popover>
               <PopoverTrigger asChild>
                 <span className="ml-2 cursor-pointer">
@@ -41,11 +45,7 @@ const RevenueDashboard: FC<RevenueDashboardProps> = async ({
                 </span>
               </PopoverTrigger>
               <PopoverContent>
-                <Text>
-                  The incoming revenue is from your sales that are currently
-                  being validated. It takes 7 days to validate, so this revenue
-                  will be available in 7 days.
-                </Text>
+                <Text>{t('revenueDashboardIncomingDesc')}</Text>
               </PopoverContent>
             </Popover>
           </div>
@@ -53,12 +53,14 @@ const RevenueDashboard: FC<RevenueDashboardProps> = async ({
             {formatFiat(incomingRevenueFiat)} €
           </Text>
           <Text className="text-sm font-thin">
-            {formatCredits(incomingRevenueCredit)} credits
+            {formatCredits(incomingRevenueCredit)} {t('credits')}
           </Text>
         </Card>
         <Card>
           <div className="flex items-center justify-between">
-            <Text className="text-lg font-light mb-2">Available revenue</Text>
+            <Text className="text-lg font-light mb-2">
+              {t('revenueDashboardAvailable')}
+            </Text>
             <Popover>
               <PopoverTrigger asChild>
                 <span className="ml-2 cursor-pointer">
@@ -66,10 +68,7 @@ const RevenueDashboard: FC<RevenueDashboardProps> = async ({
                 </span>
               </PopoverTrigger>
               <PopoverContent>
-                <Text>
-                  The available revenue is the amount you can withdraw. It needs
-                  to be higher than 50 euros to be eligible for withdrawal.
-                </Text>
+                <Text>{t('revenueDashboardAvailableDesc')}</Text>
               </PopoverContent>
             </Popover>
           </div>
@@ -77,7 +76,7 @@ const RevenueDashboard: FC<RevenueDashboardProps> = async ({
             {formatFiat(availableRevenueFiat)} €
           </Text>
           <Text className="text-sm font-thin">
-            {formatCredits(availableRevenueCredit)} credits
+            {formatCredits(availableRevenueCredit)} {t('credits')}
           </Text>
         </Card>
       </div>

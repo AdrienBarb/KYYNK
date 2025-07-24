@@ -3,6 +3,7 @@ import { genPageMetadata } from '@/app/seo';
 import { redirect } from 'next/navigation';
 import imgixLoader from '@/lib/imgix/loader';
 import { getNudeById } from '@/services/nudes/getNudesById';
+import { getTranslations } from 'next-intl/server';
 
 export type PageProps = {
   params: Promise<{ id: string }>;
@@ -14,6 +15,7 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata | undefined> {
   const { id } = await params;
   const nude = await getNudeById({ nudeId: id });
+  const t = await getTranslations();
 
   if (!nude) {
     return undefined;
@@ -27,7 +29,7 @@ export async function generateMetadata({
   });
 
   return genPageMetadata({
-    title: `Nudes - ${nude.user.pseudo}`,
+    title: `${t('nudes')} - ${nude.user.pseudo}`,
     description: nude.description ?? '',
     image: imageUrl,
     url: `/nudes/${nude.id}`,

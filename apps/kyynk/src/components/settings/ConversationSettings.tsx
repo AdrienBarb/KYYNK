@@ -14,17 +14,19 @@ import useApi from '@/hooks/requests/useApi';
 import { Card } from '../ui/Card';
 import toast from 'react-hot-toast';
 import { PRICE_OPTIONS } from '@/constants/constants';
+import { useTranslations } from 'next-intl';
 
 const ConversationSettings = () => {
   const { user, refetch } = useUser();
   const { usePut } = useApi();
+  const t = useTranslations();
 
   const { mutate: updatePrice } = usePut(
     '/api/settings/conversations/messages-price',
     {
       onSuccess: () => {
         refetch();
-        toast.success('Price updated');
+        toast.success(t('priceUpdateSuccess'));
       },
     },
   );
@@ -37,10 +39,9 @@ const ConversationSettings = () => {
     <Card>
       <div className="flex justify-between items-center gap-4">
         <div className="w-full">
-          <Text className="font-bold">Private message</Text>
+          <Text className="font-bold">{t('conversationSettingsTitle')}</Text>
           <Text className="text-sm">
-            You can get paid every time a user wants to send you a message.
-            Change the price here
+            {t('conversationSettingsDescription')}
           </Text>
         </div>
         <Select

@@ -21,6 +21,7 @@ import { usePaymentModalStore } from '@/stores/PaymentModalStore';
 import { Button } from '../ui/Button';
 import useApi from '@/hooks/requests/useApi';
 import { cn } from '@/utils/tailwind/cn';
+import { useTranslations } from 'next-intl';
 
 const PaymentModal = () => {
   const { isOpen, openModal, closeModal } = usePaymentModalStore();
@@ -28,6 +29,7 @@ const PaymentModal = () => {
   const [selectedPackageId, setSelectedPackageId] = useState<number | null>(
     null,
   );
+  const t = useTranslations();
 
   const { mutate: buyCredit, isPending } = usePost('/api/payment', {
     onSuccess: (data: { forwardUrl: string }) => {
@@ -58,9 +60,9 @@ const PaymentModal = () => {
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="z-[1000] max-w-screen-sm">
         <DialogHeader className="flex flex-col items-center">
-          <DialogTitle>Buy Credits</DialogTitle>
+          <DialogTitle>{t('paymentModalBuyCredits')}</DialogTitle>
           <DialogDescription>
-            Select a package to purchase credits.
+            {t('paymentModalSelectPackage')}
           </DialogDescription>
         </DialogHeader>
         <Carousel
@@ -83,8 +85,12 @@ const PaymentModal = () => {
                   onClick={() => setSelectedPackageId(pkg.id)}
                 >
                   <h3 className="text-lg font-bold">{pkg.name}</h3>
-                  <p>Price: {pkg.price / 100} €</p>
-                  <p>Coins: {pkg.coinsAmount / 100}</p>
+                  <p>
+                    {t('paymentModalPrice')}: {pkg.price / 100} €
+                  </p>
+                  <p>
+                    {t('paymentModalCoins')}: {pkg.coinsAmount / 100}
+                  </p>
                 </div>
               </CarouselItem>
             ))}
@@ -99,7 +105,7 @@ const PaymentModal = () => {
             isLoading={isPending}
             onClick={handleBuy}
           >
-            Buy
+            {t('buy')}
           </Button>
         </DialogFooter>
       </DialogContent>

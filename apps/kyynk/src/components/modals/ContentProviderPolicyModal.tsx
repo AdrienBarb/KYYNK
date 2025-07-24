@@ -7,6 +7,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
 } from '../ui/AlertDialog';
+import { useTranslations } from 'next-intl';
 import Title from '../ui/Title';
 import Text from '../ui/Text';
 
@@ -21,14 +22,16 @@ const ContentProviderPolicyModal: React.FC<Props> = ({
   setOpen,
   handleAcceptPolicy,
 }) => {
+  const t = useTranslations();
+
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent className="z-[1000] h-[100vh] sm:h-[80vh] overflow-y-scroll">
         <AlertDialogHeader>
-          <Title Tag="h2">Content Provider Agreement</Title>
+          <Title Tag="h2">{t('contentProviderAgreement')}</Title>
         </AlertDialogHeader>
         <div>
-          <Text>Last Updated: February 2025</Text>
+          <Text>{t('lastUpdated')}</Text>
           <Title Tag="h3">1. Introduction</Title>
           <Text>
             This Content Provider Agreement (the “Agreement”) is made between
@@ -123,9 +126,9 @@ const ContentProviderPolicyModal: React.FC<Props> = ({
           </Text>
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel>Close</AlertDialogCancel>
+          <AlertDialogCancel>{t('close')}</AlertDialogCancel>
           <AlertDialogAction onClick={handleAcceptPolicy}>
-            Accept
+            {t('accept')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

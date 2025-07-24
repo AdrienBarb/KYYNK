@@ -20,10 +20,10 @@ const PreferencesStep: React.FC<PreferencesStepProps> = ({
     <div className="space-y-8">
       <div className="text-center">
         <Title Tag="h2" className="mb-4 text-custom-black font-semibold">
-          What interests you?
+          {t('whatInterestsYou')}
         </Title>
         <p className="text-custom-black font-medium">
-          Select your preferences to personalize your experience
+          {t('selectPreferences')}
         </p>
       </div>
 
