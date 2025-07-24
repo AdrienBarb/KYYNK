@@ -19,6 +19,8 @@
   "password": "Password",
   "problem_?": "Having a problem?",
   "contact_us": "Contact us",
+  "online": "Online",
+  "formattingMediaMessage": "We are formatting your media, it can take some time.",
   "error": {
     "field_not_valid": "This field is not valid",
     "field_required": "This field is required",

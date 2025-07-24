@@ -36,11 +36,11 @@ const OnlineStatus: FC<Props> = ({ currentUser }) => {
           <div className="w-3 flex justify-center items-center">
             <FontAwesomeIcon icon={faCircle} color="#57cc99" size="xs" />
           </div>
-          <Text className="text-sm font-extralight">{t('profile.online')}</Text>
+          <Text className="text-sm font-extralight">{t('online')}</Text>
         </div>
       ) : (
         <Text className="text-sm font-extralight">
-          {`${t('profile.online')} : ${timeAgoValue}`}
+          {`${t('online')} : ${timeAgoValue}`}
         </Text>
       )}
     </div>

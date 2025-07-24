@@ -8,6 +8,7 @@ import { cn } from '@/utils/tailwind/cn';
 import type { Media } from '@prisma/client';
 import Text from '@/components/ui/Text';
 import imgixLoader from '@/lib/imgix/loader';
+import { useTranslations } from 'next-intl';
 
 interface GalleryCardProps {
   media: Media;
@@ -23,6 +24,7 @@ const GalleryCard: FC<GalleryCardProps> = ({
   selectedMedia,
 }) => {
   const { usePut } = useApi();
+  const t = useTranslations();
 
   const { mutate: archiveMedia } = usePut(`/api/medias/${media.id}/archive`, {
     onSuccess: () => {
@@ -88,7 +90,7 @@ const GalleryCard: FC<GalleryCardProps> = ({
         <div className="flex flex-col items-center justify-center h-full w-full">
           <Loader2 className="mr-2 h-6 w-6 animate-spin" color="#fff0eb" />
           <Text className="text-secondary mt-2 text-center text-xs">
-            We are formatting your media, it can take some time.
+            {t('formattingMediaMessage')}
           </Text>
         </div>
       )}

@@ -9,7 +9,6 @@ const ModalWrapper = () => {
       {/* <AgeVerificationModal /> */}
       <PaymentModal />
       <NudeCreationModal />
-
       <NotEnoughCreditsModal />
     </>
   );

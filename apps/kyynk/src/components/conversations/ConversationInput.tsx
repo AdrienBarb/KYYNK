@@ -109,7 +109,7 @@ const ConversationInput: React.FC<ConversationInputProps> = ({
             <div className="overflow-y-auto" style={{ maxHeight: '400px' }}>
               <Textarea
                 value={value}
-                placeholder={'Type your message...'}
+                placeholder={t('typeYourMessage')}
                 className={cn(
                   'w-full rounded-xl rounded-b-none px-4 py-3 border-none placeholder:text-black/70 resize-none focus-visible:ring-0 focus-visible:ring-offset-0 text-base',
                   'min-h-[72px]',
@@ -152,7 +152,9 @@ const ConversationInput: React.FC<ConversationInputProps> = ({
                 >
                   {creditMessage && creditMessage > 0 ? (
                     <Text className="text-sm font-medium text-secondary">
-                      {t('sendForCredits', { credits: formatCredits(creditMessage) })}
+                      {t('sendForCredits', {
+                        credits: formatCredits(creditMessage),
+                      })}
                     </Text>
                   ) : (
                     <ArrowRight className={cn('w-4 h-4 text-secondary')} />
