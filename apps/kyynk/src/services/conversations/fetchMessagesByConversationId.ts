@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/db/client';
-import { getNudeSelectFields } from '@/utils/nudes/getNudeSelectFields';
+import { getMessageSelectFields } from '@/utils/messages/getMessageSelectFields';
 
 export const fetchMessagesByConversationId = async ({
   conversationId,
@@ -13,15 +13,6 @@ export const fetchMessagesByConversationId = async ({
     orderBy: {
       createdAt: 'asc',
     },
-    select: {
-      id: true,
-      content: true,
-      senderId: true,
-      createdAt: true,
-      status: true,
-      nude: {
-        select: getNudeSelectFields(),
-      },
-    },
+    select: getMessageSelectFields(),
   });
 };

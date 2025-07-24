@@ -14,21 +14,19 @@ import { Separator } from './ui/Separator';
 import { Button } from './ui/Button';
 import { appRouter } from '@/constants/appRouter';
 import axios from 'axios';
-import ContentProviderPolicyModal from './modals/ContentProviderPolicyModal';
-import { Checkbox } from '@/components/ui/Checkbox';
 import { Card } from './ui/Card';
+import { useTranslations } from 'next-intl';
 
 interface Props {}
 
 const IdentityVerificationForm: FC<Props> = () => {
   const router = useRouter();
+  const t = useTranslations();
   const [frontIdentity, setFrontIdentity] = useState<null | File>(null);
   const [backIdentity, setBackIdentity] = useState<null | File>(null);
   const [frontAndFaceIdentity, setFrontAndFaceIdentity] = useState<null | File>(
     null,
   );
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPolicyAccepted, setIsPolicyAccepted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const { user, refetch } = useUser();
@@ -75,19 +73,14 @@ const IdentityVerificationForm: FC<Props> = () => {
       return fileKey;
     } catch (err) {
       console.error('Error uploading file:', err);
-      toast.error('Something went wrong!');
+      toast.error(t('identitySomethingWentWrong'));
       setIsLoading(false);
     }
   };
 
   const handleSubmitForm = async () => {
     if (!frontIdentity || !backIdentity || !frontAndFaceIdentity) {
-      toast.error('Missing pictures');
-      return;
-    }
-
-    if (!isPolicyAccepted) {
-      toast.error('You must accept the content provider policy');
+      toast.error(t('identityMissingPictures'));
       return;
     }
 
@@ -99,7 +92,7 @@ const IdentityVerificationForm: FC<Props> = () => {
     );
 
     if (!frontIdentityKey || !backIdentityKey || !frontAndFaceIdentityKey) {
-      toast.error('Failed to upload one or more files');
+      toast.error(t('identityFailedUpload'));
       return;
     }
 
@@ -108,15 +101,6 @@ const IdentityVerificationForm: FC<Props> = () => {
       backIdentity: backIdentityKey,
       frontAndFaceIdentity: frontAndFaceIdentityKey,
     });
-  };
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleAcceptPolicy = async () => {
-    setIsPolicyAccepted(true);
-    setIsModalOpen(false);
   };
 
   const baseStyle = {
@@ -162,24 +146,24 @@ const IdentityVerificationForm: FC<Props> = () => {
     <Card className="max-w-screen-sm mx-auto">
       {user?.identityVerificationStatus === 'unverified' && (
         <StatusCard
-          title="Your identity is not verified."
-          description="In order to ensure the integrity of seller profiles on our platform, we perform identity verification for each profile to ensure that all sellers are of legal age and to prevent misuse. We attach great importance to the confidentiality of your personal data, which will not be transferred or sold. Only the KYYNK teams have access to this data, for the intended purposes. We do not disclose this data to third parties."
+          title={t('identityNotVerified')}
+          description={t('identityNotVerifiedDescription')}
         />
       )}
       {user?.identityVerificationStatus === 'rejected' && (
         <StatusCard
-          title="Your identity has been rejected"
-          description="Please reimport your documents"
+          title={t('identityRejected')}
+          description={t('identityRejectedDescription')}
         />
       )}
       {user?.identityVerificationStatus === 'pending' && (
         <StatusCard
-          title="Your identity is being verified"
-          description="Your profile is being verified. You will be able to use our platform once your identity has been validated by our teams."
+          title={t('identityBeingVerified')}
+          description={t('identityBeingVerifiedDescription')}
         />
       )}
       {user?.identityVerificationStatus === 'verified' && (
-        <StatusCard title="Your identity is verified." />
+        <StatusCard title={t('identityVerified')} />
       )}
 
       {(user?.identityVerificationStatus === 'unverified' ||
@@ -218,16 +202,16 @@ const IdentityVerificationForm: FC<Props> = () => {
                     <input {...getInputProps()} />
 
                     <div className="dropzone-details text-center">
-                      <h4>Front face of ID</h4>
+                      <h4>{t('identityFrontTitle')}</h4>
                       <p>
                         <span className="file-link underline cursor-pointer">
-                          Browse
+                          {t('browse')}
                         </span>{' '}
                         or{' '}
                         <span className="file-link underline cursor-pointer">
-                          drop
+                          {t('drop')}
                         </span>{' '}
-                        a file here
+                        {t('aFileHere')}
                       </p>
                       <Image
                         alt="Image description front of ID"
@@ -272,16 +256,16 @@ const IdentityVerificationForm: FC<Props> = () => {
                     <input {...getInputProps()} />
 
                     <div className="dropzone-details text-center">
-                      <h4>Back face of ID</h4>
+                      <h4>{t('identityBackTitle')}</h4>
                       <p>
                         <span className="file-link underline cursor-pointer">
-                          Browse
+                          {t('browse')}
                         </span>{' '}
                         or{' '}
                         <span className="file-link underline cursor-pointer">
-                          drop
+                          {t('drop')}
                         </span>{' '}
-                        a file here
+                        {t('aFileHere')}
                       </p>
                       <Image
                         alt="Image description back of ID"
@@ -326,16 +310,16 @@ const IdentityVerificationForm: FC<Props> = () => {
                     <input {...getInputProps()} />
 
                     <div className="dropzone-details text-center">
-                      <h4>Face and ID</h4>
+                      <h4>{t('identityFaceAndIdTitle')}</h4>
                       <p>
                         <span className="file-link underline cursor-pointer">
-                          Browse
+                          {t('browse')}
                         </span>{' '}
                         or{' '}
                         <span className="file-link underline cursor-pointer">
-                          drop
+                          {t('drop')}
                         </span>{' '}
-                        a file here
+                        {t('aFileHere')}
                       </p>
                       <Image
                         alt="Image description face and ID"
@@ -351,46 +335,17 @@ const IdentityVerificationForm: FC<Props> = () => {
           </div>
 
           <ul className="list-disc pl-5 mt-8">
-            <li>
-              Make sure the image you want to publish is as clear as our example
-              and in the same format
-            </li>
-            <li>
-              Remember that you must publish high-quality and high-resolution
-              images
-            </li>
-            <li>
-              Blurry or grainy photos will be rejected and you will have to
-              resend them
-            </li>
-            <li>
-              Your face must be clearly visible, without cap, hat, glasses,
-              masks, etc.
-            </li>
+            <li>{t('imageQualityTip1')}</li>
+            <li>{t('imageQualityTip2')}</li>
+            <li>{t('imageQualityTip3')}</li>
+            <li>{t('imageQualityTip4')}</li>
           </ul>
 
           <Separator className="my-4" />
 
-          <Text className="text-center">
-            Your documents must be reviewed before being approved. We will
-            contact you by email within 24 hours. Remember to check your spam.
-          </Text>
+          <Text className="text-center">{t('documentsReviewNotice')}</Text>
 
           <Separator className="my-4" />
-
-          <div className="flex items-center">
-            <Checkbox
-              id="accept-policy"
-              checked={isPolicyAccepted}
-              onCheckedChange={(checked) => setIsPolicyAccepted(!!checked)}
-            />
-            <label htmlFor="accept-policy" className="ml-2">
-              I accept the content provider policy
-              <Button variant="link" onClick={handleOpenModal}>
-                Read Policy
-              </Button>
-            </label>
-          </div>
 
           <Button
             className="w-full"
@@ -399,14 +354,8 @@ const IdentityVerificationForm: FC<Props> = () => {
             disabled={isPending || isLoading}
             onClick={handleSubmitForm}
           >
-            Validate
+            {t('validate')}
           </Button>
-
-          <ContentProviderPolicyModal
-            open={isModalOpen}
-            setOpen={setIsModalOpen}
-            handleAcceptPolicy={handleAcceptPolicy}
-          />
         </>
       )}
     </Card>

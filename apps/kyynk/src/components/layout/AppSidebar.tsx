@@ -9,6 +9,8 @@ import {
   CreditCard,
   Sliders,
   BadgeEuro,
+  User,
+  Dot,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -19,6 +21,7 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
@@ -37,34 +40,69 @@ import {
 } from '../ui/collapsible';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { isUserVerified } from '@/utils/users/isUserVerified';
+import { useConversations } from '@/hooks/conversations/useConversations';
+import { useCloseSideBarOnMobile } from '@/hooks/others/useCloseSideBarOnMobile';
+import useConversationUsers from '@/hooks/conversations/useConversationUsers';
+import { ConversationType } from '@/types/conversations';
+import { useTranslations } from 'next-intl';
+import AddButton from '../nudes/AddButton';
+
+interface ConversationItemProps {
+  conversation: ConversationType;
+  onCloseSidebar: () => void;
+  onMarkAsRead: (conversationId: string) => void;
+}
+
+const ConversationItem: React.FC<ConversationItemProps> = ({
+  conversation,
+  onCloseSidebar,
+  onMarkAsRead,
+}) => {
+  const { otherUser } = useConversationUsers(conversation.participants);
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton asChild>
+        <Link
+          href={`/account/conversations/${conversation.id}`}
+          onClick={() => {
+            onCloseSidebar();
+            if (conversation.hasUnreadMessages) {
+              onMarkAsRead(conversation.id);
+            }
+          }}
+        >
+          <span>{otherUser?.pseudo || 'Unknown User'}</span>
+        </Link>
+      </SidebarMenuButton>
+      {conversation.hasUnreadMessages && (
+        <SidebarMenuBadge>
+          <Dot />
+        </SidebarMenuBadge>
+      )}
+    </SidebarMenuItem>
+  );
+};
 
 export function AppSidebar() {
   const { user, isLoggedIn } = useUser();
+  const { conversations, markConversationAsRead } = useConversations();
+  const isMobile = useIsMobile();
+  const { closeSidebarOnMobile } = useCloseSideBarOnMobile();
+  const t = useTranslations();
 
   const platforms = [
     {
-      title: 'Home',
+      title: 'models',
       url: appRouter.home,
-      icon: Home,
-      isVisible: true,
-    },
-    {
-      title: 'Models',
-      url: appRouter.models,
       icon: UsersRound,
       isVisible: true,
-    },
-    {
-      title: 'Conversations',
-      url: appRouter.conversations,
-      icon: MessageCircle,
-      isVisible: !!user,
     },
   ];
 
   const creators = [
     {
-      title: 'Revenue',
+      title: 'revenue',
       url: appRouter.revenue,
       icon: BadgeEuro,
     },
@@ -72,39 +110,44 @@ export function AppSidebar() {
 
   const settings = [
     {
-      title: 'Conversations',
+      title: 'myProfile',
+      url: appRouter.myProfile,
+      icon: User,
+      isVisible: isLoggedIn(),
+    },
+    {
+      title: 'conversations',
       url: appRouter.settingsConversations,
       icon: MessageCircle,
-      isVisible:
-        isLoggedIn() && isCreator({ user }) && isUserVerified({ user }),
+      isVisible: isLoggedIn() && isCreator({ user }),
     },
     {
-      title: 'Payment',
+      title: 'payment',
       url: appRouter.settingsPayment,
       icon: CreditCard,
-      isVisible:
-        isLoggedIn() && isCreator({ user }) && isUserVerified({ user }),
+      isVisible: isLoggedIn() && isCreator({ user }),
     },
     {
-      title: 'Preferences',
+      title: 'preferences',
       url: appRouter.settingsPreferences,
       icon: Sliders,
       isVisible: isLoggedIn(),
     },
   ];
 
-  const isMobile = useIsMobile();
+  function capitalize(str: string) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
   return (
     <Sidebar>
-      {isMobile && (
-        <SidebarHeader>
-          <SidebarTrigger />
-        </SidebarHeader>
-      )}
+      <SidebarHeader>
+        {isMobile && <SidebarTrigger />}
+        {isLoggedIn() && <AddButton />}
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Platform</SidebarGroupLabel>
+          <SidebarGroupLabel>{t('sideBarPlatform')}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {platforms.map(
@@ -112,9 +155,9 @@ export function AppSidebar() {
                   item.isVisible && (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
-                        <Link href={item.url}>
+                        <Link href={item.url} onClick={closeSidebarOnMobile}>
                           <item.icon />
-                          <span>{item.title}</span>
+                          <span>{t('sideBar' + capitalize(item.title))}</span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -126,7 +169,9 @@ export function AppSidebar() {
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton>
                         <Settings />
-                        <span className="text-sm font-rubik">Settings</span>
+                        <span className="text-sm font-rubik">
+                          {t('sideBarSettings')}
+                        </span>
                         <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
@@ -137,9 +182,14 @@ export function AppSidebar() {
                             item.isVisible && (
                               <SidebarMenuSubItem key={item.title}>
                                 <SidebarMenuButton asChild>
-                                  <Link href={item.url}>
+                                  <Link
+                                    href={item.url}
+                                    onClick={closeSidebarOnMobile}
+                                  >
                                     <item.icon />
-                                    <span>{item.title}</span>
+                                    <span>
+                                      {t('sideBar' + capitalize(item.title))}
+                                    </span>
                                   </Link>
                                 </SidebarMenuButton>
                               </SidebarMenuSubItem>
@@ -155,18 +205,35 @@ export function AppSidebar() {
         </SidebarGroup>
         {isCreator({ user }) && isUserVerified({ user }) && (
           <SidebarGroup>
-            <SidebarGroupLabel>Creators</SidebarGroupLabel>
+            <SidebarGroupLabel>{t('sideBarCreators')}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {creators.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <Link href={item.url}>
+                      <Link href={item.url} onClick={closeSidebarOnMobile}>
                         <item.icon />
-                        <span>{item.title}</span>
+                        <span>{t('sideBar' + capitalize(item.title))}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+        {conversations && conversations.length > 0 && (
+          <SidebarGroup>
+            <SidebarGroupLabel>{t('sideBarChats')}</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {conversations.map((conversation) => (
+                  <ConversationItem
+                    key={conversation.id}
+                    conversation={conversation}
+                    onCloseSidebar={closeSidebarOnMobile}
+                    onMarkAsRead={markConversationAsRead}
+                  />
                 ))}
               </SidebarMenu>
             </SidebarGroupContent>

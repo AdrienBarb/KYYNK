@@ -1,6 +1,11 @@
 import { prisma } from '@/lib/db/client';
 
-export const getUsers = async () => {
+interface GetUsersOptions {
+  limit?: number;
+  offset?: number;
+}
+
+export const getUsers = async ({ limit, offset = 0 }: GetUsersOptions = {}) => {
   try {
     const users = await prisma.user.findMany({
       where: {
@@ -21,6 +26,8 @@ export const getUsers = async () => {
         slug: true,
         profileImageId: true,
       },
+      ...(limit && { take: limit }),
+      ...(offset && { skip: offset }),
     });
 
     return users;

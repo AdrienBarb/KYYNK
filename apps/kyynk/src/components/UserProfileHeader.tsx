@@ -2,18 +2,17 @@
 
 import React, { FC } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Conversation, User } from '@prisma/client';
+import Image from 'next/image';
 import useApi from '@/hooks/requests/useApi';
 import Avatar from './ui/Avatar';
-import Text from '@/components/ui/Text';
 import OnlineStatus from '@/components/profile/OnlineStatus';
 import Title from '@/components/ui/Title';
-import { Button } from './ui/Button';
 import { useUser } from '@/hooks/users/useUser';
-import { isUserVerified } from '@/utils/users/isUserVerified';
 import { FetchedUserType } from '@/types/users';
-import { getEncodedFullUrl } from '@/utils/links/getEncodedFullUrl';
-import { appRouter } from '@/constants/appRouter';
+import UserProfileMenu from './UserProfileMenu';
+import imgixLoader from '@/lib/imgix/loader';
+import Text from './ui/Text';
+import ProfileImage from './ProfileImage';
 
 interface Props {
   initialUserDatas: FetchedUserType;
@@ -22,8 +21,7 @@ interface Props {
 const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
   const { slug } = useParams<{ slug: string }>();
   const { user: loggedUser } = useUser();
-  const { useGet, usePost } = useApi();
-  const router = useRouter();
+  const { useGet } = useApi();
 
   const { data: user } = useGet(
     `/api/users/${slug}`,
@@ -31,55 +29,31 @@ const UserProfileHeader: FC<Props> = ({ initialUserDatas }) => {
     {
       initialData: initialUserDatas,
       refetchOnWindowFocus: true,
+      staleTime: 0,
     },
   );
-
-  const { mutate: createConversation, isPending } = usePost(
-    `/api/conversations`,
-    {
-      onSuccess: (newConversation: Conversation) => {
-        router.push(`/account/conversations/${newConversation.id}`);
-      },
-    },
-  );
-
-  const handleClickOnDiscussButton = () => {
-    if (!loggedUser) {
-      const encodedUrl = getEncodedFullUrl();
-      router.push(`${appRouter.login}?previousUrl=${encodedUrl}`);
-      return;
-    }
-
-    createConversation({ slug });
-  };
 
   const isLoggedUserProfile = loggedUser?.slug === slug;
 
   return (
-    <div className="flex flex-col items-center relative w-full box-border text-black gap-4">
-      <Avatar size={164} imageId={user?.profileImageId} pseudo={user?.pseudo} />
-      <div className="flex flex-col items-center gap-2 w-full">
-        <Title Tag="h2" dataId="user-pseudo">
-          {user.pseudo}
-        </Title>
-        <div>
-          <Text className="mt-2 text-center whitespace-pre-wrap">
-            {user.description}
-          </Text>
+    <div className="flex justify-center items-center w-full">
+      <div className="flex flex-col items-center text-black gap-4">
+        <ProfileImage
+          profileImageId={user?.profileImageId}
+          pseudo={user?.pseudo}
+          size={320}
+          className="w-40 h-40"
+        />
+
+        <div className="flex flex-col items-center">
+          <Title Tag="h2" className="text-lg lg:text-xl" dataId="user-pseudo">
+            {user?.pseudo}
+          </Title>
           {!isLoggedUserProfile && <OnlineStatus currentUser={user} />}
         </div>
-      </div>
-      <div className="flex gap-2 max-w-56 w-full">
-        {!isLoggedUserProfile && isUserVerified({ user }) && (
-          <Button
-            onClick={handleClickOnDiscussButton}
-            isLoading={isPending}
-            disabled={isPending}
-            className="w-full"
-          >
-            Discuss
-          </Button>
-        )}
+        <Text className="text-sm text-center max-w-lg whitespace-pre-wrap">
+          {user?.description}
+        </Text>
       </div>
     </div>
   );

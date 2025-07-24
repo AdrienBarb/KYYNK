@@ -4,31 +4,30 @@ import React from 'react';
 import VerificationCard from './VerificationCard';
 import { useUser } from '@/hooks/users/useUser';
 import { appRouter } from '@/constants/appRouter';
-import { Card } from './ui/Card';
+import { useTranslations } from 'next-intl';
 
 const AccountVerification = () => {
   const { user } = useUser();
+  const t = useTranslations();
 
   return (
-    <Card className="max-w-screen-sm mx-auto">
-      <div className="flex flex-col gap-4">
-        <VerificationCard
-          isValid={!!user?.profileImageId}
-          path={appRouter.editProfile}
-          label={'Add a profile image'}
-        />
-        <VerificationCard
-          isValid={!!user?.isEmailVerified}
-          path={appRouter.becomeCreatorEmail}
-          label={'Confirm your email'}
-        />
-        <VerificationCard
-          isValid={user?.identityVerificationStatus === 'verified'}
-          path={appRouter.becomeCreatorIdentity}
-          label={'Verify your identity'}
-        />
-      </div>
-    </Card>
+    <div className="flex flex-col gap-4">
+      <VerificationCard
+        isValid={!!user?.profileImageId}
+        path={appRouter.myProfile}
+        label={t('accountVerificationAddProfileImage')}
+      />
+      <VerificationCard
+        isValid={!!user?.isEmailVerified}
+        path={appRouter.becomeCreatorEmail}
+        label={t('accountVerificationConfirmEmail')}
+      />
+      <VerificationCard
+        isValid={user?.identityVerificationStatus === 'verified'}
+        path={appRouter.becomeCreatorIdentity}
+        label={t('accountVerificationVerifyIdentity')}
+      />
+    </div>
   );
 };
 

@@ -16,5 +16,5 @@ export function strictlyAuth(handler: Handler) {
     }
 
     return handler(...args);
-  });
+  }) as Handler;
 }

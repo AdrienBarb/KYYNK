@@ -18,7 +18,7 @@ const AuthErrorPage = () => {
     router.push('/login');
   }, []);
 
-  return <div className={styles.container}>{t('error.userRedirect')}</div>;
+  return <div className={styles.container}>{t('userRedirect')}</div>;
 };
 
 export default AuthErrorPage;

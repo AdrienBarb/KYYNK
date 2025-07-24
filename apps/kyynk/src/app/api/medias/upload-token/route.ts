@@ -11,7 +11,7 @@ export const GET = strictlyAuth(async (req: NextRequest) => {
 
     const user = await prisma.user.findUnique({
       where: { id: userId! },
-      select: { watermarkId: true, pseudo: true, nudesCount: true },
+      select: { pseudo: true, nudesCount: true },
     });
 
     if (!user) {
@@ -30,20 +30,11 @@ export const GET = strictlyAuth(async (req: NextRequest) => {
       );
     }
 
-    let videoId = null;
+    const video = await apiVideoClient.videos.create({
+      title: `${user.pseudo} - video`,
+    });
 
-    if (user.watermarkId) {
-      const watermarkVideo = await apiVideoClient.videos.create({
-        title: `${user.pseudo} - video`,
-        watermark: {
-          id: user.watermarkId,
-          bottom: '10px',
-          right: '20px',
-        },
-      });
-
-      videoId = watermarkVideo.videoId;
-    }
+    const videoId = video.videoId;
 
     return NextResponse.json({ uploadToken: tokenResponse.token, videoId });
   } catch (error) {

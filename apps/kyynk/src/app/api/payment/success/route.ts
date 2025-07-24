@@ -3,6 +3,7 @@ import { errorHandler } from '@/utils/errors/errorHandler';
 import { prisma } from '@/lib/db/client';
 import { errorMessages } from '@/lib/constants/errorMessage';
 import { TransactionStatus } from '@prisma/client';
+import { sendPostHogEvent } from '@/utils/tracking/sendPostHogEvent';
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -42,6 +43,17 @@ export const POST = async (req: NextRequest) => {
         { status: 400 },
       );
     }
+
+    sendPostHogEvent({
+      distinctId: user.id,
+      event: 'user_credit_purchase',
+      properties: {
+        amount: transaction.creditAmount,
+        currency: transaction.currency,
+        fiatAmount: transaction.fiatAmount,
+        $process_person_profile: false,
+      },
+    });
 
     await prisma.$transaction([
       prisma.user.update({

@@ -36,20 +36,24 @@ import imgixLoader from '@/lib/imgix/loader';
 import useApi from '@/hooks/requests/useApi';
 import { useParams } from 'next/navigation';
 import MediasGallery from '../nudes/MediasGallery';
+import { useFetchMessages } from '@/hooks/messages/useFetchMessages';
+import { MessageWithNudePermissions } from '@/types/messages';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   setOpen: (e: boolean) => void;
   open: boolean;
-  refetch: () => void;
 }
 
 export type PrivateNudeStepsType = 'form' | 'gallery' | 'uploading' | 'success';
 
-const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
+const PrivateNudeModal: FC<Props> = ({ setOpen, open }) => {
   const [step, setStep] = useState<PrivateNudeStepsType>('form');
+  const t = useTranslations();
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
   const { id: conversationId } = useParams();
+  const { addMessageToCache } = useFetchMessages();
 
   const form = useForm<z.infer<typeof privateNudeSchema>>({
     resolver: zodResolver(privateNudeSchema),
@@ -65,12 +69,12 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
   const { mutate: createPrivateNudeMessage, isPending } = usePost(
     `/api/conversations/${conversationId}/messages/nudes`,
     {
-      onSuccess: () => {
+      onSuccess: (createdMessage: MessageWithNudePermissions) => {
         setOpen(false);
         setSelectedMedia(null);
         setStep('form');
         reset();
-        refetch();
+        addMessageToCache(createdMessage);
       },
     },
   );
@@ -94,16 +98,14 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
         return (
           <DialogContent className="h-[100dvh] sm:h-[80dvh] overflow-y-scroll">
             <DialogHeader>
-              <DialogTitle>Send a private nude</DialogTitle>
-              <DialogDescription>
-                Here you can send a private nude to the user.
-              </DialogDescription>
+              <DialogTitle>{t('privateNudeSend')}</DialogTitle>
+              <DialogDescription>{t('privateNudeSendDesc')}</DialogDescription>
             </DialogHeader>
 
             <Form {...form}>
               <form className="space-y-8 flex flex-col items-center w-full">
                 <FormItem className="w-full">
-                  <FormLabel>Video*</FormLabel>
+                  <FormLabel>{t('video')}*</FormLabel>
                   {selectedMedia && selectedMedia.thumbnailId ? (
                     <div className="aspect-[4/5] relative rounded-md overflow-hidden">
                       <Button
@@ -133,7 +135,7 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
                       onClick={() => setStep('gallery')}
                     >
                       <FontAwesomeIcon icon={faPlus} size="lg" />
-                      <Text className="text-custom-black">Add a video</Text>
+                      <Text className="text-custom-black">{t('addVideo')}</Text>
                     </div>
                   )}
                 </FormItem>
@@ -143,10 +145,9 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
                   name="price"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>Price</FormLabel>
+                      <FormLabel>{t('price')}</FormLabel>
                       <FormSubLabel>
-                        Either {creditPrice} credits. Credits are the currency
-                        of our platform.
+                        {t('credits')}: {creditPrice}
                       </FormSubLabel>
                       <FormControl>
                         <div className="mt-14 px-4">
@@ -168,13 +169,13 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
                   name="description"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>Message*</FormLabel>
+                      <FormLabel>{t('message')}*</FormLabel>
                       <FormControl>
                         <Textarea
                           rows={4}
                           {...field}
                           className="mt-2 text-base"
-                          placeholder="Type your message..."
+                          placeholder={t('typeYourMessage')}
                         />
                       </FormControl>
                       <FormMessage />
@@ -188,7 +189,7 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
                   isLoading={isPending}
                   disabled={isPending}
                 >
-                  Send
+                  {t('send')}
                 </Button>
               </form>
             </Form>
@@ -203,11 +204,8 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
             isClosable={false}
           >
             <DialogHeader className="flex flex-col items-center">
-              <DialogTitle>Gallery</DialogTitle>
-              <DialogDescription>
-                Here you can manage your videos. You can upload new videos,
-                delete existing ones, and select a video to use.
-              </DialogDescription>
+              <DialogTitle>{t('gallery')}</DialogTitle>
+              <DialogDescription>{t('galleryDesc')}</DialogDescription>
             </DialogHeader>
             <MediasGallery
               setStep={setStep}
@@ -221,14 +219,14 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
                 className="w-full"
                 variant="secondary"
               >
-                Quit
+                {t('quit')}
               </Button>
               <Button
                 onClick={() => setStep('form')}
                 disabled={!selectedMedia}
                 className="w-full"
               >
-                Select
+                {t('select')}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -246,7 +244,7 @@ const PrivateNudeModal: FC<Props> = ({ setOpen, open, refetch }) => {
                 {uploadProgress}%
               </Text>
               <Text className="text-center text-custom-black mt-4">
-                Please do not refresh the screen or you will lose the upload.
+                {t('refreshWarning')}
               </Text>
             </div>
           </DialogContent>

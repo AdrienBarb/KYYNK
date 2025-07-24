@@ -12,6 +12,7 @@ export const updateUserSchema = z.object({
   bodyType: z.string().optional(),
   hairColor: z.string().optional(),
   country: z.string().optional(),
+  languages: z.array(z.string()).optional(),
   tags: z.array(z.string()).optional(),
   contentProviderPolicyAccepted: z.boolean().optional(),
 });

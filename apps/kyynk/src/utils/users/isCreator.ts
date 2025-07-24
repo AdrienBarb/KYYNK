@@ -1,3 +1,4 @@
+import { UserType } from '@prisma/client';
 import { LoggedUserType } from '@/types/users';
 
 export const isCreator = ({ user }: { user: LoggedUserType | null }) => {
@@ -5,5 +6,5 @@ export const isCreator = ({ user }: { user: LoggedUserType | null }) => {
     return false;
   }
 
-  return user.userType === 'creator';
+  return user.userType === UserType.creator;
 };

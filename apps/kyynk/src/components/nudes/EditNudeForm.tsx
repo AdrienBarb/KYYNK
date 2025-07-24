@@ -25,6 +25,7 @@ import CustomSlider from '../CustomSlider';
 import { useQueryClient } from '@tanstack/react-query';
 import { NudeWithPermissions } from '@/types/nudes';
 import { formatFiat } from '@/utils/prices/formatFiat';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   nude?: NudeWithPermissions;
@@ -35,6 +36,7 @@ const EditNudeForm: FC<Props> = ({ nude, setOpen }) => {
   const { usePut } = useApi();
   const queryClient = useQueryClient();
   const { slug } = useParams<{ slug: string }>();
+  const t = useTranslations();
 
   const { mutate: editNude, isPending: isEditLoading } = usePut(
     `/api/nudes/${nude?.id}`,
@@ -90,7 +92,7 @@ const EditNudeForm: FC<Props> = ({ nude, setOpen }) => {
           name="description"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Description*</FormLabel>
+              <FormLabel>{t('description')}*</FormLabel>
               <FormControl>
                 <Textarea rows={4} {...field} className="mt-2 text-base" />
               </FormControl>
@@ -104,10 +106,9 @@ const EditNudeForm: FC<Props> = ({ nude, setOpen }) => {
           name="price"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Price</FormLabel>
+              <FormLabel>{t('price')}</FormLabel>
               <FormSubLabel>
-                Either {creditPrice} credits. Credits are the currency of our
-                platform.
+                {t('credits')}: {creditPrice}
               </FormSubLabel>
               <FormControl>
                 <div className="mt-14 px-4">
@@ -127,7 +128,7 @@ const EditNudeForm: FC<Props> = ({ nude, setOpen }) => {
           name="tags"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Tags</FormLabel>
+              <FormLabel>{t('tags')}</FormLabel>
               <FormControl>
                 <Select
                   {...field}
@@ -137,15 +138,17 @@ const EditNudeForm: FC<Props> = ({ nude, setOpen }) => {
                   }
                   options={tagList.map((currentTag) => ({
                     value: currentTag,
-                    label: currentTag,
+                    label: t('nudeCategories.' + currentTag),
                   }))}
                   value={field.value}
                   classNamePrefix="react-select"
-                  getOptionLabel={(el: TagsType) => el.label}
+                  getOptionLabel={(el: TagsType) =>
+                    t('nudeCategories.' + el.value)
+                  }
                   getOptionValue={(el: TagsType) => el.value}
                   closeMenuOnSelect={false}
-                  placeholder="Select tags"
-                  noOptionsMessage={() => <span>No Options</span>}
+                  placeholder={t('selectTags')}
+                  noOptionsMessage={() => <span>{t('noOptions')}</span>}
                   styles={{
                     control: (styles) => ({
                       ...styles,
@@ -210,7 +213,7 @@ const EditNudeForm: FC<Props> = ({ nude, setOpen }) => {
           disabled={isEditLoading}
           className="w-full"
         >
-          Edit a nude
+          {t('editNude')}
         </Button>
       </form>
     </Form>

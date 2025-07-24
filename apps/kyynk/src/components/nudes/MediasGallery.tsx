@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import Text from '@/components/ui/Text';
 import type { Media } from '@prisma/client';
 import { NudeCreationStepsType } from '@/components/modals/NudeCreationModal';
+import { useTranslations } from 'next-intl';
 
 interface MediasGalleryProps {
   setStep: (e: NudeCreationStepsType) => void;
@@ -25,6 +26,7 @@ const MediasGallery: FC<MediasGalleryProps> = ({
   selectedMedia,
 }) => {
   const { fetchData, usePost, useGet } = useApi();
+  const t = useTranslations();
 
   const { mutate: createMedia } = usePost('/api/medias', {
     onSuccess: () => {
@@ -76,7 +78,7 @@ const MediasGallery: FC<MediasGalleryProps> = ({
     } catch (error) {
       console.error('Upload error:', error);
       setStep('gallery');
-      toast.error('An error occurred during the upload. Please try again.');
+      toast.error(t('uploadError'));
     }
   };
 
@@ -100,7 +102,7 @@ const MediasGallery: FC<MediasGalleryProps> = ({
           }}
         >
           <FontAwesomeIcon icon={faPlus} size="lg" />
-          <Text className="text-secondary">Upload a new video</Text>
+          <Text className="text-secondary">{t('uploadNewVideo')}</Text>
         </div>
 
         {userMedias?.map((currentMedia: Media) => {

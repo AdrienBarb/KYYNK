@@ -9,10 +9,12 @@ import { isCreator } from '@/utils/users/isCreator';
 import { isUserVerified } from '@/utils/users/isUserVerified';
 import { Button } from '@/components/ui/Button';
 import { appRouter } from '@/constants/appRouter';
+import { useTranslations } from 'next-intl';
 
 const UserUncompletedProfileBanner = () => {
   const { user } = useUser();
   const { slug } = useParams<{ slug: string }>();
+  const t = useTranslations();
 
   if (
     user &&
@@ -26,9 +28,9 @@ const UserUncompletedProfileBanner = () => {
         className="mb-4 flex justify-between bg-primary text-secondary flex-col md:flex-row"
       >
         <div>
-          <AlertTitle>Heads up!</AlertTitle>
+          <AlertTitle>{t('uncompletedProfileBannerTitle')}</AlertTitle>
           <AlertDescription>
-            You must complete your profile for it to be visible to other users.
+            {t('uncompletedProfileBannerDescription')}
           </AlertDescription>
         </div>
         <Button
@@ -36,7 +38,9 @@ const UserUncompletedProfileBanner = () => {
           asChild
           className="text-custom-black mt-2 md:mt-none"
         >
-          <Link href={appRouter.becomeCreator}>Complete my profile</Link>
+          <Link href={appRouter.becomeCreator}>
+            {t('uncompletedProfileBannerCta')}
+          </Link>
         </Button>
       </Alert>
     );

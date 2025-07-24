@@ -19,6 +19,8 @@ import CreateNudeForm from '@/components/nudes/CreateNudeForm';
 import { NudeWithPermissions } from '@/types/nudes';
 import NudeCard from '@/components/nudes/NudeCard';
 import { TelegramShareButton, TwitterShareButton } from 'react-share';
+import { useUser } from '@/hooks/users/useUser';
+import { useTranslations } from 'next-intl';
 
 export type NudeCreationStepsType =
   | 'form'
@@ -34,14 +36,14 @@ const NudeCreationModal = () => {
   const [createdNude, setCreatedNude] = useState<NudeWithPermissions | null>(
     null,
   );
+  const { user } = useUser();
+  const t = useTranslations();
 
-  const URL_TO_SHARE = `${process.env.NEXT_PUBLIC_BASE_URL}/nudes/${createdNude?.id}`;
+  const URL_TO_SHARE = `${process.env.NEXT_PUBLIC_BASE_URL}/${user?.slug}`;
 
   const handleCloseModal = () => {
     if (step === 'uploading') {
-      toast.error(
-        'Please wait until the upload is complete before closing the modal.',
-      );
+      toast.error(t('waitForUpload'));
       return;
     }
 
@@ -57,9 +59,9 @@ const NudeCreationModal = () => {
         return (
           <DialogContent className="h-[100dvh] sm:h-[80dvh] overflow-y-scroll flex flex-col">
             <DialogHeader className="flex flex-col items-center">
-              <DialogTitle>Create a nude</DialogTitle>
+              <DialogTitle>{t('nudeCreationCreate')}</DialogTitle>
               <DialogDescription>
-                Here you can create a nude for your feed.
+                {t('nudeCreationCreateDesc')}
               </DialogDescription>
             </DialogHeader>
             <CreateNudeForm
@@ -78,10 +80,9 @@ const NudeCreationModal = () => {
             isClosable={false}
           >
             <DialogHeader className="flex flex-col items-center">
-              <DialogTitle>Gallery</DialogTitle>
+              <DialogTitle>{t('nudeCreationGallery')}</DialogTitle>
               <DialogDescription>
-                Here you can manage your videos. You can upload new videos,
-                delete existing ones, and select a video to use.
+                {t('nudeCreationGalleryDesc')}
               </DialogDescription>
             </DialogHeader>
             <MediasGallery
@@ -96,14 +97,14 @@ const NudeCreationModal = () => {
                 className="w-full"
                 variant="secondary"
               >
-                Quit
+                {t('quit')}
               </Button>
               <Button
                 onClick={() => setStep('form')}
                 disabled={!selectedMedia}
                 className="w-full"
               >
-                Select
+                {t('select')}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -121,7 +122,7 @@ const NudeCreationModal = () => {
                 {uploadProgress}%
               </Text>
               <Text className="text-center text-custom-black mt-4">
-                Please do not refresh the screen or you will lose the upload.
+                {t('refreshWarning')}
               </Text>
             </div>
           </DialogContent>
@@ -130,37 +131,33 @@ const NudeCreationModal = () => {
         return (
           <DialogContent className="h-[100dvh] sm:h-[80dvh] overflow-y-scroll flex flex-col">
             <DialogHeader className="flex flex-col items-center">
-              <DialogTitle>Success</DialogTitle>
+              <DialogTitle>{t('success')}</DialogTitle>
               <DialogDescription>
-                You can now share your nude with your followers.
+                {t('shareProfileDescription')}
               </DialogDescription>
             </DialogHeader>
             {createdNude && <NudeCard nude={createdNude} />}
             <div className="flex flex-col items-center justify-center w-full gap-2">
               <TwitterShareButton
                 url={URL_TO_SHARE}
-                title={
-                  createdNude?.description ?? 'Come discover this nude on KYYNK'
-                }
+                title={t('shareProfileTitle')}
                 style={{ width: '100%' }}
               >
-                <Button className="w-full">Share on Twitter</Button>
+                <Button className="w-full">{t('shareOnTwitter')}</Button>
               </TwitterShareButton>
               <TelegramShareButton
                 url={URL_TO_SHARE}
-                title={
-                  createdNude?.description ?? 'Come discover this nude on KYYNK'
-                }
+                title={t('shareProfileTitle')}
                 style={{ width: '100%' }}
               >
-                <Button className="w-full">Share on Telegram</Button>
+                <Button className="w-full">{t('shareOnTelegram')}</Button>
               </TelegramShareButton>
               <Button
                 variant="secondary"
                 onClick={handleCloseModal}
                 className="w-full"
               >
-                Quit
+                {t('quit')}
               </Button>
             </div>
           </DialogContent>

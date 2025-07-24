@@ -4,12 +4,16 @@ import { genPageMetadata } from '@/app/seo';
 import Title from '@/components/ui/Title';
 import Text from '@/components/ui/Text';
 import PaddingContainer from '@/components/layout/PaddingContainer';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata = genPageMetadata({
-  title: 'Privacy Policy',
-  description:
-    'Learn about our privacy policy and how KYYNK protects your personal information, manages cookies, and complies with data protection regulations.',
-});
+export async function generateMetadata() {
+  const t = await getTranslations();
+
+  return genPageMetadata({
+    title: t('privacyPolicyTitle'),
+    description: t('privacyPolicyDescription'),
+  });
+}
 
 const privacyPage = () => {
   return (
@@ -111,6 +115,24 @@ const privacyPage = () => {
             as required by law.
           </li>
         </ul>
+        <Text>
+          https://kyynk.com uses SSL encryption that ensures the confidentiality
+          of your information in the transmission of data.
+        </Text>
+        <Title Tag="h3">Payment Data Security</Title>
+        <Text>
+          In no case, we do collect, store, or transfer data from your card.
+        </Text>
+        <Text>
+          The payment operations are carried out entirely through the secure
+          server of the payment gateway(s) and/or payment processor(s).
+        </Text>
+        <Text>
+          ALLY CORPORATION will not sell, purchase, provide, exchange or in any
+          other manner disclose Account or Transaction data, or personal
+          information of or about a Cardholder to anyone, except its Acquirer,
+          Card networks/associations or in response to valid government demands.
+        </Text>
         <Title Tag="h2">7. Cookies & Tracking Technologies</Title>
         <Text>
           We use cookies and similar tracking technologies to enhance user

@@ -16,11 +16,12 @@ import CustomQueryClientProvider from '@/components/provider/CustomQueryClientPr
 import CustomSessionProvider from '@/components/provider/CustomSessionProvider';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 import { PostHogProvider } from '@/components/provider/PostHogProvider';
-import AgeVerificationModal from '@/components/modals/AgeVerificationModal';
-import PaymentModal from '@/components/modals/PaymentModal';
 import { AxiomWebVitals } from 'next-axiom';
-import NudeCreationModal from '@/components/modals/NudeCreationModal';
 import LoggedUserProvider from '@/components/provider/LoggedUserProvider';
+import UTMTracking from '@/components/tracking/UTMTracking';
+import ModalWrapper from '@/components/layout/ModalWrapper';
+import { GoogleTagManager } from '@next/third-parties/google';
+
 config.autoAddCss = false;
 
 export const metadata: Metadata = {
@@ -80,8 +81,6 @@ const RootLayout: FC<Props> = async ({ children }) => {
   const locale = await getLocale();
   const messages = await getMessages();
 
-  console.log(process.env.NEXTAUTH_URL);
-
   return (
     <CustomQueryClientProvider>
       <CustomSessionProvider>
@@ -102,20 +101,22 @@ const RootLayout: FC<Props> = async ({ children }) => {
               sizes="16x16"
               href="/images/favicon-16x16.png"
             />
+            <GoogleTagManager gtmId="GTM-KHBKVG2G" />
             <body>
-              <Toaster position="bottom-center" />
-              <GlobalConfig>
-                <LoggedUserProvider>
-                  <NuqsAdapter>
+              <NuqsAdapter>
+                <Toaster position="bottom-center" />
+                <GlobalConfig>
+                  <LoggedUserProvider>
                     <PostHogProvider>{children}</PostHogProvider>
-                  </NuqsAdapter>
-                </LoggedUserProvider>
-              </GlobalConfig>
-              <GlobalErrorProvider />
-              <AgeVerificationModal />
-              <PaymentModal />
-              <NudeCreationModal />
-              <AxiomWebVitals />
+                  </LoggedUserProvider>
+                </GlobalConfig>
+                <UTMTracking />
+                <GlobalErrorProvider />
+
+                {/* Modals */}
+                <ModalWrapper />
+                <AxiomWebVitals />
+              </NuqsAdapter>
             </body>
           </html>
         </NextIntlClientProvider>

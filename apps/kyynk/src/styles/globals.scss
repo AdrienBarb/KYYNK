@@ -1,5 +1,5 @@
+@use 'library.scss' as *;
 @import url('https://fonts.googleapis.com/css2?family=Karla:wght@200;300;400;500;600;700;800&family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
-@import 'library.scss';
 
 html,
 body {
@@ -155,10 +155,6 @@ h4 {
     height: 48px;
     background-color: rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(0, 0, 0, 0.1);
-
-    &:selected {
-      border-color: black;
-    }
   }
 
   .autocomplete-dropdown-container {

@@ -12,14 +12,12 @@ import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { authenticate } from '../../server-actions/authenticate';
 import { useQueryState } from 'nuqs';
-import { useRouter } from 'next/navigation';
-import { appRouter } from '@/constants/appRouter';
+
 const UserSignInForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const t = useTranslations();
   const [previousUrl] = useQueryState('previousUrl');
-  const router = useRouter();
 
   const handleClickShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -56,6 +54,10 @@ const UserSignInForm = () => {
         }
       } catch (error) {
         if (error instanceof Error) {
+          if (error.message === 'NEXT_REDIRECT') {
+            return;
+          }
+
           toast.error(error.message);
         }
       } finally {
@@ -72,7 +74,7 @@ const UserSignInForm = () => {
           fullWidth
           id="email"
           name="email"
-          label="Email"
+          label={t('email')}
           value={formik.values.email}
           onChange={formik.handleChange}
           error={formik.touched.email && Boolean(formik.errors.email)}
@@ -84,7 +86,7 @@ const UserSignInForm = () => {
           type={showPassword ? 'text' : 'password'}
           id="password"
           name="password"
-          label={t('common.password')}
+          label={t('password')}
           value={formik.values.password}
           onChange={formik.handleChange}
           error={formik.touched.password && Boolean(formik.errors.password)}
@@ -104,7 +106,7 @@ const UserSignInForm = () => {
         />
 
         <Button type="submit" isLoading={isLoading} disabled={isLoading}>
-          {t('common.signIn')}
+          {t('signIn')}
         </Button>
       </form>
     </div>

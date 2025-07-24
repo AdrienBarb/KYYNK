@@ -3,15 +3,13 @@
 import React, { FC } from 'react';
 import { useParams } from 'next/navigation';
 import useApi from '@/hooks/requests/useApi';
-import FeedView from './FeedView';
-import WallView from './WallView';
 import { useUser } from '@/hooks/users/useUser';
 import { isUserVerified } from '@/utils/users/isUserVerified';
 import { FetchedUserType } from '@/types/users';
-import { useQueryState } from 'nuqs';
 import { NudeWithPermissions } from '@/types/nudes';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { List, Grid } from 'lucide-react';
+import { cn } from '@/utils/tailwind/cn';
+import NudeCard from './NudeCard';
+import NudeModal from '../modals/NudeModal';
 
 interface Props {
   initialNudes: NudeWithPermissions[];
@@ -22,48 +20,50 @@ const UserNudes: FC<Props> = ({ initialNudes, user }) => {
   const { slug } = useParams<{ slug: string }>();
   const { user: loggedUser } = useUser();
   const { useGet } = useApi();
-  const [view, setView] = useQueryState('view');
-  const [nudeId, setNudeId] = useQueryState('n');
-  const isFeedView = view === 'feed';
+  const [isModalOpen, setModalOpen] = React.useState(false);
+  const [selectedNude, setSelectedNude] = React.useState<
+    NudeWithPermissions | undefined | null
+  >(null);
 
-  const { data: nudes } = useGet(
+  const { data: nudes, refetch } = useGet(
     `/api/users/${slug}/nudes`,
     {},
     {
       initialData: initialNudes,
       refetchOnWindowFocus: true,
+      staleTime: 0,
     },
   );
+
+  const handleNudeClick = (nude: NudeWithPermissions) => {
+    setSelectedNude(nude);
+    setModalOpen(true);
+  };
 
   if (loggedUser?.slug !== slug && !isUserVerified({ user })) {
     return null;
   }
 
-  const handleViewChange = (value: string) => {
-    setNudeId(null);
-    setView(value);
-  };
-
   return (
-    <div className="mt-8">
-      {!!nudes.length && (
-        <div className="flex justify-end">
-          <Tabs onValueChange={handleViewChange} value={view ?? 'wall'}>
-            <TabsList>
-              <TabsTrigger value="wall">
-                <Grid size={22} />
-              </TabsTrigger>
-              <TabsTrigger value="feed">
-                <List size={22} />
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
-      )}
-      <div className="mt-4">
-        {isFeedView ? <FeedView nudes={nudes} /> : <WallView nudes={nudes} />}
+    <>
+      <div className={cn('grid gap-4 mt-4', 'grid-cols-2 lg:grid-cols-3')}>
+        {nudes.map((nude: NudeWithPermissions) => (
+          <NudeCard
+            key={nude.id}
+            nude={nude}
+            onClick={() => handleNudeClick(nude)}
+          />
+        ))}
       </div>
-    </div>
+      <NudeModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        nude={selectedNude}
+        refetch={refetch}
+        setSelectedNude={setSelectedNude}
+        showHeader={true}
+      />
+    </>
   );
 };
 

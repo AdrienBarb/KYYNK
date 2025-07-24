@@ -12,7 +12,7 @@ const formSchema = nudeSchema.extend({
   mediaId: z.string(),
 });
 
-export const POST = strictlyAuth(async (req: NextRequest) => {
+export const POST = strictlyAuth(async (req: NextRequest): Promise<any> => {
   try {
     const { auth } = req;
     const userId = auth?.user.id;

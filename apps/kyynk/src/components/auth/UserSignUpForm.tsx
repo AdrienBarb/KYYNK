@@ -13,18 +13,17 @@ import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { register } from '@/server-actions/register';
-import { useRouter } from 'next/navigation';
-import { appRouter } from '@/constants/appRouter';
+import { getUTMFromLocalStorage } from '@/utils/tracking/getUTMFromLocalStorage';
 
 const UserSignUpForm = () => {
   //translation
   const t = useTranslations();
+
   //localstate
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] =
     useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
   const handleClickShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
@@ -78,6 +77,7 @@ const UserSignUpForm = () => {
           pseudo: values.pseudo,
           email: values.email.toLowerCase(),
           password: values.password,
+          utmTracking: getUTMFromLocalStorage(),
         });
 
         if (result && !result.success) {
@@ -85,6 +85,10 @@ const UserSignUpForm = () => {
         }
       } catch (error) {
         if (error instanceof Error) {
+          if (error.message === 'NEXT_REDIRECT') {
+            return;
+          }
+
           toast.error(error.message);
         }
       } finally {
@@ -102,7 +106,7 @@ const UserSignUpForm = () => {
             fullWidth
             id="pseudo"
             name="pseudo"
-            label={t('common.pseudo')}
+            label={t('pseudo')}
             value={formik.values.pseudo}
             onChange={formik.handleChange}
             error={formik.touched.pseudo && Boolean(formik.errors.pseudo)}
@@ -113,7 +117,7 @@ const UserSignUpForm = () => {
             fullWidth
             id="email"
             name="email"
-            label={t('common.email')}
+            label={t('email')}
             value={formik.values.email}
             onChange={formik.handleChange}
             error={formik.touched.email && Boolean(formik.errors.email)}
@@ -125,7 +129,7 @@ const UserSignUpForm = () => {
             type={showPassword ? 'text' : 'password'}
             id="password"
             name="password"
-            label={t('common.password')}
+            label={t('password')}
             value={formik.values.password}
             onChange={formik.handleChange}
             error={formik.touched.password && Boolean(formik.errors.password)}
@@ -150,7 +154,7 @@ const UserSignUpForm = () => {
             type={showPasswordConfirmation ? 'text' : 'password'}
             id="passwordConfirmation"
             name="passwordConfirmation"
-            label={t('common.passwordConfirmation')}
+            label={t('passwordConfirmation')}
             value={formik.values.passwordConfirmation}
             onChange={formik.handleChange}
             error={
@@ -193,12 +197,10 @@ const UserSignUpForm = () => {
                   },
                 }}
               />
-              <div className={styles.text}>{t('common.over_18')}</div>
+              <div className={styles.text}>{t('over_18')}</div>
             </div>
             {formik.errors.isOver18 && (
-              <div className={styles.error}>
-                {t('common.over_18_helper_text')}
-              </div>
+              <div className={styles.error}>{t('over_18_helper_text')}</div>
             )}
           </div>
           <div>
@@ -216,35 +218,33 @@ const UserSignUpForm = () => {
                 }}
               />
               <div className={styles.text}>
-                {t('common.i_read')}{' '}
+                {t('i_read')}{' '}
                 <Link
                   className={styles.bold}
                   href={'/privacy-policy'}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {t('common.privacy')}
+                  {t('privacy')}
                 </Link>{' '}
-                {t('common.and')}{' '}
+                {t('and')}{' '}
                 <Link
                   className={styles.bold}
                   href="/terms-of-service"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {t('common.terms')}
+                  {t('terms')}
                 </Link>
               </div>
             </div>
             {formik.errors.isLegalAccepted && (
-              <div className={styles.error}>
-                {t('common.legal_helper_text')}
-              </div>
+              <div className={styles.error}>{t('legal_helper_text')}</div>
             )}
           </div>
 
           <Button type="submit" isLoading={isLoading}>
-            {t('common.signUp')}
+            {t('signUp')}
           </Button>
         </form>
       </div>

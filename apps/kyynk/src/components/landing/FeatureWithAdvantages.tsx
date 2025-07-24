@@ -18,8 +18,8 @@ const Feature = () => {
                   className="w-4 h-4 mt-2 text-primary flex-shrink-0"
                 />
                 <div className="flex flex-col gap-1">
-                  <p className="font-normal">0% platform fees for 3 months</p>
-                  <p className="text-zinc-500 text-sm dark:text-zinc-400">
+                  <p className="font-normal">0% platform fees for 1 months</p>
+                  <p className="text-zinc-500 text-sm">
                     Enjoy all your earnings without initial fees.
                   </p>
                 </div>
@@ -33,7 +33,7 @@ const Feature = () => {
                   <p className="font-normal">
                     Only 10% fees after (vs 20% on OnlyFans)
                   </p>
-                  <p className="text-zinc-500 text-sm dark:text-zinc-400">
+                  <p className="text-zinc-500 text-sm">
                     Maximize your earnings with reduced fees.
                   </p>
                 </div>
@@ -47,7 +47,7 @@ const Feature = () => {
                   <p className="font-normal">
                     Chat-based content — more engagement, more earnings
                   </p>
-                  <p className="text-zinc-500 text-sm dark:text-zinc-400">
+                  <p className="text-zinc-500 text-sm">
                     Increase your interactions and profits.
                   </p>
                 </div>
@@ -61,7 +61,7 @@ const Feature = () => {
                   <p className="font-normal">
                     Credit-based system — no chargebacks
                   </p>
-                  <p className="text-zinc-500 text-sm dark:text-zinc-400">
+                  <p className="text-zinc-500 text-sm">
                     Secure your transactions without worries.
                   </p>
                 </div>
@@ -75,7 +75,7 @@ const Feature = () => {
                   <p className="font-normal">
                     Get paid for every voice reply, custom nude, or message
                   </p>
-                  <p className="text-zinc-500 text-sm dark:text-zinc-400">
+                  <p className="text-zinc-500 text-sm">
                     Every interaction counts towards your earnings.
                   </p>
                 </div>
@@ -89,7 +89,7 @@ const Feature = () => {
                   <p className="font-normal">
                     Secure, EU-based, with verified creators only
                   </p>
-                  <p className="text-zinc-500 text-sm dark:text-zinc-400">
+                  <p className="text-zinc-500 text-sm">
                     A trusted platform for you and your fans.
                   </p>
                 </div>

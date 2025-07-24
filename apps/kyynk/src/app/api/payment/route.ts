@@ -74,7 +74,7 @@ export const POST = strictlyAuth(async (req: NextRequest) => {
           currency: 'EUR',
         },
         ThreeDInfo: {
-          redirectUrl: currentUrl,
+          redirectUrl: `${currentUrl}?shouldRefetch=true`,
         },
         CustomerInfo: {
           email: user.email,

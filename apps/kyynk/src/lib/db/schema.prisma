@@ -22,6 +22,7 @@ model User {
   bodyType                      String?
   hairColor                     String?
   country                       String?
+  languages                     String[]           @default([])
   tags                          String[]           @default([])
   isArchived                    Boolean            @default(false)
   isEmailVerified               Boolean            @default(false)
@@ -47,8 +48,10 @@ model User {
   conversations                 Conversation[]     @relation("UserConversations")
   messages                      Message[]
   settings                      UserSettings?
-  feeFreeUntil                  DateTime           @default(dbgenerated("now() + interval '3 months'"))
+  feeFreeUntil                  DateTime           @default(dbgenerated("now() + interval '1 months'"))
   transactions                  Transaction[]
+  utmTracking                   Json?
+  roles                         UserRole[]         @default([user])
 }
 
 model UserToken {
@@ -61,22 +64,29 @@ model UserToken {
 }
 
 model Nude {
-  id          String    @id @default(cuid())
-  description String?
-  fiatPrice   Int
-  creditPrice Int
-  currency    String
-  tags        String[]  @default([])
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      String
-  media       Media     @relation(fields: [mediaId], references: [id], onDelete: Cascade)
-  mediaId     String
-  buyers      String[]  @default([])
-  isPrivate   Boolean   @default(false)
-  isArchived  Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  message     Message[]
+  id                 String              @id @default(cuid())
+  description        String?
+  fiatPrice          Int
+  creditPrice        Int
+  currency           String
+  tags               String[]            @default([])
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId             String
+  media              Media               @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  mediaId            String
+  buyers             String[]            @default([])
+  isPrivate          Boolean             @default(false)
+  isArchived         Boolean             @default(false)
+  moderationStatus   ModerationStatus    @default(pending)
+  moderatedBy        String?
+  moderatedAt        DateTime?
+  moderationReason   String?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  messageAttachments MessageAttachment[]
+
+  @@index([userId])
+  @@index([mediaId])
 }
 
 model Media {
@@ -140,16 +150,30 @@ model Conversation {
 }
 
 model Message {
-  id             String        @id @default(cuid())
-  conversation   Conversation  @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  id             String             @id @default(cuid())
+  conversation   Conversation       @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   conversationId String
-  sender         User          @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  sender         User               @relation(fields: [senderId], references: [id], onDelete: Cascade)
   senderId       String
   content        String
-  nude           Nude?         @relation(fields: [nudeId], references: [id], onDelete: SetNull)
-  nudeId         String?
-  createdAt      DateTime      @default(now())
-  status         MessageStatus @default(sent)
+  attachment     MessageAttachment?
+  createdAt      DateTime           @default(now())
+  status         MessageStatus      @default(sent)
+
+  @@index([conversationId])
+  @@index([senderId])
+}
+
+model MessageAttachment {
+  id        String                @id @default(cuid())
+  message   Message               @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  messageId String                @unique
+  type      MessageAttachmentType
+  nude      Nude?                 @relation(fields: [nudeId], references: [id], onDelete: SetNull)
+  nudeId    String?
+  createdAt DateTime              @default(now())
+
+  @@index([nudeId])
 }
 
 model UserSettings {
@@ -205,4 +229,21 @@ enum MessageStatus {
   sent
   delivered
   read
+}
+
+enum UserRole {
+  user
+  admin
+}
+
+enum ModerationStatus {
+  pending
+  approved
+  rejected
+}
+
+enum MessageAttachmentType {
+  nude
+  voice
+  tip
 }

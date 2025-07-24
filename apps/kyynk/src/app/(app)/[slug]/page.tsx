@@ -4,7 +4,6 @@ import { genPageMetadata } from '@/app/seo';
 import { redirect } from 'next/navigation';
 import ErrorMessage from '@/components/ErrorMessage';
 import { getTranslations } from 'next-intl/server';
-import UserProfileTopButtons from '@/components/UserProfileTopButtons';
 import { auth } from '@/auth';
 import UserUncompletedProfileBanner from '@/components/profile/UserUncompletedProfileBanner';
 import UserProfileHeader from '@/components/UserProfileHeader';
@@ -17,12 +16,19 @@ import PaddingContainer from '@/components/layout/PaddingContainer';
 import { NudeFromPrisma, NudeWithPermissions } from '@/types/nudes';
 import { FetchedUserType } from '@/types/users';
 import imgixLoader from '@/lib/imgix/loader';
+import { UserType } from '@prisma/client';
+import ProfileConversationInput from '@/components/conversations/ProfileConversationInput';
+import UserProfileMenu from '@/components/UserProfileMenu';
+
+export type PageProps = {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
 export async function generateMetadata({
-  params: { slug },
-}: {
-  params: { slug: string };
-}): Promise<Metadata | undefined> {
+  params,
+}: PageProps): Promise<Metadata | undefined> {
+  const { slug } = await params;
   const user = await getUserBySlug({ slug });
 
   const imageUrl = imgixLoader({
@@ -39,14 +45,18 @@ export async function generateMetadata({
   });
 }
 
-const UserPage = async ({ params }: { params: { slug: string } }) => {
-  const { slug } = params;
+const UserPage = async ({ params }: PageProps) => {
+  const { slug } = await params;
   const t = await getTranslations();
   const session = await auth();
 
   const user = (await getUserBySlug({ slug })) as FetchedUserType;
 
   if (!user) {
+    redirect('/404');
+  }
+
+  if (user.userType === UserType.member) {
     redirect('/404');
   }
 
@@ -63,11 +73,12 @@ const UserPage = async ({ params }: { params: { slug: string } }) => {
   ) as NudeWithPermissions[];
 
   return (
-    <PageContainer className="max-w-screen-lg mx-auto">
+    <PageContainer>
       <PaddingContainer>
         <UserUncompletedProfileBanner />
-        <UserProfileTopButtons />
+        <UserProfileMenu />
         <UserProfileHeader initialUserDatas={user} />
+        <ProfileConversationInput user={user} />
         <UserNudes initialNudes={nudesWithPermissions} user={user} />
       </PaddingContainer>
     </PageContainer>

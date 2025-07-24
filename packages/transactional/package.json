@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "email dev -p 3001",
+    "dev": "email dev",
     "export": "email export"
   },
   "devDependencies": {

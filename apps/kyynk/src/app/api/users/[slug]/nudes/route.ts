@@ -9,11 +9,11 @@ import { NudeFromPrisma } from '@/types/nudes';
 
 export const GET = async (
   req: NextRequest,
-  context: { params: { slug: string } },
-) => {
+  { params }: { params: Promise<{ slug: string }> },
+): Promise<NextResponse> => {
   try {
     const session = await auth();
-    const { slug } = context.params;
+    const { slug } = await params;
 
     if (!slug || Array.isArray(slug)) {
       return NextResponse.json(

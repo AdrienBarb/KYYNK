@@ -4,12 +4,16 @@ import { genPageMetadata } from '@/app/seo';
 import Title from '@/components/ui/Title';
 import Text from '@/components/ui/Text';
 import PaddingContainer from '@/components/layout/PaddingContainer';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata = genPageMetadata({
-  title: 'Terms of Service',
-  description:
-    'Review the Terms of Service of KYYNK to understand your rights and responsibilities as a user of our platform.',
-});
+export async function generateMetadata() {
+  const t = await getTranslations();
+
+  return genPageMetadata({
+    title: t('termsOfServiceTitle'),
+    description: t('termsOfServiceDescription'),
+  });
+}
 
 const TermsOfUsePage = () => {
   return (
@@ -22,6 +26,11 @@ const TermsOfUsePage = () => {
           Welcome to Kyynk. These Terms of Service (ToS) govern your use of our
           platform. By accessing or using our services, you agree to comply with
           these terms.
+        </Text>
+        <Text>
+          KYYNK is operated by ALLY CORPORATION, with registered address 60 rue
+          francois 1er, paris, 75008, France, under the laws of France, with
+          registered number 814 428785.
         </Text>
         <Title Tag="h2">2. Eligibility and Age Verification</Title>
         <Text>
@@ -72,6 +81,27 @@ const TermsOfUsePage = () => {
           chosen payment method. By submitting your payment information, you
           authorize us to share your payment card details with our third-party
           payment processor to complete the transaction.
+        </Text>
+        <Text>
+          For billing support, visit{' '}
+          <a
+            href="https://www.cgbilling.com/secure"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            CGBilling Support
+          </a>{' '}
+          (powered by{' '}
+          <a
+            href="https://www.commercegate.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            CommerceGate
+          </a>
+          )
         </Text>
         <Text>
           Kyynk Credit prices may change at any time, and we do not provide
@@ -131,6 +161,12 @@ const TermsOfUsePage = () => {
           chargebacks in bad faith may result in permanent account suspension
           and/or legal action.
         </Text>
+        <Title Tag="h3">5.5 Delivery Policy</Title>
+        <Text>
+          Once credits are purchased, they are immediately added to the
+          user&apos;s account. No physical delivery is involved. Access to
+          services is instant.
+        </Text>
         <Title Tag="h2">6. Complaint & Content Removal Policy</Title>
         <Text>
           • <strong>User complaints:</strong> Users can report illegal or
@@ -172,6 +208,10 @@ const TermsOfUsePage = () => {
         <Text>These Terms of Service are governed by the laws of France.</Text>
         <Title Tag="h2">11. Contact Information</Title>
         <Text>For legal or compliance inquiries, contact:</Text>
+        <Text>
+          <strong>Correspondence Address:</strong> ALLY CORPORATION, 60 rue
+          Francois 1er, Paris, 75008, France francois 1er, paris, 75008, France
+        </Text>
         <Text>
           <strong>Legal & Compliance:</strong> legal@kyynk.com
         </Text>

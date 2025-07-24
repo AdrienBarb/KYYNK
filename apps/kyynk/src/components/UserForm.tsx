@@ -7,19 +7,16 @@ import {
   HAIR_COLOR,
   countries,
 } from '@/constants/formValue';
-import EditIcon from '@mui/icons-material/Edit';
-import clsx from 'clsx';
-import { useTranslations } from 'next-intl';
+import { LANGUAGES } from '@/constants/languages';
 import useApi from '@/hooks/requests/useApi';
-import { useRouter } from 'next/navigation';
 import { useUser } from '@/hooks/users/useUser';
 import '@uploadcare/react-uploader/core.css';
-import Avatar from './ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useTranslations } from 'next-intl';
 import {
   Form,
   FormControl,
@@ -40,15 +37,14 @@ import {
 import { User } from '@prisma/client';
 import axios from 'axios';
 import { Pencil } from 'lucide-react';
+import { isCreator } from '@/utils/users/isCreator';
+import Loader from './Loader';
+import MultipleSelector from './ui/MultiSelect';
+import ProfileImage from './ProfileImage';
 
 const UserForm = () => {
-  //router
-  const router = useRouter();
-
-  //traduction
-  const t = useTranslations();
-
   const { user, refetch } = useUser();
+  const t = useTranslations();
 
   const profilInput = useRef<HTMLInputElement>(null);
 
@@ -57,10 +53,9 @@ const UserForm = () => {
   const [isUploading, setIsUploading] = useState(false);
 
   const { mutate: doPost, isPending } = usePut('/api/me', {
-    onSuccess: async (user: User) => {
+    onSuccess: async () => {
       refetch();
-
-      router.push(`/${user?.slug}`);
+      toast.success(t('profileUpdateSuccess'));
     },
   });
 
@@ -73,17 +68,21 @@ const UserForm = () => {
   const formSchema = z.object({
     pseudo: z
       .string()
-      .min(3, { message: 'Pseudo must be at least 3 characters long.' })
-      .max(12, { message: 'Pseudo must be at most 12 characters long.' })
+      .min(3, { message: t('pseudoMinLength') })
+      .max(12, { message: t('pseudoMaxLength') })
       .regex(
         /^[a-zA-Z0-9](?!.*[_.-]{2})[a-zA-Z0-9._-]*[a-zA-Z0-9]$/,
-        'Pseudo can only contain letters, numbers, "_", "-", ".", and must not start or end with special characters.',
+        t('pseudoRegex'),
       ),
-    description: z.string().optional(),
+    description: z
+      .string()
+      .max(200, { message: t('descriptionMaxLength') })
+      .optional(),
     gender: z.string().optional(),
     bodyType: z.string().optional(),
     hairColor: z.string().optional(),
     country: z.string().optional(),
+    languages: z.array(z.string()).optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -97,6 +96,7 @@ const UserForm = () => {
       reset({
         pseudo: user.pseudo ?? '',
         description: user.description ?? '',
+        languages: user.languages ?? [],
       });
     }
   }, [user, reset]);
@@ -130,7 +130,7 @@ const UserForm = () => {
       setProfileImageId({ profileImageId: fileKey });
     } catch (err) {
       console.error('Error uploading file:', err);
-      toast.error('Something went wrong!');
+      toast.error(t('somethingWentWrong'));
     } finally {
       setIsUploading(false);
     }
@@ -143,12 +143,23 @@ const UserForm = () => {
         className="space-y-8 flex flex-col items-center w-full"
       >
         <div className="relative self-center">
-          <Avatar
-            size={164}
-            imageId={user?.profileImageId}
+          <ProfileImage
+            profileImageId={user?.profileImageId}
             pseudo={user?.pseudo}
+            size={160}
+            className="w-40 h-40 cursor-pointer"
           />
 
+          <div
+            onClick={() => profilInput.current?.click()}
+            className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-md cursor-pointer"
+          >
+            {isUploading ? (
+              <Loader size={32} style={{ color: 'white' }} />
+            ) : (
+              <Pencil className="text-white" size={24} />
+            )}
+          </div>
           <input
             ref={profilInput}
             onChange={(e) => handleFileUpload(e)}
@@ -157,20 +168,6 @@ const UserForm = () => {
             multiple={false}
             accept="image/png, image/jpeg"
           />
-
-          <div className="absolute right-2.5 bottom-2.5 w-8 h-8">
-            <Button
-              size="icon"
-              className="rounded-full"
-              onClick={(e) => {
-                e.preventDefault();
-                profilInput.current?.click();
-              }}
-              isLoading={isUploading}
-            >
-              <Pencil color="#fff0eb" />
-            </Button>
-          </div>
         </div>
 
         <FormField
@@ -178,7 +175,7 @@ const UserForm = () => {
           name="pseudo"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>{t('db.pseudo')}</FormLabel>
+              <FormLabel>{t('pseudo')}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -187,143 +184,180 @@ const UserForm = () => {
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>{t('db.description')}</FormLabel>
-              <FormControl>
-                <Textarea {...field} className="text-base" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <div className="flex gap-8 w-full">
-          <FormField
-            control={form.control}
-            name="country"
-            render={({ field }) => {
-              return (
+        {isCreator({ user }) && (
+          <>
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>{t('db.country')}</FormLabel>
+                  <FormLabel>{t('description')}</FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      value={field.value! ?? user?.country}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder={t('db.nothing')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {countries.map((el) => {
-                          return (
-                            <SelectItem value={el.value} key={el.value}>
-                              {t(`db.${el.label}`)}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
+                    <div className="relative">
+                      <Textarea {...field} className="text-base pr-16" />
+                      <div className="absolute bottom-2 right-2 text-xs text-gray-500">
+                        {field.value?.length || 0}/200
+                      </div>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
-              );
-            }}
-          />
-          <FormField
-            control={form.control}
-            name="gender"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>{t('db.gender')}</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value! ?? user?.gender}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={t('db.nothing')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {GENDER.map((el) => {
-                        return (
-                          <SelectItem value={el} key={el}>
-                            {t(`db.${el}`)}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="flex gap-8 w-full">
-          <FormField
-            control={form.control}
-            name="bodyType"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>{t('db.body_type')}</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value! ?? user?.bodyType}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={t('db.nothing')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {BODY_TYPE.map((el) => {
-                        return (
-                          <SelectItem value={el} key={el}>
-                            {t(`db.${el}`)}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="languages"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>{t('languages')}</FormLabel>
+                  <FormControl>
+                    <MultipleSelector
+                      value={
+                        field.value?.map((lang) => ({
+                          value: lang,
+                          label:
+                            LANGUAGES.find((l) => l.value === lang)?.label ||
+                            lang,
+                        })) || []
+                      }
+                      onChange={(options) =>
+                        field.onChange(options.map((opt) => opt.value))
+                      }
+                      options={LANGUAGES}
+                      inputProps={{
+                        style: { fontSize: '16px' },
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full">
+              <FormField
+                control={form.control}
+                name="country"
+                render={({ field }) => {
+                  return (
+                    <FormItem className="w-full">
+                      <FormLabel>{t('countryTitle')}</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value! ?? user?.country}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder={t('selectCountry')} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {countries.map((el) => {
+                              return (
+                                <SelectItem value={el.value} key={el.value}>
+                                  {t(`country.${el.value}`)}
+                                </SelectItem>
+                              );
+                            })}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
+              <FormField
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>{t('genderTitle')}</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value! ?? user?.gender}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a gender" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {GENDER.map((el) => {
+                            return (
+                              <SelectItem value={el.value} key={el.value}>
+                                {t(`gender.${el.value}`)}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col md:flex-row gap-4 md:gap-8 w-full">
+              <FormField
+                control={form.control}
+                name="bodyType"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>{t('bodyTypeTitle')}</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value! ?? user?.bodyType}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a body type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {BODY_TYPE.map((el) => {
+                            return (
+                              <SelectItem value={el.value} key={el.value}>
+                                {t(`bodyType.${el.value}`)}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <FormField
-            control={form.control}
-            name="hairColor"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>{t('db.hair_color')}</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value! ?? user?.hairColor}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder={t('db.nothing')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {HAIR_COLOR.map((el) => {
-                        return (
-                          <SelectItem value={el} key={el}>
-                            {t(`db.${el}`)}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+              <FormField
+                control={form.control}
+                name="hairColor"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>{t('hairColorTitle')}</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value! ?? user?.hairColor}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={t('selectHairColor')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {HAIR_COLOR.map((el) => {
+                            return (
+                              <SelectItem value={el.value} key={el.value}>
+                                {t(`hairColor.${el.value}`)}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </>
+        )}
 
         <Button
           className="w-full"
@@ -331,7 +365,7 @@ const UserForm = () => {
           isLoading={isPending}
           disabled={isPending}
         >
-          {t('common.validate')}
+          {t('validate')}
         </Button>
       </form>
     </Form>

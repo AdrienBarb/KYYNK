@@ -1,6 +1,13 @@
 'use client';
 
-import { BadgeCheck, ChevronsUpDown, Coins, LogOut, User } from 'lucide-react';
+import {
+  BadgeCheck,
+  ChevronsUpDown,
+  Coins,
+  HelpCircle,
+  LogOut,
+  User,
+} from 'lucide-react';
 
 import Avatar from '@/components/ui/Avatar';
 
@@ -26,14 +33,19 @@ import { useUser } from '@/hooks/users/useUser';
 import { appRouter } from '@/constants/appRouter';
 import { usePaymentModalStore } from '@/stores/PaymentModalStore';
 import { formatCredits } from '@/utils/prices/formatCredits';
+import { isCreator } from '@/utils/users/isCreator';
+import { useCloseSideBarOnMobile } from '@/hooks/others/useCloseSideBarOnMobile';
+import { useTranslations } from 'next-intl';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { user } = useUser();
   const { openModal } = usePaymentModalStore();
+  const { closeSidebarOnMobile } = useCloseSideBarOnMobile();
+  const t = useTranslations();
 
   const logout = () => {
-    toast.success('You are logged out');
+    toast.success(t('navUserLoggedOut'));
     signOut({ redirectTo: '/' });
   };
 
@@ -77,31 +89,62 @@ export function NavUser() {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            {isCreator({ user }) && (
+              <>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href={`/${user?.slug}`}
+                      onClick={closeSidebarOnMobile}
+                    >
+                      <User />
+                      {t('navUserMyProfile')}
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+              </>
+            )}
             <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <Link href={`/${user?.slug}`}>
-                  <User />
-                  My Profile
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem onClick={openModal}>
+              <DropdownMenuItem
+                onClick={() => {
+                  openModal();
+                  closeSidebarOnMobile();
+                }}
+              >
                 <Coins />
-                Buy credits
+                {t('navUserBuyCredits')}
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href={appRouter.becomeCreator} className="font-karla">
+                <Link
+                  href={appRouter.becomeCreator}
+                  className="font-karla"
+                  onClick={closeSidebarOnMobile}
+                >
                   <BadgeCheck />
-                  Become a creator
+                  {t('navUserBecomeCreator')}
                 </Link>
               </DropdownMenuItem>
+              {isCreator({ user }) && (
+                <DropdownMenuItem asChild>
+                  <Link
+                    href={
+                      process.env.NEXT_PUBLIC_CREATOR_TOOLKIT_NOTION_URL || ''
+                    }
+                    target="_blank"
+                    className="font-karla"
+                    onClick={closeSidebarOnMobile}
+                  >
+                    <HelpCircle />
+                    {t('navUserNeedHelp')}
+                  </Link>
+                </DropdownMenuItem>
+              )}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={logout}>
               <LogOut />
-              Log out
+              {t('navUserLogout')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

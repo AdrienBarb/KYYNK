@@ -1,27 +1,53 @@
-import { Tailwind } from '@react-email/components';
+import {
+  Body,
+  Container,
+  Head,
+  Heading,
+  Html,
+  Tailwind,
+  Preview,
+  Section,
+  Text,
+} from '@react-email/components';
 import * as React from 'react';
 import { tailwindConfig } from '../config';
 
-const VerificationCodeEmail = ({ code }: { code: number }) => {
+interface VerificationCodeEmailProps {
+  code: number;
+}
+
+const VerificationCodeEmail = ({ code }: VerificationCodeEmailProps) => {
   return (
-    <Tailwind config={tailwindConfig}>
-      <div className="p-4">
-        <h1 className="text-2xl font-bold text-primary">Verification Code</h1>
-        <p className="mt-2 text-lg">Hello,</p>
-        <p className="mt-1">
-          Thank you for signing up. Please use the following code to verify your
-          email address:
-        </p>
-        <div className="mt-4 p-2 bg-primary text-secondary rounded-sm text-center text-xl font-semibold">
-          {code}
-        </div>
-        <p className="mt-4">
-          If you did not request this code, please ignore this email.
-        </p>
-        <p className="mt-4">Best regards,</p>
-        <p>Your Company Team</p>
-      </div>
-    </Tailwind>
+    <Html>
+      <Head />
+      <Tailwind config={tailwindConfig}>
+        <Body className="bg-white font-sans">
+          <Preview>Verification Code</Preview>
+          <Container className="mx-auto p-4">
+            <Section>
+              <Heading className="text-2xl font-bold text-primary">
+                Verification Code
+              </Heading>
+              <Text className="mt-2 text-lg">Hello,</Text>
+              <Text className="mt-1">
+                Thank you for signing up. Please use the following code to
+                verify your email address:
+              </Text>
+              <Section className="mt-4">
+                <div className="p-2 bg-primary text-secondary rounded-sm text-center text-xl font-semibold">
+                  {code}
+                </div>
+              </Section>
+              <Text className="mt-4">
+                If you did not request this code, please ignore this email.
+              </Text>
+              <Text className="mt-4">Best regards,</Text>
+              <Text>KYYNK Team</Text>
+            </Section>
+          </Container>
+        </Body>
+      </Tailwind>
+    </Html>
   );
 };
 
