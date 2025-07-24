@@ -21,7 +21,7 @@ export const useMessageValidation = ({
   otherUser,
 }: UseMessageValidationProps) => {
   const router = useRouter();
-  const { setOpenNotEnoughCreditModal } = useGlobalModalStore((state) => state);
+  const { openModal } = useGlobalModalStore((state) => state);
 
   const validateMessage = (message: string): boolean => {
     try {
@@ -39,7 +39,7 @@ export const useMessageValidation = ({
           requiredCredits: otherUser?.settings?.creditMessage ?? null,
         })
       ) {
-        setOpenNotEnoughCreditModal(true);
+        openModal('notEnoughCredits');
         return false;
       }
 

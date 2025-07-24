@@ -7,30 +7,26 @@ import useConversationUsers from '@/hooks/conversations/useConversationUsers';
 import { useUser } from '@/hooks/users/useUser';
 import { isCreator } from '@/utils/users/isCreator';
 import { isUserVerified } from '@/utils/users/isUserVerified';
-import {
-  ConversationModalsProvider,
-  useConversationModals,
-} from '@/contexts/ConversationModalsContext';
 import ConversationHeader from './ConversationHeader';
 import MessageList from './MessageList';
 import ConversationInput from './ConversationInput';
-import NudeModal from '../modals/NudeModal';
-import PrivateNudeModal from '../modals/PrivateNudeModal';
 import { useFetchMessages } from '@/hooks/messages/useFetchMessages';
 import { useSendMessage } from '@/hooks/messages/useSendMessage';
 import { useRealtimeMessages } from '@/hooks/messages/useRealtimeMessages';
 import { useParams } from 'next/navigation';
 import useApi from '@/hooks/requests/useApi';
+import { useGlobalModalStore } from '@/stores/GlobalModalStore';
 
 interface Props {
   initialConversation: ConversationType;
 }
 
-const ConversationContent: FC<Props> = ({ initialConversation }) => {
+const Conversation: FC<Props> = ({ initialConversation }) => {
   const { otherUser } = useConversationUsers(initialConversation.participants);
   const { user, refetch: refetchUser } = useUser();
   const { id: conversationId } = useParams();
   const { fetchData } = useApi();
+  const { openModal } = useGlobalModalStore();
 
   useRealtimeMessages(conversationId as string, async (newMessage) => {
     if (newMessage.senderId === user?.id) {
@@ -41,16 +37,7 @@ const ConversationContent: FC<Props> = ({ initialConversation }) => {
     addMessageToCache(message);
   });
 
-  const {
-    openPrivateNudeModal,
-    setOpenPrivateNudeModal,
-    isNudeModalOpen,
-    setNudeModalOpen,
-    selectedNude,
-    setSelectedNude,
-  } = useConversationModals();
-
-  const { messages, refetch, addMessageToCache } = useFetchMessages();
+  const { messages, addMessageToCache } = useFetchMessages();
   const { handleSendMessage, isPending } = useSendMessage({
     user,
     otherUser,
@@ -63,7 +50,7 @@ const ConversationContent: FC<Props> = ({ initialConversation }) => {
   const ref = useChatScroll(messages);
 
   const handleOpenPrivateNudeModal = () => {
-    setOpenPrivateNudeModal(true);
+    openModal('privateNude');
   };
 
   return (
@@ -86,28 +73,7 @@ const ConversationContent: FC<Props> = ({ initialConversation }) => {
           openPrivateNudeModal={handleOpenPrivateNudeModal}
         />
       </div>
-
-      <NudeModal
-        isOpen={isNudeModalOpen}
-        onClose={() => setNudeModalOpen(false)}
-        nude={selectedNude}
-        refetch={refetch}
-        setSelectedNude={setSelectedNude}
-      />
-
-      <PrivateNudeModal
-        open={openPrivateNudeModal}
-        setOpen={setOpenPrivateNudeModal}
-      />
     </div>
-  );
-};
-
-const Conversation: FC<Props> = (props) => {
-  return (
-    <ConversationModalsProvider>
-      <ConversationContent {...props} />
-    </ConversationModalsProvider>
   );
 };
 

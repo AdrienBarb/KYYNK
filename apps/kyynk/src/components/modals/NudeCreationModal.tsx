@@ -9,7 +9,6 @@ import {
   DialogDescription,
   DialogFooter,
 } from '../ui/Dialog';
-import { useNudeCreationModalStore } from '@/stores/NudeCreationModalStore';
 import { Button } from '../ui/Button';
 import MediasGallery from '../nudes/MediasGallery';
 import Text from '../ui/Text';
@@ -28,8 +27,13 @@ export type NudeCreationStepsType =
   | 'uploading'
   | 'success';
 
-const NudeCreationModal = () => {
-  const { isOpen, closeModal } = useNudeCreationModalStore();
+const NudeCreationModal = ({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}) => {
   const [step, setStep] = useState<NudeCreationStepsType>('form');
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
@@ -50,7 +54,7 @@ const NudeCreationModal = () => {
     setStep('form');
     setCreatedNude(null);
     setSelectedMedia(null);
-    closeModal();
+    setOpen(false);
   };
 
   const renderStepContent = () => {
@@ -166,7 +170,7 @@ const NudeCreationModal = () => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleCloseModal}>
+    <Dialog open={open} onOpenChange={handleCloseModal}>
       {renderStepContent()}
     </Dialog>
   );

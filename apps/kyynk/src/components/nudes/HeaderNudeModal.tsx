@@ -16,10 +16,9 @@ import useApi from '@/hooks/requests/useApi';
 import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import DeleteConfirmationModal from '../modals/ConfirmationModal';
-import NudeEditModal from '@/components/modals/NudeEditModal';
 import { NudeWithPermissions } from '@/types/nudes';
-import ShareModal from '@/components/ShareModal';
 import { useTranslations } from 'next-intl';
+import { useGlobalModalStore } from '@/stores/GlobalModalStore';
 
 interface NudePostProps {
   nude: NudeWithPermissions;
@@ -30,9 +29,7 @@ const HeaderNudeModal: FC<NudePostProps> = ({ nude }) => {
   const queryClient = useQueryClient();
   const { usePut } = useApi();
   const t = useTranslations();
-  const [isConfirmationModalOpen, setConfirmationModalOpen] = useState(false);
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-
+  const { openModal, closeModal } = useGlobalModalStore();
   const { mutate: archiveNude } = usePut(`/api/nudes/${nude.id}/archive`, {
     onSuccess: () => {
       queryClient.setQueryData(
@@ -45,10 +42,6 @@ const HeaderNudeModal: FC<NudePostProps> = ({ nude }) => {
       );
     },
   });
-
-  const handleDeleteNude = async () => {
-    setConfirmationModalOpen(true);
-  };
 
   const handleConfirmDelete = async () => {
     await archiveNude({});
@@ -100,13 +93,19 @@ const HeaderNudeModal: FC<NudePostProps> = ({ nude }) => {
                 <>
                   <DropdownMenuItem
                     className="text-base font-medium font-karla"
-                    onClick={() => setEditModalOpen(true)}
+                    onClick={() => openModal('nudeEdit', { nude })}
                   >
                     {t('edit')}
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="text-red-500 text-base font-medium"
-                    onClick={handleDeleteNude}
+                    onClick={() => {
+                      closeModal();
+                      openModal('confirmation', {
+                        onDeleteConfirm: handleConfirmDelete,
+                        text: t('deleteNudeConfirm'),
+                      });
+                    }}
                   >
                     {t('delete')}
                   </DropdownMenuItem>
@@ -118,18 +117,6 @@ const HeaderNudeModal: FC<NudePostProps> = ({ nude }) => {
       </div>
 
       <Text className="whitespace-pre-wrap">{nude.description}</Text>
-
-      <DeleteConfirmationModal
-        open={isConfirmationModalOpen}
-        setOpen={setConfirmationModalOpen}
-        onDeleteConfirm={handleConfirmDelete}
-        text={t('deleteNudeConfirm')}
-      />
-      <NudeEditModal
-        open={isEditModalOpen}
-        setOpen={setEditModalOpen}
-        nude={nude}
-      />
     </>
   );
 };

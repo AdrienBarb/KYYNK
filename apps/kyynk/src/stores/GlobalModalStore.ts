@@ -1,12 +1,32 @@
 import { create } from 'zustand';
 
+type ModalType =
+  | 'payment'
+  | 'nudeCreation'
+  | 'notEnoughCredits'
+  | 'nudeEdit'
+  | 'nudeView'
+  | 'confirmation'
+  | 'privateNude'
+  | null;
+
+interface ModalStackItem {
+  type: ModalType;
+  data?: any;
+}
+
 interface GlobalModalState {
-  openNotEnoughCreditModal: boolean;
-  setOpenNotEnoughCreditModal: (open: boolean) => void;
+  stack: ModalStackItem[];
+  openModal: (type: ModalType, data?: any) => void;
+  closeModal: () => void;
+  resetModals: () => void;
 }
 
 export const useGlobalModalStore = create<GlobalModalState>((set) => ({
-  openNotEnoughCreditModal: false,
-  setOpenNotEnoughCreditModal: (open: boolean) =>
-    set({ openNotEnoughCreditModal: open }),
+  stack: [],
+  openModal: (type, data) => {
+    return set((state) => ({ stack: [...state.stack, { type, data }] }));
+  },
+  closeModal: () => set((state) => ({ stack: state.stack.slice(0, -1) })),
+  resetModals: () => set({ stack: [] }),
 }));

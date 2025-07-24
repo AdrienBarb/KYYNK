@@ -3,14 +3,14 @@
 import { CirclePlus } from 'lucide-react';
 
 import { Button } from '@/components/ui/Button';
-import { useNudeCreationModalStore } from '@/stores/NudeCreationModalStore';
+import { useGlobalModalStore } from '@/stores/GlobalModalStore';
 import { useUser } from '@/hooks/users/useUser';
 import { isCreator } from '@/utils/users/isCreator';
 import { isUserVerified } from '@/utils/users/isUserVerified';
 import { useTranslations } from 'next-intl';
 
 const AddButton = () => {
-  const { openModal } = useNudeCreationModalStore();
+  const { openModal } = useGlobalModalStore();
   const { user } = useUser();
   const t = useTranslations();
 
@@ -23,7 +23,7 @@ const AddButton = () => {
       variant="secondary"
       size="sm"
       className="flex items-center gap-2"
-      onClick={openModal}
+      onClick={() => openModal('nudeCreation')}
     >
       <CirclePlus size={18} />
       {t('addNude')}

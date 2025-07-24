@@ -17,14 +17,19 @@ import {
   CarouselPrevious,
 } from '../ui/Carousel';
 import { creditPackages } from '@/constants/creditPackages';
-import { usePaymentModalStore } from '@/stores/PaymentModalStore';
 import { Button } from '../ui/Button';
 import useApi from '@/hooks/requests/useApi';
 import { cn } from '@/utils/tailwind/cn';
 import { useTranslations } from 'next-intl';
 
-const PaymentModal = () => {
-  const { isOpen, openModal, closeModal } = usePaymentModalStore();
+const PaymentModal = ({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}) => {
+  console.log('🚀 ~ PaymentModal ~ open:', open);
   const { usePost } = useApi();
   const [selectedPackageId, setSelectedPackageId] = useState<number | null>(
     null,
@@ -34,18 +39,9 @@ const PaymentModal = () => {
   const { mutate: buyCredit, isPending } = usePost('/api/payment', {
     onSuccess: (data: { forwardUrl: string }) => {
       window.location.href = data.forwardUrl;
-      closeModal();
+      setOpen(false);
     },
   });
-
-  const handleOpenChange = (open: boolean) => {
-    if (open) {
-      openModal();
-      setSelectedPackageId(null);
-    } else {
-      closeModal();
-    }
-  };
 
   const handleBuy = () => {
     if (selectedPackageId !== null) {
@@ -57,7 +53,7 @@ const PaymentModal = () => {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="z-[1000] max-w-screen-sm">
         <DialogHeader className="flex flex-col items-center">
           <DialogTitle>{t('paymentModalBuyCredits')}</DialogTitle>
