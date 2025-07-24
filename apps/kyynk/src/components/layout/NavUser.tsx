@@ -31,16 +31,16 @@ import { signOut } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import { useUser } from '@/hooks/users/useUser';
 import { appRouter } from '@/constants/appRouter';
-import { usePaymentModalStore } from '@/stores/PaymentModalStore';
 import { formatCredits } from '@/utils/prices/formatCredits';
 import { isCreator } from '@/utils/users/isCreator';
 import { useCloseSideBarOnMobile } from '@/hooks/others/useCloseSideBarOnMobile';
 import { useTranslations } from 'next-intl';
+import { useGlobalModalStore } from '@/stores/GlobalModalStore';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { user } = useUser();
-  const { openModal } = usePaymentModalStore();
+  const { openModal } = useGlobalModalStore();
   const { closeSidebarOnMobile } = useCloseSideBarOnMobile();
   const t = useTranslations();
 
@@ -108,7 +108,7 @@ export function NavUser() {
             <DropdownMenuGroup>
               <DropdownMenuItem
                 onClick={() => {
-                  openModal();
+                  openModal('payment');
                   closeSidebarOnMobile();
                 }}
               >

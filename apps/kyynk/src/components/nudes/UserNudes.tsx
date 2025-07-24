@@ -9,7 +9,7 @@ import { FetchedUserType } from '@/types/users';
 import { NudeWithPermissions } from '@/types/nudes';
 import { cn } from '@/utils/tailwind/cn';
 import NudeCard from './NudeCard';
-import NudeModal from '../modals/NudeModal';
+import { useGlobalModalStore } from '@/stores/GlobalModalStore';
 
 interface Props {
   initialNudes: NudeWithPermissions[];
@@ -20,10 +20,7 @@ const UserNudes: FC<Props> = ({ initialNudes, user }) => {
   const { slug } = useParams<{ slug: string }>();
   const { user: loggedUser } = useUser();
   const { useGet } = useApi();
-  const [isModalOpen, setModalOpen] = React.useState(false);
-  const [selectedNude, setSelectedNude] = React.useState<
-    NudeWithPermissions | undefined | null
-  >(null);
+  const openModal = useGlobalModalStore((s) => s.openModal);
 
   const { data: nudes, refetch } = useGet(
     `/api/users/${slug}/nudes`,
@@ -36,8 +33,7 @@ const UserNudes: FC<Props> = ({ initialNudes, user }) => {
   );
 
   const handleNudeClick = (nude: NudeWithPermissions) => {
-    setSelectedNude(nude);
-    setModalOpen(true);
+    openModal('nudeView', { nude, refetch, showHeader: true });
   };
 
   if (loggedUser?.slug !== slug && !isUserVerified({ user })) {
@@ -55,14 +51,6 @@ const UserNudes: FC<Props> = ({ initialNudes, user }) => {
           />
         ))}
       </div>
-      <NudeModal
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
-        nude={selectedNude}
-        refetch={refetch}
-        setSelectedNude={setSelectedNude}
-        showHeader={true}
-      />
     </>
   );
 };

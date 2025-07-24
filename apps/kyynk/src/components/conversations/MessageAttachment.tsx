@@ -2,18 +2,22 @@ import { FC } from 'react';
 import { NudeWithPermissions } from '@/types/nudes';
 import NudeCard from '../nudes/NudeCard';
 import { MessageAttachmentWithNudePermissions } from '@/types/message-attachment';
-import { useConversationModals } from '@/contexts/ConversationModalsContext';
+import { useGlobalModalStore } from '@/stores/GlobalModalStore';
+import { useFetchMessages } from '@/hooks/messages/useFetchMessages';
 
 interface Props {
   attachment: MessageAttachmentWithNudePermissions;
 }
 
 const MessageAttachment: FC<Props> = ({ attachment }) => {
-  const { setSelectedNude, setNudeModalOpen } = useConversationModals();
+  const { openModal } = useGlobalModalStore();
+  const { refetch } = useFetchMessages();
 
   const handleNudeClick = (nude: NudeWithPermissions | undefined) => {
-    setSelectedNude(nude || null);
-    setNudeModalOpen(true);
+    openModal('nudeView', {
+      refetch: refetch,
+      nude: nude,
+    });
   };
 
   const renderAttachment = () => {

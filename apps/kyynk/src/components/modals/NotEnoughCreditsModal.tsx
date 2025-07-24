@@ -2,48 +2,47 @@
 
 import { useGlobalModalStore } from '@/stores/GlobalModalStore';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '../ui/AlertDialog';
-import { usePaymentModalStore } from '@/stores/PaymentModalStore';
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../ui/Dialog';
+import { Button } from '../ui/Button';
 
-const NotEnoughCreditsModal = () => {
-  const openPaymentModal = usePaymentModalStore((state) => state.openModal);
-  const { openNotEnoughCreditModal, setOpenNotEnoughCreditModal } =
-    useGlobalModalStore((state) => state);
+const NotEnoughCreditsModal = ({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}) => {
+  const { openModal } = useGlobalModalStore();
 
   const handleBuyMoreCredits = () => {
-    setOpenNotEnoughCreditModal(false);
-    openPaymentModal();
+    console.log('🚀 ~ handleBuyMoreCredits ~ payment:');
+    openModal('payment');
   };
 
   return (
-    <AlertDialog
-      open={openNotEnoughCreditModal}
-      onOpenChange={setOpenNotEnoughCreditModal}
-    >
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Not Enough Credits</AlertDialogTitle>
-          <AlertDialogDescription>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent className="z-[1000]">
+        <DialogHeader>
+          <DialogTitle>Not Enough Credits</DialogTitle>
+          <DialogDescription>
             You do not have enough credits to buy this nude. Would you like to
             buy more credits?
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleBuyMoreCredits}>
-            Buy more credits
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="secondary" onClick={() => setOpen(false)}>
+            Cancel
+          </Button>
+          <Button onClick={handleBuyMoreCredits}>Buy more credits</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

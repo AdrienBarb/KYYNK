@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogContent } from '../ui/Dialog';
 import ApiVideoPlayer from '@api.video/react-player';
 import NudeCard from '../nudes/NudeCard';
@@ -7,8 +7,8 @@ import { NudeWithPermissions } from '@/types/nudes';
 import HeaderNudeModal from '../nudes/HeaderNudeModal';
 
 interface NudeModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
   nude?: NudeWithPermissions | null;
   refetch: () => void;
   setSelectedNude: (nude: NudeWithPermissions | null) => void;
@@ -16,37 +16,46 @@ interface NudeModalProps {
 }
 
 const NudeModal: React.FC<NudeModalProps> = ({
-  isOpen,
-  onClose,
+  open,
+  setOpen,
   nude,
   refetch,
-  setSelectedNude,
   showHeader = false,
 }) => {
+  const [displayedNude, setDisplayedNude] =
+    useState<NudeWithPermissions | null>(nude!);
+
   const handleAfterBuyAction = (newNude: NudeWithPermissions) => {
-    setSelectedNude(newNude);
     refetch();
+    setDisplayedNude(newNude);
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="z-[1000] pt-12">
-        {showHeader && nude && <HeaderNudeModal nude={nude} />}
+        {showHeader && displayedNude && (
+          <HeaderNudeModal nude={displayedNude} />
+        )}
 
-        {nude && nude.permissions.canView && nude.media?.videoId ? (
+        {displayedNude &&
+        displayedNude.permissions.canView &&
+        displayedNude.media?.videoId ? (
           <div className="rounded-md overflow-hidden">
             <ApiVideoPlayer
-              video={{ id: nude.media.videoId }}
+              video={{ id: displayedNude.media.videoId }}
               style={{ height: '400px', width: '100%' }}
               hideTitle={true}
               controls={['play', 'progressBar', 'volume', 'fullscreen']}
             />
           </div>
         ) : (
-          nude && <NudeCard nude={nude} />
+          displayedNude && <NudeCard nude={displayedNude} />
         )}
-        {nude && nude.permissions.canBuy && (
-          <BuyButton nude={nude} afterBuyAction={handleAfterBuyAction} />
+        {displayedNude && displayedNude.permissions.canBuy && (
+          <BuyButton
+            nude={displayedNude}
+            afterBuyAction={handleAfterBuyAction}
+          />
         )}
       </DialogContent>
     </Dialog>

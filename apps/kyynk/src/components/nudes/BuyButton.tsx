@@ -1,3 +1,5 @@
+'use client';
+
 import { useUser } from '@/hooks/users/useUser';
 import { Button } from '../ui/Button';
 import useApi from '@/hooks/requests/useApi';
@@ -16,7 +18,7 @@ interface Props {
 
 const BuyButton = ({ nude, afterBuyAction }: Props) => {
   const { user, refetch } = useUser();
-  const { setOpenNotEnoughCreditModal } = useGlobalModalStore((state) => state);
+  const { openModal } = useGlobalModalStore();
   const router = useRouter();
   const t = useTranslations();
 
@@ -36,7 +38,7 @@ const BuyButton = ({ nude, afterBuyAction }: Props) => {
     }
 
     if (user.creditsAmount < nude.creditPrice) {
-      setOpenNotEnoughCreditModal(true);
+      openModal('notEnoughCredits');
       return;
     }
 
