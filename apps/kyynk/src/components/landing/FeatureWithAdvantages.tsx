@@ -18,7 +18,7 @@ const Feature = () => {
                   className="w-4 h-4 mt-2 text-primary flex-shrink-0"
                 />
                 <div className="flex flex-col gap-1">
-                  <p className="font-normal">0% platform fees for 3 months</p>
+                  <p className="font-normal">0% platform fees for 1 months</p>
                   <p className="text-zinc-500 text-sm">
                     Enjoy all your earnings without initial fees.
                   </p>

@@ -19,7 +19,7 @@ const AppFAQ: FC<Props> = ({}) => {
       {
         title: 'How do creators earn money?',
         content:
-          'Creators earn credits for each message they send or nude they share. They can withdraw their earnings anytime. During the first 3 months, they keep 100% of what they earn.',
+          'Creators earn credits for each message they send or nude they share. They can withdraw their earnings anytime. During the first month, they keep 100% of what they earn.',
       },
       {
         title: 'Is this anonymous and secure?',
@@ -35,7 +35,7 @@ const AppFAQ: FC<Props> = ({}) => {
   };
 
   return (
-    <section className="max-w-4xl mx-auto py-16 px-4">
+    <section className="max-w-4xl mx-auto py-16">
       <LandingHeader title="FREQUENTLY ASKED QUESTIONS" />
       <div className="flex flex-col gap-4">
         {data.rows.map((item, index) => (

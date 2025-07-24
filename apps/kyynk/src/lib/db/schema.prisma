@@ -48,7 +48,7 @@ model User {
   conversations                 Conversation[]     @relation("UserConversations")
   messages                      Message[]
   settings                      UserSettings?
-  feeFreeUntil                  DateTime           @default(dbgenerated("now() + interval '3 months'"))
+  feeFreeUntil                  DateTime           @default(dbgenerated("now() + interval '1 months'"))
   transactions                  Transaction[]
   utmTracking                   Json?
   roles                         UserRole[]         @default([user])

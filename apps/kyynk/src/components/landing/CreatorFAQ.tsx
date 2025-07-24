@@ -17,7 +17,7 @@ const CreatorFAQ = () => {
       {
         title: 'What makes KYYNK different?',
         content:
-          'KYYNK offers a creator-first model with 0% fees for the first 3 months and only 10% after. There are no subscriptions — members pay only for what they want. The platform is focused on chat and personalized media, not mass distribution, and is fully based in the EU with strong privacy and compliance standards.',
+          'KYYNK offers a creator-first model with 0% fees for the first month and only 10% after. There are no subscriptions — members pay only for what they want. The platform is focused on chat and personalized media, not mass distribution, and is fully based in the EU with strong privacy and compliance standards.',
       },
       {
         title: 'What kind of content can I sell?',
