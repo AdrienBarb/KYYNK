@@ -5,16 +5,18 @@ import { VerificationTable } from '@/components/verifications/VerificationTable'
 import useApi from '@/hooks/requests/useApi';
 import { apiRouter } from '@/constants/apiRouter';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
+import { useTranslations } from 'next-intl';
 
 export default function DemoPage() {
   const { useGet } = useApi();
   const { data } = useGet(apiRouter.identityVerifications);
+  const t = useTranslations();
 
   return (
     <div className="space-y-6">
       <AdminPageHeader
-        title="Verifications"
-        description="Manage and review user identity verifications."
+        title={t('verificationsTitle')}
+        description={t('verificationsDescription')}
       />
       <VerificationTable columns={VerificationColumns} data={data ?? []} />
     </div>

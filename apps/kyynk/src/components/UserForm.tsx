@@ -16,6 +16,7 @@ import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useTranslations } from 'next-intl';
 import {
   Form,
   FormControl,
@@ -43,6 +44,7 @@ import ProfileImage from './ProfileImage';
 
 const UserForm = () => {
   const { user, refetch } = useUser();
+  const t = useTranslations();
 
   const profilInput = useRef<HTMLInputElement>(null);
 
@@ -53,7 +55,7 @@ const UserForm = () => {
   const { mutate: doPost, isPending } = usePut('/api/me', {
     onSuccess: async () => {
       refetch();
-      toast.success('Profile updated successfully!');
+      toast.success(t('profileUpdateSuccess'));
     },
   });
 
@@ -66,15 +68,15 @@ const UserForm = () => {
   const formSchema = z.object({
     pseudo: z
       .string()
-      .min(3, { message: 'Pseudo must be at least 3 characters long.' })
-      .max(12, { message: 'Pseudo must be at most 12 characters long.' })
+      .min(3, { message: t('pseudoMinLength') })
+      .max(12, { message: t('pseudoMaxLength') })
       .regex(
         /^[a-zA-Z0-9](?!.*[_.-]{2})[a-zA-Z0-9._-]*[a-zA-Z0-9]$/,
-        'Pseudo can only contain letters, numbers, "_", "-", ".", and must not start or end with special characters.',
+        t('pseudoRegex'),
       ),
     description: z
       .string()
-      .max(200, { message: 'Description must be at most 200 characters long.' })
+      .max(200, { message: t('descriptionMaxLength') })
       .optional(),
     gender: z.string().optional(),
     bodyType: z.string().optional(),
@@ -128,7 +130,7 @@ const UserForm = () => {
       setProfileImageId({ profileImageId: fileKey });
     } catch (err) {
       console.error('Error uploading file:', err);
-      toast.error('Something went wrong!');
+      toast.error(t('somethingWentWrong'));
     } finally {
       setIsUploading(false);
     }
@@ -173,7 +175,7 @@ const UserForm = () => {
           name="pseudo"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Pseudo</FormLabel>
+              <FormLabel>{t('pseudo')}</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -189,7 +191,7 @@ const UserForm = () => {
               name="description"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>{t('description')}</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Textarea {...field} className="text-base pr-16" />
@@ -207,7 +209,7 @@ const UserForm = () => {
               name="languages"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Languages</FormLabel>
+                  <FormLabel>{t('languages')}</FormLabel>
                   <FormControl>
                     <MultipleSelector
                       value={
@@ -238,20 +240,20 @@ const UserForm = () => {
                 render={({ field }) => {
                   return (
                     <FormItem className="w-full">
-                      <FormLabel>Country</FormLabel>
+                      <FormLabel>{t('countryTitle')}</FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
                           value={field.value! ?? user?.country}
                         >
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a country" />
+                            <SelectValue placeholder={t('selectCountry')} />
                           </SelectTrigger>
                           <SelectContent>
                             {countries.map((el) => {
                               return (
                                 <SelectItem value={el.value} key={el.value}>
-                                  {el.label}
+                                  {t(`country.${el.value}`)}
                                 </SelectItem>
                               );
                             })}
@@ -268,7 +270,7 @@ const UserForm = () => {
                 name="gender"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Gender</FormLabel>
+                    <FormLabel>{t('genderTitle')}</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
@@ -281,7 +283,7 @@ const UserForm = () => {
                           {GENDER.map((el) => {
                             return (
                               <SelectItem value={el.value} key={el.value}>
-                                {el.label}
+                                {t(`gender.${el.value}`)}
                               </SelectItem>
                             );
                           })}
@@ -299,7 +301,7 @@ const UserForm = () => {
                 name="bodyType"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Body Type</FormLabel>
+                    <FormLabel>{t('bodyTypeTitle')}</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
@@ -312,7 +314,7 @@ const UserForm = () => {
                           {BODY_TYPE.map((el) => {
                             return (
                               <SelectItem value={el.value} key={el.value}>
-                                {el.label}
+                                {t(`bodyType.${el.value}`)}
                               </SelectItem>
                             );
                           })}
@@ -329,20 +331,20 @@ const UserForm = () => {
                 name="hairColor"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Hair Color</FormLabel>
+                    <FormLabel>{t('hairColorTitle')}</FormLabel>
                     <FormControl>
                       <Select
                         onValueChange={field.onChange}
                         value={field.value! ?? user?.hairColor}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a hair color" />
+                          <SelectValue placeholder={t('selectHairColor')} />
                         </SelectTrigger>
                         <SelectContent>
                           {HAIR_COLOR.map((el) => {
                             return (
                               <SelectItem value={el.value} key={el.value}>
-                                {el.label}
+                                {t(`hairColor.${el.value}`)}
                               </SelectItem>
                             );
                           })}
@@ -363,7 +365,7 @@ const UserForm = () => {
           isLoading={isPending}
           disabled={isPending}
         >
-          Validate
+          {t('validate')}
         </Button>
       </form>
     </Form>

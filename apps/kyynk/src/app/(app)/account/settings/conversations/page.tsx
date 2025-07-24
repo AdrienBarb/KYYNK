@@ -4,9 +4,11 @@ import PaddingContainer from '@/components/layout/PaddingContainer';
 import ConversationSettings from '@/components/settings/ConversationSettings';
 import { redirect } from 'next/navigation';
 import React from 'react';
+import { getTranslations } from 'next-intl/server';
 
 const SettingsConversationsPage = async () => {
   const session = await auth();
+  const t = await getTranslations();
 
   if (!session) {
     redirect('/login');
@@ -14,7 +16,7 @@ const SettingsConversationsPage = async () => {
 
   return (
     <PaddingContainer>
-      <PageHeader title="Conversations Settings" />
+      <PageHeader title={t('conversationsSettings')} />
       <ConversationSettings />
     </PaddingContainer>
   );

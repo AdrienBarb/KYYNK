@@ -4,12 +4,16 @@ import { genPageMetadata } from '@/app/seo';
 import Title from '@/components/ui/Title';
 import Text from '@/components/ui/Text';
 import PaddingContainer from '@/components/layout/PaddingContainer';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata = genPageMetadata({
-  title: 'Terms of Service',
-  description:
-    'Review the Terms of Service of KYYNK to understand your rights and responsibilities as a user of our platform.',
-});
+export async function generateMetadata() {
+  const t = await getTranslations();
+
+  return genPageMetadata({
+    title: t('termsOfServiceTitle'),
+    description: t('termsOfServiceDescription'),
+  });
+}
 
 const TermsOfUsePage = () => {
   return (

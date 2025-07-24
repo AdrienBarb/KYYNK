@@ -8,11 +8,13 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '@/hooks/users/useUser';
 import { appRouter } from '@/constants/appRouter';
 import { Input } from './ui/Input';
+import { useTranslations } from 'next-intl';
 
 const VerificationCodeButton = ({}) => {
   const [code, setCode] = useState('');
   const router = useRouter();
   const { refetch } = useUser();
+  const t = useTranslations();
 
   const { usePost } = useApi();
 
@@ -42,7 +44,7 @@ const VerificationCodeButton = ({}) => {
     <div className="flex flex-col gap-4 w-full">
       <Input
         type="text"
-        placeholder="Verification Code"
+        placeholder={t('emailVerificationCodePlaceholder')}
         value={code}
         onChange={handleCodeChange}
         className="w-full"
@@ -55,7 +57,7 @@ const VerificationCodeButton = ({}) => {
         className="w-full"
         variant="default"
       >
-        Confirm Code
+        {t('emailVerificationConfirmCode')}
       </Button>
     </div>
   );
@@ -66,6 +68,7 @@ const EmailVerification = () => {
   const [isCodeSended, setIsCodeSended] = useState(false);
 
   const { usePost } = useApi();
+  const t = useTranslations();
 
   const { mutate: sendVerificationCode, isPending } = usePost(
     `/api/me/emails/send-verification-code`,
@@ -85,29 +88,29 @@ const EmailVerification = () => {
       {isCodeSended ? (
         <div className="flex flex-col gap-4 items-center">
           <div className="text-center">
-            We have sent a code to your email: {session?.user?.email}
+            {t('emailVerificationSent', { email: session?.user?.email ?? '' })}
           </div>
           <VerificationCodeButton />
           <div>
-            Didn&apos;t receive the code?{' '}
+            {t('emailVerificationNotReceived')}{' '}
             <span
               className="cursor-pointer underline"
               onClick={() => setIsCodeSended(false)}
             >
-              Send it again
+              {t('emailVerificationSendAgain')}
             </span>
           </div>
         </div>
       ) : (
         <div className="flex flex-col gap-4 items-center">
-          <div>Please enter the verification code sent to your email.</div>
+          <div>{t('emailVerificationPrompt')}</div>
           <Button
             onClick={handleSendCode}
             isLoading={isPending}
             className="w-full"
             variant="default"
           >
-            Send Code
+            {t('emailVerificationSendCode')}
           </Button>
         </div>
       )}

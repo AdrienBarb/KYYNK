@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Title from '@/components/ui/Title';
+import { useTranslations } from 'next-intl';
 
 interface UserTypeStepProps {
   selectedUserType: string;
@@ -12,15 +13,15 @@ const UserTypeStep: React.FC<UserTypeStepProps> = ({
   selectedUserType,
   onUserTypeSelect,
 }) => {
+  const t = useTranslations();
+
   return (
     <div className="space-y-8">
       <div className="text-center">
         <Title Tag="h2" className="mb-4 text-custom-black font-semibold">
-          Welcome to KYYNK!
+          {t('welcomeToKyynk')}
         </Title>
-        <p className="text-custom-black font-medium">
-          Let&apos;s get to know you better. What brings you here today?
-        </p>
+        <p className="text-custom-black font-medium">{t('getToKnowYou')}</p>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
@@ -32,9 +33,9 @@ const UserTypeStep: React.FC<UserTypeStepProps> = ({
               : 'border-custom-black/30 text-custom-black/80 hover:border-custom-black/60 hover:bg-background/10'
           }`}
         >
-          <h3 className="font-bold text-xl mb-2">Creator</h3>
+          <h3 className="font-bold text-xl mb-2">{t('creator')}</h3>
           <p className="text-custom-black/80 font-medium">
-            Share your content and connect with your audience
+            {t('shareContentConnect')}
           </p>
         </div>
 
@@ -46,9 +47,9 @@ const UserTypeStep: React.FC<UserTypeStepProps> = ({
               : 'border-custom-black/30 text-custom-black/80 hover:border-custom-black/60 hover:bg-background/10'
           }`}
         >
-          <h3 className="font-bold text-xl mb-2">Member</h3>
+          <h3 className="font-bold text-xl mb-2">{t('member')}</h3>
           <p className="text-custom-black/80 font-medium">
-            Discover amazing content and connect with creators
+            {t('discoverAmazingContent')}
           </p>
         </div>
       </div>

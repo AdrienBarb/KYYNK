@@ -4,12 +4,16 @@ import { genPageMetadata } from '@/app/seo';
 import Title from '@/components/ui/Title';
 import Text from '@/components/ui/Text';
 import PaddingContainer from '@/components/layout/PaddingContainer';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata = genPageMetadata({
-  title: 'Privacy Policy',
-  description:
-    'Learn about our privacy policy and how KYYNK protects your personal information, manages cookies, and complies with data protection regulations.',
-});
+export async function generateMetadata() {
+  const t = await getTranslations();
+
+  return genPageMetadata({
+    title: t('privacyPolicyTitle'),
+    description: t('privacyPolicyDescription'),
+  });
+}
 
 const privacyPage = () => {
   return (

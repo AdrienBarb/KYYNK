@@ -14,7 +14,7 @@ const Landing = async () => {
           >
             {t('landingTitle')}
           </h1>
-          <h2 className="text-base lg:text-lg font-light font-karla text-secondary mt-4">
+          <h2 className="text-base lg:text-lg font-normal font-karla text-secondary mt-2">
             {t('landingSubtitle')}
           </h2>
         </div>

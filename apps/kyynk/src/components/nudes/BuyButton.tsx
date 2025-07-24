@@ -7,6 +7,7 @@ import { formatCredits } from '@/utils/prices/formatCredits';
 import { NudeWithPermissions } from '@/types/nudes';
 import { getEncodedFullUrl } from '@/utils/links/getEncodedFullUrl';
 import { useGlobalModalStore } from '@/stores/GlobalModalStore';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   nude: NudeWithPermissions;
@@ -17,6 +18,7 @@ const BuyButton = ({ nude, afterBuyAction }: Props) => {
   const { user, refetch } = useUser();
   const { setOpenNotEnoughCreditModal } = useGlobalModalStore((state) => state);
   const router = useRouter();
+  const t = useTranslations();
 
   const { usePost } = useApi();
   const { mutate: buyNude, isPending } = usePost(`/api/nudes/${nude.id}/buy`, {
@@ -42,11 +44,9 @@ const BuyButton = ({ nude, afterBuyAction }: Props) => {
   };
 
   return (
-    <Button
-      onClick={handleBuy}
-      isLoading={isPending}
-      disabled={isPending}
-    >{`Buy for ${formatCredits(nude.creditPrice)} credits`}</Button>
+    <Button onClick={handleBuy} isLoading={isPending} disabled={isPending}>
+      {t('buyForCredits', { credits: formatCredits(nude.creditPrice) })}
+    </Button>
   );
 };
 

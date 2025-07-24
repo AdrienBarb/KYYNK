@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/Select';
 import { PRICE_OPTIONS } from '@/constants/constants';
+import { useTranslations } from 'next-intl';
 
 interface MessagePriceStepProps {
   selectedPrice: string;
@@ -20,21 +21,23 @@ const MessagePriceStep: React.FC<MessagePriceStepProps> = ({
   selectedPrice,
   onPriceChange,
 }) => {
+  const t = useTranslations();
+
   return (
     <div className="space-y-8">
       <div className="text-center">
         <Title Tag="h2" className="mb-4 text-custom-black font-semibold">
-          Set your message price!
+          {t('setMessagePrice')}
         </Title>
         <p className="text-custom-black font-medium">
-          Choose how much you want to charge for private messages
+          {t('chooseMessagePrice')}
         </p>
       </div>
 
       <div className="flex justify-center">
         <Select value={selectedPrice} onValueChange={onPriceChange}>
           <SelectTrigger className="w-48 bg-background/10 border-custom-black/30 text-custom-black placeholder:text-custom-black/60">
-            <SelectValue placeholder="Select price" />
+            <SelectValue placeholder={t('selectPrice')} />
           </SelectTrigger>
           <SelectContent>
             {PRICE_OPTIONS.map((option) => (

@@ -4,12 +4,16 @@ import { genPageMetadata } from '@/app/seo';
 import Title from '@/components/ui/Title';
 import Text from '@/components/ui/Text';
 import PaddingContainer from '@/components/layout/PaddingContainer';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata = genPageMetadata({
-  title: 'DMCA Policy',
-  description:
-    'Learn about our DMCA policy and how KYYNK handles copyright infringement reports and counter-notices.',
-});
+export async function generateMetadata() {
+  const t = await getTranslations();
+
+  return genPageMetadata({
+    title: t('dmcaPolicyTitle'),
+    description: t('dmcaPolicyDescription'),
+  });
+}
 
 const dmcaPolicyPage = () => {
   return (

@@ -24,10 +24,12 @@ import useApi from '@/hooks/requests/useApi';
 import { useQueryClient } from '@tanstack/react-query';
 import { apiRouter } from '@/constants/apiRouter';
 import { User } from '@prisma/client';
+import { useTranslations } from 'next-intl';
 
 const VerificationButtonAction = ({ user }: { user: User }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const queryClient = useQueryClient();
+  const t = useTranslations();
 
   const { usePut } = useApi();
   const { mutate: confirmOrReject, isPending } = usePut(
@@ -69,15 +71,15 @@ const VerificationButtonAction = ({ user }: { user: User }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuLabel>{t('actions')}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => navigator.clipboard.writeText(user.id)}
           >
-            Copy payment ID
+            {t('copyPaymentId')}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setOpenDialog(true)}>
-            Verify
+            {t('verify')}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -95,14 +97,14 @@ const VerificationButtonAction = ({ user }: { user: User }) => {
               onClick={handleCancel}
               disabled={isPending}
             >
-              REJECT
+              {t('reject')}
             </Button>
             <Button
               className="w-full"
               onClick={handleAccept}
               disabled={isPending}
             >
-              ACCEPT
+              {t('accept')}
             </Button>
           </div>
         </DialogContent>

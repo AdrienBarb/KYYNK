@@ -7,6 +7,7 @@ import { cn } from '@/utils/tailwind/cn';
 import { Button } from '@/components/ui/Button';
 import { formatCredits } from '@/utils/prices/formatCredits';
 import Text from '../ui/Text';
+import { useTranslations } from 'next-intl';
 
 interface UseAutoResizeTextareaProps {
   minHeight: number;
@@ -75,6 +76,7 @@ const ConversationInput: React.FC<ConversationInputProps> = ({
   openPrivateNudeModal,
 }) => {
   const [value, setValue] = useState('');
+  const t = useTranslations();
   const { textareaRef, adjustHeight } = useAutoResizeTextarea({
     minHeight: 72,
     maxHeight: 300,
@@ -150,7 +152,7 @@ const ConversationInput: React.FC<ConversationInputProps> = ({
                 >
                   {creditMessage && creditMessage > 0 ? (
                     <Text className="text-sm font-medium text-secondary">
-                      Send for {formatCredits(creditMessage)} credits
+                      {t('sendForCredits', { credits: formatCredits(creditMessage) })}
                     </Text>
                   ) : (
                     <ArrowRight className={cn('w-4 h-4 text-secondary')} />

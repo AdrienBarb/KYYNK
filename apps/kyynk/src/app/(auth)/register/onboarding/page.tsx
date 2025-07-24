@@ -8,8 +8,10 @@ import UserTypeStep from '@/components/onboarding/UserTypeStep';
 import PreferencesStep from '@/components/onboarding/PreferencesStep';
 import ProfilePictureStep from '@/components/onboarding/ProfilePictureStep';
 import MessagePriceStep from '@/components/onboarding/MessagePriceStep';
+import { useTranslations } from 'next-intl';
 
 const OnboardingPage = () => {
+  const t = useTranslations();
   const {
     currentStep,
     onboardingData,
@@ -73,7 +75,7 @@ const OnboardingPage = () => {
               onClick={goToPreviousStep}
               className="w-full"
             >
-              Back
+              {t('back')}
             </Button>
           )}
 
@@ -83,13 +85,13 @@ const OnboardingPage = () => {
             isLoading={isPending}
             className="w-full"
           >
-            {hasNextStep ? 'Continue' : 'Finish'}
+            {hasNextStep ? t('continue') : t('finish')}
           </Button>
         </div>
 
         {hasNextStep && currentStep !== 'user-type' && (
           <Button variant="link" onClick={handleSkip} className="text-sm">
-            Skip
+            {t('skip')}
           </Button>
         )}
       </div>
